@@ -1,0 +1,47 @@
+<HTML>
+<HEAD><Title>QA 0002 - Computer Programs in Seismology</TITLE></HEAD>
+<BODY>
+<PRE>
+<I>
+  Dear Pro.Herrmann,
+       recently,i have done some instrument response removement for iris seismic data.But i don't understand how to choose the freqlimits(f1,f2,f3,f4).
+ On  your new tutorial about response,Is this code as follow give the  freqlimits? I don't know what's this code mean.
+#####
+#       define the frequency limits for deconvolution
+#####
+DELTA=`saclhdr -DELTA velcount.sac`
+FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' 
+
+
+can you give my suggestion about this? thank you very much.
+
+sincerely   
+</I>
+
+
+Response:
+
+Please read my discussion of instrument response on the Question and Answers page
+
+    http://www.eas.slu.edu/Earthquake_Center/CPS/Questions/qa0001.html
+
+To answer you question we must consider the problem of creating digital seismograms. 
+
+Ground motion consists of a very wide range of frequencies, much at frequencies greater than 1/DT (DT is the sample rate).  When the analog data stream is converted to digital samples, the highest frequency that can be captured is the Nyquist frequency, 1/(2 DT). If frequencies greater than this are in the stream, the amplitude of these frequencies may incorrectly be assigned to lower frequencies. Thus the low frequencies would be contaminated.
+
+The solution is to assure that the data acquisition system response remove or severely reduce the amplitudes of frequencies greater than the Nyquist frequency. This can be done with analog filters or  by some interesting digital processing techniques.
+
+I personally prefer using the evalresp output to define the system response because this program accounts for the effects of all analog filters (sensor and signal conditioning which then become the pole-zero file that appear in the sac pole-zero response file) but also the effect of all of the digital filters. If you are interested in frequencies near the Nyquist you must consider the effects of the digital filters.
+
+If you plot the amplitude part of the evalresp output, you will see that the response drops very fast  as frequencies get close to the Nyquist frequency.  If you try to remove this response, you will be dividing by a very, very small number and the result may be a seismogram of noise.
+
+So to control this behavior, one used FREQLIMITS.  So when I remove the instrument response I use a line that looks like
+
+transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE FREQLIMITS 0.002 0.004 ${FHL} ${FHH}
+
+Which says to remove the instrument response to provide a good picture of ground velocity in the frequency range of 0.004 - ${FHL) Hz.  (this is because I asked evalresp to provide the response that converts gound velocity in m/sec to digital counts).
+If you are studying high frequency signals, you may try to make ${FHL} a numer closer to ${FHH}
+</PRE>
+</BODY>
+</HTML>

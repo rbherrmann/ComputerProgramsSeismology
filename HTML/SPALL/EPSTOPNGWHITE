@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+EPS=$1
+BASE=`basename ${EPS} .eps`
+convert -trim ${EPS} -background white -alpha remove -alpha off ${BASE}.png

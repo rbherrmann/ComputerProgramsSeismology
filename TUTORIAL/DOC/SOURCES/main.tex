@@ -1,0 +1,470 @@
+\documentclass{article}
+\usepackage{amsmath}% if you are using this package,
+                      % it must be loaded before amsthm.sty
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+% \usepackage{subcaption}
+
+\begin{document}
+
+\title{Green's functions in Computer Programs in Seismology
+{}}
+\author{Robert B. Herrmann}
+
+\maketitle
+
+\begin{abstract}
+
+The abstract text goes here.
+\end{abstract}
+
+\section{Introduction}
+
+Computer Programs in Seismology provides codes for the computation of Grene's functions for layered isotropic and transverse isotropic media.
+Confusion oftne arises in the use of the program for incorporating the source time function.
+
+\section{Green's functions}
+
+
+The equations of motion describing the displacement $ {\bf u} $ at a point within an infinite medium under the action of
+an external force per unit
+volume, $( F_1 , F_{2,} F_3 ) $, 
+are
+\begin{equation} \label{eq5_2_1}
+\begin{aligned}
+ \rho \frac{ \partial^2 { u_1 }  }{  \partial t^2 } &= 
+{ \frac{ \partial { p_{11} }  }{  \partial x_1 } } +
+{ \frac{ \partial { p_{12} }  }{  \partial x_2 } }+
+{ \frac{ \partial { p_{13} }  }{  \partial x_3 } }+
+{ F_1 } \\
+ \rho \frac{ \partial^2 { u_2 }  }{  \partial t^2 } &=
+{ \frac{ \partial { p_{21} }  }{  \partial x_1 } } +
+{ \frac{ \partial { p_{22} }  }{  \partial x_2 } }+
+{ \frac{ \partial { p_{23} }  }{  \partial x_3 } }+
+{ F_2 } \\
+ \rho \frac{ \partial^2 { u_3 }  }{  \partial t^2 } &=
+{ \frac{ \partial { p_{31} }  }{  \partial x_1 } } +
+{ \frac{ \partial { p_{32} }  }{  \partial x_2 } }+
+{ \frac{ \partial { p_{33} }  }{  \partial x_3 } } +
+{ F_3 } \\
+\end{aligned}
+\end{equation}
+where $ \rho $ is the density.
+The physical dimensions  of the quantities are $ u_i $ $( L)$,
+$ p_{ij} $ $( M L^{-1} T^{-2}  ) $, $ F_i $ $( M L^{-2} T^{-2}  ) $ and $ \rho ( M L^{-3} )$.
+
+If the body force in the
+elastic wave equation is given by
+$$
+\left( \mathscr{F}_1 (t) {\bf e}_1 +  \mathscr{F}_2 (t) {\bf e}_2 +  \mathscr{F}_3 (t) {\bf e}_3 \right) \, \delta ( x_1 ) \delta ( x_2 ) \delta ( x_3 )  ,
+$$
+the
+displacements in the space-angular frequency domain
+are just
+\begin{equation} \label{eq5_3_18}
+u_i \,=\,  G_{ij} ( \omega ) \mathscr{F}_j ( \omega )
+\end{equation}
+where the $ G_{ij} ( \omega ) $ $(M^{-1} T^2 )$ are the  $i'th$ component of displacement for a point force
+in the $j'th$ direction and are  given by
+$$ 
+4 \pi \rho G_{ij} ( {\bf x,} \omega ) \ =\    \,\,\,\,
+ ( 3 \gamma_i \gamma_j \,-\, \delta_{ij} ) \exp ( \,-\, i \omega  R \,/\, \alpha ) \,/\, (  \,-\, \omega^2 R^3 ) 
+$$
+$$ 
+\,+\, ( 3 \gamma_i \gamma_j \,-\, \delta_{ij} ) \exp (  \,-\, i \omega R \,/\, \alpha ) \,/\, ( i \omega \alpha R^2 )
+$$
+$$ 
+\,+\, \gamma_i \gamma_j \exp ( \,-\, i \omega R \,/\, \alpha )\,/\, ( \alpha^2 R )
+$$
+\begin{equation} \label{eq5_3_19}
+   \,-\, ( 3 \gamma_i \gamma_j \,-\, \delta_{ij} ) \exp (  \,-\, i \omega R \,/\, \beta ) \,/\, ( \,-\,\omega^2 R^3  )
+\end{equation}
+$$
+\,-\, ( 3 \gamma_i \gamma_j \,-\, \delta_{ij} ) \exp (  \,-\, i \omega  R \,/\, \beta ) \,/\, (  i \omega \beta R^2 )
+$$
+$$
+\left . 
+\,-\,   \gamma_i \gamma_j   \exp (  \,-\, i \omega R \,/\, \beta )\,/\, ( \beta^2 R )  \right .
+$$
+$$
+\left. 
+\,+\,   \delta_{ij}   \exp (  \,-\, i \omega R \,/\, \beta )\,/\, ( \beta^2 R )  \right .
+$$
+
+Combining the results we have the following expression for the
+displacement due to an arbitrary combination of dipoles and couples:
+$$
+u_i 
+\,\equiv\, {\mathscr{M}}_{jk}   G_{ij,k} 
+\,=\,  {\mathscr{M}}_{jk} \, \frac{ \partial G_{ij} ( {\bf x} , {\bf y} , \omega )   }{  \partial y_k } 
+\,=\,  \,-\, {\mathscr{M}}_{jk} \, \frac{ \partial G_{ij} ( {\bf x} , {\bf y} , \omega )   }{  \partial x_k } 
+%\eqno (\*[chap].\*[sec].5)
+$$
+where the units of $ {\mathscr{M}}_{ij} ( \omega )  $ are $(M L^2 T^{-1} )$ and of $ G_{ki,j} $ are $(M^{-1} L^{-1} T^2 )$. 
+The explicit expression for $ G_{ij,k}$ is taken from Haskell (1963):
+$$
+4 \pi \rho ( i \omega )^2 G_{ij,k}  \,=\, 
+- ( 3 \gamma_i \delta_{jk} + 3 \gamma_j \delta_{ik} + 3 \gamma_k \delta_{ij} - 15 \gamma_i \gamma_j \gamma_k ) 
+\exp ( - i \omega R / \alpha ) (1 / R^4 )
+$$
+$$
+ \ \ -\  ( 3 \gamma_i \delta_{jk} + 3 \gamma_j \delta_{ik} + 3 \gamma_k \delta_{ij} - 15 \gamma_i \gamma_j \gamma_k )
+\exp ( - i \omega R / \alpha ) (1 / R^3 ) ( i \omega / \alpha )
+$$
+$$
+ \ \ -\   ( \gamma_i \delta_{jk} + \gamma_j \delta_{ik} + \gamma_k \delta_{ij} - 6 \gamma_i \gamma_j \gamma_k  )
+\exp ( - i \omega R / \alpha ) (1 / R^2 ) ( i \omega / \alpha )^2
+$$
+$$
+ \ \ +\  \gamma_i \gamma_j \gamma_k 
+\exp ( - i \omega R / \alpha ) (1 / R  ) ( i \omega / \alpha )^3
+%\eqno (\*[chap].\*[sec].6)
+$$
+$$
+ \ \ +\ 
+ ( 3 \gamma_i \delta_{jk} + 3 \gamma_j \delta_{ik} + 3 \gamma_k \delta_{ij} - 15 \gamma_i \gamma_j \gamma_k ) 
+\exp ( - i \omega R / \beta ) (1 / R^4 )
+$$
+$$
+ \ \ +\   ( 3 \gamma_i \delta_{jk} + 3 \gamma_j \delta_{ik} + 3 \gamma_k \delta_{ij} - 15 \gamma_i \gamma_j \gamma_k )
+\exp ( - i \omega R / \beta ) (1 / R^3 ) ( i \omega / \beta )
+$$
+$$
+ \ \ +\   ( \gamma_i \delta_{jk} + \gamma_j \delta_{ik} + 2 \gamma_k \delta_{ij} - 6 \gamma_i \gamma_j \gamma_k  )
+\exp ( - i \omega R / \beta ) (1 / R^2 ) ( i \omega / \beta )^2
+$$
+$$
+ \ \ -\  ( \gamma_i \gamma_j \gamma_k - \gamma_k \delta_{ij} )
+\exp ( - i \omega R / \beta ) (1 / R  ) ( i \omega / \beta )^3
+$$
+Figure \ref{F5_1} presents the elemental couple and dipole force
+systems denoted by the 9 $ {\mathscr{M}}_{ij} $ terms. 
+The $ {\mathscr{M}}_{ij} $ introduced here corresponds to the Fourier transform of moment.
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.7]{Figures/nFIG4.eps}
+\end{center}
+\caption{ Basic second-order multi-pole force combinations.}
+\label{F5_1}
+\end{figure}
+
+After converting from a cartesian to a cylindrical coordinate system using the transformation
+
+The vector displacement components $ u_r $, $ u_{\phi} $ and $ u_z $
+in a cylindrical coordinate system are related to those in a Cartesian system, with $u_3$ positive down,
+$ u_1 $, $ u_2 $ and $ u_3 $ by the simple relations
+\begin{align*}
+u_r  \,&=\, \ \   u_1 \cos \phi \,+\, u_2 \sin \phi \\
+u_{\phi}  \,&=\, -  u_1 \sin \phi  \,+\, u_2 \cos \phi \\
+%\eqno (\*[chap].\*[sec].1)
+u_z  \,&=\, u_3
+\end{align*}
+where
+$ x_1 / r \,=\, \cos \phi $, $ x_2  / r \,=\, \sin \phi $,
+$ r^2 \,=\, x_1^2 \,+\, x_2^2 $ and
+$ R^2 \,=\, r^2 \,+\, z^2 $. In addition
+$ \gamma_1 \,=\, x_1 / R \,=\, ( r / R ) \cos \phi$, 
+$ \gamma_2 \,=\, x_2 / R \,=\, ( r / R ) \sin \phi $ and $ \gamma_3 \,=\, ( z / R ) $.
+
+Using the summetry of $ M_{ij}$,
+and combining terms in order of increasing azimuthal dependence,
+we have the following expression for the displacement for point forces/moments in space with a Diric delta function dependence in time:
+
+\begin{align*}
+u_z (r,z,h, \omega )   &= ( F_1 \cos \phi\ +  F_2 \sin \phi ) ZHF + F_3 ZVF \\
+ &+ \ M_{11}  \left[   \frac{ ZSS   }{ 2 }  \cos ( 2 \phi )  - \frac{ ZDD   }{ 6 } +  \frac{ ZEX   }{ 3 }\ \right] \\
+ &+ \  M_{22}  \left[ \frac{ -ZSS   }{ 2 }  \cos ( 2 \phi )  - \frac{ ZDD   }{ 6 } +  \frac{ ZEX   }{ 3 }\right] \\
+ &+ \  M_{33}  \left[ \frac{ ZDD   }{ 3 } +  \frac{ ZEX   }{ 3 }\right] \\
+ &+ \  M_{12}  \left[ ZSS   \sin ( 2 \phi ) \right] \\
+%\eqno (\*[chap].\*[sec].8a)
+ &+ \  M_{13}  \left[ ZDS   \cos ( \phi ) \right] \\
+ &+ \  M_{23}  \left[ ZDS   \sin ( \phi ) \right] 
+\end{align*}
+
+\begin{align*}
+u_r (r,z,h, \omega )\   &=
+( F_1 \cos \phi\ \,+\,\  F_2 \sin \phi ) RHF \,+\, F_3 RVF \\
+ \ \ \ \ &+ \  M_{11}
+\, \left[ \frac{ RSS   }{ 2 }\  \cos ( 2 \phi ) \ -\ 
+\frac{ RDD   }{ 6 }\ +\  \frac{ REX   }{ 3 }\right] \\
+ \ \ \ \ &+ \  M_{22} \, \left[ \frac{ -RSS   }{ 2 }\  \cos ( 2 \phi ) \ -\ 
+\frac{ RDD   }{ 6 }\ +\  \frac{ REX   }{ 3 }\right] \\
+ \ \ \ \ &+ \  M_{33} \, \left[ \frac{ RDD   }{ 3 }\ +\  \frac{ REX   }{ 3 }\  \right] \\
+ \ \ \ \ &+ \  M_{12} \, \left[ \  RSS \  \sin ( 2 \phi ) \  \right] \\
+%\eqno (\*[chap].\*[sec].8b)
+ \ \ \ \ &+ \  M_{13} \, \left[ \  RDS \  \cos ( \phi ) \  \right] \\
+ \ \ \ \ &+ \  M_{23} \, \left[ \  RDS \  \sin ( \phi ) \right]
+\end{align*}
+
+\begin{align*}
+u_{\phi} (r,z,h, \omega )\   &= ( + F_1 \sin \phi - F_2 \cos \phi ) THF \\
+ \ \ \ \ &+ \ M_{11} \, \left[ \frac{ TSS   }{ 2 }\  \sin ( 2 \phi ) \right] \\
+ \ \ \ \ &+ \  M_{22} \, \left[ \frac{ -TSS   }{ 2 }\  \sin ( 2 \phi ) \right] \\
+ \ \ \ \ &+ \  M_{12} \, \left[ -TSS \  \cos ( 2 \phi ) \right] \\
+%\eqno (\*[chap].\*[sec].8c)
+ \ \ \ \ &+ \  M_{13} \, \left[ TDS \  \sin ( \phi ) \right] \\
+ \ \ \ \ &+ \  M_{23} \, \left[ -TDS \  \cos ( \phi ) \right]\ . 
+\end{align*}
+where we define 
+
+\begin{align*}
+ZDD \   &= \  { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ 3 { \frac{ \partial^3 F_{\alpha}   }{  \partial {\it z}^3 } } \,+\, {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial {\it z} } } \,-\, 3 { \frac{ \partial^3 F_{\beta}   }{  \partial {\it z}^3 } } \,-\, 3 {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial {\it z} } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9a)
+RDD \   &= \  { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ 3 { \frac{ \partial^3 F_{\alpha}   }{  \partial {\it z}^2 \partial r } } \,-\, 3 { \frac{ \partial^3 F_{\beta}   }{  \partial {\it z}^2 \partial r } } \,+\, {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial r } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9b)
+ZDS \   &= \  { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }}  \, \left[ 2 { \frac{ \partial^3 F_{\alpha}   }{  \partial {\it z}^2 \partial r } } \,-\,2 { \frac{ \partial^3 F_{\beta}   }{  \partial {\it z}^2 \partial r } } \,-\, {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial r } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9c)
+RDS \   &= \  { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ 2 { \frac{ \partial^3 F_{\alpha}   }{  \partial r^2 \partial {\it z} } } \,-\,2 { \frac{ \partial^3 F_{\beta}   }{  \partial r^2 \partial {\it z} } } \,-\, {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial {\it z} } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9d)
+TDS \   &= \   { \frac{1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ \frac{2 }{ r }\left( { \frac{ \partial^2 F_{\alpha}   }{  \partial r \partial {\it z} } } \,-\, { \frac{ \partial^2 F_{\beta}   }{  \partial r \partial {\it z} } } \right) \,-\, {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial {\it z} } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9e)
+ZSS \   &= \   { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ 2 { \frac{ \partial^3 F_{\alpha}   }{  \partial r^2 \partial {\it z} } } \,+\, { \frac{ \partial^3 F_{\alpha}   }{  \partial {\it z}^3 } } \,+\, {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial {\it z} } }  \right . \\
+& \left.  \ \ \ \,-\, 2 { \frac{ \partial^3 F_{\beta}   }{  \partial r^2 \partial {\it z} } } \,-\, { \frac{ \partial^3 F_{\beta}   }{  \partial {\it z}^3 } } \,-\, {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial {\it z} } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9f)
+RSS \   &= \  { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ 2 { \frac{ \partial^3 F_{\alpha}   }{  \partial r^3 } } \,+\, { \frac{ \partial^3 F_{\alpha}   }{  \partial {\it z}^2 \partial r } } \,+\, {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial r } } \right . \\
+& \left.  \ \ \ \,-\, 2 { \frac{ \partial^3 F_{\beta}   }{  \partial r^3 } } \,-\, { \frac{ \partial^3 F_{\beta}   }{  \partial {\it z}^2 \partial r } } \,-\,2 {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial r } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9g)
+TSS \   &= \  { \frac{-1 }{ { 4 \pi \rho ( i \omega )^2 } }} \, \left[ 2 { \frac{ \partial^3 F_{\alpha}   }{  \partial r^3 } } \,+\,2 { \frac{ \partial^3 F_{\alpha}   }{  \partial {\it z}^2 \partial r } } \,+\,2 {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial r } } \right . \\
+& \left.  \ \ \ \,-\, 2 { \frac{ \partial^3 F_{\beta}   }{  \partial r^3 } }  \,-\,2 { \frac{ \partial^3 F_{\beta}   }{  \partial {\it z}^2 \partial r } } \,-\, {{ k_{\beta} }}^2 { \frac{ \partial F_{\beta}   }{  \partial r } } \right] \, \\
+%\eqno (\*[chap].\*[sec].9h)
+ZEX \   &= \   { \frac{1 }{  4 \pi \rho ( i \omega )^2 } } {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial {\it z} } } \\
+%\eqno (\*[chap].\*[sec].9i)
+REX \   &= \   { \frac{1 }{  4 \pi \rho ( i \omega )^2 }} {{ k_{\alpha} }}^2 { \frac{ \partial F_{\alpha}   }{  \partial r } } \\
+%\eqno (\*[chap].\*[sec].9j)
+ZVF \   &= \  { \frac{1 }{  { 4 \pi \rho ( i \omega )^2 } } } \, \left[ { \frac{ \partial^2 F_{\alpha}   }{  \partial {\it z}^2 } } \,-\, { \frac{ \partial^2 F_{\beta}   }{  \partial {\it z}^2 } } \,-\, {{ k_{\beta} }}^2 { { F_{\beta} }} \right] \, \\
+%\eqno (\*[chap].\*[sec].9k)
+RVF \   &= \  { \frac{1 }{  { 4 \pi \rho ( i \omega )^2 } } } \, \left[ { \frac{ \partial^2 F_{\alpha}   }{  \partial r \partial {\it z} } } \,-\, { \frac{ \partial^2 F_{\beta}   }{  \partial r \partial {\it z} } }  \right] \, \\
+%\eqno (\*[chap].\*[sec].9l)
+ZHF \   &= \  { \frac{1 }{  { 4 \pi \rho ( i \omega )^2 } } } \, \left[ { \frac{ \partial^2 F_{\alpha}   }{  \partial r \partial {\it z} } } \,-\, { \frac{ \partial^2 F_{\beta}   }{  \partial r \partial {\it z} } }  \right] \, \\
+%\eqno (\*[chap].\*[sec].9m)
+RHF \   &= \  { \frac{1 }{  { 4 \pi \rho ( i \omega )^2 } } } \, \left[ { \frac{ \partial^2 F_{\alpha}   }{  \partial r^2 } } \,-\, { \frac{ \partial^2 F_{\beta}   }{  \partial r^2 } }  \,-\, {{ k_{\beta} }}^2 { { F_{\beta} }} \right] \, \\
+%\eqno (\*[chap].\*[sec].9n)
+THF \   &= \ -\, { \frac{1 }{  { 4 \pi \rho ( i \omega )^2 } } } \, \left[ { \frac{1 }{ r }} { \, \left( { \frac{ \partial F_{\alpha}   }{  \partial r } } \,-\, { \frac{ \partial F_{\beta}   }{  \partial r } } \right) \, }  \,-\, {{ k_{\beta} }}^2 { { F_{\beta} }} \right]\, \\
+%\eqno (\*[chap].\*[sec].9o)
+PEX \   &= \  - { \frac{{{ k_{\alpha} }}^2   }{  4 \pi   } } { { F_{\alpha} }}
+%\eqno (\*[chap].\*[sec].9p)
+\end{align*}
+
+The PEX solution is the pressure field in a fluid due to a
+center of expansion
+source somewhere in the model.
+
+The partial derivatives of the Sommerfeld integral are given in the Appendix.
+
+
+\section{Programs}
+
+Computer Programs in Seismology computes the $ZDD$, $RDD$, $ZDS$, $RDS$, $TDS$, $ZSS$, $RSS$, $TSS$, $ZEX$, $REX$, $ZVF$, $RVF$, $ZHF$, $RHF$, $THF$ and $PEX$ Green's functions.
+Different techniques are used to make synthetics, but the meaning of the Green's functions is the same. We will focus on the wavenumber integration code, which consists of the sequence
+{\bf hprep96}, {\bf hspec96} and {\bf hpulse96}. These programs prepare the data set for the wavenumber integration, evaluate the multilayered medium response in term of wavenumber and frequency and then integrate over wavenumbaer an finally, convolve a source time function, respectively. To test the {\bf hspec96} output the program {\bf whole96} implements the wholespace Green's functions given above.
+
+The only deviation from the equations given above is that the polarity of the $u_z$ is reversed to agree with the observational convention that positive-$z$ is up on the Earth's surface. Positive-$r$ is in a radial direction away from the source, and positive-${\phi}$ is is a direction to the right when looking in the positive-$r$ direction.
+
+For the $ZEX$ Green function, the lines in {\bf hwhole96} that define the result are:
+\begin{verbatim}
+c-----
+c       ZEX
+c-----
+                 cresp(9) = cresp(9) +
+     1                  (- fz(1))/
+     2                  (4.0*3.1415927*rho*a*a*atna*atna)
+                           ...
+                 cresp(9)  = - cresp(9)
+\end{verbatim}
+where
+\begin{verbatim}
+                    ...
+        xka=omega/(dble(a)*atna)
+                    ...
+        eye = dcmplx(0.0d+00,1.0d+00)
+                    ...
+        r1=dsqrt(dble(r)**2 + dble(z)**2)
+                    ...
+        pfac(1) = -eye * xka * dcmplx(r1,0.0d+00)
+                    ...
+c-----
+c       Fz
+c-----
+        fac(1) = zr3
+        fac(2) = z/r2
+                    ...
+        fz = -pfac* (fac(1) + kv * fac(2))
+\end{verbatim}
+If we put all of these pieces together, we get the following for the $ZEX$ output of {\bf hwhole96}, and by design {\bf hspec96},
+\begin{equation*}
+u_z(r,z,\omega)  = \frac{1}{4 \pi\rho {\alpha}^2 } \frac{1}{R} \frac{z}{R} \left[ {\frac{1}{R} + \frac{ i \omega}{\alpha} } \right] e^{ - i \omega R / \alpha }
+\end{equation*} 
+while the expansion of the $ZEX$ given above, after using the partial derivatives given in Appendix A, is
+\begin{equation*}
+u_z(r,z,\omega)  = \frac{1}{4 \pi\rho { ( i \omega} )^2 } \frac { {\omega}^2}{{\alpha}^2} \left [ \frac{z}{R^3} + \frac { i \omega}{\alpha} {\frac{z}{R^2} \right ] e^{ - i \omega R / \alpha }
+\end{equation*} 
+The only difference  is the difference in the definition of the positive $z$-direction which causes the change in sign.
+
+\section{Source time function}
+The derivation until now  provides the Fourier transform of the displacement due to a point force or moment tensor source in space with a Dirac delta function time dependence.
+In the actual implementation of the code, a complex frequency is used, e.g., $\omega -i a $ rather than $\omega$ for several reasons. Instead of working with the Fourier transform pair
+$ h(t) \Leftrightarrow H( \omega) $, we work with the transform pair
+$ exp ( - a t ) h(t) \Leftrightarrow H( \omega - ia) $ which has the advantages of removing complex singularities from the real wavenumber axis but also of controlling the Discrete Fourier transform wrap-around (periodicity) that plagues numerical synthetics.  The desired $h(t)$ is obtained by multiplying the inverse transform of $ H( \omega -ia) $ by $ exp ( + a t )$.  The use of this trick also permits the use of a step function.
+
+The program {\bf hpulse96} uses the output of {\bf hwhole96},  {\bf hspec96} or {\bf tspec96}, $ H(r,z, \omega -ia )$,  applies the source time function and yields desired time series (displacement, velocity or acceleration) to give the desired time series $h(r,z,t)$.
+
+The simplify the discussion let $a = 0 $, let the Green function be $G(s)$, let the Fourier transform of the source time funciton be $S(s)$, and let $H(s)$ be a filter that integrates of differentiates the output, and
+$s$, the Laplace transform variable, which is $s = i \omega$. Table \ref{T_1} gives some possible output for various source tiem functions and output filters.
+
+\begin{table}
+\label{T_1}
+\caption{Operations}
+\begin{tabular} { l l l l }
+\hline
+$S(s)$ & ${H(s)$ & Motion & Description \\
+\hline
+\\
+1 & 1         & G(s) $ & displacement from impulse \\
+\\
+$\frac{1}{s}$ & 1 & $\frac{1}{s} G(s)$  &  displacement from step function \\
+\\
+$\frac{1}{s}$ & s &  G(s)$ $  & velocity from step function \\
+\\
+\hline
+\end{tabular}
+\end{table}
+
+Table \ref{T_2} shows the result of using different command flags when running {\bf hpulse96}.
+
+\begin{table}
+\label{T_2}
+\caption{Result of command line flags for {\bf hpusle96}}
+\begin{tabular} { l l  }
+\hline
+\\
+-D &  Displacement for a step source time function\\ 
+\\
+-V &  Velocity for a step source time function \\
+\\
+-A &  Acceleartion for a step source time function\\
+\\
+-V &  Displacement for an impulse source time function \\
+\\
+-V -OD  & Displacement for an impulse source time function \\
+ & but the ASCII output in the file96 format indicates displacement units \\
+\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Modern usage}
+For my source studies, I use the Green's function in Sac files rather than the the ASCII {\it file96} format. I use the following syntax
+to do this
+\begin{verbatim}
+ hprep96
+ hspec96
+ hpulse96 -p -V -l 1 | f96tosac -G
+\end{verbatim}
+This creates files with names 012500100.RDD  012500100.RDS  012500100.REX  012500100.RSS  012500100.TDS  012500100.TSS  012500100.ZDD  012500100.ZDS	012500100.ZEX  012500100.ZSS 012500100.ZVF 012500100.RVF 012500100.ZHF 012500100.RHF 012500100.THF , which represent
+a ground velocity Green's function for a step-like source (I use a smooth source to avoid noise problems due to sharp truncation at the Nyquist frequency), at a distance of 125.0 km and a source depth of 10.0 km.
+If I wish to make a synthetic for a specific source, I do the following in  {\bf gsac}:
+\begin{verbatim}
+GSAC> mt to ZRT FN 1.0e+15 FE 2.0e+15 -FZ 0.0 -AZ 122. FILE 012500100
+GSAC> w
+\end{verbatim}
+This will create the Sac files T.Z, T.R and T.T.
+
+
+To derive the static deformation for a step-like source time function, we use the relation
+\begin{equation*}
+h ( \infty ) = \lim_{ s \to 0 } s H(s) 
+\end{equation*}
+Using our Green's functions, the displacement due to a step source time function response is $H(s) = ZEX(s)/s $, for example, and the
+static displacement in the limit is just $ZEX (0)$. Taking this limit very carefully, we have for the wholespace the following static deformations for a step source.
+
+\begin{equation*}
+\begin{aligned}
+ZDD \,&=   \ \   \frac{1}{  4 \pi \rho } \, \left[ { \frac{2}{ \alpha^2 }\frac{z}{  R^3 } - \frac{3}{ 2 }\left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \, \left( \frac{ 3 z^3  }{  R^5 } - \frac{ z  }{  R^3 } \right) } \right] \\
+RDD \,&=   \ \   \frac{1}{  4 \pi \rho } \, \left[ { \frac{2}{ \alpha^2 }\frac{r}{  R^3 } - \frac{3}{ 2 }\left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \, \left( \frac{ 3 r z^2  }{  R^5 } \right) - \frac{3}{ 2 }\left( \frac{1}{ \alpha^2 }+ \frac{1}{ \beta^2 }\right) \frac{r}{ R^3 }} \right] \\
+ZDS \,&=   \ \   \frac{1}{  4 \pi \rho } 
+ \, \left[ { \frac{1}{ \beta^2 }\frac{r}{  R^3 } + \left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \,  \frac{ 3 r z^2  }{  R^5 }  -  \left( \frac{1}{ \alpha^2 }+ \frac{1}{ \beta^2 }\right) \frac{r}{ R^3 }} \right] \\
+RDS \,&=  \ \   \frac{1}{  4 \pi \rho }
+\left[ {
+  \left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \, \left( \frac{ 3 z^3  }{  R^5 } - \frac{ 2 z  }{  R^3 } \right) + \frac{ z  }{  R^3 } 
+} \right] \\
+TDS \,&= \ \   - \frac{1}{  4 \pi \rho } \frac{1}{ \alpha^2 }\frac{ z  }{  R^3 } \\
+ZSS \,&=  \ \   - \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \, \frac{ 3 z r^2  }{  R^5 } \\
+RSS \,&=  \ \   \frac{1}{  4 \pi \rho } \frac{ R^3 {}1}{ 2 }\left[ {
+\left( \frac{ 3 z^2  }{  R^2 } - 2 \right) \, \left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) + \left( \frac{1}{ \alpha^2 }+ \frac{1}{ \beta^2 }\right)
+} \right] \\
+TSS \,&=  \ \    - \frac{1}{  4 \pi \rho } \frac{1}{ \alpha^2 }\frac{r}{ R^3 } \\
+ZEX \,&=  \ \   \frac{1}{  4 \pi \rho } \frac{1}{ \alpha^2 }\frac{z}{ R^3 } \\
+REX \,&=  \ \   \frac{1}{  4 \pi \rho } \frac{1}{ \alpha^2 }\frac{r}{ R^3 } \\
+ZVF \,&=  \ \   \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left( \frac{1}{ \alpha^2 }+ \frac{1}{ \beta^2 }\right) \frac{1}{ R }- \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left(  \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \frac{z^2}{ R^3 } \\
+RVF \,&=  \ \   - \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \frac{rz}{ R^3 } \\
+ZHF \,&=  \ \   - \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \frac{rz}{ R^3 } \\
+RHF \,&=  \ \   \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left[ { 
+ - \left( \frac{1}{ \alpha^2 }- \frac{1}{ \beta^2 }\right) \frac{ r^2  }{  R^3 } 
++ \left( \frac{1}{ \alpha^2 }+ \frac{1}{ \beta^2 }\right) \frac{1}{ R }} \right] \\
+THF \,&=  \ \   - \frac{1}{  4 \pi \rho } \frac{1}{ 2 }\left(  \frac{1}{ \alpha^2 }+ \frac{1}{ \beta^2 }\right) \, \frac{1}{ R }
+\end{aligned}
+\end{equation*}
+
+
+
+
+
+\appendix
+\begin{center}
+      {\bf Appendix}
+    \end{center}
+\chapter{Integrals}
+
+The Sommerfeld integral is fundamental to the representation of wave propagation in a cylindrival coordinate system. We have seen  that solutions for various combinations of points forces in a homogeneous, isotropic media, requires partial derivatives of the Sommerfeld integral with respect to the $r$ and $ z $ coordinates. This chapter provides the algebraic and integral expressions for these partial derivatives. 
+
+
+\section{Partials of spherical wave propagation solution}
+
+Given the expression for the outwardly propagating spherical wave,
+$$ 
+F_v \   = \  { \frac{1 }{ R }} e^{ \frac{ \,-\,i \omega R   }{ v }} \ =\  \INT
+ { \frac{k }{  \nu_v } } e^{ \,-\, \nu_v |  z | } J_o ( kr ) \, dk
+$$
+where
+$R^2 \   = \  r^2 \ \,+\,\   {  z }^2 $,
+$ \nu_v^2 \,=\, k^2 - ( \omega \,/\, v )^2 $,
+and
+the function $  sgn(z) $ is defined as
+$$
+ sgn(z) = 
+\begin{cases}
+ 0 & z < 0 \\
+ 1 & z \ge 0
+\end{cases}
+$$
+then the expressions for the desired spatial derivatives of the Sommerfeld integral are as follow:
+\begin{equation*}
+\begin{aligned}
+ \frac{ \partial F_v   }{  \partial  z }  \   &= \   \,-\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  {  \frac{z }{  R^3 } }  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }  {  \frac{z }{  R^2 } }  \right] \\
+ \,&=\, \  - sgn (z) \INT  k e^{ \,-\, \nu_v |  z | } J_0 ( kr ) \, dk \\
+{ \frac{ \partial F_v   }{  \partial r } } \   &= \  \,-\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  { \frac{r }{  R^3 } }  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }  { \frac{r }{  R^2 } }  \right] \\
+ \,&=\, \  - \INT  \frac{ k^2   }{  \nu_v } e^{ \,-\, \nu_v |  z | } J_1 ( kr ) \, dk \\
+{ \frac{ \partial^2 F_v   }{  \partial r \partial {\it z} } } \   &= \  \ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \frac{ \,3r  z   }{  R^5 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \frac{ \,3r  z   }{  R^4 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \frac{ \,r  z   }{  R^3 } \right)  \right] \, \\
+ \,&=\, \    sgn (z) \INT  { k^2 }  e^{ \,-\, \nu_v |  z | } J_1 ( kr ) \, dk \\
+{ \frac{ \partial^2 F_v   }{  \partial {\it z}^2 } } \   &= \  \,+\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \frac{ 3   z^2   }{  R^5 } \,-\, \frac{ 1   }{  R^3 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \frac{ 3   z^2   }{  R^4 } \,-\, \frac{ 1   }{  R^2 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \frac{   z^2   }{  R^3 } \right)  \right] \, \\
+ \,&=\, \    \INT  k \nu_v  e^{ \,-\, \nu_v |  z | } J_0 ( kr ) \, dk \\
+{ \frac{ \partial^2 F_v   }{  \partial r^2 } } \   &= \  \,+\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \frac{ 3 r^2   }{  R^5 } \,-\, \frac{ 1   }{  R^3 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \frac{ 3 r^2   }{  R^4 } \,-\, \frac{ 1   }{  R^2 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \frac{ r^2   }{  R^3 } \right)  \right] \, \\
+ \,&=\, \  - \INT  \frac{ k^2   }{  \nu_v } e^{ \,-\, \nu_v |  z | } \left( k J_0 ( kr ) - \frac{1 }{ r }J_1 ( kr )  \right) \, dk \\
+{ \frac{ \partial^3 F_v   }{  \partial r^3 } } \   &= \ \,-\,  { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \frac{\,-\,9r }{  R^5 } \,+\, \frac{ 15 r^3   }{  R^7 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \frac{\,-\,9r }{  R^4 } \,+\, \frac{ 15 r^3   }{  R^6 } \right)  \,+\,  \right . \\
+   &\left. { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \frac{\,-\,3r }{  R^3 } \,+\, \frac{ 6 r^3   }{  R^5 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^3 \,  \left( \frac{ r^3   }{  R^4 } \right)  \right] \, \\
+ \,&=\, \   \INT  \frac{ k^3   }{  \nu_v } e^{ \,-\, \nu_v |  z | } \left( k J_1 ( kr ) - \frac{1 }{ r }J_2 ( kr )  \right) \, dk \\
+{ \frac{ \partial^3 F_v   }{  \partial {\it z}^3 } } \   &= \  \,-\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \, -\, \frac{ 9 z   }{  R^5 } \,+\, \frac{ 15   z^3   }{  R^7 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \, -\, \frac{ 9 z   }{  R^4 } \,+\, \frac{ 15   z^3   }{  R^6 } \right)  \,+\,  \right . \\
+ &\left. { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \, -\, \frac{ 3 z   }{  R^3 } \,+\, \frac{ 6   z^3   }{  R^6 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^3 \,  \left( \frac{   z^3   }{  R^4 } \right)  \right] \, \\
+ \,&=\, \  - sgn (z) \INT  k \nu_v^2  e^{ \,-\, \nu_v |  z | } J_0 ( kr ) \, dk \\
+{ \frac{ \partial^3 F_v   }{  \partial r^2 \partial {\it z} } } \   &= \  \,-\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \,-\, \frac{ 3 z   }{  R^5 } \,+\, \frac{15 r^2   z   }{  R^7 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \,-\, \frac{ 3 z   }{  R^4 } \,+\, \frac{15 r^2   z   }{  R^6 } \right)  \,+\, \right . \\
+ &\left. { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \,-\,  \frac{z }{  R^3 } \,+\, \frac{6 r^2   z   }{  R^5 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^3 \,  \left( \frac{ r^2   z   }{  R^4 } \right)  \right] \, \\
+ \,&=\, \  sgn (z) \INT  { k^2 }  e^{ \,-\, \nu_v |  z | } \left(  k J_0 ( kr ) - \frac{1 }{ r }J_1 ( kr )  \right) \, dk \\
+{ \frac{ \partial^3 F_v   }{  \partial {\it z}^2 \partial r } } \   &= \  \,-\,\ { e^{ \frac{ \,-\,i \omega R   }{ v }} } \, \left[  \left( \,-\, \frac{ 3 r   }{  R^5 } \,+\, \frac{ 15 r   z^2   }{  R^7 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) } \,  \left( \,-\, \frac{ 3 r   }{  R^4 } \,+\, \frac{ 15 r   z^2   }{  R^6 } \right)  \,+\,  \right . \\
+ &\left. { \left( {\frac{ i \omega   }{ v }}  \right) }^2 \,  \left( \,-\, \frac{ r   }{  R^3 } \,+\, \frac{ 6 r   z^2   }{  R^5 } \right)  \,+\, { \left( {\frac{ i \omega   }{ v }}  \right) }^3 \,  \left( \frac{ r   z^2   }{  R^4 } \right)  \right] \, \\
+ \,&=\, \   -  \INT  k^2 \nu_v  e^{ \,-\, \nu_v |  z | } J_1 ( kr ) \, dk 
+\end{aligned}
+\end{equation*}
+
+\end{document}

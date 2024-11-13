@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#####
+#	cleanup
+#####
+
+for HS in  010 600
+do
+rm -f file96
+rm -fr ${HS}0
+
+
+DIR=${HS}0
+if [ ! -d ${DIR} ]
+then
+	mkdir ${DIR}
+fi
+
+for GCARC in 30  50  70  90
+do
+hudson96 -HS ${HS}  -TEL ../MODELS/tak135sph.mod  -GCARC ${GCARC} -NPTS 4096 -DT 0.1   
+
+hpulse96 -V -p -l 1 >> file96
+done
+
+cd ${DIR}
+f96tosac -T < ../file96
+
+#-----
+#     put in source function of 4 second width
+#-----
+gsac << EOF
+r *.???
+triangle width 4
+interpolate delta 1
+w
+q
+EOF
+
+../DOANNOTATE
+
+
+
+cd ..
+
+done
+
+

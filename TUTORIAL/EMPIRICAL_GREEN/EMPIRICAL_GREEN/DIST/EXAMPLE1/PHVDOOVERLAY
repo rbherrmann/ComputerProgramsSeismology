@@ -1,0 +1,31 @@
+#!/bin/sh
+
+clear
+echo Getting dispersion from tomography
+
+rm -f S?EGNC.PLT
+MOD=CUS.REG
+#####
+#    look at PHV96CMP
+#####
+ed PHV96CMP << EOF
+/sdpegn96/s//sdpegn96 -K 4/
+w
+q
+EOF
+
+if [ ! -f sregn96.egn ]
+then
+	cp $GREENDIR/${MOD}/SW/sregn96.egn .
+fi
+if [ ! -f slegn96.egn ]
+then
+	cp $GREENDIR/${MOD}/SW/slegn96.egn .
+fi
+	
+sh PHV96CMP
+
+cat S?EGNC.PLT >> PHV96.PLT
+
+rm -f S?EGNC.PLT
+

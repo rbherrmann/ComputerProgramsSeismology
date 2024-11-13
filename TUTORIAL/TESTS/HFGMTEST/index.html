@@ -1,0 +1,77 @@
+<html>
+<head><title>Groundmotion comparisons</title></ehad>
+<body bgcolor="#FFFFFF">
+<h2>Introduction</h2>
+The following is a comparison of peak ground velocities for different mechanisms as a function of distance.
+<p>
+The CUS velocity model is used which can be downloaded from <a href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/MODELS/index.html"> http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/MODELS/index.html</a>. This model has some Q (note if the value is < 1 the value is actually q inverse).
+<p>
+Greens functions were computed for a source depth of 9 km in the model using a sample interval of 0.05 sec. The synthetics have a triangular source time function of width 0.20 sec, which was designed to have a spectral zero at the 10 Hz Byquist frequency. The corner frequency of the source pulse is about 6 hz.
+<p>
+The gsac mt command was used to read the Greens functions and to create a synthetic for a given combination of strike, sip, rake, azimuth and Mw. 
+<p>
+Further the results were convolved with a triangular function with base width of 0.5 sec. The results are peak ground velocity in units of m/s for an Mw=3.
+<p>
+There is no attempt to model an earthquake, hence the apparent dichotomy between the Mw and the source pulse width. The purpose is to examine peak amplitude versus hypocentral distance.
+<p>
+For the interest ion quickly preparing this page, only the larges positive amplitude is plotted. I did not want to mess around with scripting and ABS into awk.
+<h2>Source mechanisms</h2>
+The following combinations of strike, dip and rake were used:
+<br>
+<pre>
+45   45 degree dip slip  Strike=5  Dip=45 Rake=85
+SS   strike - slip       Strike=5  Dip=80 Rake=5
+VA   Virginia            Strike=28 Dip=50 Rake=113
+<pre>
+<h2>Simulations</h2>
+For each component, I used Greens functions at precomputed epicentral distances to compute synthetics at azimuths of 10, 20, ..., 340 and 350 degrees.
+<p>
+The peak velocity was then plotted as a function of epicentral distance. I did not focus on the S arrival. So perhaps the peak motion might be due to the P wave.
+<p>
+The following plots present four figures for each mechanism: ALL which is the poverlay of all components onto a single plot and may be useful to see which component dominates at a given distance, Z which is the vertical, R which is the radial and T which is the transverse.
+<h3>9 km deep source</h3>
+<table>
+<tr>
+<td><IMG src="09.SS.ALL.png"><br>SS - ALL  </td>
+<td><IMG src="09.SS.Z.png"><br>SS - Z  </td>
+<td><IMG src="09.SS.R.png"><br>SS - R  </td>
+<td><IMG src="09.SS.T.png"><br>SS - T  </td>
+</tr>
+<tr>
+<td><IMG src="09.45.ALL.png"><br>45 - ALL  </td>
+<td><IMG src="09.45.Z.png"><br>45 - Z  </td>
+<td><IMG src="09.45.R.png"><br>45 - R  </td>
+<td><IMG src="09.45.T.png"><br>45 - T  </td>
+</tr>
+<tr>
+<td><IMG src="09.VA.ALL.png"><br>VA - ALL  </td>
+<td><IMG src="09.VA.Z.png"><br>VA - Z  </td>
+<td><IMG src="09.VA.R.png"><br>VA - R  </td>
+<td><IMG src="09.VA.T.png"><br>VA - T  </td>
+</tr>
+</table>
+<h3>20 km deep source</h3>
+<table>
+<tr>
+<td><IMG src="20.SS.ALL.png"><br>SS - ALL  </td>
+<td><IMG src="20.SS.Z.png"><br>SS - Z  </td>
+<td><IMG src="20.SS.R.png"><br>SS - R  </td>
+<td><IMG src="20.SS.T.png"><br>SS - T  </td>
+</tr>
+<tr>
+<td><IMG src="20.45.ALL.png"><br>45 - ALL  </td>
+<td><IMG src="20.45.Z.png"><br>45 - Z  </td>
+<td><IMG src="20.45.R.png"><br>45 - R  </td>
+<td><IMG src="20.45.T.png"><br>45 - T  </td>
+</tr>
+<tr>
+<td><IMG src="20.VA.ALL.png"><br>VA - ALL  </td>
+<td><IMG src="20.VA.Z.png"><br>VA - Z  </td>
+<td><IMG src="20.VA.R.png"><br>VA - R  </td>
+<td><IMG src="20.VA.T.png"><br>VA - T  </td>
+</tr>
+</table>
+<H2>Script</h2>
+The script <a href="DOIT.SS">DOIT.SS</A> is a shell script shows how this was all done using the tools of computer programs in seismology. The Greens functions were computed several months ago.
+</body>
+</html>

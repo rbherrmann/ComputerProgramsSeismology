@@ -1,0 +1,306 @@
+#!/bin/bash
+
+# place the stations at coordinates (-200,0) (200,0)
+# place sources randomly in the region bounded by (-800,-800) to (800,800)
+# apply a randomly directed force
+# The synthetics are zero phase, so that the source time function will
+# not cause a delay that would affect the velocity measurements
+#
+# for the CUS model the maximum distance will be about 1500 km and the travel time
+# about 500 sec
+#  OK this cross-correlates individual sources
+#  and then stacks
+
+rm -f Summary
+
+#####
+#   create the directory with the 
+#   two traces
+#####
+rm -fr POS1 POS2 
+rm -fr CORR
+rm -fr STACK1 STACK2
+mkdir POS1
+mkdir POS2
+mkdir CORR
+mkdir STACK1 STACK2
+
+if [ ! -f CUS.mod ]
+then
+	cp $GREENDIR/Models/CUS.mod .
+fi
+#####
+#   pre-compute the eigenfunctions
+#####
+
+
+DT=0.25
+NPTS=2048
+DIST=1000.
+FREQLIMITS="0.005 0.01 1.0 2"
+cat > dfile << EOF
+${DIST} ${DT} ${NPTS} 0.0 0.0
+EOF
+sprep96 -d dfile -R -L -M CUS.mod -HS 0.01 -HR 0.0 -NMOD 1
+sdisp96
+sregn96
+slegn96
+
+
+#####
+# now do MAXSRC simulations
+#####
+MAXSRC=100
+NSRC=0
+
+P1X=-200.0
+P1Y=0.0
+STLO1=`echo $P1X | awk '{print $1/111.195}' `
+STLA1=`echo $P1Y | awk '{print $1/111.195}' `
+P2X=200.0
+P2Y=0.0
+STLO2=`echo $P2X | awk '{print $1/111.195}' `
+STLA2=`echo $P2Y | awk '{print $1/111.195}' `
+DX=`echo $P1X $P2X | awk '{print $2 - $1}' `
+
+
+
+while [ $NSRC != $MAXSRC ]
+do
+
+for SUBSOURCE in 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19
+do
+#####
+#    get the coordinates for the source
+#    Sometimes the bash $RANDOM works
+#RVAL=`echo $RANDOM`
+# note the awk method require the initial echo to start
+#####
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+XS=`echo $RVAL | awk '{print 1600.*$1/32767. -800.}' `
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+YS=`echo $RVAL | awk '{print 1600.*$1/32767. -800.}' `
+EVLA=`echo $YS | awk '{print $1/111.195}' `
+EVLO=`echo $XS | awk '{print $1/111.195}' `
+
+#####
+#    get the components for the force
+#####
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+ FN=`echo $RVAL | awk '{print 2.*$1/32767. -1.}' `
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+ FE=`echo $RVAL | awk '{print 2.*$1/32767. -1.}' `
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+ FD=`echo $RVAL | awk '{print 2.*$1/32767. -1.}' `
+#FN=1.0
+#FE=1.0
+#FD=1.0
+
+DIST1=`udelaz -DIST -EVLA $EVLA -EVLO $EVLO -STLA $STLA1 -STLO $STLO1`
+AZ1=`  udelaz -AZ   -EVLA $EVLA -EVLO $EVLO -STLA $STLA1 -STLO $STLO1`
+BAZ1=` udelaz -BAZ  -EVLA $EVLA -EVLO $EVLO -STLA $STLA1 -STLO $STLO1`
+DIST2=`udelaz -DIST -EVLA $EVLA -EVLO $EVLO -STLA $STLA2 -STLO $STLO2`
+AZ2=`  udelaz -AZ   -EVLA $EVLA -EVLO $EVLO -STLA $STLA2 -STLO $STLO2`
+BAZ2=` udelaz -BAZ  -EVLA $EVLA -EVLO $EVLO -STLA $STLA2 -STLO $STLO2`
+
+#####
+#   exclude short distance
+#####
+ANS=`echo $DIST1 $DIST2 | awk '{ if ( $1 < 50 || $2 < 50 ) print "NO" ; else print "YES" }' `
+if [ $ANS = "YES" ]
+then
+cat > dfile << EOF
+${DIST1} ${DT} ${NPTS} 0.0 0.0
+EOF
+rm -fr TMP
+mkdir TMP
+spulse96 -Z -p -V -l 2 -d dfile -EXF | (cd TMP ; f96tosac -G )
+(cd TMP ;
+F=`ls *.ZVF`
+B=`basename $F .ZVF`
+gsac << FOE
+mt to ZNE AZ ${AZ1} BAZ ${BAZ1} FN $FN FE $FE FD $FD FILE $B
+ch EVLA $EVLA EVLO $EVLO STLA $STLA1 STLO $STLO1
+whiten freqlimits ${FREQLIMITS}
+w
+q
+FOE
+cp T.Z ../POS1/${NSRC}.${SUBSOURCE}.Z
+cp T.N ../POS1/${NSRC}.${SUBSOURCE}.N
+cp T.E ../POS1/${NSRC}.${SUBSOURCE}.E
+)
+
+
+
+cat > dfile << EOF
+${DIST2} ${DT} ${NPTS} 0.0 0.0
+EOF
+rm -fr TMP
+mkdir TMP
+spulse96 -Z -p -V -l 2 -d dfile -EXF | (cd TMP ; f96tosac -G )
+(cd TMP ;
+F=`ls *.ZVF`
+B=`basename $F .ZVF`
+gsac << FOE
+mt to ZNE AZ ${AZ2} BAZ ${BAZ2} FN $FN FE $FE FD $FD FILE $B
+ch EVLA $EVLA EVLO $EVLO STLA $STLA2 STLO $STLO2
+whiten freqlimits ${FREQLIMITS}
+w
+q
+FOE
+cp T.Z ../POS2/${NSRC}.${SUBSOURCE}.Z
+cp T.N ../POS2/${NSRC}.${SUBSOURCE}.N
+cp T.E ../POS2/${NSRC}.${SUBSOURCE}.E
+)
+
+fi
+
+#####
+#     stack the subsources traces into one
+#     seismogram in the STACK directories
+####
+
+gsac << EOF
+r POS1/${NSRC}.*.Z
+stack
+w STACK1/${NSRC}.Z
+r POS1/${NSRC}.*.N
+stack
+w STACK1/${NSRC}.N
+r POS1/${NSRC}.*.E
+stack
+w STACK1/${NSRC}.E
+
+r POS2/${NSRC}.*.Z
+stack
+w STACK2/${NSRC}.Z
+r POS2/${NSRC}.*.N
+stack
+w STACK2/${NSRC}.N
+r POS2/${NSRC}.*.E
+stack
+w STACK2/${NSRC}.E
+q
+EOF
+
+# end ofr SUBSOURCE loop
+
+done
+#####
+#    now correlate the realization
+#    and force the distances and event
+#####
+gsac << EOF
+r STACK1/${NSRC}.Z STACK2/${NSRC}.Z STACK2/${NSRC}.N STACK2/${NSRC}.E
+correlate master 0
+ch evla $STLA1 evlo $STLO1 stla $STLA2 stlo $STLO2
+
+w Z1Z1 Z1Z2 Z1N2 Z1E2
+mv Z1Z2 CORR/${NSRC}.Z1Z2
+mv Z1E2 CORR/${NSRC}.Z1E2
+mv Z1N2 CORR/${NSRC}.Z1N2
+
+r STACK1/${NSRC}.N STACK2/${NSRC}.Z STACK2/${NSRC}.N STACK2/${NSRC}.E
+correlate master 0
+ch evla $STLA1 evlo $STLO1 stla $STLA2 stlo $STLO2
+w N1N1 N1Z2 N1N2 N1E2
+mv N1Z2 CORR/${NSRC}.N1Z2
+mv N1E2 CORR/${NSRC}.N1E2
+mv N1N2 CORR/${NSRC}.N1N2
+
+r STACK1/${NSRC}.E STACK2/${NSRC}.Z STACK2/${NSRC}.N STACK2/${NSRC}.E
+correlate master 0
+ch evla $STLA1 evlo $STLO1 stla $STLA2 stlo $STLO2
+w E1E1 E1Z2 E1N2 E1E2
+mv E1Z2 CORR/${NSRC}.E1Z2
+mv E1E2 CORR/${NSRC}.E1E2
+mv E1N2 CORR/${NSRC}.E1N2
+q
+EOF
+
+
+
+echo $NSRC XS=$XS YS=$YS DIST1=$DIST1 AZ1=$AZ1 BAZ1=$BAZ1 DIST2=$DIST2 AZ2=$AZ2 BAZ2=$BAZ2 F= $FN $FE $FD >> Summary
+NSRC=`echo $NSRC | awk '{print $1 + 1 }' `
+
+#end NSRC loop
+done
+
+######
+#    prepare the stacks
+#####
+
+gsac << EOF
+r CORR/*.Z1Z2
+stack
+w Z1Z2
+rev
+w Z1Z2.rev
+r Z1Z2  Z1Z2.rev
+stack
+w Z1Z2.sym
+
+## note Z1E2 is will have extra pi/2 since
+## compared to Z1Z2.  Currently do_mft
+## phave velocity will not be correct since
+## this extra pi/2 is not accounted for. 
+## Only do phase velocity for 
+## Z1Z2  vertical force vertical receiver
+## E1E2  radial   force  radial receiver
+## N1N@  transverse force transverse receiver
+#r CORR/*.Z1E2
+#stack
+#w Z1E2
+#rev
+#w Z1E2.rev
+#r Z1E2  Z1E2.rev
+#stack
+#w Z1E2.sym
+
+#r CORR/*.Z1N2
+#stack
+#w Z1N2
+#rev
+#w Z1N2.rev
+#r Z1N2  Z1N2.rev
+#stack
+#w Z1N2.sym
+
+r CORR/*.E1E2
+stack
+w E1E2
+rev
+w E1E2.rev
+r E1E2  E1E2.rev
+stack
+w E1E2.sym
+
+r CORR/*.N1N2
+stack
+w N1N2
+rev
+w N1N2.rev
+r N1N2  N1N2.rev
+stack
+w N1N2.sym
+
+q
+EOF
+
+#####
+#    make a map
+#####
+gsac << EOF
+r POS?/*Z
+map t off
+q
+EOF
+ed map.sh << EOF
+g/EPISYM="A0.50c"/s/A0.50/c0.10/p
+1
+/^pscoast/s/ps/\#ps/p
+/psxy/s/-O//p
+w map.sh
+q
+EOF
+sh map.sh

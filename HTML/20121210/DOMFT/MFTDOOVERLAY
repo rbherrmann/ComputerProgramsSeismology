@@ -1,0 +1,64 @@
+#!/bin/sh
+
+clear
+echo Getting dispersion from tomography
+
+#####
+#    look at the file MFT96CMP created by
+#    sacmft96 to get the plot scales
+#
+#    Here get the line with sdpegn96, 
+#    change sdpegn96 to sdpdsp96, and
+#    indicate the name of the SURF96 dispersion file
+#####
+
+grep sdpegn96 MFT96CMP > 1.tmp
+ed 1.tmp > /dev/null 2>&1  << EOF
+/sdpegn96/s//sdpdsp96/
+s/$/ -K 0 -S 0.020 -D tomo.disp/
+w
+q
+EOF
+
+#####
+#    identify the trace file, get endpoint
+#    coordinates
+#####
+SACFILE=`grep sacspc96 MFT96CMP | awk '{print $23}' `
+echo processing ${SACFILE}
+if [ -f ${SACFILE} ]
+then
+	STLA=`saclhdr -STLA ${SACFILE}`
+	STLO=`saclhdr -STLO ${SACFILE}`
+	EVLA=`saclhdr -EVLA ${SACFILE}`
+	EVLO=`saclhdr -EVLO ${SACFILE}`
+	IHDR11=`saclhdr -IHDR11 ${SACFILE}`
+        rm -f S?DSPU.PLT
+#####
+#      get the predicted group velocity for the path
+#####
+	MFTDOGRID ${STLA} ${STLO} ${EVLA} ${EVLO}  > /dev/null 2>&1
+	sh ./1.tmp
+	cat S?DSPU.PLT >> MFT96.PLT
+        DAYS=`echo $IHDR11 | awk '{print $1 / 2 } ' `
+#####
+#      use gsac and GMT to get a map
+#####
+gsac > /dev/null  << EOF
+rh ${SACFILE}
+map kstnm on r on s 25 n 50 e -80 w -110
+sh map.sh
+q
+EOF
+	echo MFTOVERLAY DAYS STACKED=${DAYS} done
+#####
+#     say the number of days for the stack
+#####
+#	flite -t "${DAYS}    days  stacked   "  /tmp/play.wav
+##	aplay /tmp/play.wav &
+#	(play /tmp/play.wav gain +6 > /dev/null 2>&1) &
+
+fi
+
+
+rm -f tomo.disp 1.tmp S?DSPU.PLT map.sh

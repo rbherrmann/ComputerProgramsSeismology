@@ -1,0 +1,129 @@
+<HTML>
+<HEAD><TITLE>Computer Programs in Seismology Tutorials - Regional moment Tensor</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<h2>Introduction</h2>
+<p>
+This tutorial provides a complete data set for regional moment tensor inversion.
+Download the following:
+<UL>
+	<li><a href="GREEN.tgz">GREEN.tgz</a> (92718426 bytes)</li>
+	<li><a href="MECH.NA.tgz">MECH.NA.tgz</a> (6208752 bytes)</li>
+	<li><a href="0XXXREG.tgz">0XXXREG.tgz</a> (122156 bytes)  <span
+          style="color: rgb(255, 0, 0); font-style: italic; font-weight:
+          bold;">Added May 9, 2016 (see below) </span> </li>
+</ul>
+<p>`
+After downloading, execute the following steps:
+<ul>
+	<li>Unpack the gzip archives:<br><pre>
+gunzip -c GREEN.tgz | tar xvf - <br>
+gunzip -c MECH.NA.tgz | tar xvf - 
+cd RMT/MECH.NA ; gunzip -c ../../0XXXREG.tgz | tar xf -  <span style="color: rgb(255, 0, 0); font-style: italic; font-weight: bold;"> [corrected 20 JUN 2019] </span> 
+</pre><br>This will create the following directory structure:
+<pre>
+     RMT
+     |--- GREEN
+     |    |--- CUS.REG
+     |    |--- Models
+     |--- index.html
+     |--- MECH.NA
+          |--- 0XXXREG
+          |--- DO
+          |--- DOCWBREG
+          |--- DOFINISH
+          |--- DOIRIS
+          |--- DOISETUP
+          |--- DOQUERY
+          |--- DOSETUP
+          |--- DOSOLUTION
+          |--- mech.sh
+          |--- PROTO.CWB
+          |--- PROTO.I
+          |--- RAW
+</pre>
+	</li>
+	<li> Determine the absolute PATH to the GREEN directory, e.g., <br>
+	<pre>
+     cd RMT/GREEN
+     pwd
+</pre>For example on my system the response of this command will be
+	<pre>
+/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/TUTORIAL/RMT/GREEN
+</pre>
+</li>
+<li>Set the environment parameter <i>GREENDIR</i> in the <i>.bashrc</i>
+        file if you use the <b>bash</b> shell. [If you use another shell, set up something similar]. The line to be added to <i>.bashrc</i> for the parameter above is<br><pre>export GREENDIR=/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/TUTORIAL/RMT/GREEN</pre></li>
+        <li> Refresh the environment<br><pre> source ~/.bashrc</pre><br>Note this will be done automatically when you login again.</li>
+	<li>Run the souce inversion</li>
+</ul>
+<h2>Source inversion</h2>
+The PDF document <a href="MomentTensorCourse.pdf"> MomentTensorCourse.pdf</a> provides details on the steps required to perform a regional moment tensor inversion using a grid-search technique.
+<p>
+If you must skip reading the tutorial, do the following:
+<pre>
+cd RMT/MECH.NA
+DO
+cp RAW/*seed /home/cps/MTTEST/RMT/MECH.NA/20080418093700/20080418093700
+cd /home/cps/MTTEST/RMT/MECH.NA/20080418093700/20080418093700
+cd Sac
+rdseed -f ../*.seed -R -d -o 1
+cd ..
+IDOEVT
+IDOROT
+IDODIST
+IDOQC
+cd ..
+cd GRD.REG
+DOGRD
+DODELAY
+DOPLTSAC
+DOCLEANUP
+cd ../HTML.REG
+DOHTML
+</pre>
+NOTES: 
+<ul>
+<li>On your system the absolute path will be different. So you may see something like <i>/Users/rbh/PROGRAMS.310t/MOMENT_TENSOR</i>MECH.NA/20080418093700/20080418093700</li>
+<li>
+When the computations have finished point your browser to the HTML.REG directory, e.g., <i>file:///home/cps/MTTEST/RMT/MECH.NA/20080418093700/HTML.REG/index.html</i> for the machine that I used.</li>
+<li>You may get some error messages if your do not have GMT 4 installed (the scripts will have to be changed for GMT5), and do not have the database of previous moment tensors, or the magnitde computation codes</li>
+</ul>
+<h2>Advanced steps</h2>
+The Greens functions distributed for this example are only the subset of distances required for the tutorial. The reason that a complete set is not provide is because of the large size of the download file.
+<p>
+In the directory  RMT/GREEN/CUS.REG is a shell script DOIT.WK.big which computes Greens functions at finer distance intervals out to 790 km.
+<p>
+If you wish to work with another veolocty model, do the following:
+<UL>
+	<li>Create the model and place it in $GREENDIR/Models, e.g., NEW.mod</li>
+	<li>Create a new directory for the Greens functions, cd $GREENDIR ; mkdir NEW.REG</li>
+	<li>Copy the DOIT.WK and MKW scripts from the CUS.REG directory to the NEW.REG directory</li>
+	<li>Carefully edit the DOIT.WK script in NEW.REG to change references of CUS to NEW. Also select the distances for which the Green's functions are to be computed. You will note in the script that at shorter distances 512 point time series are used and 1024 at larger distances.  If the NEW.mod has lower velocites near the surface, as in the WUS.mod, the 1024 point synthetics will have to tbe applied at shorter distances.</li>
+</ul>
+<h2>Updates May 9, 2016 </h2>
+The 0XXXREG now contains prototypes for comptuoing ML and mLg as well as for applying the grid search for the full and deviaoric moment tensors.
+The use of these scripts is illustrated at <a href="http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20160307004336/index.html"> http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20160307004336/index.html</a>. The differences are as follow.
+<p>
+The EVENT directory will now contrin the ML.REG and MLG.REG subdirectories. If the EVETN/EVENT/FINAL/rotated_sac_files has not been removed,
+then
+<pre>
+cd ML.REG
+DOML
+
+cd ../HTML.REG
+DOHTML
+</pre>
+will compute ML and put the results in the HTML.REG directory. 
+<p>Currently my DOSETUP will also create the directories EVENT/MTGRD.REG, EVENT/MTGRD.REG.DC and EVENT.MTGRD.REG.DEV.  The grid search for the best double couple solution will give the same results at the use of <b>wvfgrd96</b> in the EVENT/GRD.REG directory. The deviatoric grid search takes longer since the search is over 4 parameters instead of 3.  The full moment tensor search is ove five parameters and will take much, much longer than for the double couple search. So, do the following: (a) copy the DOSTA from GRD.REG to the MTGRD.REG.DEV. Edit the DOMTGRD files to select the depth ranges. In the case of the full moment tensor, just do a few depths about the best depth for the deviatoric solution.
+<h2>Extra software</h2>
+Besides Computer Programs in Seismology, you will require the following:
+<ul>
+	<li>ImageMagick package to convert PostScript to PNG</li>
+	<li>GMT - to make maps</li>
+</ul>
+
+<p>
+<center>Last changed April 15, 2012</center>
+</BODY>
+</HTML>

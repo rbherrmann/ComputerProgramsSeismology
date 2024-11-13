@@ -1,0 +1,45 @@
+<HTML>
+<HEAD><TITLE>Computer Programs in Seismology Tutorials</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<P>
+<pre>
+#!/bin/sh
+export PATH=:.:./src:$PATH
+
+#####
+#    make synthetics and then invert using wvfgrd96
+#####
+
+#DOMKMOD Model STK DIP RAKE DEPTH MW PVAL
+#
+#   Model   CUS   uses ${GREENDIR}/CUS.REG green function
+#   Model   WUS   uses ${GREENDIR}/WUS.REG green function
+#   Model   nnCIA   uses ${GREENDIR}/nnCIA.REG green function
+#
+#   STK
+#   DIP
+#   RAKE
+#
+#   DEPTH (km)
+#
+#   MW
+#
+#   PVAL  < 0  no noise
+#           0  use ASL New Low   Noise Model (NLNM)
+#           1  use ASL New High  Noise Model (NHNM)
+#         0 < pval < 1  interpolate linearly between 
+#         20 seconds  NHNM -120 db
+#         20 seconds  NLNM -173 db
+#          thus for pval = 0.1 we use -168 at 20 sec
+#####
+# 20140209021601
+  DOMKMOD2 CUS  85 70 -20 2.0 3.38 0.3
+  DOMKMOD2 CUS  85 70 -20 2.0 3.00 0.3
+  DOMKMOD2 CUS  85 70 -20 2.0 4.00 0.3
+  DOMKMOD2 CUS  85 70 -20 2.0 3.00 0.4
+  DOMKMOD2 CUS  85 70 -20 2.0 3.50 0.4
+  DOMKMOD2 CUS  85 70 -20 2.0 4.00 0.4
+</pre>
+</BODY>
+</HTML>

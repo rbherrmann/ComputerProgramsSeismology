@@ -1,0 +1,112 @@
+#!/bin/sh
+
+#####
+#	attempt to make synthetic teleseismic P for Harley
+#	using revised hspec96 with earth flattening
+#####
+rm -f hspec96*
+
+#cd PPP;make hspec96 ; cd ..
+
+date > date.start
+
+#####
+#	PARAMETERS FOR SYNTHETIC
+#####
+DT=1
+NPTS=4096
+NDEC=2
+
+#####
+#	LOOP OVER THE SOURCE DEPTH
+#	NOTE: The depth must be given as 3 digits for depths > 0.5 km
+#	this is for the naming convention
+#####
+for HS in \
+	010  100 700
+do
+
+#####
+#	define the DIRECTORY NAME FOR THIS SOURCE DEPTH
+#	THE CONVENTION IS A 5 DIGIT NUMBER SUCH THAT
+#	1234  means a depth of 123.4 km
+#####
+
+case $HS 
+in
+	0.5) DIRNAME=0005 ;;
+	*) DIRNAME=${HS}0 ;;
+esac
+#####
+#	create the directory for this source depth
+#####
+if [ ! -d  ${DIRNAME} ]
+then
+	echo creating the Green s Function depth directory 
+	echo $DIRNAME for depth $HS
+	mkdir ${DIRNAME}
+fi
+#####
+#	LOOP OVER THE GREAT CIRCLE DISTANCES
+#####
+rm -f dfile
+for GCARC in \
+	    030 060  090
+do
+
+#####
+#	FOR THIS EXERCISE THE DISTANCE IN KILOMETERS WILL BE TO THE
+#	NEAREST 1 KM
+#	WE NEED km for the synthetics and GCARC for the travel time
+#	D is set to be a 5 digit integer such that 12345
+#####
+
+DIST=`echo ${GCARC} | awk '{printf "%7.1f",   111.195*$1}' `	
+GCARC=`echo ${DIST} | awk '{printf "%f", $1/111.195}' `
+
+#####
+#	for this distance and source depth get the ray parameter
+#	and define the phase velocity limits
+#####
+#####
+#	get P travel time == arrival time
+#####
+	A=`time96 -M tak135sph.mod -GCARC ${GCARC} -T -EVDP ${HS}`
+	T0=`echo $A | awk '{printf "%f", $1 - 100}' `
+cat >> dfile << EOF
+${DIST} ${DT} ${NPTS} ${T0} 0.0
+EOF
+	
+done
+#####
+#	end of GCARC loop
+#####
+	
+
+	hprep96 -M tak135sph.mod -HS ${HS} -HR 0.0 -EQEX -TF -BH  -d dfile \
+		-NDEC ${NDEC}
+	hspec96  -K 
+	hpulse96 -p -V -l 1 -Z > file96
+
+cd ${DIRNAME}
+cat ../file96 | f96tosac -T
+cd ..
+
+#####
+#	now that all computations are done, create the final
+#	W.CTL since the above efforts do not match the naming
+#	created by the FORTRAN code in f96tosac
+#
+######
+	cd ${DIRNAME}
+	../MKW > W.CTL
+	cd ..
+
+
+done
+#####
+#	end of HS loop 
+#####
+date > date.end
+
+

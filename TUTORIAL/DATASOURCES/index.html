@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=ISO-8859-1">
+    <title>Computer Programs in Seismology Tutorials - Data Sources</title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h2>Introduction</h2>
+    <p>This tutorial shows how to acquire earthquake waveforms from data
+      centers.<br>
+    </p>
+    <p>The data centers are used to provide SEED volumes for regional
+      moment tensor inversion. <br>
+    </p>
+    <p>The source inversion is initiated by a "DO" script that looks
+      like the following example:<br>
+    </p>
+    <pre style="margin-left: 40px;">#!/bin/sh <br># valid regions<br># REG    Region             FELTID  VELOCITY_MODEL<br># HI    Hawaii              hi        [Not implemented June 23, 2007]<br># SAK    Alaska             ak        WUS  (to 69 km deep)<br># NAK    Alaska             ak        CUS  (in continent from Rockies -no deep)<br># CA    California          ca        WUS<br># PNW   Pacific Northwestrn pnw       WUS<br># IMW   Intermountain west  imw       WUS<br># CUS   Central US          cus       CUS<br># NE    Northeastern US     ne        CUS<br># ECAN  Eastern Canada      ous       CUS (in continent from Rockies)<br># WCAN  Western Canada      ous       [Not implemented June 23, 2007]<br>#####<br># Command syntax:<br>#DOCWBREG YEAR MO DY HR MN SC MSC  LAT     LON    DEP  MAG REG  NEIC FELTID STATE/COUNTRY<br>#####<br>DOIRIS "2013" "01" "05" "08" "58" "19" "000" " 55.368" " -134.621" "9.8" " 7.48" "CUS" "c000ejqv" "US/c000ejqv"   "Canada"<br><br></pre>
+    <span style="font-style: italic;"></span>The DOIRIS script sets up
+    the directory structure, instructs the user to place the SEED
+    volumes in a subdirectory, and then<br>
+    unpack then, and finally run the DOFINISH script:<br>
+    <br>
+    <div style="margin-left: 40px;">
+      <pre>1. PLACE THE SEED_VOLUME FROM IRIS in /backup/rbh/PROGRAMS.310t/MECH.NA/20130105085819/20130105085819<br>   cp SEED_VOLUME /backup/rbh/PROGRAMS.310t/MECH.NA/20130105085819/20130105085819<br>2. UNPACK the SEED_VOLUME FROM IRIS as follows<br>   cd  /backup/rbh/PROGRAMS.310t/MECH.NA/20130105085819/20130105085819<br>   cd Sac <br>   rdseed -f ../SEED_VOLUME -R -d -o 1<br>   [Note use the name of the downloaded file for SEED_VOLUME, e.g., 20090116.seed]<br>3. Return to the top level directory where you started:<br>   cd /backup/rbh/PROGRAMS.310t/MECH.NA<br>4. enter the command:<br>   DOFINISH<br></pre>
+    </div>
+    The following sections describe how to get SEED volumes from various
+    data centers.<br>
+    <h2>Earthquakes Canada<br>
+    </h2>
+    <p>Natural Resources Canada/Ressources naturelles Canada provides
+      access to waveform data through their autodrm site. The web page
+      is very easy to use. There are some limitations on the size of the
+      download request, and of course some shortcuts for easier access.<br>
+    </p>
+    <p>The autodrm request form starts with an the users Email address.
+      When the request is complete, an Email to the user is sent giving
+      the location for FTP access. <br>
+    </p>
+    <p>Because of the limitation on file downloads, I first run the
+      script DOGSC to get a list of stations ordered by epicentral
+      distance. I use this is select stations for regional moment tensor
+      inversion. The script is available from the next link - just
+      download and save,<br>
+    </p>
+    <div style="margin-left: 40px;"><a href="DOGSC">DOGSC script</a></div>
+    <p>and then<br>
+    </p>
+    <p style="margin-left: 40px;">chmod +x DOGSC<br>
+      <span style="text-decoration: underline;"></span></p>
+    <p>Now run the script with the syntax<br>
+    </p>
+    <p style="margin-left: 40px;">DOGSC lat lon, e.g.,<br>
+    </p>
+    <p style="margin-left: 40px;">DOGSC 55.368 -134.621<br>
+    </p>
+    <p>The result is the file <a href="gsc.list">gsc.list</a> The first
+      few lines of this file are<br>
+    </p>
+    <pre style=" margin-left: 40px;">NDB      191.1411   145 19970101.0001 29991231.0000<br>MASB     225.3494   131 19990505.1919 29991231.0000<br>VIB      271.7930   149 20041123.1343 29991231.0000<br>DIB      278.7018   149 20040315.1942 29991231.0000<br>MOBC     301.9514   144 19960226.1956 29991231.0000<br>RUBB     303.6043   111 20120518.2140 29991231.0000<br>BNAB     332.2422   127 19990416.1834 29991231.0000<br>BNB      363.4351   148 19960226.1955 29991231.0000<br>DLBC     441.3487    37 19940928.2211 29991231.0000<br><br></pre>
+    The entries are station name, epicentral distances, azimuth, on_date
+    and off_date.&nbsp; Note that the station information was downloaded
+    in September, 2012 and should be periodically&nbsp; upgraded
+    manually.<br>
+    <br>
+    We are now ready to make the AutoDRM Request. Go to the following
+    link:<br>
+    <p> <a href="http://www.earthquakescanada.nrcan.gc.ca/stndon/AutoDRM/autodrm_req-eng.php">CNDC AutoDRM data request page</a><br>
+    </p>
+    <p>The following pages show how the form is completed to get the
+      SEED volume for the broadbands at Yellowknife.<br>
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <td> <a href="autodrm_01.png"> <img src="autodrm_01.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_02.png"> <img src="autodrm_02.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_03.png"> <img src="autodrm_03.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_05.png"> <img src="autodrm_05.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_06.png"> <img src="autodrm_06.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_07.png"> <img src="autodrm_07.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_08.png"> <img src="autodrm_08.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_09.png"> <img src="autodrm_09.png"
+                height="50%" width="50%"></a> </td>
+        </tr>
+        <tr>
+          <td> <a href="autodrm_10.png"> </a><br>
+            <div style="margin-left: 40px;"><a href="autodrm_10.png"><img
+                  src="autodrm_10.png" height="50%" width="50%"></a></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p> </p>
+    When the list is complete, click on the "Submit" button.&nbsp; The
+    next page will be<br>
+    <br>
+    <table style="text-align: left; width: 50%; margin-left: 40px;"
+      border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td style=" vertical-align: top;"><img style=" width: 611px;
+              height: 788px;" alt="submissted command"
+              src="autodro_S_01.png"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    In a terminal window, enter the following command to get the UTC
+    time for the time of submission:<br>
+    <br>
+    <div style="margin-left: 40px;">
+      <pre>rbh@bob:~$ date -u<br>Sun Jan 20 22:52:27 UTC 2013<br></pre>
+      <br>
+    </div>
+    Rather than wait for the Email message, go to the FTP
+    site&nbsp;&nbsp; <a
+      href="ftp://ftp.seismo.nrcan.gc.ca/pub/autodrm/">ftp://ftp.seismo.nrcan.gc.ca/pub/autodrm/</a><br>
+    <br>
+    <div style="margin-left: 40px;">
+      <table style=" text-align: left; width: 50%;" border="1"
+        cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top;"><img style=" width: 967px;
+                height: 262px;" alt="ftp site" src="autodrm_xwd.png"><br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+    </div>
+    The filenames starting with CNDC are the SEED volumes.&nbsp; Since
+    the date command was just approximate, the file created at 10:51:00
+    PM is the one we want, e.g., 10:51 PM is 22:51 UTC.<br>
+    <br>
+    You can use the browser to download, but I prefer to use the wget
+    command to place this in the desired directory, e.g.,<br>
+    <br>
+    <div style="margin-left: 40px;">
+      <pre>wget ftp://ftp.seismo.nrcan.gc.ca/pub/autodrm/CNDC_20130120.225158 <br><br></pre>
+      <br>
+    </div>
+    With LINUX and the Firefox browser I just drag the filename to the
+    terminal window after I have typed wget, and then after the drag, I
+    hit the Enter.<br>
+    <br>
+    Now unpack in the Sac subdirectory, e.g.,<br>
+    <br>
+    <div style="margin-left: 40px;">
+      <pre>cd Sac<br>rdseed -f ../CNDC* -R -D -o 1<br></pre>
+    </div>
+    Since some stations may have EH, short period channels, remove those
+    files, e.g.,&nbsp; rm -fr *EH[ZNE]*<br>
+    <br>
+    <br>
+    <h2>IRIS Waveserver</h2>
+  </body>
+</html>

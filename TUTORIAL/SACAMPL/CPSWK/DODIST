@@ -1,0 +1,137 @@
+#!/bin/sh
+
+R=$1
+HS=10
+ANGLE=`echo $R $HS | awk '{print 180.0*atan2($1,$2)/3.1415927}' `
+
+#####
+#   clean up
+#####
+rm -f *.am
+rm -f *soil *rock *soil_rock
+
+VSBASE=3.5
+
+cat > soil.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+  0.0100  1.5     0.3     2.0         0.05   0.10   0    0      1       1
+  0.0100  1.5     0.6     2.0         0.03   0.06   0    0      1       1
+  0.0200  1.6     0.8     2.0         0.025  0.05   0    0      1       1
+  0.0200  3.0     1.5     2.2         0.01   0.02   0    0      1       1
+  0.1000  5.0     2.5     2.5         0.005  0.01   0    0      1       1
+  0.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+EOF
+
+cat > rock.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+ 20.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+EOF
+
+
+sacampl -M soil.mod -S -A ${ANGLE} -TXT > sacamp.out
+mv sacsampl.txt sacsampl_${R}.txt
+
+cat > dfile << EOF
+${R} 0.02  512 1  0.0
+EOF
+hprep96 -d dfile -M soil.mod -EQEX -HS ${HS}  -ML 2 
+hspec96 
+hpulse96 -V -p -l 1 | f96tosac -B
+mv *ZSS.sac ZSSsoil
+mv *TSS.sac TSSsoil
+mv *RSS.sac RSSsoil
+gsac << EOF
+cut a 0.5 a 4.5
+r *SSsoil
+fft
+writesp am
+q
+EOF
+rm -f B*sac
+
+
+hprep96 -d dfile -M rock.mod -EQEX -HS ${HS}  -ML 2
+hspec96 
+hpulse96 -V -p -l 1 | f96tosac -B
+mv *ZSS.sac ZSSrock
+mv *TSS.sac TSSrock
+mv *RSS.sac RSSrock
+gsac << EOF
+cut a 0.5 a 4.5
+r *SSrock
+fft
+writesp am
+q
+EOF
+rm -f B*sac
+
+#####
+#    at this time we have two surface motions
+#    lets carefully get the ration of soil to rock. Howver
+#    we will not go up to 20 Hz since the source pulse has a zero there
+#####
+gsac << EOF
+cut b b 20
+r ZSSsoil.am ZSSrock.am
+divf master 1
+w ZSSsoil_rock 11
+
+r TSSsoil.am TSSrock.am
+divf master 1
+w TSSsoil_rock 11
+
+r RSSsoil.am RSSrock.am
+divf master 1
+w RSSsoil_rock 11
+q
+EOF
+rm -f 11
+
+gsac << EOF
+cut b b 20
+r KAMP.sac.am ZSSsoil_rock RSSsoil_rock TSSsoil_rock
+color list black red blue cyan
+fileid list fname  dist concat on format colon
+bg plt
+p overlay on
+q
+EOF
+mv P001.PLT Ratio_${R}.PLT
+
+echo Epicentral distance = $R Incident Angle = $ANGLE
+
+
+mv TSSrock TSSrock_${R}
+mv ZSSrock ZSSrock_${R}
+mv RSSrock RSSrock_${R}
+
+mv TSSsoil TSSsoil_${R}
+mv ZSSsoil ZSSsoil_${R}
+mv RSSsoil RSSsoil_${R}
+
+#####
+#    clean up
+#####
+rm -fr dist hspec96.??? KAMP.sac.am AMP.sac.am

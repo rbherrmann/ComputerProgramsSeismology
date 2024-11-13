@@ -1,0 +1,81 @@
+#/bin/sh
+
+
+#####
+#  plot a record section of the REX and ZEX Green's functions
+#####
+#####
+#    plot some record sections
+#####
+gsac << EOF
+bg plt
+r *ZEX.sac
+prs STLO amp 0.2
+mv PRS001.PLT ZEX.PLT
+
+r *REX.sac
+prs STLO amp 0.2
+mv PRS002.PLT REX.PLT
+q
+EOF
+
+#####
+#    compute receiver function ffrom the synthetic at 200 km
+#    due to the source at a depth of 100 km and an x poistion of 100
+#    the approximately ray leaves the source at about arctan(100/100) so that the
+#    ray parameter is approximately sin(pi/4)/8.0 ~ 0.088
+#    An exact value can be obtained from the program time96
+#       time96 -EVDP 100 -DIST 100 -M model.d -P -RAYP which gives
+#       9.59405228E-02  s/km
+#    The travel time is time96 -EVDP 100 -DIST 100 -M model.d  which gives
+#       19.8530426s
+#    note the line in cseis96.amp corresponding to the direct P at 200 km is
+#    1   21  0.19849E+02  0.11161E-01  0.13669E-01  0.31416E+01  0.00000E+00 -0.696068E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.60000E+01
+#    cseis96 gives a travel time of 19.849s and a angle with respect to the horitontal of -0.696068 radians or -39.3968 degrees. This would correspond to
+#     an angle of incidence of 90.0 - 39.3868 = 50.083 degrees which would be a ray parameter os 0.09587 s/km.
+#    Since the source is beneath the center of the array, the ray which goes 100 km in the negative x-direction cfrom the center has the
+#    description
+#
+#    At the receiver position at 0 km, we would have
+#    1    1  0.19852E+02  0.11160E-01  0.13664E-01  0.00000E+00  0.00000E+00 -0.244573E+01    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.60000E+01
+#    Here the angle is -0.244573E+01 radians or -140.13 degrees. which would correspond to an angle of 39.87 with respect to the vertical. The difference is
+#    to to the limited precision in the outptu format. Shoutld change it from and e to an f format specification. Finally this ray goes upward from the source
+#    and propagates in the negative x-direction, e.g., to the left.
+#
+#    From this exercise  we note the following.  Let p be the ray parameter and V the velocity of the ray at the source. The angle at which the
+#    ray laves the source is theta = arcsin(p V).  The angle in cseis96 for such a ray going upward and to the right is  -pi/2 + theta = -0.69582.  
+#    The specification 
+#    for a ray going up and to the left is  -pi/2 -theta = -2.44576 radians.
+#####
+RAYP=`time96 -EVDP 100 -DIST 100 -M model.d -P -RAYP`
+saciterd -FN B02110REX.sac  -FD B02109ZEX.sac  -RAYP ${RAYP} -D 10 -ALP 1.0
+hrftn96 -M model.d -NSAMP 1024 -DT 0.125 -ALP 1.0 -P -RAYP ${RAYP} -D 10
+
+#####
+#    plot both and overlay
+#####
+gsac << EOF
+r decon.out hrftn96.sac
+fileid list fname
+color list red blue
+bg plt
+xlim b b 50
+p overlay on
+q
+EOF
+mv P001.PLT RFTN.PLT
+
+#####
+#     convert PLT file format to EPS and then
+#     convert EPS to PNG using Image Magick
+#     also ensure the background is white and 
+#     not transparent
+#####
+for i in *.PLT
+do
+	B=`basename ${i} .PLT`
+	plotnps -F7 -W10 -EPS -K < $i > ${B}.eps
+	convert -trim ${B}.eps  -background white -alpha remove -alpha off ${B}.png
+done
+
+

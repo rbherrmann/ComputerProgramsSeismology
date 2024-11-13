@@ -1,0 +1,249 @@
+#!/bin/sh
+
+
+#####
+#	generate the web page for this earthquake
+#####
+
+#####
+#	get the name of the parent directory since we will use that for indexing
+#####
+
+CURDIR=`pwd`
+cd ..
+P=`pwd`
+B=`basename $P`
+cd $CURDIR
+#####
+#	first get event information - we do this by looking in the one of the
+#	SAC files, synchronizing to Origin time and then looking the the
+#	new reference time
+#####
+rm -f station
+for i in `ls ../DAT.TEL/*[ZRT] `
+do
+echo `saclhdr -KSTNM $i` >> station
+done
+
+for i in `ls ../DAT.TEL/*[ZRT] | tail -1`
+do
+gsac << EOF
+r $i
+synchronize o
+w tmp
+q
+EOF
+done
+
+EVLA=`saclhdr -EVLA tmp | awk '{printf "%6.2f", $1}' `
+EVLO=`saclhdr -EVLO tmp | awk '{printf "%7.2f", $1}' `
+EVDP=`saclhdr -EVDP tmp | awk '{printf "%7.0f", $1}' `
+NZYEAR=`saclhdr -NZYEAR tmp`
+NZMON=`saclhdr -NZMON tmp`
+NZDAY=`saclhdr -NZDAY tmp`
+NZHOUR=`saclhdr -NZHOUR tmp`
+NZMIN=`saclhdr -NZMIN tmp`
+NZSEC=`saclhdr -NZSEC tmp`
+rm -f tmp
+
+KZDATE="${NZYEAR}/${NZMON}/${NZDAY}"
+KZTIME="${NZHOUR}:${NZMIN}:${NZSEC}"
+
+#####
+#	use the results of the MTD solution to get the best Double Couple Solution
+#	with DEPTH, STRIKE, DIP, SLIP
+#####
+
+if [ -f ../GRD.TEL/fmdfit.dat ]
+then
+cp ../GRD.TEL/fmdfit.dat .
+DEPTH=`cat fmdfit.dat | awk '{print $2}' `
+STK=`cat fmdfit.dat | awk '{print $3}' `
+DIP=`cat fmdfit.dat | awk '{print $4}' `
+RAKE=`cat fmdfit.dat | awk '{print $5}' `
+MW=`cat fmdfit.dat | awk '{print $6}' `
+lprmech "$KZDATE $KZTIME"  $STK $DIP $RAKE $MW $DEPTH > ${B}.msg
+echo lprmech $TITLE $STK $DIP $RAKE $MW $DEPTH 
+rm -f fmdfit.dat
+fi
+
+
+#####
+#	create the html.proto
+#####
+cat > html.proto << EOF
+<TR>
+    <TD valign=top align=right>${KZDATE} </TD>
+    <TD valign=top align=right>${KZTIME} </TD>
+    <TD valign=top align=right>${EVLA} </TD>
+    <TD valign=top align=right>${EVLO} </TD>
+    <TD valign=top align=right>${DEPTH} </TD>
+    <TD valign=top align=right>${MW} </TD>
+    <TD valign=top align=right><A HREF="${B}/HTML.TEL/index.html">${B} mechanism</A></TD>
+</TR>
+EOF
+
+#####
+#	Now start the web page for this earthquake
+#	Sections
+#	Comparison
+#	Moment tensor inversion
+#####
+
+cat > index.html << EOF
+<HTML>
+<HEAD>
+	<TITLE>Moment Tensor ${NZYEAR}${NZMON}${NZDAY}${NZHOUR}${NZMIN}${NZSEC}</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H3>Location</H3>
+<P>
+${KZDATE} ${KZTIME} ${EVLA} ${EVLO} ${EVDP}
+<H2>Moment Tensor Comparison </H2>
+<P>
+For reference here are other moment tensor solutions for this event.
+<TABLE>
+<TR>
+EOF
+
+
+#####
+#	PASS 1 OUTPUT THE COLUMN HEADERS
+#####
+for MT in USGSMT USGSCMT CMT GCMT BAT
+do
+case ${MT} in
+        USGSMT) mtsol="usgsmt" ;;
+        USGSCMT) mtsol="usgscmt" ;;
+        CMT) mtsol="cmt" ;;
+        GCMT) mtsol="gcmt" ;;
+        BAT) mtsol="bat" ;;
+esac
+
+#####
+#       see if there is a USGS solution
+#####
+if [ -f ../MT.OTHER/${mtsol} ]
+then
+cat >> index.html << EOF
+<TD><CENTER><B>${MT}</B></CENTER></TD>
+EOF
+fi
+
+done
+
+#####
+# this is the second pass two pass - first pass defined title columns
+#	second pass fills in with beach balls
+#
+#####
+
+cat >> index.html << EOF
+</TR>
+<TR>
+EOF
+
+#####
+#	now cycle through other solutions in the same order
+#####
+
+for MT in USGSMT USGSCMT CMT GCMT BAT
+do
+case ${MT} in
+        USGSMT) mtsol="usgsmt" ;;
+        USGSCMT) mtsol="usgscmt" ;;
+        CMT) mtsol="cmt" ;;
+        GCMT) mtsol="gcmt" ;;
+        BAT) mtsol="bat" ;;
+esac
+
+if [ -f ../MT.OTHER/${mtsol} ]
+then
+cat >> index.html << EOF
+	<TD VALIGN=top ><PRE>
+EOF
+cat ../MT.OTHER/${mtsol} >> index.html
+cat >> index.html << EOF
+        </PRE></TD>
+EOF
+fi
+
+done
+
+#####
+#	complete the table
+#####
+cat >> index.html << EOF
+</TR>
+</TABLE>
+EOF
+
+#####
+#	end moment tensor comparison
+#####
+
+#####
+#	now go into detail on the SLU Solution
+#####
+cat >> index.html << EOF
+<H2>Data set</H2>
+<P>
+The following broadband stations passed the QC and were used for the source inversion.
+EOF
+cat station | sort | uniq >> index.html
+
+
+#####
+#	output documentation of the different techniques
+#####
+if [ -f mtd.html ]
+then
+	cat mtd.html >> index.html 
+fi
+if [ -f pmtd.html ]
+then
+	cat pmtd.html >> index.html 
+fi
+
+
+if [ -f grd.html ]
+then
+	cat grd.html >> index.html 
+fi
+if [ -f pgrd.html ]
+then
+	cat pgrd.html >> index.html 
+fi
+
+#####
+#	output synthetic forward modeling
+#####
+if [ -f syn.html ]
+then
+	cat syn.html >> index.html 
+fi
+
+#####
+#	put in information for timing
+#####
+cat >> index.html << EOF
+<H2>Processing times</H2>
+<P>
+<PRE>
+EOF
+cat timing >> index.html
+cat >> index.html << EOF
+</PRE>
+EOF
+
+
+#####
+#	put in time date stamp and end
+#####
+D=`date -u`
+cat >> index.html << EOF
+<P>
+<CENTER>Last Changed ${D}</CENTER>
+</BODY>
+</HTML>
+

@@ -1,0 +1,45 @@
+#!/bin/sh
+
+#####
+#   make acceleration sensitivity file
+#   with unit gain since the synthetics are in
+#   m/s**2
+#####
+cat > acc.resp << EOF
+0.0 1.0
+1000.0 1.0
+EOF
+
+for PVAL in 0.0 0.2 0.3 0.4 1.0
+do
+R=$RANDOM
+sacnoise -dt 0.1 -npts 100000 -seed $R -pval $PVAL
+mv O.sac ${PVAL}.sac
+sacpsd -f ${PVAL}.sac -r acc.resp
+#####
+#   rename the output psd file
+#####
+mv ____________.1970.001.00.00.psd ${PVAL}.psd
+done
+
+#####
+#    create the plot control file
+#####
+cat > listfile << EOF
+0.0.psd 1000 "0.0"
+0.2.psd 1025 "0.2"
+0.3.psd 1050 "0.3"
+0.4.psd 1075 "0.4"
+1.0.psd 1100 "1.0"
+EOF
+sacpsd -L listfile
+plotnps -BGFILL -F7 -W10 -EPS -K < SACPSD.PLT > t.eps
+convert -trim t.eps NOISEPSD.png
+mv t.eps NOISEPSD.eps
+rm *.psd  SACPSD.PLT
+rm sacpsd.out acc.resp listfile
+
+#####
+#   clean up
+#####
+rm -f *.sac

@@ -1,0 +1,148 @@
+#!/bin/sh
+
+#####
+#   in the CPS model format, an initial set of negative 
+#   layer thicknesses is used to define a reference depth
+#   for the fluid solid interface. 
+#   In the example below, for a source depth of -1 km above the 
+#   solid earth, the codes split the layers to have
+#   39 km air, 1 km air, 40 km solid and then put the source at
+#   a depth of 39 km in the new model.
+#####
+
+cat > crust-atmos.mod << EOF
+MODEL.01
+Simple Crust Atmosphere model
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+-40.0000  0.3000  0.0000  0.0012 0.00  0.00  0.00  0.00  1.00  1.00 
+ 40.0000  6.0000  3.5000  2.8000 0.00  0.00  0.00  0.00  1.00  1.00 
+EOF
+
+#####
+#    create a place for the Sac files
+#####
+if [ ! -d Sac ]
+then
+	mkdir Sac
+fi
+
+#####
+#     crewate a p-lace for the FILE96 files
+#####
+
+if [ ! -d FILE96.DIR ]
+then
+	mkdir FILE96.DIR
+fi
+
+
+for HS in -1.0 -0.5 0.0 0.5 1.0 2.0 3.0 4.0 5.0
+do 
+rm -f file96.${HS}
+#####
+#	cycle through the observations
+#####
+for I in 00 10 20 30 40 50 60 70 80 90
+do
+
+case ${I} in 
+	00) R=20.000000 ; HR=-0.000000 ;;
+	10) R=19.696155 ; HR=-3.472964 ;;
+	20) R=18.793852 ; HR=-6.840403 ;;
+	30) R=17.320508 ; HR=-10.000000 ;;
+	40) R=15.320889 ; HR=-12.855753 ;;
+	50) R=12.855752 ; HR=-15.320889 ;;
+	60) R=10.000000 ; HR=-17.320508 ;;
+	70) R=6.840402 ; HR=-18.793852 ;;
+	80) R=3.472963 ; HR=-19.696155 ;;
+	90) R=-0.000000 ; HR=-20.000000 ;;
+esac
+
+cat > dfile << EOF
+${R} 0.125 1024 0 0
+EOF
+hprep96 -M crust-atmos.mod -d dfile -HS ${HS} -HR ${HR} -ALL -NDEC 2 -TH
+hspec96
+hpulse96 -p -V -l 2  >> file96.${HS}
+rm hspec96.???
+
+
+done
+
+#####
+#    use a sub-shell to  convert the file96 format to a Sac binary file with
+#    file name related to the epicentral distance and source depth
+#####
+( cd Sac ; f96tosac -G ../file96.${HS} )
+mv file96.${HS}  FILE96.DIR
+done
+
+
+#####
+#    once all computations are completed
+#    annotate the Sac files with the angle above.
+#    to do this we use the information in the f I loop above
+#####
+
+cd Sac
+for G in *.[ZRTP]??
+do
+	DIST=`saclhdr -DIST $G`
+	STEL=`saclhdr -STEL $G`
+	#####
+	# this is a bit messy and time consuming because the
+	# DIST and STEL fields in the Sac header are subject to
+	# roundoff in the printf statements
+	#####
+	ANGLE=0
+	DIFF="10000.0"
+	for I in 00 10 20 30 40 50 60 70 80 90
+	do
+		case ${I} in 
+			00) R=20.000000 ; HR=-0.000000 ;;
+			10) R=19.696155 ; HR=-3.472964 ;;
+			20) R=18.793852 ; HR=-6.840403 ;;
+			30) R=17.320508 ; HR=-10.000000 ;;
+			40) R=15.320889 ; HR=-12.855753 ;;
+			50) R=12.855752 ; HR=-15.320889 ;;
+			60) R=10.000000 ; HR=-17.320508 ;;
+			70) R=6.840402 ; HR=-18.793852 ;;
+			80) R=3.472963 ; HR=-19.696155 ;;
+			90) R=-0.000000 ; HR=-20.000000 ;;
+		esac
+		#####
+		# determine if the difference between the R and DIST is better than before
+		#####
+#		ABSDIF=`echo $DIST $R | awk '{ if ( $1 > $2 ) printf "%10.3f", $1 - $2 ; else printf "%10.3f", $2 - $1 } ' `
+		ABSDIF=`echo $DIST $R | awk '{ if ( $1 > $2 ) print $1 - $2 ; else print $2 - $1 } ' `
+		#####
+		#   is this smaller than before ?
+		#####
+		ANS=`echo "$ABSDIF" "$DIFF" | awk '{ ANS="NO" ; if (  $1 < $2  ) ANS="YES"  ; print ANS }' `
+		if [ "$ANS" = "YES" ]
+		then 
+			ANGLE="${I}"
+			DIFF="${ABSDIF}"
+		fi
+
+	done
+	#####
+	# now use gsac to set place the angle into USER1 header field
+gsac > /dev/null 2>%1   << EOF
+rh $G
+ch USER1 $ANGLE
+wh
+q
+EOF
+
+done
+

@@ -1,0 +1,104 @@
+#!/bin/sh
+
+#####
+#       define the time windows for the trace and response
+#####
+DATETIME="2010/02/07-11:00:00"
+MDBEG="2010/02/07-11:00:00"
+MDEND="2010/02/07-12:00:00"
+WINDOW=3600
+
+#####
+#	Clean up
+#####
+rm -f *SAC*
+
+#####
+#	define a short name for CWBQuery
+#####
+alias query='java -jar ~/bin/CWBQuery.jar'
+
+##### 
+#     Use query to get all data for NM network filling gaps with 
+#     zeros,  returning as a Sac file.
+#     Use mdget to get the RESP file for use with the program
+#     evalresp.
+#     Note that a line terminated with a backslash newline is
+#     a continuation for the shell and is use for clarity
+##### 
+query -dccdbg -t sac -o "%N.SAC" -sacpz nm -fill 0 -b "${DATETIME}" -d ${WINDOW} -s "NM.....BHZ.."
+mdget -resp -b "${MDBEG}" -e "${MDEND}" -s "NM.....BHZ.."
+
+#####
+#	perform the PSD
+#####
+
+for TRACE in *.SAC
+do
+
+#####
+#	get information from the file
+#####
+
+KSTNM=`saclhdr -KSTNM $TRACE`
+KCMPNM=`saclhdr -KCMPNM $TRACE`
+DELTA=`saclhdr -DELTA $TRACE`
+NPTS=`saclhdr -NPTS $TRACE`
+FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+YEAR=`saclhdr -NZYEAR $TRACE`
+DOY=`saclhdr -NZJDAY $TRACE`
+KNETWK=`saclhdr -KNETWK $TRACE`
+KHOLE=`saclhdr -KHOLE $TRACE`
+
+#####
+#	define the lower frequency bound which is 1/4 length off record
+#####
+FLH=`echo $NPTS $DELTA | awk '{print 1.0/($1*$2)}' `
+#####
+#	we will not rewrite the KNETWK and KHOLE in the headers with new values
+#	we will just repeat the following steps in the script
+#####
+	if [ -z "${KNETWK}" ]
+	then
+		NET=""
+	else
+		if [ "${KNETWK}" = "-12345" ]
+		then
+				NET=""
+		else
+				NET="${KNETWK}"
+		fi
+	fi
+	if [ -z "${KHOLE}" ]
+	then
+		LOC=""
+	else
+		if [ "${KHOLE}" = "-12345" ]
+		then
+				LOC=""
+		else
+				LOC="${KHOLE}"
+		fi
+	fi
+
+RESPFILE=RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} 
+
+
+#####
+#	create the acceleration response in terms of M/S**2
+#####
+evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} ${FLH} ${FHH} 2049 -u 'acc' -f ${RESPFILE}
+
+
+sacpsd -f  ${TRACE} -r AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} -5  
+
+done
+
+ls *psd > afile
+sacpsd -A afile
+plotnps -K -EPS -F7 -W10 < SACPSD.PLT > t.eps
+EPSTOPNG t.eps
+mv t.png Fig05.png
+rm *.eps
+rm SACPSD.PLT

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+rm -fr FINAL
+mkdir FINAL
+for LOC in 00 10 __
+do
+	for CMP in BH HH
+	do
+		for STA in `ls GOOD/*${CMP}Z${LOC}.sac`
+		do
+			KSTNM=`saclhdr -KSTNM $STA`
+			KNETWK=`saclhdr -KNETWK $STA`
+gsac << EOF
+cd GOOD
+r ${KNETWK}${KSTNM}*${LOC}.sac
+rot3 to gc
+cd ../FINAL
+w ${KSTNM}${KNETWK}${LOC}${CMP}R ${KSTNM}${KNETWK}${LOC}${CMP}T ${KSTNM}${KNETWK}${LOC}${CMP}Z
+q
+EOF
+		done
+	done
+done

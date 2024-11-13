@@ -1,0 +1,52 @@
+#!/bin/sh
+
+echo Testing Source depth Effect
+
+#####
+#    clean up previous results
+#####
+
+
+rm -f */*.sac
+
+
+for GCARC in 50 
+do
+
+for HS in 02 04 06 08 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38
+do
+
+if [ ! -d ${HS} ]
+then
+    mkdir ${HS}
+fi
+
+hudson96 -GCARC ${GCARC} -HS ${HS} -TEL ../MODELS/tak135sph.mod  -NPTS 8192 -DT 0.05 
+hpulse96 -p -l 1 -V > file96
+
+cd ${HS}
+cat ../file96 | \
+	fmech96 -S 45 -D 45 -R 45 -AZ 45 -MW 4 -ROT | \
+        f96tosac -B
+cd ..
+
+
+done
+done
+
+
+#####
+# make a plot
+#####
+gsac << EOF
+cut b b 60
+r */*Z00.sac
+fileid name
+bg plt
+prs reverse evdp vl 0 40 sa 0.0 amp 0.2 color 1 shd pos
+quit
+EOF
+
+plotnps -F7 -W10 -EPS -K < PRS001.PLT > prs001.eps
+convert -trim prs001.eps prs001.png
+

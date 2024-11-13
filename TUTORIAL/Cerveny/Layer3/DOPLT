@@ -1,0 +1,36 @@
+#/bin/sh
+
+
+#####
+#  plot a record section of the REX and ZEX Green's functions
+#####
+#####
+#    plot some record sections
+#####
+gsac << EOF
+bg plt
+r *ZEX.sac
+prs STLO amp 0.2 vl -10 210
+mv PRS001.PLT ZEX.PLT
+
+r *REX.sac
+prs STLO amp 0.2 vl -10 210
+mv PRS002.PLT REX.PLT
+q
+EOF
+
+
+#####
+#     convert PLT file format to EPS and then
+#     convert EPS to PNG using Image Magick
+#     also ensure the background is white and 
+#     not transparent
+#####
+for i in *.PLT
+do
+	B=`basename ${i} .PLT`
+	plotnps -F7 -W10 -EPS -K < $i > ${B}.eps
+	convert -trim ${B}.eps  -background white -alpha remove -alpha off ${B}.png
+done
+
+

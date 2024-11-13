@@ -1,0 +1,32 @@
+TARGET=rbh@wiggles.eas.slu.edu:/net/eqinfo/seis/web/eqc/eqc_cps
+
+scp -p cpsbug.html ${TARGET}
+scp -pr FIGURES ${TARGET}
+scp -pr  STRAIN ${TARGET}
+#scp -pr  PLOTNPS ${TARGET}
+#scp -pr  Examples ${TARGET}
+#scp -pr  IRIS ${TARGET}
+#scp -pr  TIME96 ${TARGET}
+#scp -pr  TTIME96 ${TARGET}
+#scp -p CPS330.html rbh@eqinfo.eas.slu.edu:/home/eq/People/RBHerrmann
+#scp -pr  Questions ${TARGET}
+#scp -pr  REFMOD96 ${TARGET}
+#scp -pr  ROTATE3 ${TARGET}
+#scp -pr  SACPSD ${TARGET}
+#scp -pr  PLOTNPS ${TARGET}
+#scp -pr  GENPLT ${TARGET}
+#scp -pr  IRIS ${TARGET}
+#scp -pr 20121210 ${TARGET}
+#scp -pr INTERP ${TARGET}
+#scp -pr GSAC20150824 ${TARGET}
+#scp -pr 20121210 20140506 20141111 ${TARGET}
+#scp -pr MTINFO ${TARGET}
+#scp -pr GSACCUTXLIM ${TARGET}
+#scp -pr VTI ${TARGET}
+#scp -pr 20181130 ${TARGET}
+#scp -pr RSPEC ${TARGET}
+#scp -pr 20190930 ${TARGET}
+#scp -pr SPALL ${TARGET}
+#scp -pr SHWMOD96 ${TARGET}
+#scp -pr LUNE ${TARGET}
+#scp -pr STRAIN ${TARGET}

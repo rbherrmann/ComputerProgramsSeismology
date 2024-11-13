@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Receiver Function Tutorial</title>
+</head>
+<body bgcolor="#ffffff">
+<h2>Receiver Functions:</h2>
+This section will describe the use of Computer Programs in Seismology
+to create teleseismic P-wave receiver functions from digital data.<br>
+<br>
+<h2>Required Programs:</h2>
+To perform the analysis we wil require the following programs from the
+Computer Programs in Seismology: <span style="font-weight: bold;">gsac,
+saciterd, saclhdr, </span>and <span style="font-weight: bold;">udtdd.<br>
+<br>
+</span><span style="font-weight: bold;"></span>
+<h2>Data Set:</h2>
+For the purpose of this example, I will assume that the original data
+is received as a SEED file which will be read using the program <span
+ style="font-weight: bold;">rdseed</span> to create traces in the SAC
+binary trace format. It is not necessary to start with a SEED file, but
+to determine the receiver function, you must have files in the SAC
+trace format.&nbsp; For this example, we will consider the recording at
+station ULN from the 20060510024256 Fox Island, Aleutians
+earthquake.&nbsp; I went to the IRIS WILBUR II site <a
+ href="http://www.iris.edu/cgi-bin/wilberII_page1.pl">http://www.iris.edu/cgi-bin/wilberII_page1.pl</a>
+to select the waveform.&nbsp; I also note the event information given
+at the WILBUR II page:&nbsp; <b><font size="3">
+Event: <font color="#cc0000">2006/05/10 02:42:56.3 &nbsp;FOX ISLANDS,
+ALEUTIAN ISLANDS</font><br>
+Mag: <font color="#cc0000">6.3</font>
+Type: <font color="#cc0000">MO</font>
+Lat: <font color="#cc0000"> 52.71</font>
+Lon: <font color="#cc0000">-169.24</font>
+Depth: <font color="#cc0000"> 56.50<br>
+<br>
+<span style="color: rgb(0, 0, 0);"></span></font></font></b><font
+ size="3"><font color="#cc0000"><span style="color: rgb(0, 0, 0);"> I
+create the directory</span> <span style="font-weight: bold;">20060510024256&nbsp;
+</span><span style="color: rgb(0, 0, 0);">and</span> <span
+ style="color: rgb(0, 0, 0);">place the scripts&nbsp; <a
+ href="20060510024256/IDOEVT">IDOEVT</a>,&nbsp;<a
+ href="20060510024256/IDOROT">IDOROT</a>, and&nbsp;<a
+ href="20060510024256/DORFTN">DORFTN </a><span
+ style="font-weight: bold;"></span><span style="font-weight: bold;"> </span>in
+that directory. I also place the SEED file <a
+ href="20060510024256/20060510.seed">20060510.seed</a> in tht
+directory. <br>
+<br>
+For testing everything is in the tarball&nbsp; <a href="rftn.tgz">rftn.tgz</a>
+. Unpack this with the command <span style="font-weight: bold;"><span
+ style="font-style: italic;">gunzip -c rftn.tgz | tar xvf - </span></span><br>
+<br>
+I now edit the <span style="font-weight: bold;">IDOEVT </span>script
+to place in the event location. The purpose of the <span
+ style="font-weight: bold;">IDOEVT </span>script is to place the event
+source parameters into the SAC header and to deconvolve the instrument
+response to ground velocity in uits of <span style="font-weight: bold;"><span
+ style="font-style: italic;">m/sec.&nbsp; Deconvolution is optional for
+receiver function studies if the 3-components have the same instrument
+response. For more information on the IDOEVT script click on&nbsp; <a
+ href="idoevt.html">Annotated IDOEVT</a><br>
+<br>
+</span></span>So in </span></font></font><font size="3"><font
+ color="#cc0000"><span style="font-weight: bold;">20060510024256 <span
+ style="color: rgb(0, 0, 0);"><span style="font-weight: bold;"></span></span></span><span
+ style="color: rgb(0, 0, 0);">do the following:<br>
+<br>
+</span></font></font>
+<pre style="margin-left: 40px;"><span style="font-weight: bold;">mkdir Sac</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">cd Sac</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">rdseed -f ../20060510.seed -R -d -o 1</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">../IDOEVT</span><br></pre>
+<h2>Quality Review:</h2>
+Go to the GOOD directory<br>
+<br>
+<div style="margin-left: 40px;">
+<pre><span style="font-weight: bold;">cd ../GOOD</span><br><br></pre>
+</div>
+Use gsac to review the traces so that you can exclude traces that have
+problems<br>
+<br>
+<pre><div style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt;<br>gsac</span><br><span
+ style="font-weight: bold;">GSAC&gt;&nbsp; r *sac</span><br><span
+ style="font-weight: bold;">GSAC&gt; sort up dist</span><br><span
+ style="font-weight: bold;">GSAC&gt; p perplot 3</span><br><span
+ style="font-weight: bold;">GSAC&gt; quit</span><br><span
+ style="font-weight: bold;">rbh&gt;</span><br><br><span
+ style="font-weight: bold;"></span></div></pre>
+<p>Now rotate the traces to a great circle path.<br>
+<br>
+</p>
+<div style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt;
+../IDOROT</span><br>
+</div>
+This script looks at traces ending with BHZ.sac or LHZ.sac. It then
+uses saclhdr internally to get the station name,<br>
+using that to get all three components, which are then rotated to form
+the Vertical, Radial and Transverse Components.<br>
+These are placed in the newly created parallel directory called ../FINAL<br>
+<br>
+Go to the ../FINAL directory. For this example you will see the
+following files: ULNBHR&nbsp; ULNBHT&nbsp; ULNBHZ.<br>
+<br>
+Because of the way tht <span style="font-weight: bold;">gsac </span>rotates
+traces, it is not necessary to <span style="font-style: italic;"><span
+ style="font-weight: bold;">synchronize </span></span>and <span
+ style="font-weight: bold;"><span style="font-style: italic;">cut </span></span>prior
+to rotation as is required by <span style="font-weight: bold;">sac2000.</span>
+This is because <span style="font-weight: bold;">gsac </span>rotates
+in absolute time and outputs only the common time window. In addition <span
+ style="font-weight: bold;">gsac </span>can automatically rename the
+output file names based on the station name in the header that the
+first two characters of the component name. this is one reason for the
+use of the ULNBHZ.sac notation for the deconvolved trace.<br>
+<br>
+Note that if you wish to use the raw traces since the instrument
+responses for the three components are matched, then you must modify
+the <span style="font-weight: bold;">IDOROT </span>script to key on
+the BHZ.S and BH*.S instead of the BHZ.sac and BH*.sac.<br>
+<br>
+<h2>Receiver functions:</h2>
+The steps to be take here are to select the P-wave, and then to cut the
+trace around the P-wave arrival, to decimate to speed up a subsequent
+direct inversion, and to finally do the deconvolution.<br>
+<br>
+This is all handled by the script <span style="font-weight: bold;">DORFTN.
+So,<br>
+<br>
+<br>
+</span>
+<pre style="margin-left: 40px;"><span style="font-weight: bold;">cd ..</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">DORFTN</span><br></pre>
+This script is highly commented.&nbsp; You only have to interactively
+pick the P arrival, uainsg the x-x sequence to position the window, P
+to pick and q to quit, you do not have to be very precise<br>
+<br>
+To see the receiver functions,&nbsp; you can use <span
+ style="font-weight: bold;">gsac:<br>
+<br>
+</span>
+<pre style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt; cd RFTN</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt; gsac</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; r *</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; fileid name</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; p</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; q</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt;</span><br></pre>
+To get hte image below I actually used the following commands:<br>
+<br>
+<pre style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt; cd RFTN</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt; gsac</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; r *</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; fileid name</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; bg plt</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; p</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">Hold is OFF</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">XLIM is turned off</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">Initializing P001.PLT</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; plotnps -F7 -W10 -EPS -K &lt; P001.PLT &gt; P001.eps</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; convert -trim P001.eps P001.png</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; q</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt;</span><br></pre>
+The Computer Programs in Seismology command <span
+ style="font-weight: bold;">plotnps </span>converts CALPLOT graphics
+to Encapsulated PostScript. On my LINUX or CYGWIN system, I have the
+ImageMagick conversion routine, <span style="font-weight: bold;">convert,
+</span>which converts the EPS to PNG for display on the web or
+including in Word or PowerPoint. The plot of the receiver functions
+obtained here<br>
+are<br>
+<br>
+<a href="P001.png"><img alt="Receiver Functions" src="P001.png"
+ style="border: 0px solid ;"></a><br>
+<span style="font-weight: bold;"><br>
+<br>
+</span><br>
+<h2>&nbsp;
+Displaying Receiver Functions:</h2>
+Once the receiver functions have been computed, they should be placed
+in directories organized by the station. For example, I have the
+following in the directory named KWJ:<br>
+<pre style="margin-left: 40px;"><span style="font-weight: bold;">R.KWJBHZ20020590148.2.5  R.KWJBHZ20031411853.1.0  R.KWJBHZ20052810350.1.0</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621207.1.0  R.KWJBHZ20031411853.2.5  R.KWJBHZ20052810350.2.5</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621207.2.5  R.KWJBHZ20031461923.1.0  R.KWJBHZ20053091040.1.0</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621213.1.0  R.KWJBHZ20031461923.2.5  R.KWJBHZ20053091040.2.5</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621213.2.5  R.KWJBHZ20031462314.1.0  R.KWJBHZ20053241244.1.0</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020642114.1.0  R.KWJBHZ20031462314.2.5  R.KWJBHZ20053241244.2.5</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020642114.2.5  R.KWJBHZ20031741214.1.0  R.KWJBHZ20053261503.1.0</span><br></pre>
+The PlotRecordSection (prs) command of gsac can plot these receiver
+functions in a way to assist their interpretation. Typically this is
+done in two ways - a plot versus ray parameter and a plot az a funciton
+of back azimuth.&nbsp; The back azimuth plot is useful for identifying
+departure from a two dimensional model.&nbsp; For these plot to work,
+the receiver functions must be computed to have exactly the same number
+of seconds before the first bump.<br>
+<h3>Back Azimuth Plot:</h3>
+<br>
+<pre style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt; gsac</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; r KWJ/R*.1.0</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; sort up baz</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; bg plt</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; prs baz relative tl -10 40 amp 0.3 vl -20 380 shd pos color 2</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">Hold is OFF</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">Initializing PRS001.PLT</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; plotnps -F7 -W10 -EPS -K &lt; PRS001.PLT &gt; prs001.eps</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; echo user4 is the ray parameter set by saciterd</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; sort up user4<br>GSAC&gt; echo plot traces as a function of ray parameter from 0.05 to 0.09 sec/km<br
+ style="font-weight: bold;"></span><span style="font-weight: bold;">GSAC&gt; prs user4 relative vl 0.05 0.09 title "Ray parameter (sec/km)" shd pos color 2 tl -10 40</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">Hold is OFF</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">Initializing PRS002.PLT</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; plotnps -F7 -W10 -EPS -K &lt; PRS002.PLT &gt; prs002.eps</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; quit</span><br
+ style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt;</span><br></pre>
+These instructions create a CALPLOT file, e.g., PRS001.PLT, which is
+converted to Encapsulated PostScript using the program <span
+ style="font-weight: bold;">plotnps</span>. I then used the ImageMagick
+conversion program <span style="font-weight: bold;">convert<span
+ style="font-weight: bold;"> </span></span>to create the PNG graphic
+for this web page.&nbsp; <br>
+<br>
+The reason that I applied the sort command was that I wanted the
+shading to overlay is an appealing fashion from left to right.&nbsp;
+There are other <span style="font-style: italic;">prs </span>options
+that control the plotting.&nbsp; The <span style="font-style: italic;">relative
+</span>option must be used because the receiver functions do not have
+correct time stamp. By definition the receiver function is a filter.
+However having the year and day helps identify the earthquake providing
+the data.&nbsp; The relative flag says to plot relative to the
+beginning of the trace.&nbsp; Since we can plot traces orgainized by
+many of the SAC header values, e.g., EVDP, USER4, AZ, DIST, BAZ, etc.,
+the VL is used to denote the limits of the Variable used.&nbsp; In the
+first case, the VL refers to back azimuth (the use of <span
+ style="font-style: italic;">vl -20 380 </span>instead of <span
+ style="font-style: italic;">vl 0 360 </span>is to avoid trace
+clipping is there are observations at the extremes). In the second case
+VL indicates ray parameters.<br>
+<br>
+Here are the plots:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr align="center">
+      <td style="vertical-align: top;"><img
+ style="width: 646px; height: 485px;" alt="Back Azimuth plot"
+ src="prs001.png"><br>
+      <br>
+      <center>KWJ receiver functions for ALP=1.0 az a function of back
+azimuth. </center>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr align="center">
+      <td style="vertical-align: top;"><img
+ style="width: 646px; height: 485px;" alt="Ray parameter plot"
+ src="prs002.png"><br>
+      <center> KWJ receiver funcitons for ALP=1.0 as a function of ray
+parameter. Note that the PRS command does not yet have absolute trace
+scaling.</center>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+</p>
+</body>
+</html>

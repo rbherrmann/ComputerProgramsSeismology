@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Sac file precision</title>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body>
+    <h2>Introduction</h2>
+    <p>SAC v102.0 introduced&nbsp; extended precision for certain
+      floating point variables (&lt;
+      href="http://ds.iris.edu/files/sac-manual/manual/file_format.html"&gt;http://ds.iris.edu/files/sac-manual/manual/file_format.html).
+
+
+
+      The reason for this is given in <a
+        href="http://ds.iris.edu/files/sac-manual/manual/tutorial.html">http://ds.iris.edu/files/sac-manual/manual/tutorial.html</a>
+      in the section entitled <a
+        href="http://ds.iris.edu/files/sac-manual/manual/tutorial.html#id48">FLOATING-POINT
+
+
+
+        PRECISON IN SAC</a>. This section gives an example of how
+      floating point numebrs are stored for use in a computer and gives
+      graphic example of the problem addressed by sacv102. </p>
+    <p> This web page provides additional examples on the nature of
+      floating point numbers and problem tat arise using sac or <b>gsac</b>
+    </p>
+    <h2>Floating point numbers</h2>
+    <p>A discussion of the IEEE 754-1985 industry standard is given at <a
+        href="https://en.wikipedia.org/wiki/IEEE_754-1985">
+        https://en.wikipedia.org/wiki/IEEE_754-1985</a> This web page
+      gives two examples of how 32-bit (float) and 64-bit (double)
+      floating point numbers are stored in binary.<br>
+      <table>
+        <tbody>
+          <tr>
+            <td><img src="IEEE_754_Single_Floating_Point_Format.svg.png">
+              <br>
+              The number 0.15625 represented as a single-precision IEEE
+              754-1985 floating-point number. See text for explanation.
+            </td>
+          </tr>
+          <tr>
+            <td><img
+                src="618px-IEEE_754_Double_Floating_Point_Format.svg.png">
+              <br>
+              The three fields in a 64bit IEEE 754 float </td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <p>The important point to note is that computers cannot represent a
+      continuum floating point numbers . Because of the finite number of
+      bits in the mantissa (fraction), a continuum would plot as a
+      series of steps. </p>
+    <p>This granularity is also exhibited in the process of printing a
+      floating point number, e.g., using <i>printf</i> in C. Consider
+      this C code named <i>tprec.c</i>: <br>
+    </p>
+    <pre>#include <stdio.h>
+#include <string.h>
+
+
+char fmtstr[30];
+#define FVAL 172800.05
+#define NDEC 20
+
+void main()
+{
+        float fvar;
+        double dvar;
+        int i;
+        fvar = FVAL;
+        dvar = FVAL;
+printf("Comparison of printing single anddoulple precision values of 172800.05\n");
+printf("using a format string of the form %%40.NDECf, e.g., %%40.10f\n");
+printf(" ndec                                    float                                   double\n");
+        for (i=0;i &lt; NDEC; i++){
+                sprintf(fmtstr,"%%5d %%40.%df %%40.%df\n",i,i);
+                printf(fmtstr,i,fvar,dvar);
+        }
+
+}
+</string.h></stdio.h></pre>
+    <p>Then <br>
+    </p>
+    <pre>gcc tprec.c
+a.out
+Comparison of printing single and doulple precision values of 172800.05
+using a format string of the form %40.{NDEC}f, e.g., %40.10f
+ NDEC                                    float                                   double
+    0                                   172800                                   172800
+    1                                 172800.0                                 172800.0
+    2                                172800.05                                172800.05
+    3                               172800.047                               172800.050
+    4                              172800.0469                              172800.0500
+    5                             172800.04688                             172800.05000
+    6                            172800.046875                            172800.050000
+    7                           172800.0468750                           172800.0500000
+    8                          172800.04687500                          172800.05000000
+    9                         172800.046875000                         172800.050000000
+   10                        172800.0468750000                        172800.0500000000
+   11                       172800.04687500000                       172800.04999999999
+   12                      172800.046875000000                      172800.049999999988
+   13                     172800.0468750000000                     172800.0499999999884
+   14                    172800.04687500000000                    172800.04999999998836
+   15                   172800.046875000000000                   172800.049999999988358
+   16                  172800.0468750000000000                  172800.0499999999883585
+   17                 172800.04687500000000000                 172800.04999999998835847
+   18                172800.046875000000000000                172800.049999999988358468
+</pre>
+    <p>First note that the single precision cannot represent the number
+      <i>172800.05</i> perfectly. In single precision the nearest "bit"
+      for this number corresponds to <i>1721800.04687</i>. Double
+      precision does better in represent the desired number. The second
+      point to note, is that extending the number of digits in the
+      format statement will yield a sequence of printed characters,
+      whose additional information is the result of the algorithm of
+      converting a float to a string. This algorithm decides what
+      character to print, e.g., 0 1 2 3 4 5 6 7 8 9, then divides by 10
+      and selects the character corresponding to the first digit. This
+      process can continue forever since the procedure may always yield
+      a value due to roundoff.<br>
+    </p>
+    <h2>Sac and gsac</h2>
+    <b> </b>The discussion given in the tutorial at IRIS illustrates
+    the problem. This example was duplicated with gsac by writing a
+    simple C program since gsac does not support blackboard variables.
+    This exercise also served as a test of the updated <i>sacsub c.c</i>
+    which is part of Computer Programs in Seismology. This code named <i>dsac.c</i>
+    is <b><br>
+      <pre><stdio.h><stdlib.h><math.h>#include &lt;stdio.h&gt;<br>#include &lt;stdlib.h&gt;<br>#include &lt;math.h&gt;<br>#include "sacsubc.h"<br><br>/*<br>#define NPTS 10000000<br>#define DELTA 0.01<br>#define NA 9123456789<br>*/<br>#define NPTS 13<br>#define DELTA 0.01<br>#define NA 18246913578<br><br>void main()<br>{<br>        int i;<br>        float depmax, depmin, depmen;<br>        int indmax, indmin;<br>        float dt, b;<br>        int npts;<br>        float *arr;<br>        int nerr;<br>        float e;<br>        float a;<br><br>        double db, de, ddt;<br>        double da;<br><br>        float t0,t1,t2,t3,t4,t5,t6,t7,t8,t9;<br>        float stla, stlo, evla, evlo;<br>        double dstla, dstlo, devla, devlo;<br>        double dt0,dt1,dt2,dt3,dt4,dt5,dt6,dt7,dt8,dt9;<br><br>        stla = 0.0 ;<br>        stlo = -105.0000003;<br>        evla = 0.0 ;<br>        evlo = -105.0;<br>        dt = DELTA;<br>        npts = NPTS;<br>        arr = (float *)calloc(npts,sizeof(float));<br>        /* initialiuze */<br>        for(i=0;i &lt; NPTS ; i++)<br>                arr[i] = sin(6.2831853*2.0*i*DELTA);<br><br><br>        b = 172800.;<br>        t0 = b + 1*dt;<br>        t1 = b + 2*dt;<br>        t2 = b + 3*dt;<br>        t3 = b + 4*dt;<br>        t4 = b + 5*dt;<br>        t5 = b + 6*dt;<br>        t6 = b + 7*dt;<br>        t7 = b + 8*dt;<br>        t8 = b + 9*dt;<br>        t9 = b + 10*dt;<br><br>        e = b + (npts -1 )*dt;<br>        scmxmn(arr,npts,&amp;depmax,&amp;depmin,&amp;depmen,&amp;indmax,&amp;indmin);<br>        newhdr();<br>        setfhv("DEPMAX", depmax, &amp;nerr);<br>        setfhv("DEPMIN", depmin, &amp;nerr);<br>        setfhv("DEPMEN", depmen, &amp;nerr);<br>        setnhv("NPTS    ",npts,&amp;nerr);<br>        setfhv("DELTA   ",dt  ,&amp;nerr);<br>        setfhv("TIMMAX  ",b + indmax*dt, &amp;nerr);<br>        setfhv("TIMMIN  ",b + indmin*dt, &amp;nerr);<br>        setihv("IFTYPE  ","ITIME   ",&amp;nerr);<br>        setfhv("B       ",b  ,&amp;nerr);<br>        setfhv("E       ",e     ,&amp;nerr);<br>        setfhv("T0       ",t0  ,&amp;nerr);<br>        setfhv("T1       ",t1  ,&amp;nerr);<br>        setfhv("T2       ",t2  ,&amp;nerr);<br>        setfhv("T3       ",t3  ,&amp;nerr);<br>        setfhv("T4       ",t4  ,&amp;nerr);<br>        setfhv("T5       ",t5  ,&amp;nerr);<br>        setfhv("T6       ",t6  ,&amp;nerr);<br>        setfhv("T7       ",t7  ,&amp;nerr);<br>        setfhv("T8       ",t8  ,&amp;nerr);<br>        setfhv("T9       ",t9  ,&amp;nerr);<br>        setfhv("EVLA     ",evla,&amp;nerr);<br>        setfhv("EVLO     ",evlo,&amp;nerr);<br>        setfhv("STLA     ",stla,&amp;nerr);<br>        setfhv("STLO     ",stlo,&amp;nerr);<br>        setlhv("LEVEN   ",1,&amp;nerr);<br>        setlhv("LOVROK  ",1,&amp;nerr);<br>        setlhv("LCALDA  ",1,&amp;nerr);<br>        setnhv("NZYEAR  ",2022,&amp;nerr);<br>        setnhv("NZJDAY  ",1,&amp;nerr);<br>        setnhv("NZHOUR  ",0,&amp;nerr);<br>        setnhv("NZMIN   ",0,&amp;nerr);<br>        setnhv("NZSEC   ",0,&amp;nerr);<br>        setnhv("NZMSEC  ",0,&amp;nerr);<br>        setkhv("KT0     ","t0      ",&amp;nerr);<br>        setkhv("KT1     ","t1      ",&amp;nerr);<br>        setkhv("KT2     ","t2      ",&amp;nerr);<br>        setkhv("KT3     ","t3      ",&amp;nerr);<br>        setkhv("KT4     ","t4      ",&amp;nerr);<br>        setkhv("KT5     ","t5      ",&amp;nerr);<br>        setkhv("KT6     ","t6      ",&amp;nerr);<br>        setkhv("KT7     ","t7      ",&amp;nerr);<br>        setkhv("KT8     ","t8      ",&amp;nerr);<br>        setkhv("KT9     ","t9      ",&amp;nerr);<br>        bwsac(npts,"dut6.sac",arr);<br><br><br>        dstla = 0.0 ;<br>        dstlo = -105.0000003;<br>        devla = 0.0 ;<br>        devlo = -105.0;<br>        db = 172800.;<br>        ddt = DELTA;<br>        dt0 = db + 1*ddt;<br>        dt1 = db + 2*ddt;<br>        dt2 = db + 3*ddt;<br>        dt3 = db + 4*ddt;<br>        dt4 = db + 5*ddt;<br>        dt5 = db + 6*ddt;<br>        dt6 = db + 7*ddt;<br>        dt7 = db + 8*ddt;<br>        dt8 = db + 9*ddt;<br>        dt9 = db + 10*ddt;<br>        fprintf(stderr,"dt0 %22.16g\n",dt0);<br>        fprintf(stderr,"dt1 %22.16g\n",dt1);<br>        fprintf(stderr,"dt2 %22.16g\n",dt2);<br>        fprintf(stderr,"dt3 %22.16g\n",dt3);<br>        fprintf(stderr,"dt4 %22.16g\n",dt4);<br>        fprintf(stderr,"dt5 %22.16g\n",dt5);<br>        fprintf(stderr,"dt6 %22.16g\n",dt6);<br>        fprintf(stderr,"dt7 %22.16g\n",dt7);<br>        fprintf(stderr,"dt8 %22.16g\n",dt8);<br>        fprintf(stderr,"dt9 %22.16g\n",dt9);<br>        de = db + (npts -1 )*dt;<br>        setdhv("DELTA   ",ddt  ,&amp;nerr);<br>        setdhv("B       ",db  ,&amp;nerr);<br>        setdhv("E       ",de  ,&amp;nerr);<br>        setdhv("T0       ",dt0  ,&amp;nerr);<br>        setdhv("T1       ",dt1  ,&amp;nerr);<br>        setdhv("T2       ",dt2  ,&amp;nerr);<br>        setdhv("T3       ",dt3  ,&amp;nerr);<br>        setdhv("T4       ",dt4  ,&amp;nerr);<br>        setdhv("T5       ",dt5  ,&amp;nerr);<br>        setdhv("T6       ",dt6  ,&amp;nerr);<br>        setdhv("T7       ",dt7  ,&amp;nerr);<br>        setdhv("T8       ",dt8  ,&amp;nerr);<br>        setdhv("T9       ",dt9  ,&amp;nerr);<br>        setnhv("NVHDR   ",7,&amp;nerr);<br>        setdhv("DELTA   ",ddt,&amp;nerr);<br>        setdhv("EVLA     ",devla,&amp;nerr);<br>        setdhv("EVLO     ",devlo,&amp;nerr);<br>        setdhv("STLA     ",dstla,&amp;nerr);<br>        setdhv("STLO     ",dstlo,&amp;nerr);<br>        bwsac(npts,"dut7.sac",arr);<br>        /* clean up */<br>        free (arr);<br>}<br><br>        
+	
+	
+	</math.h></stdlib.h></stdio.h></pre>
+    </b><b>
+      <p> <br>
+      </p>
+    </b>The purpose of this code is to create two files in sac format
+    with names <i>dut6.sac </i>and <i>dut7.sac</i>.&nbsp; The code is
+    very careful about distinguishing single- and double-precision&nbsp;
+    floating point variables. The timing and coordinates used were
+    selected to test the ability of floating point numbers to represent
+    very small differences. This C program was used to have complete
+    control on the numbers stored in the sac file headers. A second
+    example below uses <b>gsac</b> to do this, but that must be done
+    carefully since <b>gsac </b>represents all floating point numbers
+    in the Sac header internally in double precision.<br>
+    <br>
+    The next step is to compile and run the code.<br>
+    <b>
+      <p> </p>
+    </b><b>
+      <pre>gcc dsac.c sacsubc.c -lm -o dsac
+dsac
+</pre>
+      <br>
+    </b>This creates the files<i> </i><i>cut6.sac</i><i> </i>which has
+    NVHDR=6 and <i>cut7.sac</i><i> w</i>hich has NVHDR=7. The header
+    contents of these files can be viewed using the comman sachdr -B
+    cut7.sac and similarly with cut6.sac. A plot is illustrative of the
+    problem associated with NVHDR=6 that arises with long time series at
+    with high sample rates.<br>
+    <b>
+      <pre>gsac
+GSAC&gt; r cut?.sac
+GSAC&gt; fileid list fname
+GSAC&gt; bg plt
+GSAC&gt; p
+GSAC&gt; # creates P001.PLT which is then converted to an EPS and then a PNG
+</pre>
+      <br>
+      <table>
+        <tbody>
+          <tr>
+            <td><img src="6vs7.png"></td>
+            <td> <br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+    </b>The C source code attempts to create time picks at 172800.01,
+    172800.02, ..., 172800.10. The following are shown using the <i>listheader</i>
+    command<b> </b>of <b>gsac</b>:<b><br>
+      <pre><br>GSAC&gt; lh b e t0 t1 t2 t3 t4 t5 t6 t7 t8 t9 stla stlo evla evlo dist gcarc az baz npts nvhdr<br>dut6.sac (0):<br>        NPTS                    13           B                172800<br>           E              172800.1          T0                172800<br>        STLA                     0        STLO                  -105<br>        EVLA                     0        EVLO                  -105<br>        DIST          2.219911e-09          AZ                     0<br>         BAZ                   180       GCARC          1.986611e-11<br>          T1                172800          T2                172800<br>          T3                172800          T4                172800<br>          T5              172800.1          T6              172800.1<br>          T7              172800.1          T8              172800.1<br>          T9              172800.1       NVHDR                     6<br>dut7.sac (1):<br>        NPTS                    13           B   1.7280000000000e+05<br>           E   1.7280012000000e+05          T0   1.7280001000000e+05<br>        STLA   0.0000000000000e+00        STLO  -1.0500000030000e+02<br>        EVLA   0.0000000000000e+00        EVLO  -1.0500000000000e+02<br>        DIST          3.339586e-05          AZ              270.0038<br>         BAZ              90.00379       GCARC                 3e-07<br>          T1   1.7280002000000e+05          T2   1.7280003000000e+05<br>          T3   1.7280004000000e+05          T4   1.7280005000000e+05<br>          T5   1.7280006000000e+05          T6   1.7280007000000e+05<br>          T7   1.7280008000000e+05          T8   1.7280009000000e+05<br>          T9   1.7280010000000e+05       NVHDR                     7<br>
+</pre>
+      <br>
+    </b>You will note that <b>gsac</b> now uses an extended formatting
+    statement %20.13g for these variables with NVHDR=7 instead of %21.7g
+    &nbsp;<b> Note these are biased somewhat by the formatting using to
+      make this presentation.
+      <p>Writing a separate program to display the numbers actually
+        stored gives <br>
+      </p>
+      <pre>    True                float                double
+T0 172800.01         172800.01562         172800.01000
+T1 172800.02         172800.01562         172800.02000
+T2 172800.03         172800.03125         172800.03000
+T3 172800.04         172800.04688         172800.04000
+T4 172800.05         172800.04688         172800.05000
+T5 172800.06         172800.06250         172800.06000
+T6 172800.07         172800.06250         172800.07000
+T7 172800.08         172800.07812         172800.08000
+T8 172800.09         172800.09375         172800.09000
+T9 172800.10         172800.09375         172800.10000
+</pre>
+      <br>
+    </b>Thus NVHDR=6 file <i>dut6.sac</i> would see that T1=T0, T3=T4,
+    T5=T6, T8=T9. The plot shows these picks at the actual floating
+    point time instead of the desited time. The plot for <i>dut7.sac</i>
+    with NHVDR=7, plots the picks at the desired correct times. The plot
+    for <i>dut6.sac</i> plots the times as given in the header.<br>
+    <br>
+    This test also examined the effect or precision in the station
+    coordinates. The example shows the value of the extended format when
+    the station coordinates differ by about 0.03m.<br>
+    <br>
+    The documentation given at <a
+      href="http://ds.iris.edu/files/sac-manual/manual/tutorial.html">http://ds.iris.edu/files/sac-manual/manual/tutorial.html</a>
+    gives the commands creating the test data sets using <b>sac102</b>.
+    The following shwos how this is donw without blackboard variables
+    using <b>gsac</b>.&nbsp; This is a bit lengthier because of the way
+    that <b>gsac</b> works internally. If both source and station
+    coordinates are entered, then <b>gsac</b> will compute the
+    distances and azimuths. A <i>write</i> would place them on the sac
+    file that is created. To avoid this the sac files must be created
+    with <i>lcalda false </i>before the write. Then it is read, <i>lcalda
+      true&nbsp; </i>is set and a new file created with <i>.lcalda </i>appended.
+    That file will demonstrated the effect of the extended coordinates.<br>
+    <pre>	
+
+#!/bin/sh
+
+rm -f v6.sac v6.sac.lcalda v7.sac v7.sac.lcalda
+
+#####
+#    make a simple pulse
+#####
+gsac &lt;&lt; EOF
+fg  delta 0.01 npts 13 gaussian alpha 30
+w imp.sac
+# force lcalda false
+rh imp.sac
+ch lcalda false
+wh
+q
+EOF
+
+
+
+#####
+# now that the pulse is defined, define the header values 
+# the purpose here is to check the accuracy of computing distance 
+# when the latitudes and longitudes are very close.
+# To make this test, one must set lcalda false so that the
+# internal double precision distances are not used
+#####
+clear;reset;clear
+gsac &lt;&lt; EOF
+# create v6.sac
+r imp.sac
+lh lcalda
+shift f 172800.06
+lh lcalda
+w v6.sac
+r v6.sac
+lh lcalda
+ch t0 172800.01
+ch t1 172800.02
+ch t2 172800.03
+ch t3 172800.04
+ch t4 172800.05
+ch t5 172800.06
+ch t6 172800.07
+ch t7 172800.08
+ch t8 172800.09
+ch t9 172800.10
+ch kt0 t0
+ch kt1 t1
+ch kt2 t2
+ch kt3 t3
+ch kt4 t4
+ch kt5 t5
+ch kt6 t6
+ch kt7 t7
+ch kt8 t8
+ch kt9 t9
+#  place the station about 0.1 meters from the epicenter
+ch evla 0.0
+ch stla 0.0
+ch evlo -105.0
+ch stlo -105.0000003
+lh lcalda evla evlo stla stlo dist az baz
+w
+
+# create v7.sac
+r imp.sac
+ch lcalda false
+w
+ch nvhdr 7
+shift f 172800.06
+w v7.sac
+r v7.sac
+ch t0 172800.01
+ch t1 172800.02
+ch t2 172800.03
+ch t3 172800.04
+ch t4 172800.05
+ch t5 172800.06
+ch t6 172800.07
+ch t7 172800.08
+ch t8 172800.09
+ch t9 172800.10
+ch kt0 t0
+ch kt1 t1
+ch kt2 t2
+ch kt3 t3
+ch kt4 t4
+ch kt5 t5
+ch kt6 t6
+ch kt7 t7
+ch kt8 t8
+ch kt9 t9
+#  place the station about 0.1 meters from the epicenter
+ch lcalda  false
+ch evla 0.0
+ch stla 0.0
+ch evlo -105.0
+ch stlo -105.0000003
+lh lcalda evla evlo stla stlo dist az baz
+w
+EOF
+
+
+#####
+# In the test if the difference in longitudes is 3e-7
+# now read the files, set lcalda true
+# and save the result with .lcalda set at the end
+#####
+
+
+gsac &lt;&lt; EOF
+r v?.sac
+lh lcalda
+ch lcalda true
+w append .lcalda
+lh lcalda
+q
+EOF
+
+
+
+gsac &lt;&lt; EOF
+r v6.sac.lcalda v7.sac.lcalda
+lh evla evlo stla stlo dist gcarc t0 t1 t2 t3 t4 t5 t6 t7 t8 t9
+q
+EOF
+
+</pre>
+    with output of<br>
+    <br>
+    <pre>GSAC&gt; lh evla evlo stla stlo dist gcarc t0 t1 t2 t3 t4 t5 t6 t7 t8 t9<br>v6.sac.lcalda (0):<br>          T0                172800        STLA                     0<br>        STLO                  -105        EVLA                     0<br>        EVLO                  -105        DIST          2.219911e-09<br>       GCARC          1.986611e-11          T1                172800<br>          T2                172800          T3                172800<br>          T4                172800          T5              172800.1<br>          T6              172800.1          T7              172800.1<br>          T8              172800.1          T9              172800.1<br>v7.sac.lcalda (1):<br>          T0   1.7280001000000e+05        STLA   0.0000000000000e+00<br>        STLO  -1.0500000030000e+02        EVLA   0.0000000000000e+00<br>        EVLO  -1.0500000000000e+02        DIST          3.339586e-05<br>       GCARC                 3e-07          T1   1.7280002000000e+05<br>          T2   1.7280003000000e+05          T3   1.7280004000000e+05<br>          T4   1.7280005000000e+05          T5   1.7280006000000e+05<br>          T6   1.7280007000000e+05          T7   1.7280008000000e+05<br>          T8   1.7280009000000e+05          T9   1.7280010000000e+05<br>GSAC&gt; q<br></pre>
+    <br>
+    <h1>gsac, shwsac and saclhdr</h1>
+    <p>For NVHDR=7 these display the&nbsp; values in the extended header
+      as double precision. <br>
+    </p>
+    <b>
+      <h2>Discussion </h2>
+    </b><br>
+    One difference between <b>sac102</b> and <b>gsac</b> is that <b>gsac
+    </b>uses real header positions 64 and 65 (C notation) to store the
+    times TIMMAX and TIMMIN corresponding to DEPMAX and DEPMIN,
+    respectively. These positions are designated unused in the <b>sac102</b>
+    header definition.&nbsp; This modification was made to address a
+    reaseach problem. Since these are not part of the extended header,
+    beware of using these header values if the precision of timing is a
+    problem.<br>
+    <b></b><b> </b>
+  </body>
+</html>

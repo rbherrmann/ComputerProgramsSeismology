@@ -1,0 +1,96 @@
+#!/bin/sh
+
+#####
+#    compile the Fortran program
+#####
+gfortran mkgrad.f -o mkgrad
+
+#####
+#     definitions for the RFTN
+#####
+RAYP=0.07
+DT=0.05
+NPTS=1024
+#####
+#     compute models. For each index N, 2*N layer make up the gradient
+#####
+rm -f DISP.PLT
+for N in 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+do
+	mkgrad -N ${N}
+	mv model.out model.${N}
+	#####
+	#    for each model create the RFTN for ALP = 1.0 and 2.5
+	#####
+	for ALP in 1.0 2.5
+	do
+		hrftn96 -M model.${N} -D 10.0 -RAYP ${RAYP} -NPTS ${NPTS} -DT ${DT} -2 -ALP ${ALP}
+		mv hrftn96.sac R.${N}.${ALP}
+	done
+	KOLOR=`echo $N | awk '{print 1000 + $1*5}' `
+	sprep96 -L -R -PMIN 1 -PMAX 100 -NMOD 1 -M model.${N}
+	sdisp96
+	sregn96
+	slegn96
+	sdpegn96 -C -L -XLOG -XMIN 1 -XMAX 100 -YMIN 2.5 -YMAX 5.0 -XLEN 4 -YLEN 4 -X0 1.5 -Y0 6.0 -K ${KOLOR} -PER
+	sdpegn96 -C -R -XLOG -XMIN 1 -XMAX 100 -YMIN 2.5 -YMAX 5.0 -XLEN 4 -YLEN 4 -X0 7.5 -Y0 6.0 -K ${KOLOR} -PER
+	sdpegn96 -U -L -XLOG -XMIN 1 -XMAX 100 -YMIN 2.5 -YMAX 5.0 -XLEN 4 -YLEN 4 -X0 1.5 -Y0 1.0 -K ${KOLOR} -PER
+	sdpegn96 -U -R -XLOG -XMIN 1 -XMAX 100 -YMIN 2.5 -YMAX 5.0 -XLEN 4 -YLEN 4 -X0 7.5 -Y0 1.0 -K ${KOLOR} -PER
+	cat S?EGN?.PLT >> DISP.PLT
+done
+
+calplt << EOF
+NEWPEN
+1
+CENTER
+3.5 9.5 0.2 'Love' 0.0
+CENTER
+9.5 9.5 0.2 'Rayleigh' 0.0
+PEND
+EOF
+cat CALPLT.PLT >> DISP.PLT
+
+#####
+#     plot the models
+#####
+shwmod96 -ZMAX 100 -K -1 -LEGIN model.??
+#####
+#     plot the RFTN's
+#####
+gsac << EOF
+cut off
+r R.??.1.0
+color rainbow
+fileid name
+bg plt
+p overlay on
+r R.??.2.5
+p
+q
+EOF
+
+#####
+#    annotate the DISP.PLT
+#####
+
+#####
+#    cleanup
+#####
+rm -f mkgrad
+rm -f SLEGNC.PLT  SLEGNU.PLT	SREGNC.PLT  SREGNU.PLT
+rm -f CALPLT.PLT
+rm -f R.??.???
+rm -f sdisp96.??? sregn96.??? slegn96.??? model.??
+rm -f CALPLT.cmd
+
+#####
+#    make the PNG files
+#####
+for i in *.PLT
+do
+	B=`basename $i .PLT`
+	plotnps -F7 -W10 -K -BGFILL -EPS < $i > t.eps 
+	convert -trim t.eps ${B}.png
+	rm t.eps
+done
+

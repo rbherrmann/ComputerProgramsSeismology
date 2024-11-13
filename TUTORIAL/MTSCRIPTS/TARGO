@@ -1,0 +1,11 @@
+#!/bin/sh
+
+
+#####
+#    make a tarfile
+#####
+
+
+
+tar cf - MECH/0XXXREG MECH/DO* MECH/PROTO* MECH/bin MECH/src | gzip -c > MECH.tgz
+

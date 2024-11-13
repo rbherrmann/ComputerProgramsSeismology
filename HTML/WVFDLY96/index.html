@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Computer Programs in Seismology - WVFDLY96 </title>
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<h2>Introduction</h2>
+The programs <b>wvfgrd96</b>, <b>wvfmtd96</b> and <b>wvfmt96</b>
+output the time shift used to better match the observed and predicted
+waveforms in the <i>sac</i> header value <i>USER9</i> in the
+predicted waveform, eg., <i>CCMZ.pre</i>. Until now this has not been
+used quantitatively, but has served an an indication of several
+different effects.
+<p>The convention for the time shift is that a positive value
+indicates that the synthetic traces must be moved&nbsp; later in time
+for alignment.
+</p>
+<p>There are different causes for this time shift:
+</p>
+<ul>
+  <li>The origin time and epicentral distance are incorrect</li>
+  <li>The velocity model used for the inversion is incorrect</li>
+  <li>The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion (assuming
+that the initial trace alignment is based on the P arrival time)</li>
+</ul>
+<p>
+The program <b>wvfdly96</b> considers the azimuthal variation of the Z
+R and T components, which are contained in the files Z.dat, R.dat and
+T.dat
+The files consist of one line per station with an entry
+</p>
+<pre>   Azimuth Time_Shift<br></pre>
+<p>
+Assuming only a mislocation, the time shifts are fit to a functional
+form as a function of azimuth to the station: </p>
+<pre>    Time_shift = A + B cos Azimuth + C Sin Azimuth<br></pre>
+For small changes in epicentral location, <br>
+<pre>         A is the change in origin time<br></pre>
+The second two terms can be rewritten, for interpretation, as
+<br>
+<pre>         R/V cos ( Az - Theta)</pre>
+<br>
+where R is the shift of the epicenter in km and Theta + 180 is the
+direction of the epicenter shift<br>
+<p>
+Consider the following example with time shifts indicated by -, 0 +
+where <i>I</i> is the initial epicenter and <i>E</i> is the true
+epicenter
+</p>
+<pre>               <br>                       0          delay           * *<br>                       |            |           *    *<br>                       |            |          *       *<br>               + ------I--E--- -    **---|----|----|----| Az<br>                       |            | * 90  *180  270  360<br>                       |            |  *   *<br>                       |            |    *<br>                       0            |<br><br></pre>
+In this figure stations to the east would be closer to the true
+epicenter, <span style="font-style: italic;">E, </span>than to the
+assumed epicenter, <span style="font-style: italic;">I, </span>and
+thus the prediction waveform would be later than observed. The program <span
+ style="font-weight: bold;">wvfgrd96 </span>would shift the predicted
+waveform to the left on the plots, which would be a negative
+delay.&nbsp; For stations to the west, the true travel distance is
+greater than the assumed distance, and the predictions would appear
+before the actual arrival; <span style="font-weight: bold;">wvfgrd96 </span>would
+then shift the prediction later in time,. a positive time shift.
+<p>This pattern would indicate a functional fit in this example would be<br>
+</p>
+<pre>         time_shift = A + C sin Az  with C negative<br></pre>
+<br>
+After removing the contstant time shift, the epicenter should be moved
+to the east, e.g., 270 + 180 degrees<br>
+<br>
+For use with regional moment tensor, it is assumed that the time shift
+is related to the delay of the Rayleigh wave on the Z and R components
+and the Love wave on the T component. Further is it assumed that the
+ratio of Love-wave group velocity to Rayleigh-wave is 0.92 and that
+there is no other dispersion effect in the frequency band of the
+waveform match.&nbsp; Further the code assumes that the Rayleigh-wave
+group velocity is 3.1 km/s.<br>
+Thus the time shift for the T component is of the form <br>
+<br>
+<pre> Time_shift = A + 0.92 B cos Azimuth + 0.92 C Sin Azimuth</pre>
+The A, B and C parameters are determined by least squares and no
+weighting (e.g., distance) is applied to the regression.<br>
+<h2>DODELAY and wvfgrd96</h2>
+After the source inversion, the script <a href="dodelay.html">DODELAY</a>
+is run to extract the delays from the predicted waveforms, to estiamte
+the shift and to plot the results using the program <b>genplt</b>.
+<br>
+<br>
+The following example provides the background for writing this program
+and the DODELAY script:<br>
+<br>
+A recent earthquake in the Northwest Territories of Canada was located
+by the USGS NEIC as follows:<br>
+<br>
+<h2>USGS Location </h2>
+<p>
+2010/09/04 00:23:13 62.943 -125.718 7.1 4.50 NT, Canada
+</p>
+The time shifts associated with the waveforms showed significant
+delays. Running DODELAY yielded the following image:<br>
+<br>
+<img src="wdelayneic.png" alt="wdelayneic.png">
+<br>
+<h3><br>
+</h3>
+<h3><br>
+</h3>
+Subsequencly the Natural Resources Canada (NRCAN) solution was
+published.<br>
+<h3>NRCAN Location </h3>
+<p>
+2010/09/04 00:23:11.35 62.864 -125.821 1.0 4.8 ML 120 km of Wrigley, NT
+</p>
+Following the source inversion starting with these coordinates, the
+interpreted delays yield the following figure:<br>
+<br>
+<img src="wdelaynrcan.png" alt="wdelaynrcan.png">
+<br>
+<br>
+The NRCAN solution is 10.24 km away from the USGS solution in an
+azimuthal direction of 210 degrees. A comparison of the intitial time
+shifts showed that those for the NRCAN location were smaller than for
+the NEIC solution. This is also evident in the plots where the inferred
+Rayleigh wave distance offsets are smaller for the NRCAN solution than
+for the NEIC solution. There is some consistency in the orgin time
+shift, e.g., that the NEIC solution would want 00:23:13.6 and the NRCAN
+solution 00:23:13.0. <br>
+<br>
+The output of <span style="font-weight: bold;">wvfdly96</span> is only
+mean to interpret waveform matching time shifts in terms of a source
+offset. It does not provide a true relation because of the simple
+assumptions of the group velocities used. Other factors such as poor
+station distribution and incorrect model still affect the results. <br>
+<br>
+Large inferred time shifts are an indication that an examination of the
+initial location is appropriate.<br>
+<h2>Discussion</h2>
+This program may have value for testing epicentral locations base on
+body-wave arrival times. If a significant azimuthal change is seen in
+the independent surface-wave field, then a reexamination of the
+location may be in order.<br>
+<br>
+<br>
+<center><i>Last changed September 20, 2010</i></center>
+</body>
+</html>

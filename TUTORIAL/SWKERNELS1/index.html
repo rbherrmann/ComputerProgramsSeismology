@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials -SW Inversion
+      Kernels</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body link="#0000EE" vlink="#551A8B" text="#000000" bgcolor="#ffffff"
+    alink="#EE0000">
+    <br>
+    <h2>Introduction</h2>
+    Although the programs <b>surf96</b> and <b>joint96</b> have been
+    available for almost 40 years, access to the actual partial
+    derivatives used in the inversion of surface-wave data has not been
+    easy to obtain unless one really read the programs. <br>
+    <br>
+    This tutorial is a follow on to the tutorial describing <b>srfker96</b>.
+    the purpose of that program was to provide the inversion kernels,
+    e.g., the partial derivatives of the dispersion value with respect
+    to the medium parameters in a manner that permitted their
+    plots.&nbsp; Recently there was a request for the partial
+    derivatives themselves for use in an user developed inversion
+    program. For this reason <b>srfpar96 </b>is now provided.&nbsp;
+    This new program uses the data sets and some of the internal files
+    used by <b>surf96. <br>
+      <br>
+    </b>To permit the user to tailor the information provided by <b>srfpar96</b>,
+    the output is performed in <i>subroutine outputpar</i>.&nbsp; This
+    subroutine is well commented, so that the output can be reformatted
+    for the user's independent code. <br>
+    <p> The detailed theory concerning the partial derivatives&nbsp; is
+      given in <a href="surf.pdf"> surf.pdf</a>. The discussion shows
+      how to use the new program with others contained in
+      PROGRAMS.330/VOLIV/src.</p>
+    <p> The complete set of scripts for running the programs are given
+      in <a href="DIST.tgz"> DIST.tgz</a>. After downloading, unpack
+      using the command: </p>
+    <pre>gunzip -c DIST.tgz | tar xvf -
+</pre>
+    This will create the subdirectory SWKERNELS1/DIST. <b>cd
+      SWKERNELS1/DIST</b>. There are two subdirectories: Q and NOQ which
+    permit one to duplicate the results shown in this tutorial.<br>
+    <br>
+    <h2>Tutorial download<br>
+    </h2>
+    <p>Download <a href="file:///Users/rbh/Desktop/TOLUPEI/DIST.tgz">DIST.tgz</a>.
+      Then<br>
+    </p>
+    <pre>gunzip -c DIST.tgz | tar xf -<br>cd DIST.tgz<br></pre>
+    You will see the following directory structure:<br>
+    <br>
+    <pre>SWKERNELS1/<br>           | -----  srfpar96.f<br>           | -----  surf.pdf<br>           | ----- Q/<br>           |        | ---- SCMQ.mod<br>           |        | ---- disp.d<br>           |        | ---- sobs.d<br>           |<br>           | ----- NOQ/<br>                    | ---- SCM.mod<br>           |        | ---- disp.d<br>           |        | ---- sobs.d
+<br>   <br></pre>
+    <h2>Source code</h2>
+    <p>The <i>srfpar96.f&nbsp; </i>will be included in the next
+      distribution of <b>Computer Programs in Seismology.</b> It is
+      also given here:<br>
+    </p>
+    <p><a href="srfpar96.f">srfpar96.f</a></p>
+    <p>Compile this with the command<br>
+    </p>
+    <pre>gfortran -frecord-marker=4 srfpar96.f -o srfpar96</pre>
+    <br>
+    <h2>Use of srfpar96</h2>
+    <p>Before running this program, you must have the dispersion file in
+      <i>surf96</i> format, the velocity model in <i>model96&nbsp; </i>format
+
+
+      and the <i>sobs.d </i>control file. These are requires by <b>surf96</b>
+      which initially reads these using <b>srfpre96.&nbsp; <br>
+      </b></p>
+    <p>The <i>sobs.d </i>used in Example 1 below is</p>
+    <pre>   4.99999989E-03   4.99999989E-03   0.00000000       4.99999989E-03   0.00000000    <br>    1    1    2    2    1    2    2    0    1    0<br>SCM.mod                                                                         <br>disp.d  <br></pre>
+    <p>I usually create this file interactively using <b>srfpre96</b>,
+      which creates <i>sobs.d</i> if it does now exist, or which uses
+      an existing <i>sobs.d</i>. The meaning of the entries on the four
+      lines is as follows:</p>
+    <ul>
+      <li>Line 1:</li>
+      <ul>
+        <li>Entry one &nbsp; : h&nbsp;&nbsp;&nbsp;&nbsp; - percentage
+          change in period for computing the group velocity partial
+          using the Rodi method</li>
+        <li>Entry two &nbsp; : dcl &nbsp; - increment in phase velocity
+          for the Love wave dispersion search. If the model velocities
+          are in km/s, then 0.005 is OK</li>
+        <li>Entry three : onel - for internal use. Set to 0.0</li>
+        <li>Entry four&nbsp;&nbsp; : dcr&nbsp;&nbsp; - increment in
+          phase velocity for the Rayleigh wave dispersion search. If the
+          model velocities are in km/s, then 0.005 is OK</li>
+        <li>Entry five &nbsp;&nbsp; : oner&nbsp; - for internal use. Set
+          to 0.0</li>
+      </ul>
+      <li>Line 2</li>
+      <ul>
+        <li>Entry one&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp; Inversion - 1
+          variance based on residuals ; 0 variance based on standard
+          deviation of observation<br>
+        </li>
+        <li>Entry two.&nbsp;&nbsp;&nbsp; :&nbsp; Maximum number of Love
+          Wave Gamma Modes; 0 means do not use</li>
+        <li>Entry three. :&nbsp; Maximum Number of Love Wave Phase
+          Velocity Modes; 0 means do not use</li>
+        <li>Entry four&nbsp;&nbsp;&nbsp; :&nbsp; Maximum Number of Love
+          Wave Group Velocity Modes; 0 means do not use</li>
+        <li>Entry five&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp; Maximum Number of
+          Rayleigh Wave Gamma Modes; 0 means do not use<br>
+        </li>
+        <li>Entry six&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp; Maximum
+          Number of Rayleigh Wave Phase Velocity Modes; 0 means do not
+          use<br>
+        </li>
+        <li>Entry seven :&nbsp; Maximum Number of Rayleigh Wave Group
+          Velocity Modes; 0 means do not use<br>
+        </li>
+        <li>Entry eight &nbsp; :&nbsp; Model layer weighting 0=no, 1=yes<br>
+        </li>
+        <li>Entry nine&nbsp; &nbsp; :&nbsp; Inversion smoothing 0=none,
+          1=differential<br>
+        </li>
+        <li>Entry ten &nbsp; &nbsp;&nbsp; :&nbsp; Flat/spherical model -
+          this is set from the model96 velocity model</li>
+      </ul>
+      <li>Line 3</li>
+      <ul>
+        <li>Name of the velocity model file in <i>model96 </i>format</li>
+      </ul>
+      <li>Line 4</li>
+      <ul>
+        <li>Name of the dispersion file in <i>surf96 </i>format.</li>
+      </ul>
+    </ul>
+    <b>The safest way to create <i>sobs.d </i>is to run
+      surf96/srfrpe96 interactively.</b><br>
+    <h2>Tests<br>
+    </h2>
+    <h3>Example 1<br>
+    </h3>
+    <p>The first example is in the subdirectory NOQ. In this directory
+      you will find the following files: sobs.d, SCM.mod and disp.d. Not
+      the that Q fields in SCM.mod are set to zero.&nbsp; This is
+      because <b>srfpar96</b> will compute dispersion for causal Q,
+      which means that the pahse and group velocities will differ from
+      purely infinite Q models.&nbsp; <br>
+    </p>
+    <p>In this example <b>srfker96 </b>will also be run.<br>
+    </p>
+    <pre>srfpre96                   <font color="#ff0000">Create the control files</font><br>srfdis96                   <font color="#ff0000">Get the phase velocities for the current model</font><br>srfdrl96                   <font color="#ff0000">This must be run first. Get the Love partials and group velocities</font><br>srfdrr96                   <font color="#ff0000">Get the Rayleigh wave partials and merge results with the Love wave results</font><br>srfpar96 &gt; srfpar96.txt    <font color="#ff0000">Output the partial derivatives corresponding to  the observed dispersion</font><br><br>srfker96 &gt; srfker96.txt    <font color="#ff6600">Output kernels for the the model. The entries here will often be greater than the observed dispersion.</font><br></pre>
+    <p>Here is the output: <a href="srfpar96noq.txt"> srfpar96.txt</a>
+      and <a href="srfker96noq.txt"> srfker96.txt</a>.</p>
+    An entry of <i>srfpar96.txt </i>for one observation looks like<br>
+    <br>
+    <pre>           2           2           1   12.0000000       3.50000000       3.14152980      0.358470201               2<br>   5.15833758E-02  -2.00628449E-04<br>  0.755849659      -2.36292444E-02<br>   7.48062041E-03   0.00000000    <br> -0.244638950      -1.38737843E-04<br>  -1.36846924      -1.22778639E-02<br></pre>
+    <br>
+    The entries of the first line are type (1=Love, 2=Rayleigh),
+    dispersion value (1=phase velocity, 2=group velocity, 3=gamma), mode
+    number (0=fundamental), period, observed dispersion, predicted
+    dispersion, residual (observed - predicted), and finally the number
+    of layers.<br>
+    <br>
+    The next five lines are the partial derivatives of the dispersion
+    value, corresponding to each layer of the model:<br>
+    <blockquote>dvda&nbsp;&nbsp; &nbsp; &nbsp; - partial of value with
+      respect to P velocity<br>
+      dvdb&nbsp;&nbsp; &nbsp; &nbsp; - partial of value with respect to
+      S velocity<br>
+      dvdh&nbsp;&nbsp; &nbsp; &nbsp; - partial of value with respect to
+      layer thickness<br>
+      dvdqainc - partial of value with respect to inverse Qp<br>
+      dvdqbinv - partial of value with respect to inverse Qs<br>
+    </blockquote>
+    <p>The example code in <i>subroutine outputpar </i>always outputs
+      the five partials. However for love waves the dvda and dvdqainv
+      will&nbsp; be zeros since love waves are not a function of the
+      p-wave velocities.<br>
+    </p>
+    <h3>Example 2 <br>
+    </h3>
+    This differs from the previous example in that the velocity model
+    has Qp=600 and Qs=300 in the first layers. Because of this the
+    predicted dispersion values and partial derivatives will be
+    different form the results of Example 1. The difference will be
+    greater that&nbsp; for models with much lower Q. and data at shorter
+    periods.<br>
+    <br>
+    The output of this example is <a href="srfpar96noq.txt">
+      srfpar96.txt</a>
+    and <a href="srfker96noq.txt"> srfker96.txt</a>.<br>
+    <br>
+    <h3>Discussion</h3>
+    <p>As mentioned the number of partials output can be less than the
+      number of dispersion points. The <i>dist.d</i> had the following
+      entry<br>
+    </p>
+    <pre>SURF96 R C X 1 50.0 3.9 0.01<br></pre>
+    <p>The first higher modes for the model only appear at periods less
+      than about 15s. Thus this observation at a period of 50s&nbsp;
+      will not be used for the inversion since the model does not
+      support it.<br>
+    </p>
+    <p>Compare the output of the <a
+        href="file:///Users/rbh/Desktop/TOLUPEI/srfpar96noq.txt">
+        srfpar96.txt</a>
+      and <a href="file:///Users/rbh/Desktop/TOLUPEI/srfker96noq.txt">
+        srfker96.txt<br>
+      </a></p>
+    <p>to ensure that the <b>srfpar96</b> output is correct.<br>
+    </p>
+    <h2>Thoughts on inversion</h2>
+    <p>An iterative inversion will run through a sequence of models.
+      Here is how I might approach it.<br>
+    </p>
+    <p>Have an sobs.d that looks like<br>
+    </p>
+    <pre>   4.99999989E-03   4.99999989E-03   0.00000000       4.99999989E-03   0.00000000    <br>    1    1    2    2    1    2    2    0    1    0.     <font color="#ff0000">This will be different for your data set</font><br>T.mod                                                                         <br>disp.d  </pre>
+    <p>Now if the sequence of models is something like 000.mod<br>
+    </p>
+    <pre>cp 000.mod<br><br>srfpre96<br>srfdis96<br>srfdrl96<br>srfdrr96<br><font color="#ff0000">your_modified_srfpar96 &gt; output<br>your inversion which creates a new model, e.g. out.mod<br><br>cp out.mod 001.mod<br>cp 001.mod T.mod<br><br></font><br><font color="#ff0000"><font color="#000000">srfpre96<br>srfdis96<br>srfdrl96<br>srfdrr96</font><br><font color="#ff0000">your_modified_srfpar96 &gt; output<br>your inversion which creates a new model, e.g. out.mod</font>
+<br><br></font></pre>
+    <p><br>
+    </p>
+    <br>
+    <div style="text-align: center;">Last Changed&nbsp; August 7, 2024<br>
+    </div>
+  </body>
+</html>

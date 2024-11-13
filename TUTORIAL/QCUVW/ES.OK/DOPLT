@@ -1,0 +1,70 @@
+#!/bin/sh
+
+gsac << EOF
+cd FINAL
+r *[ZRT]
+map ep off kstnm on s 32 n 36.5 w -84 e -78
+mv map.sh ..
+bg plt
+ylim all
+color list black black black black black black black black black black black black red black black black black black red black red black
+qdp 10
+fileid name
+
+cut b 80 b 250
+r *Z
+sort up dist
+qdp 10
+fileid name
+lp c 0.2 n 3
+title on l top s small text "Z component: lp c 0.2 n 3"
+pctl YLEN 12.0
+p
+
+r *R
+sort up dist
+lp c 0.2 n 3
+title on l top s small text "Z component: lp c 0.2 n 3"
+pctl YLEN 12.0
+p
+
+r *T
+sort up dist
+lp c 0.2 n 3
+title on l top s small text "T component: lp c 0.2 n 3"
+pctl YLEN 12.0
+p
+
+cut b 200 b 800
+r *Z
+sort up dist
+lp c 0.01 n 3
+title on l top s small text "Z component: lp c 0.01 n 3"
+pctl YLEN 12.0
+p
+
+r *R
+sort up dist
+lp c 0.01 n 3
+title on l top s small text "Z component: lp c 0.01 n 3"
+pctl YLEN 12.0
+p
+
+r *T
+sort up dist
+lp c 0.01 n 3
+title on l top s small text "T component: lp c 0.01 n 3"
+pctl YLEN 12.0
+p
+
+mv P00?.PLT ..
+q
+EOF
+
+for i in 001 002 003 004 005 006
+do
+plotnps -BGFILL -F7 -W10 -EPS -K < P${i}.PLT > t.eps
+convert -trim t.eps P${i}.png
+done
+
+

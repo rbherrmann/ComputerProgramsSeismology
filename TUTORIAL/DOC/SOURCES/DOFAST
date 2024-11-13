@@ -1,0 +1,2 @@
+echo s | latex main.tex
+dvips -t letter main.dvi

@@ -1,0 +1,32 @@
+#!/bin/sh
+
+MYTOP=`pwd`
+DEST=$GREENDIR/WUS.REG/0050
+
+
+gsac << EOF
+cd $DEST
+cut vel 3.5 -10 vel 3.5 20
+fileid name
+r 0[01][02468]00*TSS
+cd ${MYTOP}
+bg plt 
+sort up dist
+title on l t s m text "cut vel 3.5 -10 vel 3.5 20 ; sort up dist ; p absolute"
+p absolute
+cd $DEST
+cut off
+r
+sort
+xlim vel 3.5 -20 vel 3.5 50 
+title on l t s m text "xlim vel 3.5 -20 vel 3.5 50 ; sort up dist ; p relative"
+cd ${MYTOP}
+markt on
+p relative
+q
+EOF
+
+plotnps -F7 -W10 -EPS -BGFILL -K < P001.PLT > t.eps ; convert -trim t.eps GSACcut.png
+plotnps -F7 -W10 -EPS -BGFILL -K < P002.PLT > t.eps ; convert -trim t.eps GSACxlim.png
+rm t.eps
+

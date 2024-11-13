@@ -1,0 +1,801 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Moment Tensor Inversion Scripts</title>
+    <meta name="generator" content="LibreOffice 7.1.3.2 (MacOSX)">
+    <meta name="created" content="00:00:00">
+    <meta name="changed" content="2022-05-29T11:13:04.268398000">
+    <meta name="" content="">
+    <style type="text/css">
+		@page { size: 11in 11in }
+		td p { color: #000000; text-align: center }
+		p { color: #000000 }
+		pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6; color: #000000; text-align: left }
+		h2 { color: #000000 }
+		h2.cjk { font-family: "Songti SC" }
+		h2.ctl { font-family: "Arial Unicode MS" }
+		blockquote { color: #000000 }
+		h3 { color: #000000 }
+		h3.cjk { font-family: "Songti SC" }
+		h3.ctl { font-family: "Arial Unicode MS" }
+		a:link { color: #0000ee }
+		a:visited { color: #551a8b }
+	</style>
+  </head>
+  <body dir="ltr" text="#000000" vlink="#551a8b" lang="en-US"
+    link="#0000ee" bgcolor="#ffffff">
+    <h2 class="western" style="margin-right: -0.13in; background:
+      transparent; page-break-after: avoid"> Introduction</h2>
+    <p>Moment tensor solutions for earthquakes in North America are
+      routinely determined by Saint Louis University using the codes
+      distributed&nbsp;<a href="/eqc/eqccps.html"> Computer Programs in
+        Seismology</a>. The basic codes are then invoked using&nbsp; a
+      sequence of shell scripts that acquire the waveforms, remove the
+      instrument response, permit an interactive quality control of
+      ground motions, invert for the source and document the processing
+      and results in detail.</p>
+    <p>The purpose of this document is to provide the scripts, describe
+      their function, and provide detail on how they can be modified for
+      a local use. The result will be a web page such as <a
+href="https://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20220219003853/index.html">https://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20220219003853/index.html</a>.<br>
+    </p>
+    <p>This tutorial updates the scripts given in <a
+        href="/eqc/eqc_cps/TUTORIAL/RMT">Regional Moment Tensor
+        Inversion</a>.<br>
+    </p>
+    <p>Because the scripts are designed to support routine moment tensor
+      inversion in a region, the scripts are connected in the sense that
+      a master script invokes supporting scripts after first setting
+      parameters for the supporting scripts. </p>
+    <p>These <b>bash</b> shell scripts are internally documented with
+      comments and function well.&nbsp; Although one can create GUI's
+      for processing, the value of these scripts is that they define the
+      logical steps for processing.&nbsp; Many of the concepts have been
+      incorporated into other systems.</p>
+    <h2 class="western">Requirements</h2>
+    <p>In order to perform moment tensor inversion, it is necessary that
+      the current distribution of&nbsp;&nbsp; <a
+        href="/eqc/eqccps.html">Computer Programs in Seismology</a>
+      (CPS) be compiled and that the PATH variable be modified to point
+      to the executables.&nbsp; In addition two environment parameters
+      are used to point to the CPS directory and to the Green's
+      functions directory. Since I use the <b>bash</b> shell on LINUX
+      and MacOS, I have the following in the <i>.profile</i> file which
+      is read upon login:</p>
+    <pre style="margin-top: 0in; margin-bottom: 0in"><b>LINUX example 1</b>
+<i>In ~/.profile</i>
+# set PATH so it includes user's PROGRAMS.330/bin if it exists
+if [ -d "$HOME/PROGRAMS.330/bin" ] ; then
+    PATH=":.:$HOME/PROGRAMS.330/bin:$PATH"
+fi
+<i>In ~/.bashrc</i>
+export CPS=${HOME}/PROGRAMS.330
+export GREENDIR=/media/sf_rbh/PROGRAMS.310t/GREEN
+------------------------
+<b>LINUX example 2</b>
+<i>In ~/.profile</i>
+PATH=:.:$HOME/bin:$PATH:$HOME/PROGRAMS.310t/PROGRAMS.330/bin:
+<i>In ~/.bashrc</i>
+export GREENDIR='/d/rbh/GREEN'
+export CPS='/home/rbh/PROGRAMS.310t/PROGRAMS.330/'
+------------------------
+<b>OSX example</b>
+<i>In ~/.profile</i>
+OPATH=$PATH
+PATH=:.:$HOME/bin:$HOME/PROGRAMS.310t/PROGRAMS.330/bin:$OPATH
+export GREENDIR=${HOME}/PROGRAMS.310t/GREEN
+export CPS=${HOME}/PROGRAMS.310t/PROGRAMS.330
+ </pre>
+    <p> If everything is set up correctly, then the shell will be able
+      to find the executables and also be able to access the directory
+      contents:</p>
+    <b> </b>
+    <pre style="margin-top: 0in; margin-bottom: 0in"><b>$ which gsac</b>
+/home/cps/PROGRAMS.330/bin/gsac
+$ ls -F $CPS
+bin/      C.proto*              DOC/      readline-8.1/  VOLII/   VOLV/     VOLX/
+C*        CPSInstall.pdf        include/  Setup*         VOLIII/  VOLVI/    XVIG/
+CALPLOT/  Csrconly*             IRIS/     SUBS/          VOLIV/   VOLVII/
+C.out     dialog-1.1-20080819/  lib/      VOLI/          VOLIX/   VOLVIII/
+   
+<b>$ ls -F $GREENDIR</b>
+CUS.REG/  Models/               WUS.REG/</pre>
+    <p> Here the variable CPS is the location of the CPS software
+      distribution while the variable GREENDIR is the location of the
+      Green's functions required for inversion. These can be anywhere on
+      the disk system, but they must exist.</p>
+    <h2 class="western">Support software</h2>
+    <p>In the distribution where will be a <b>src </b>directory that
+      contains some utility programs for computing ML and mLg magnitudes
+      from the data. These are provided since these are usful parameters
+      to define the size of an earthquake. They really are part of the
+      package because of a research interest in the relationship between
+      a local magnitude and Mw. It will be necessary to compile these. </p>
+    <p>In addition the scripts make use of the <b>convert</b> program
+      of the ImageMagick package to convert EPS graphics to PNG for
+      inclusion in the web page created.</p>
+    <p>Finally, the Generic Mapping Tools (GMT) are use to make some
+      maps</p>
+    <h2 class="western">Distribution</h2>
+    <p>All of the scripts are included in the file <a href="MECH.tgz">MECH.tgz</a>&nbsp;
+Click
+
+
+
+
+
+
+
+      on this link to download this file. Then do the following steps:</p>
+    <pre style="margin-top: 0in; margin-bottom: 0in"><b>gunzip -c MECH.tgz | tar xf -
+cd MECH
+rm -fr bin
+mkdir bin
+cd src
+make all
+cd ..</b></pre>
+    <p> <br>
+      <br>
+    </p>
+    <p>The programs created and their purposes are as follow: </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in"><b>mlmag</b> - pass ground
+          velocities through a Wood-Anderson response and compute ML
+          using the IASPEI formula</p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><b>mblgmag</b> - pass ground
+          velocities through a WWSSN Short Period response and compute
+          mLg using the IASPEI formula</p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><b>linreg1</b> - given an input
+          stream of (x,y) pairs, perform a linear regression of the form
+          <i>y = A + B x</i>. The command line flag <i>-1</i> uses the
+          residuals, <i>res</i>,&nbsp; as a <i>1/res </i>weight to
+          implement an <b>L1 </b>inversion_</p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><b>linreg1w</b> - given an input
+          stream of (x,y,wt) triplets, where <i>wt</i> is a weight,
+          perform a linear regression of the form <i>y = A + B x</i>.
+          The command line flag <i>-1</i> uses the residuals, <i>res</i>,&nbsp;
+
+
+
+
+
+
+
+
+
+          as a <i>1/residual </i>weight to implement an <b>L1 </b>inversion
+
+
+
+
+
+
+
+
+
+        </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><b>mlwt</b> - given
+          (magnitude,distance) pairs, define a weight that emphasizes
+          observations at distances less than 100 km. the output stream
+          sonsists of (x,y,wt) triplets. The ML scripts will attempt to
+          correct for a difference between regional attenuation and that
+          implicit in the IASPEI ML formula that was defined for
+          Southern California (USA). </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><b>stationxml-seed-converter-2.1.0.jar</b>
+          - This is from <a
+            href="https://github.com/iris-edu/stationxml-seed-converter">https://github.com/iris-edu/stationxml-seed-converter</a>.
+          This program will convert the downloaded station xml file from
+          IRIS to datalessSEED than can be used with <b>rdseed</b> and
+          the downloaded miniSEED to create the RESP, pole-zero and Sac
+          files. </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><b>FetchData</b> - an IRIS tool (<a
+            href="https://service.iris.edu/clients/">https://service.iris.edu/clients/</a>)
+          that fetches time series data (miniSEED), simple metadata
+          (ASCII) and instrument responses (SEED, RESP and SAC PZs).
+          This can be used to access data from IRIS and cooperating data
+          centers.</p>
+      </li>
+      <li>
+        <p> <b>fdsnws_fetch</b> - (<a
+            href="https://geofon.gfz-potsdam.de/software/fdsnws_fetch/">https://geofon.gfz-potsdam.de/software/fdsnws_fetch/</a>)
+          THIS CODE IS NOT IN THE SOURCE DIRECTORY.&nbsp; IT MUST BE SEPARATELY DOWNLOADED.</p>
+        <p>To do this use the <b>python</b> <i>pip</i> command which may have to be installed. On LINUX Mint one would
+fist install <i>pip</i> (<a href="tecmint.com/install-pip-in-linux">tecmint.com/install-pip-in-linux</a> a)s
+
+<pre>
+Install PIP On Debian/Ubuntu/Mint:
+
+# apt install python-pip	#python 2
+# apt install python3-pip	#python 3
+</pre>
+The link gives the commands for other LINUX distributions. Next install the FDSN scripts from
+<a href="pypi.org/project/fdsnwsscripts/">pypi.org/project/fdsnwsscripts</a>:
+<pre>
+pip oinstall fdsnwsscripts
+</pre>
+The installation will place the scripts into the <i>${HOME}/.local/bin</i> directory and warn is this is not in the <i>$PATH</i>  If not than place the following line in the <b>bash</b> <i>.profile</i> file:
+<pre>
+# set PATH to include the .local/bin directory
+export PATH="$HOME/.local.bin"
+</pre>
+<p>
+Note that Version 2022.17 <b>fdsnws2seed</b> will create a SEED volume which can be used with <b>rdseed</b> but  also creates Sac files and Sac pole-zero files.
+
+      </li>
+      <li>
+        <p> <b>mseed2sac</b> - an IRIS tool (<a
+            href="https://ds.iris.edu/ds/nodes/dmc/software/downloads/mseed2sac/">https://ds.iris.edu/ds/nodes/dmc/software/downloads/mseed2sac/</a>)
+          <br>
+          Converts miniSEED to SAC format. An optional metadata file may
+          be supplied that contains values for the SACheaders that are
+          not available in miniSEED. </p>
+      </li>
+      <li>
+        <p> <b>query</b> or <b>java -jar CWBQuery.jar $*</b>&nbsp;
+          (https://github.com/usgs/edgecwb/wiki/CWBQuery). This accesses
+          the USGS public server and can provide waveforms in SAC format
+          and responses in SAC pole-zero format. THIS CODE IS NOT IN THE
+          SOURCE DIRECTORY. </p>
+      </li>
+    </ul>
+    <h2 class="western">MECH</h2>
+    <p>The MECH directory provides the required scripts and prototype
+      organization.&nbsp; In my usage, there are similar directories
+      that focus on different geographical reqions. For example I have
+      the organization</p>
+    <pre style="margin-top: 0in; margin-bottom: 0in">MOMENT_TENSOR
+    |
+    |----- MECH.NA     <font color="#ff0000"><b>[Moment tensor inversion for earthquakes in North America]</b></font>
+    |
+    |----- MECH.IT     <font color="#ff0000"><b>[Moment tensor inversion for earthquakes in Italy]</b></font>
+    |
+    |----- MECH.EU<font color="#ff0000">     </font><font color="#ff0000"><b>[Moment tensor inversion for earthquakes in other locations in Europe]</b></font></pre>
+    <p> Thus the MECH directory is a prototype for any region.</p>
+    <p>The MECH directory contains the following directories <br>
+    </p>
+    <pre><font color="#555753"><b>MECH</b></font>
+├── <font color="#555753"><b>0XXXREG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>DAT.REG</b></font>
+│&nbsp;&nbsp; │&nbsp;&nbsp; └── <font color="#555753"><b>NOUSE</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>GRD.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>HTML.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MLG.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>ML.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MTD.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MTGRD.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MTGRD.REG.DC</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MTGRD.REG.DEV</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MT.OTHER</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>MT.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>NEW2.REG</b></font>
+│&nbsp;&nbsp; ├── <font color="#555753"><b>SYN.REG</b></font>
+│&nbsp;&nbsp; └── <font color="#555753"><b>TMLG.REG</b></font>
+├── <font color="#555753"><b>bin</b></font>
+├── <font color="#555753"><b>PROTO.CWB</b></font>
+├── <font color="#555753"><b>PROTO.GEOFON</b></font>
+├── <font color="#555753"><b>PROTO.I</b></font>
+├── <font color="#555753"><b>PROTO.WS</b></font>
+└── <font color="#555753"><b>src</b></font>
+    └── <font color="#555753"><b>mseed2sac-2.3</b></font>
+        ├── <font color="#555753"><b>doc</b></font>
+        ├── <font color="#555753"><b>libmseed</b></font>
+        │&nbsp;&nbsp; ├── <font color="#555753"><b>doc</b></font>
+        │&nbsp;&nbsp; ├── <font color="#555753"><b>example</b></font>
+        │&nbsp;&nbsp; ├── <font color="#555753"><b>matlab</b></font>
+        │&nbsp;&nbsp; └── <font color="#555753"><b>test</b></font>
+        │&nbsp;&nbsp;     └── <font color="#555753"><b>data</b></font>
+        └── <font color="#555753"><b>src</b></font>
+</pre>
+    <p>and scripts starting with DO<br>
+    </p>
+    <pre><b>DO		DOGEOFON	DOQUERY		DOSOLUTION	DOWS5		DOWSSETUP</b><b><br></b><b>DOCWB		DOGEOFON5	DOSETUP		DOSOLUTION5	DOWSF</b><b><br></b><b>DOCWB5		DOGEOFONSETUP	DOSETUP5	DOWS		DOWSF5</b><br></pre>
+    <p><br>
+    </p>
+    <h2 class="western">Source Inversion</h2>
+    <p>Typical source inversion requires broadband waveform data for a
+      given event.&nbsp; Thus the process starts by specifying the event
+      coordinates. In an automated or GUI based system this information
+      would be provided by the system.&nbsp; For command line inversion,
+      one must edit an initial file, here called <b>DO</b>, which looks
+      like the following:</p>
+    <pre style="margin-top: 0in; margin-bottom: 0in">#!/bin/sh 
+#####
+# valid regions
+# REG    Region             VELOCITY_MODEL
+# CUS   Central US          CUS
+# WUS   Wsstern US          WUS
+#####
+# Command syntax:
+#DO YEAR MO DY HR MN SC MSC  LAT     LON    DEP  MAG REG  NEIC FELTID STATE/COUNTRY
+#####
+# DO        YEAR   MO   DY   HR   MN   SC   MSC   LAT             LON    DEP     MAG    REG  NEIC FELTID STATE/COUNTRY
+#   0         1     2     3   4    5    6    7      8             9       10      11    12    13     14       15  
+DOCWB     "2022" "05" "17" "08" "07" "34" "000" "48.295  " " -121.869" "3.6"  " 3.6" "WUS" "NONE" "NONE" "Washington"
+DOWS      "2022" "05" "17" "08" "07" "34" "000" "48.295  " " -121.869" "3.6"  " 3.6" "WUS" "NONE" "NONE" "Washington"
+DOWSF     "2022" "05" "17" "08" "07" "34" "000" "48.295  " " -121.869" "3.6"  " 3.6" "WUS" "NONE" "NONE" "Washington"
+DOGEOFON  "2022" "04" "24" "04" "27" "55" "000" "43.05   " " 18.15"    "19.0" " 4.8" "WUS" "NONE" "NONE" "Bosnia-Herzegovina" 
+DOCWB5    "2022" "05" "17" "08" "07" "34" "000" "48.295  " " -121.869" "3.6"  " 3.6" "WUS" "NONE" "NONE" "Washington"
+DOWS5     "2022" "05" "17" "08" "07" "34" "000" "48.295  " " -121.869" "3.6"  " 3.6" "WUS" "NONE" "NONE" "Washington"
+DOWSF5    "2022" "05" "17" "08" "07" "34" "000" "48.295  " " -121.869" "3.6"  " 3.6" "WUS" "NONE" "NONE" "Washington"
+DOGEOFON5 "2022" "04" "24" "04" "27" "55" "000" "43.05   " " 18.15"    "19.0" " 4.8" "WUS" "NONE" "NONE" "Bosnia-Herzegovina" 
+<font color="#ff0000"><b>NOTE IN AN ACTUAL SCRIPT ONLY 1 WILL NOT HAVE A # COMMENT IN FRONT. YOU WILL ONLY WANT TO PROCESS ONE EVENT AT A TIME</b></font></pre>
+    <p> In this script 15 variables must be specified.&nbsp; These are
+      the year, month, day, hour, minute, second and millisecond of the
+      event origina time. The event latitude, longitude and depth. The
+      event magnitude. The region which is used to select the particular
+      velocity model used to create the Green's functions. Finally there
+      are 3 entries that are used to annotate the final documentation.</p>
+    <p>Note that the&nbsp; lines are very similar. They differ only in
+      the first command DOCWB, DOWS and DOWSF, etc. These scripts are
+      designed to work with different data sets, e.g., the USGS
+      Continuous Wave buffer, waveform data deposited at IRIS and
+      waveform data deposited at federated data centers.&nbsp; There is
+      also a DOFDSN to obtain waveform data from GFZ. The DOCWB5, DOWS5
+      and DOWSF5 perform the same functions, but use GMT v5 and greater
+      rather than GMT4 or GMT3.</p>
+    <p>These scripts do the following:</p>
+    <blockquote>create a durectory for the event<br>
+      create a subdirectory structure for the inversion<br>
+      create a subdirectory structure for downloading waveforms,
+      deconvolving and QC'ing the waveforms.<br>
+      download the waveform and responses<br>
+      deconvolve waveforms to make ground velocity in m/s<br>
+      rotate the wave forms<br>
+      perform interactive QC<br>
+      perform the inversion<br>
+      <br>
+    </blockquote>
+    THE SIMPLEST WAY TO SET UP THE DATA STRUCTURE FOR AN EVENT WITHOUT
+    ACTUALLY DOWNLOADING WAVEFORMS IS TO RUN<br>
+    <b>DOWS </b>or <b>DOWS5.&nbsp; </b>If the data are available by
+    another method, place the sac files and the response files in the <i>EVENT/EVENT/Sac
+
+
+
+
+    </i>directory. If the RESP file is available, then run IDOEVT in the
+    parent directory. If the response is in terms of pole-zero files,
+    modify the IDOEVT script to identify them and then to use the proper
+    <b>gsac</b> syntax for deconvolution.<br>
+    <p>The following links discuss each in detail. Note the differences
+      between DOCWB and DOCWB5 are minor, and the minor differences are
+      indicated.</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in"><a href="DOCWB.html">DOCWB</a> -
+          This scripts runs to completion with only the interactive QC
+          oepration.<br>
+        </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><a href="DOWS.html">DOWS</a>
+          -&nbsp; These scripts create a DOFINISH file that is run
+          manually to acquire the data and then runs the deconvolution,
+          rotation, QC and finally the inversion. The reason for the
+          DOFINISH script is to permit fine tuning. This is especially
+          the case for acquiring GEOFON data using <b>fdsnws_fetch</b>
+          which does not support a distance search. Instead of obtaining
+          all waveform data, this DOFINISH is edited to select the
+          wavefrms from desired networks.<br>
+        </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in"><a href="DOWSF.html">DOWSF</a> -</p>
+      </li>
+      <li>
+        <p><a href="DOGEOFON.html">DOGEOFON</a></p>
+      </li>
+    </ul>
+    <p><br>
+      Each if these scripts invoke DOSETUP, a script to get data using
+      CWB (DOCWB) or create a script named DOFINISH (DOWS and DOWSF),
+      and use a script named <br>
+      DOSOLUTION (or DOSOLUTION5 when using GMT v5 or greater).</p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in"><a href="DOSETUP.html">DOSETUP</a>
+          -This sets up the directory structure for the event. In
+          addition it associates the REG parameter of the DO script with
+          the model file name and the Green's function directory by
+          defining&nbsp; the shell variables GMODEL and VMODEL which are
+          then placed into the HTML.REG/DOHTML, GRD.REG/DOSTA and
+          EVENT/IDOROT scripts, for example.&nbsp; The <i>case </i>statment
+
+
+
+          in this script has a lot of information that&nbsp; can be used
+          later.&nbsp; For example, the line</p>
+      </li>
+    </ul>
+    <blockquote>
+      <p style="margin-bottom: 0in"><i>CUS)
+          GMODEL="CUS.REG";VMODEL="CUS";FIDREG="cus";REGIONTEXT="Central
+          and Southeastern US" ;; <br>
+        </i></p>
+      <p style="margin-bottom: 0in">indicates that the directory
+        containing the Green's functions will be <i>${GREENDIR}/CUS.REG</i>
+        and that the velocity model will be <i>CUS.mod</i> which will
+        be in ${GREENDIR}/Models.</p>
+      <p style="margin-bottom: 0in">The script also places the event
+        information in the HTML.REG/DOHTML and EVENTID/IDOEVT scripts
+        after the EVENTID directory is created and the prototypes moved
+        there.&nbsp;&nbsp; <br>
+      </p>
+      <p style="margin-bottom: 0in">The script may seem complicated, but
+        the requirement is that all moment tensors be determined using
+        the same procedure. Depending on the event location, it may be
+        necessary to use different velocity models.<br>
+        <i></i></p>
+    </blockquote>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in">(data acquisition and
+          preprocessing of waveforms - see below for DOQUERY and
+          DOFINISH)</p>
+      </li>
+      <li>
+        <p><a href="DOSOLUTION.html">DOSOLUTION</a> </p>
+        - </li>
+    </ul>
+    <p>The data acquisition, deconvolution and rotation is done by the
+      script DOQUERY for DOCWB or DOCWB5, and DOFINISH, which is created
+      by DOWS </p>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in"><a href="DOQUERY.html">DOQUERY</a>
+          - </p>
+      </li>
+      <li>
+        <p><a href="DOFINISH.html">DOFINISH scripts</a> - created by
+          DOWS, DOWSF or DOFDSN </p>
+      </li>
+    </ul>
+    <h3 class="western">DOSOLUTION</h3>
+    <p>For routine moment tensor solutions for earthquakes, a grid
+      search over all possible double0couple solutions is performed in
+      the GRD.REG directory. If <i>DIR</i> is the event identifier of
+      the form YYYMMDDHHMMSS, then the <b>DOSOLUTION</b> is just</p>
+    <pre style="margin-top: 0in; margin-bottom: 0in">#####
+#       Waveform inversion
+#####
+cd ${MYPWD}/${DIR}/GRD.REG
+DOGRD
+DODELAY
+DOPLTSAC
+DOCLEANUP
+#####
+#       in the future do the documentation here
+#####
+cd ${MYPWD}/${DIR}/HTML.REG
+DOHTML</pre>
+    <p> <br>
+      <br>
+    </p>
+    <p><b>DOSOLUTION5 </b>differs in that <b>DOHTML5</b> is invoked at
+      the end rather than <b>DOHTML.</b></p>
+    <p><b>DOGRD</b> performs the grid search over a range of source
+      depths. It used the supporting script <b>DOSTA</b> to find the
+      Green's functions at the observation distance, and then filters
+      both. The filtering corner frequencies can be changed by editing
+      the <b>DOSTA </b>script. In addition a microseism band reject
+      filter can be applied and the signal time window can be adjusted.<br>
+      <b>DODELAY </b>uses the timeshifts required to fit the Green's
+      functions to the observed data to estimate changes in event
+      location. If there seems to be a large mislocation, perhaps the
+      Green's function model is not correct or the event location should
+      be reviewed.<br>
+      <b>DOPLTSAC (DOPLTSAC5) </b>used the ImageMagick <b>convert</b>
+      program to make PNG files of the goodness of fit and the waveforms
+      comparison for the web page.<br>
+      <b>DOCLEANUP </b>removes temporary files to clean up the
+      directory to make the archive smaller.</p>
+    <p><b>DOHTML (DOHTML5) </b>creates the web page. If there are other
+      moment tensor solutions described in <b>${MYPWD}/${DIR}/MT.OTHER</b>,
+      these are included in the event web page for&nbsp;
+      completeness.&nbsp; The DOHTMLK can be hand edited to add
+      additional information, such as relocation results.</p>
+    <p>An example of the HTML created for an event is given in <a
+        href="20201108141007/HTML.REG/index.html">20201108141007/HTML.REG/index.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </a>and the files in the MT.OTHER directory are in <a
+        href="20201108141007/MT.OTHER">20201108141007/MT.OTHER</a>&nbsp;&nbsp;
+to
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      provide an example of how the HTML is written to permit the
+      comparison.</p>
+    <h2 class="western">OTHER INVERSIONS</h2>
+    <p>The event directory will also have the subdirectories MTGRD.REG,
+      MTGRD.REG.DEV and MTGRD.REG.DC.&nbsp;&nbsp; These codes are based
+      on a paper my Zhu and Ben-Zion<br>
+      &nbsp;(Zhu, L., and Y. Ben-Zion (2013). Paramaterization of
+      general&nbsp; seismic potency and moment tensors for source
+      inversion of seismic wavefrom data, Geophys. J. Int. 194,
+      839-843.&nbsp; doi: 10.1093/gji/ggt137) that describes how to
+      perform a grid search for a full moment tensor.&nbsp; The DOMTGRD
+      in MTGRD.REG searchs for all six moment tensor parameters. The
+      DOMTGRD in MTGRD.REG.DEV executes <b>wvfmtgrd96 -DEV</b> to
+      perform a search for the deviatoric moment tensor. Finally the
+      DOMTGRD in MTGRD.REG.DC searches for the best double couple using
+      the command <b>wvfmtgrd96 -DC.</b>&nbsp; The wvfmtgrd96 -DC is
+      equivalent to the CPS wvfgrd96. The wvfmtgrd96 -DEV takes longer
+      to run since the grid search is over four parameters. The
+      wvfmtgrd96 searches over 5 parameters and take a very long while
+      to run.</p>
+    <p>Within each of these directories, the scripts are run int he
+      following order:</p>
+    <pre style="margin-top: 0in; margin-bottom: 0in">DOMTGRD
+DODELAY
+DOPLTSAC   or DOPLTSAC5
+DOCLEANUP</pre>
+    <p> If these inversions are run, then the DOHTML/DOHTML5 script in
+      HTML.REG will include the results of this proceesing in the
+      HTML.REG/index.html file.</p>
+    <h2 class="western">FINE TUNING OF SCRIPTS</h2>
+    <p>Moment tensor inversion requires&nbsp; good signal-to-noise
+      ratios and a simple signal. Thus the frequency band and time
+      window may have to be adjusted.<br>
+      Other processing scripts may also need to be adjusted. The
+      following discussion will discuss these scripts. The scripts for
+      data acquisition, deconvolution and quality control will be
+      discussed first. Then the scripts for moment tensor inversion will
+      be discussed. Finally the scripts for creating the HTML
+      documentation will be discussed last.&nbsp; To make this
+      discussion easier to follow, the path name consisting of the
+      origin time will be given. Thus the script location may be in the
+      directories</p>
+    <pre>20220517080734/20220517080734/Orig
+20220517080734/GRD.REG</pre>
+    <p> <br>
+      <br>
+    </p>
+    <h4>20220517080734/2022051708073</h4>
+    <ul>
+      <li>This directory contains the files for deconvolving waveforms,
+        rotating them, selecting a range of distances and QC'ing the
+        ground velocity traces. The scripts are in PROTO.CWB if
+        DOCWB/DOCWB5 is used, PROTO.WS if DOWS, DOWS5, DOWSF or DOWSF5
+        is used, and in PROTO.GEOFON if DOGEOFON or DOGEOFON5 is
+        invoked.&nbsp; <br>
+      </li>
+      <li>The CWBDOEVT/IDOEVT adds the event information in the SAC
+        files and deconvolves to ground velocity. The resulting fields
+        are places in the GOOD subdrectory.&nbsp; Both scripts will
+        check to see if some header valeus are not defined, e.g., with
+        values of -12345. Specifically the network KNETWK and location
+        KHOLE codes are checked. If a -12345 is seen, the header value
+        is repalced by a black. This will make the name of the ground
+        velocity file easier to read and will also simplify later
+        displays. CWBDOEVT assumes the use of a pole-zero file that
+        describes the instrument response in NM/S which the IDOEVT
+        assumes the existence of a RESP file which us used with <b>evalresp</b>
+        to make files of the amplitude and pahse response as a function
+        of frequency.<br>
+      </li>
+      <li>CWBDOROT/IDOROT resets the waveforms headers so that the O
+        (origin time) offset is 0, computes the model predicted travel
+        time to set the A, T0 and T1 headers. The amplitudes are checked
+        to see of the maximum ground vleocity is between 1.0e-10 and 0.1
+        m/s. If&nbsp; there responses are not correct, the maximum value
+        will be greater than 0.1 m/s, which is unrealistic.&nbsp; Three
+        component traces are then rotated for form Z, R and T traces
+        which are placed in the FINAL directory. Note the&nbsp; lines</li>
+    </ul>
+    <pre>case ${KCMPNM} in<br>                BHZ) C="BH" ;;<br>                HHZ) C="HH" ;;<br>                HNZ) C="HN" ;;<br>                LHZ) C="LH" ;;<br>        esac<br></pre>
+    <blockquote>If other channels are used, e.g., EH, add an entry <i>EHZ)
+
+
+
+
+
+        C="EH" ;;</i><br>
+    </blockquote>
+    <ul>
+      <li>CWBDODIST/IDODIST - This copies the files that are in the
+        FINAL directory to the FINAL.QC directory only if the epicentral
+        distance isbetween DMIN and DMAX km. This is another safety
+        check, if the original data download could not specify a desired
+        distance range.</li>
+      <li>CWBDOQC/IDOQC performs an interactive QC of the traces. the
+        traces are presented in groupd of three, usually the R, T and Z
+        componts on one screen. Clicking the mouse button causs of red
+        '+' sign to appear, which indicates that the traces is
+        acceptable for inversion. One can also undue a selection. After
+        all traces are examined or after the 'q' key is pressed, the
+        selected waveforms are then copies to <b>20220517080734/DAT.REG</b>.
+        The QC script runs <b>gsac</b> with the following commands</li>
+    </ul>
+    <blockquote>
+      <pre>fileid list fname dist az concat on format colon<br>markt on<br>xlim vel 3.3 -40 vel 3.3 70<br>#xlim a -10 a 180<br>r *<br>cut off<br>sort up dist<br>rtr<br>taper w 0.01<br>hp c 0.03 n 3<br>lp c 0.10 n 3<br>#br c 0.12 0.25 n 4 p 2<br>qdp 10<br><br>ppk q relative perplot 3<br>wh IHDR20<br>q<br></pre>
+    </blockquote>
+    <blockquote>
+      <p>The window and filter settings are the same as those in the
+        DOSTA scripts. I often change the frequency band and decide
+        whether to use a microseism band reject filter. If any of these
+        are changes, then the corresponding values in the DOSTA scripts
+        for the inversion should also be change.<br>
+      </p>
+    </blockquote>
+    <ul>
+    </ul>
+    <h4>20220517080734/DAT.REG</h4>
+    <ul>
+      <li>This directory contains the good waveforms of ground velocity
+        in <i>m/s</i>. There is a subdirectory named <b>NOUSE</b>.
+        After running the inversion, examine the trave plots. If there
+        are bad traces, do something like&nbsp; <i>mv badtrace NOUSE</i>.&nbsp;
+
+
+
+
+
+        This is actually the final quality control of the inversion.<br>
+      </li>
+    </ul>
+    <h4>20220517080734/GRD.REG</h4>
+    <ul>
+      <li>DOGRD - This loops over source depth, sets up the data set for
+        the inversion, and then selects the best fitting solution.
+        Depending on the location of the event, different ranges of
+        source depth can be used. Note that there must be Green's
+        functions for a given source depth.<br>
+      </li>
+      <li>DOSTA - This associates a Green''s functions to the
+        observation distance. Read the comments at the top. For regional
+        earthquakes, I prefer to use a group velocity window to isolate
+        the signal using the variables VEL, TB and TE. One my also
+        adjust the FHIGHPASS and FLOWPASS variables to find a frequency
+        band that gives good S/N for the inversion. In addition, one can
+        apply a microseism rejection filter.</li>
+    </ul>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If channels
+      other than BH, HN or HH are used, then modify the lines<br>
+    </p>
+    <pre>######       define the components
+        case ${KCMPNM} in
+                BHZ|HHZ|HNZ) COMP=1 ; NAM=Z;;
+                BHR|HHR|HNR) COMP=2 ; NAM=R;;
+                BHT|HHT|HNT) COMP=3 ; NAM=T;;
+                *) break;;
+        esac
+</pre>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to have an entry
+    like <i>BHZ|HHZ|HNZ|EHZ) COMP=1 ; NAM=Z;;</i>. This part of the
+    code sets up the input for the <b>wvfgrd96</b> and the other
+    inversion codes.<br>
+    <ul>
+      <br>
+      <li>DOPLTSAC/DOPLTSAC5 - This creates the graphics files and the
+        html for the inversion. The only adjustment is for the plot of
+        goodness of fit as a funciton of source depth, created by the
+        program <b>fmdfit</b>. If deeper sources are considered, oen
+        may change the<i> -HMN 0 -HMX 30</i> to <i>-HMN 0 -HMX 150</i><br>
+      </li>
+    </ul>
+    <h4>20220517080734/HTML.REG</h4>
+    <ul>
+      <li>DOHTML/DOHTML5 - The are only manually edited if the result of
+        using another location code, such as <b>elocate</b> is run. <b>elocate
+
+
+
+
+
+        </b>is run to check on the posted location or to provide the
+        azimuth and takeoff angle information to make a first motion
+        plot.<br>
+      </li>
+      <li>DOCONTEXT/DOCONTEXT5 - If there is a file containing all of
+        the <i>mechlist.proto </i>created in the HTML.REG directories,
+        plots of first motion beachballs and the direction of maximum
+        compressive stress will be made. One may wish to change the
+        DLAT/DLON variables. The map will be centered at the epicenter
+        and extend DLAT degrees above and below and DLON degrees east
+        and west. <br>
+      </li>
+      <li>DOMECH/DOMECH5 - This is called by DOCONTEST/DOCONTEXT5. One
+        may wish to cange the SACLELEN=20 to change the distance sclae
+        for the map. In addition the <i>TICS=`echo $LAT | awk '{ if (
+          $1 &gt; 55.)&nbsp; printf "a1.0g0/a1.0g0WSNe" ; else printf
+          "a0.2g0/a0.2g0WSNe"}' ` </i>may be changed to improve the
+        range of tic marks in latitude and longitude.<br>
+      </li>
+    </ul>
+    <h4>20220517080734/MT.REG</h4>
+    <ul>
+      <li>DOMT - This is similar to the DOGRD above, except that it
+        invokes the programs <b>wvfmt96.</b><br>
+      </li>
+      <li>DOSTA - (see above)<br>
+      </li>
+      <li>DOPLTSAC/DOPLTSAC5 - (see above)<br>
+      </li>
+    </ul>
+    <h4>20220517080734/MTD.REG</h4>
+    <ul>
+      <li>DOMTD - This is similar to the DOGRD above, except that it
+        invokes the programs <b>wvfmtd96.</b></li>
+      <li>DOSTA - (see above)</li>
+      <li>DOPLTSAC/DOPLTSAC5 - (see above)</li>
+    </ul>
+    <h4>20220517080734/MTGRD.REG&nbsp;&nbsp;&nbsp; <br>
+    </h4>
+    <h4>20220517080734/MTGRD.REG.DC</h4>
+    <h4>20220517080734/MTGRD.REG.DEV</h4>
+    <ul>
+      <li>DOMTDGRD - This is similar to the DOGRD above, excepth that it
+        invokes<b> </b><b>wvfgrd96</b>,&nbsp; <b>wvfgrd96 -DC </b>or
+        <b>wvfgrd96 -DEV </b>in the MTGRD.REG, MTGRD.REG.DC or
+        MTGRD.DEV directories, respectively.<br>
+      </li>
+      <li>DOSTA - (see above)</li>
+      <li>DOPLTSAC/DOPLTSAC5 - (see above)</li>
+    </ul>
+    <h2>Comparing all inversions</h2>
+    <p>An example of running all inversion is given at&nbsp;<a
+        moz-do-not-send="true"
+href="https://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20220601150149/index.html">https://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20220601150149/index.html</a>
+      .&nbsp; This was an event in West Texas.<br>
+      In this case the <b>wvfmtd96 </b>and <b>wvfmtgrd96 -DEV </b>agreed
+
+
+      as did the <b>wvfmt96 </b>and <b>wvfmtgrd96</b> solutions. As
+      mentioned the <b>wvfmt96 </b>and <b>wvmtd96 </b>do not have a
+      robust way to handle time shifts. However this event was well
+      located and the Green's function model was appropriate and large
+      time shifts were not required. <br>
+    </p>
+    <p>&nbsp;<br>
+      The script used iwith GMT5+ after the QC'd waveforms were placed
+      in the DAT.REG directory is the following:<br>
+    </p>
+    <pre>(cd GRD.REG      ;DOGRD  ;DODELAY;DOPLTSAC5)<br>(cd MT.REG       ;DOMT   ;DODELAY;DOPLTSAC5)<br>(cd MTD.REG      ;DOMTD  ;DODLEAY;DOPLTSAC5)<br>(cd MTGRD.REG.DC ;DOMTGRD;DODELAY;DOPLTSAC5)<br>(cd MTGRD.REG.DEV;DOMTGRD;DODELAY;DOPLTSAC5)<br>(cd MTGRD.REG    ;DOMTGRD;DODELAY;DOPLTSAC5)<br>(cd HTML.REG;DOHTML5)<br></pre>
+    <p>Normally for earthquakes, one would just run&nbsp; the commands</p>
+    <pre>(cd GRD.REG;DOGRD;DODELAY;DOPLTSAC)<br>(cd HTML.REG;DOHTML5)<br></pre>
+    <p><br>
+    </p>
+    <ul>
+    </ul>
+  </body>
+</html>

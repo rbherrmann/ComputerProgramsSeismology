@@ -1,0 +1,8 @@
+#!/bin/sh
+
+MODEL=CUS.mod
+
+sprep96 -L -R -NMOD 1 -M  ${MODEL} -PMIN 1 -PMAX 100
+sdisp96
+sregn96
+slegn96

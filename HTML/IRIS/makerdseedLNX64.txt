@@ -1,0 +1,89 @@
+gcc  -I../Include -c -g   -c -o output_seed.o output_seed.c
+output_seed.c: In function 'update_type74':
+output_seed.c:352: warning: format '%04d' expects type 'int', but argument 3 has type 'long unsigned int'
+output_seed.c: In function 'pack_em':
+output_seed.c:625: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c:652: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c:686: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c:715: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c:746: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c: In function 'output_station_comment':
+output_seed.c:1393: warning: format '%06d' expects type 'int', but argument 6 has type 'long int'
+output_seed.c: In function 'output_poles_zeros':
+output_seed.c:1634: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'output_coefficients':
+output_seed.c:1736: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'output_list':
+output_seed.c:1814: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'output_generic':
+output_seed.c:1883: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'output_sensitivity':
+output_seed.c:1982: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'output_channel_comment':
+output_seed.c:2019: warning: format '%06d' expects type 'int', but argument 6 has type 'long int'
+output_seed.c: In function 'output_FIR':
+output_seed.c:2095: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'output_poly':
+output_seed.c:2167: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+output_seed.c: In function 'out_to_disk':
+output_seed.c:2554: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c:2570: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c:2589: warning: format '%06d' expects type 'int', but argument 3 has type 'long int'
+output_seed.c: In function 'fix_rec_length':
+output_seed.c:2782: warning: format '%04d' expects type 'int', but argument 3 has type 'size_t'
+
+gcc  -I../Include -c -g   -c -o steim.o steim.c
+steim.c: In function 'display_header':
+steim.c:198: warning: format '%ld' expects type 'long int', but argument 2 has type 'int'
+steim.c: In function 'statistics':
+steim.c:214: warning: format '%lu' expects type 'long unsigned int', but argument 2 has type 'unsigned int'
+steim.c:215: warning: format '%lu' expects type 'long unsigned int', but argument 2 has type 'unsigned int'
+steim.c:216: warning: format '%lu' expects type 'long unsigned int', but argument 2 has type 'unsigned int'
+steim.c:219: warning: format '%lu' expects type 'long unsigned int', but argument 2 has type 'unsigned int'
+steim.c:220: warning: format '%lu' expects type 'long unsigned int', but argument 2 has type 'unsigned int'
+steim.c:222: warning: format '%lu' expects type 'long unsigned int', but argument 2 has type 'unsigned int'
+
+gcc  -I../Include -c -g   -c -o rdseed.o rdseed.c
+rdseed.c: In function 'where_am_i':
+rdseed.c:1408: warning: format '%d' expects type 'int', but argument 2 has type 'long int'
+rdseed.c:1432: warning: too few arguments for format
+rdseed.c: In function 'position_to_record_boundary':
+rdseed.c:1490: warning: format '%d' expects type 'int', but argument 4 has type 'long int'
+
+gcc  -I../Include -c -g   -c -o process_data.o process_data.c
+process_data.c: In function 'process_data':
+process_data.c:287: warning: too few arguments for format
+
+gcc  -I../Include -c -g   -c -o print_44.o print_44.c
+print_44.c: In function 'print_type44':
+print_44.c:86: warning: format '%2.2d' expects type 'int', but argument 4 has type 'char *'
+print_44.c:86: warning: format '% E' expects type 'double', but argument 6 has type 'int'
+print_44.c:86: warning: format '% E' expects type 'double', but argument 7 has type 'int'
+
+gcc  -I../Include -c -g   -c -o print_46.o print_46.c
+print_46.c: In function 'print_type46':
+print_46.c:54: warning: format '%d' expects type 'int', but argument 3 has type 'char *'
+print_46.c:58: warning: format '%4d' expects type 'int', but argument 3 has type 'char *'
+print_46.c:61: warning: format '%4d' expects type 'int', but argument 3 has type 'char *'
+print_46.c:64: warning: format '%d' expects type 'int', but argument 3 has type 'char *'
+
+gcc  -I../Include -c -g   -c -o print_62.o print_62.c
+print_62.c: In function 'old_print_type62':
+print_62.c:206: warning: format '% E' expects type 'double', but argument 3 has type 'int'
+
+gcc  -I../Include -c -g   -c -o alloc_linklist_element.o alloc_linklist_element.c
+alloc_linklist_element.c: In function 'alloc_linklist_element':
+alloc_linklist_element.c:85: warning: format '%d' expects type 'int', but argument 3 has type 'size_t'
+
+gcc  -I../Include -c -g   -c -o read_blockette.o read_blockette.c
+read_blockette.c: In function 'read_blockette':
+read_blockette.c:158: warning: format '%d' expects type 'int', but argument 4 has type 'size_t'
+
+gcc  -I../Include -c -g   -c -o get_date.o get_date.c
+get_date.c: In function 'get_date':
+get_date.c:29: warning: cast to pointer from integer of different size
+get_date.c:31: warning: incompatible implicit declaration of built-in function 'strftime'
+
+gcc  -I../Include -c -g   -c -o times_data.o times_data.c
+times_data.c: In function 'times_data':
+times_data.c:533: warning: format '%6d' expects type 'int', but argument 3 has type 'long int'

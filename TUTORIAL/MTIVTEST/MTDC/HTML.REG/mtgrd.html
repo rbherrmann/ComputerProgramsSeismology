@@ -1,0 +1,125 @@
+<hr>
+<H3>Grid Search Full Moment Tensor Inversion using wvfmtgrd96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtgrdmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program  H(km) Mxx(dyne-cm)   Myy        Mxy        Mxz        Myz        Mzz       Mw      Fit
+WVFMTGRD96    1.0  0.652E+22  0.141E+22  0.214E+22  0.101E+23  0.369E+22 -0.517E+22  3.9984  0.9984
+WVFMTGRD96    2.0  0.975E+22  0.387E+22  0.247E+22  0.598E+22  0.218E+22 -0.373E+20  3.9357  0.9802
+WVFMTGRD96    3.0  0.115E+23  0.538E+22  0.255E+22  0.534E+22  0.194E+22  0.286E+22  3.9634  0.9479
+WVFMTGRD96    4.0  0.131E+23  0.625E+22  0.259E+22  0.433E+22  0.170E+22  0.735E+22  4.0016  0.9163
+WVFMTGRD96    5.0  0.131E+23  0.673E+22  0.253E+22  0.466E+22  0.193E+22  0.795E+22  4.0118  0.8874
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTGRD96    1.0  0.652E+22  0.141E+22  0.214E+22  0.101E+23  0.369E+22 -0.517E+22  3.9984  0.9984
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTGRDinfo.txt"> MTGRDinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRD.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtgrdfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtgrddelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+

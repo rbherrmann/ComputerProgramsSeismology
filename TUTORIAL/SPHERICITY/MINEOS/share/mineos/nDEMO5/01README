@@ -1,0 +1,7 @@
+
+1. RBH green in cm.sec
+2. Syn here are acceleration in nm/s/s
+   rtr
+   int
+   div 1e+7
+   transfer from none to none freqlimits 0.0025 0.005 0.05 0.10

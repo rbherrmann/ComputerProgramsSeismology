@@ -1,0 +1,315 @@
+#!/bin/sh
+export PATH=:.:./src:$PATH
+
+#####
+#   remember this starting directory
+#####
+MYTOP=`pwd`
+
+#####
+#    check for usage
+#####
+echo $*
+echo $#
+if [ $# -ne 7 ]
+then
+	echo 'Usage:  DOMKMOD model stk dip rake depth mw pval'
+	echo '  e.g.  DOMKMOD CUS 45 30 60 11.0 4.0 0.1'
+	exit 0
+fi
+MODEL="$1"
+STK="$2"
+DIP="$3"
+RAKE="$4"
+DEPTH="$5"
+MW="$6"
+PVAL="$7"
+
+echo $PVAL | awk '{ print $1}' 
+#####
+# define the event
+#####
+YEAR=2013
+MO=05
+DY=22
+HR=17
+MN=19
+SEC=39
+MSEC=000
+LAT=35.299
+LON=-92.715
+
+MAG=${MW}
+
+#####
+#    do not change
+#####
+
+#####
+#    examine the pval to determine if noise is used and if the pval is
+#    appropriate
+#####
+USENOISE=`echo "$PVAL" | awk '{ if( $1 < 0.0 )print "NO";else if( $1 > 1.0 )print "NO" ; else print "YES" }' `
+if [ "${USENOISE}" = "NO" ]
+then
+	DIRP="___"
+else
+	DIRP="$PVAL"
+fi
+
+#####
+#    get the day of year
+#####
+# EVENTUALLY USE INDEPENDENT PROGRAM TO GET DAY OF YEAR
+# $(...) is sh/bash parlance for exetuting the command ...
+# check the local date function, especially if not LINUX
+# the LINUX date syntax differs significantly from that of MacOS-X
+# so use gsac
+#####
+gsac << EOF
+fg impulse delta 1 npts 2
+w imp.sac
+r imp.sac
+ch ocal $YEAR $MO $DY $HR $MN $SEC 000
+synchronize o
+w imp.sac
+q
+EOF
+#####
+# LINUX
+#NZJDAY=$(date +"%j" -d "${YEAR}-${MO}-${DY} 00:00:00")
+#####
+NZJDAY=`saclhdr -NZJDAY imp.sac`
+rm imp.sac
+
+
+#####
+#    define the location of the Greens functions for the model
+#####
+GREEN=${GREENDIR}/${MODEL}.REG
+
+#####
+#    create the awk program that finds the depth closest to the desired depth
+#####
+cat > awkprog << FOE
+BEGIN { MDIF = 10000.0 }
+{DIF = $DEPTH - \$1 ;
+if( DIF < 0 ) DIF = - DIF ;
+if(DIF < MDIF) { MDIF = DIF ; Hfile = \$2  }
+}
+END { print Hfile  }
+FOE
+
+        cat ${GREEN}/D.CTL | \
+                awk -f awkprog > j
+        rm awkprog
+HS=`awk '{print $1}' < j `
+rm -f j
+
+#####
+#     create a unique directory and subdirectories, make synthetics, run inversion
+#####
+
+DIR="$MODEL.$STK.$DIP.$RAKE.$HS.${MW}.${DIRP}"
+mkdir ${DIR}
+cd 0XXXREG
+
+#####
+#     copy the prototype processing files and update
+#####
+
+tar cf - . | ( cd ../${DIR} ; tar xvf - )
+
+cd ${MYTOP}/${DIR}
+
+#####
+#    modify the processing scripts
+#    using the ed line editor
+#####
+ed HTML.REG/DOHTML << EOF
+g/VMODEL/s//${MODEL}/p
+/IDHERE/
+a
+REGION="NONE"
+FELTEVID="NONE"
+TITLE=""
+EVID="NONE"
+DATE="${YEAR}/${MO}/${DY}"
+TIME="${HR}:${MN}:${SEC}"
+LAT="${LAT}"
+LON="${LON}"
+DEPTH="${DEPTH}"
+MAG="$MAG"
+FELT="n"
+DIR="${YEAR}${MO}${DY}${HR}${MN}${SEC}"
+STATE=" "
+YEAR="${YEAR}"
+MO="$MO"
+DY="$DY"
+HR="$HR"
+MN="$MN"
+SEC="$SEC"
+MSEC="$MSEC"
+.
+w
+q
+EOF
+
+ed GRD.REG/DOSTA << EOF
+g/GMODEL/s//${MODEL}.REG/p
+w
+q
+EOF
+
+#####
+#    create the synthetic data sets
+#####
+cd ${MYTOP}/${DIR}/DAT.REG
+
+
+
+for STA in CCM MGMO TUL1 U40A UALR W39A W41B X40A FCAR
+do
+case ${STA} in
+	CCM) AZ=22.816100 ; R=332.941000 ;;
+	MGMO) AZ=10.899800 ; R=209.710000 ;;
+	TUL1) AZ=284.564000 ; R=286.923000 ;;
+	U40A) AZ=353.951000 ; R=117.979000 ;;
+	UALR) AZ=149.602000 ; R=67.312100 ;;
+	W39A) AZ=263.608000 ; R=97.960600 ;;
+	W41B) AZ=107.985000 ; R=44.735600 ;;
+	X40A) AZ=186.933000 ; R=90.705500 ;;
+	FCAR) AZ=39.070400 ; R=84.664600 ;;
+esac
+KSTNM=${STA}
+
+cd ${MYTOP}
+DOLL $KSTNM $R $AZ $LAT $LON | \
+	`awk '{print $2,$3,$4,$5,$6,$7}'>j `
+
+R=`awk '{print $1}' < j `
+AZ=`awk '{print $2}' < j `
+EVLA=`awk '{print $5}' < j `
+EVLO=`awk '{print $6}' < j `
+
+#########
+#	define STLA and STLO##############################################
+#########
+STLA=`awk '{print $3}' < j `
+STLO=`awk '{print $4}' < j `
+rm -f j
+############################################################################
+#####
+#    create the awk program that finds the Green function at the distance
+#    closest to the requested distance
+#####
+cd ${MYTOP}/${DIR}/DAT.REG
+cat > awkprog << FOE
+# This works under gawk - on Solaris try nawk
+BEGIN { MDIF = 10000.0 }
+{DIF = $R - \$1 ;
+if( DIF < 0 ) DIF = - DIF ;
+if(DIF < MDIF) { MDIF = DIF ; Dfile = \$7 ; Rate = \$2 ; Dist = \$1 }
+}
+END { print Dfile , Rate, Dist }
+FOE
+
+        cat ${GREEN}/${HS}/W.CTL | \
+                awk -f awkprog > j
+        rm awkprog
+
+	DFILE=`awk '{print $1}' < j `
+        rm j
+
+gsac << EOF
+mt to zrt mw $MW AZ $AZ STK $STK DIP $DIP RAKE $RAKE FILE ${GREENDIR}/${MODEL}.REG/${HS}/${DFILE}
+ch KSTNM $KSTNM EVLA $EVLA EVLO $EVLO STLA $STLA STLO $STLO
+ch NZYEAR $YEAR NZJDAY $NZJDAY NZHOUR $HR NZMIN $MN NZSEC $SEC NZMSEC $MSEC
+w
+mv T.Z ${KSTNM}Z
+mv T.R ${KSTNM}R
+mv T.T ${KSTNM}T
+#####
+#   to do the overlay next
+#   add zeros for 60 seconds before the P arrival
+#####
+cuterr fillz
+cut a -60 a 250
+r ${KSTNM}Z ${KSTNM}R ${KSTNM}T
+#####
+#    ensure that origin time is the reference time
+#####
+synchronize o
+w
+q
+EOF
+#####
+#     if USENOISE = YES
+#     add noise to the trace
+#####
+if [ "${USENOISE}" = "YES" ]
+then
+	cp ${KSTNM}Z ${KSTNM}Z.save
+	cp ${KSTNM}T ${KSTNM}T.save
+	cp ${KSTNM}R ${KSTNM}R.save
+	NPTS=`saclhdr -NPTS ${KSTNM}Z`
+	A=`saclhdr -A ${KSTNM}Z`
+	O=`saclhdr -O ${KSTNM}Z`
+	DELTA=`saclhdr -DELTA ${KSTNM}Z`
+	B=`saclhdr -B ${KSTNM}Z`
+	E=`saclhdr -E ${KSTNM}Z`
+	NZYEAR=`saclhdr -NZYEAR ${KSTNM}Z`
+	NZMON=`saclhdr -NZMON ${KSTNM}Z`
+	NZDAY=`saclhdr -NZDAY ${KSTNM}Z`
+	NZHOUR=`saclhdr -NZHOUR ${KSTNM}Z`
+	NZMIN=`saclhdr -NZMIN ${KSTNM}Z`
+	NZSEC=`saclhdr -NZSEC ${KSTNM}Z`
+	NZMSEC=`saclhdr -NZMSEC ${KSTNM}Z`
+	RVAL=${RANDOM}
+	sacnoise -dt ${DELTA} -seed ${RVAL} -pval ${PVAL} -npts 100000
+	#####
+	#  To get noise before the synthetic
+	#    for the synthetic  
+	#    set the O 60 seconds into the record
+	#    then set the time stamp
+	#    then synchronize O
+	#    then set the A time for the P first arrival
+	#####
+gsac << EOF
+	r O.sac
+#####
+#     set first sample 120 sec before origin time
+#####
+	ch o 0
+	ch NZYEAR $YEAR NZJDAY $NZJDAY NZHOUR $HR NZMIN $MN NZSEC $SEC NZMSEC $MSEC
+	shift fixed -120
+	synchronize o
+	ch a $A 
+	ch KSTNM N
+	ch KCMPNM C
+	ch EVLA $EVLA EVLO $EVLO STLA $STLA STLO $STLO
+	transfer from none to none freqlimits 0.005 0.01 10 20
+	#convert to velocity
+	int
+	w noise
+	w ${KSTNM}.noise
+	cut O -120  a 280
+	r ${KSTNM}Z noise
+	addf master 1
+	w ${KSTNM}Z none
+	r ${KSTNM}T noise
+	addf master 1
+	w ${KSTNM}T none
+	r ${KSTNM}R noise
+	addf master 1
+	w ${KSTNM}R none
+	q
+EOF
+fi
+done
+
+
+
+
+
+ cd ${MYTOP}/${DIR}/GRD.REG ; DOGRD; DODELAY;DOPLTSAC;DOCLEANUP;cd ../HTML.REG;DOHTML

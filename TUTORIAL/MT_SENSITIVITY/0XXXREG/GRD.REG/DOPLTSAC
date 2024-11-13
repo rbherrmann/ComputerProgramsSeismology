@@ -1,0 +1,269 @@
+#!/bin/sh
+
+Y0=11
+YT=`echo $Y0 | gawk '{print $1 - 0.5 }'`
+rm -f CMP1.plt
+calplt << EOF
+NEWPEN
+1
+CENTER
+1.25 ${YT} 0.2 'Z' 0.0
+CENTER
+3.50 ${YT} 0.2 'R' 0.0
+CENTER
+5.75 ${YT} 0.2 'T' 0.0
+PEND
+EOF
+cat CALPLT.PLT > CMP1.plt
+rm -f CALPLT.PLT CALPLT.cmd
+
+#####
+#	make up the list of stations
+#####
+rm -f dlist
+
+for i in *[ZRT].obs
+do
+KSTNM=`saclhdr -KSTNM $i`
+DIST=`saclhdr -DIST $i`
+echo $DIST $KSTNM >> dlist
+done
+cat dlist | sort -n | uniq | awk '{print $2}' > sdlist
+edlist=`tail -1 sdlist`
+rm -f ssdlist
+
+for STA in `cat sdlist`
+do
+Y0=`echo $Y0 | gawk '{print $1 - 0.6 }'`
+
+case $STA in
+$edlist)
+pltsac -O -USER9 -TSCB -K -1 -DOAMP  -XLEN 2.0 -X0 0.25 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}Z.[op]??  
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -O -USER9 -TSCB -K -1 -DOAMP  -XLEN 2.0 -X0 2.50 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}R.[op]?? 
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -O -USER9 -TSCB -K -1 -DOAMP  -XLEN 2.0 -X0 4.75 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}T.[op]??
+cat PLTSAC.PLT >> CMP1.plt
+	;;
+*)
+pltsac -O -USER9 -K -1 -DOAMP  -XLEN 2.0 -X0 0.25 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}Z.[op]?? 
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -O -USER9 -K -1 -DOAMP  -XLEN 2.0 -X0 2.50 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}R.[op]?? 
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -O -USER9 -K -1 -DOAMP  -XLEN 2.0 -X0 4.75 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}T.[op]??
+cat PLTSAC.PLT >> CMP1.plt
+	;;
+esac
+calplt << EOF
+NEWPEN
+1
+LEFT 
+7.00 ${Y0} 0.12 '${STA}' 0.0
+PEND
+EOF
+cat CALPLT.PLT >> CMP1.plt
+
+
+
+done
+plotnps -K -EPS -F7 -W10 < CMP1.plt > cmp1.eps
+gm convert +matte -trim cmp1.eps wcmp1.png
+
+fmdfit -HMN 0 -HMX 50 -MECH < FMDSUM
+# FOR ELASKA DEEP COMMENTPREVIOUS AND UNCOMMENT NEXT
+#fmdfit -HMN 0 -HMX 130 -MECH < FMDSUM
+plotnps -K -EPS -F7 -W10 < FMDFIT.PLT > j
+gm convert +matte -trim j wfmdfit.png
+rm FMDFIT.PLT
+rm -f j
+
+
+rm CALPLT.cmd
+rm CALPLT.PLT
+rm PLTSAC.PLT
+
+#####
+#	annotate html
+#####
+#####
+#	get the best solution
+#####
+BEST=`cat FMDSUM | sort -n -k 7 | tail -1 `
+Hbest=`cat FMDSUM | sort -n -k 7 | tail -1 | awk '{printf "%4.4d",$2 *10}'  `
+fmmfit -DMN 0 -DMX 90 < Oout.${Hbest}
+plotnps -F7 -EPS -K < FMMFIT.PLT > wfmmfit.eps
+gm convert +matte -trim wfmmfit.eps wfmmfit.png
+rm wfmmfit.eps
+cp wfmmfit.png ../HTML.REG
+rm FMMFIT.PLT
+
+#####
+#       use gsac and GMT to plot the station locations used for the waveform inversion
+#####
+gsac << EOF
+r ../DAT.REG/*[ZRT]
+map kstnm on
+quit
+EOF
+sh map.sh
+gm convert +matte -trim map.eps wmap.png
+
+
+cat > tgrd.html << EOF
+<H3>Waveform Inversion </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="wmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+EOF
+cat tfilter >> tgrd.html 
+cat >> tgrd.html << EOF
+The results of this grid search from 0.5 to 19 km depth are as follow:
+<P>
+<PRE>
+           DEPTH  STK   DIP  RAKE   MW    FIT
+EOF
+
+cat FMDSUM >> tgrd.html
+cat >> tgrd.html << EOF
+</PRE>
+<P>
+The best solution is
+<PRE>
+${BEST}
+</PRE>
+<P>
+The mechanism correspond to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="wfmplot.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="wfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+EOF
+cat >> tgrd.html < tfilter
+cat >> tgrd.html << EOF
+<table>
+<tr>
+        <td>
+        <img SRC="wcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+EOF
+cat >> tgrd.html << EOF
+<TABLE>
+<TR>
+	<TD>
+	<IMG SRC="wfmmfit.png" NAME="Focal mechanism sensitivity at the preferred depth," ALIGN="LEFT">
+	</TD>
+</TR>
+<TR>
+	<TD>
+	Focal mechanism sensitivity at the preferred depth. The red color indicates a very good fit to thewavefroms.
+Each solution is plotted as a vector at a given value of strike and dip with the angle of the vector representing the rake angle, measured, with respect to the upward vertical (N) in the figure. 
+	</TD>
+</TR>
+</TABLE>
+EOF
+
+#####
+#	make the control files for lpr mech 
+#	We want a listing of stations used, a tabulation of the
+#	number of components and stations, and the filter bands
+#####
+
+rm -f sum.obs.txt
+for TRACE in *.obs
+do
+	saclhdr -NL -KSTNM -KCMPNM -KNETWK -USER1 ${TRACE} >> sum.obs.txt
+done
+
+cat sum.obs.txt | awk '{printf "%s.%s \n", $3,$1}'| sort | uniq > j
+cat j | awk '{printf "%s ", $1}'| sort | uniq | fold -s --width=60 > sumstaused.txt
+NUMSTA=`cat sum.obs.txt | awk '{print $1}' |sort | uniq | wc -l`
+NUMCMP=`cat sum.obs.txt | awk '{print $2}' | wc -l`
+MINPER=`cat sum.obs.txt | awk '{print $4}' | sort -n | head -1`
+echo ${NUMSTA} ${NUMCMP} ${MINPER} > sumswavendk.txt
+mv sumstaused.txt sumswavendk.txt ../HTML.REG
+cat tfilter | grep -v PRE > ../HTML.REG/sumwfilter.txt
+
+if [ -f "wdelay.png" ]
+then
+cat >> tgrd.html << EOF
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="wdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+EOF
+fi
+
+mv tgrd.html w*.png ../HTML.REG

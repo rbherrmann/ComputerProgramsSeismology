@@ -1,0 +1,120 @@
+#!/bin/sh
+
+#####
+#    download
+#    put event information into the sac headers
+#    put everything into the subdirectory Sac
+#####
+
+#####
+#    ensure a Sac subdirectory exists
+#####
+
+#####
+#    clean up from earlier run
+#####
+rm -fr *SAC* Sac 
+mkdir Sac
+
+#####
+#    define an alias to simplify the syntax below
+#####
+alias query='java -jar ~/bin/CWBQuery.jar'
+
+#####
+#    define the time of the first sample
+#####h
+START='2012/08/27-04:40:00'
+
+#####
+#     define the origin parameters
+#     for use by the ChangeHeader command of gsac
+#####
+CH="ocal 2012 08 27 04 37 20 060 evla 12.278 evlo -88.528 evdp 20.3 mag 7.3"
+#####
+#     define the number of seconds of data required
+#####
+WINDOW=1500
+
+#####
+#    Extract of syntax for using CWBQuery
+#
+#   -b begin time yyyy/mm/dd hh:mm:ss (normally enclose in quotes) or yyyy,doy-hh:mm:ss
+#   -d nnnn[d] seconds of duration(default is 300 seconds) end with 'd' to indicate nnnn is in days
+#   -s NSCL or REGEXP  (note: on many shells its best to put this argument in double quotes)
+#      NNSSSSSCCCLL to specify a seed channel name. If < 12 characters, match any seednames starting
+#          with those characters.  Example : '-s IUA' would return all IU stations starting with 'A' (ADK,AFI,ANMO,ANTO)
+#      OR
+#      REGEXP :'.' matches any character, [ABC] means one character which is A, or B or C The regexp is right padded with '.'
+#          Example: '-s IUANMO.LH[ZN]..' returns the vertical and north component for LH channels at station(s) starting with 'ANMO'
+#          '.*' matchs zero or more following characters (include in quotes as * has many meanings!
+#          'AA|BB' means matches pattern AA or BB e.g.  'US.*|IU.*' matches the US and IU networks
+#    -nogaps if present, any missing data in the interval except at the end results in no output file
+#####7
+
+for NNSSSSSCCCLL in \
+	'COCASEE[BH]H...' \
+	'COBIRD.[BH]H...' \
+	'COHODGE[BH]H...' \
+	'COPAULI[BH]H...' \
+	'COJSC..[BH]H...' \
+	'....SC.[BH]H...' \
+	'..GOGA.[BH]H...' \
+	'TAW52A.[BH]H...' \
+	'TAW53A.[BH]H...' \
+	'TAX52A.[BH]H...' \
+	'TAX53A.[BH]H...' \
+	'TAY53A.[BH]H...' \
+	'TAY54A.[BH]H...' \
+	'TAZ53A.[BH]H...' \
+	'TAZ54A.[BH]H...' \
+	'TAZ55A.[BH]H...' \
+	'TA153A.[BH]H...' \
+	'TA154A.[BH]H...' \
+	'TA155A.[BH]H...' \
+	'TA156A.[BH]H...' 
+do
+
+query -hr -t sac -o "%N.SAC" -sacpz nm -b ${START} -d ${WINDOW} -s "${NNSSSSSCCCLL}"
+query -hi -t sac -o "%N.SAC" -sacpz nm -b ${START} -d ${WINDOW} -s "${NNSSSSSCCCLL}"
+done
+
+
+gsac << EOF
+rh *SAC
+ch ${CH} 
+wh
+q
+EOF
+rm IM*SAC*
+rm CI*SAC*
+mv *SAC* Sac
+
+#####
+#   decon
+#####
+rm -fr GOOD
+mkdir GOOD
+cd Sac
+for i in *SAC
+do
+B=`basename $i .SAC`
+DELTA=`saclhdr -DELTA $i`
+FHH=`echo $DELTA | awk '{print 0.5/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+gsac << EOF
+r $i
+rtr
+transfer from polezero subtype ${i}.pz to vel freqlimits 0.003 0.005 $FHL $FHH
+cd ../GOOD
+w ${B}.sac
+q
+EOF
+done
+
+cd ..
+
+DOROT
+
+
+

@@ -1,0 +1,135 @@
+<HTML>
+<HEAD><TITLE>Comparison of the Randall and Herrmann Green function convention </TITLE></HEAD>
+<BODY>
+<H2>Introduction </H2>
+The purpose of this note is to compare the fundamental solutions generated using Randall's and Herrmann's codes for Green's functions used for moment tensor studies.  There are eight different solutions that must be
+compared.
+<P>
+For the comparison synthetics will be generated for the CUS model, a source depth of 15 km and an epicentral distance of 500 km. The command sequences use are as follow:
+<H3>Herrmann</H3>
+<PRE>
+      #!/bin/sh
+      HS=15.0
+      cat > dfile << EOF
+      500.0     1       1024 -1.0 13.0
+      EOF
+      hprep96 -M CUS.mod -HS ${HS}  -d dfile -ALL
+      hspec96
+      hpulse96 -V -p -l 1 > file96
+      f96tosac -G < file96
+      </PRE>
+<P>The model file is <A HREF="CUS.mod.txt">CUS.mod</A>
+<P>The Herrmann Greens functions have the names 050000150.RDD  050000150.RHF  050000150.TDS  050000150.ZDD  050000150.ZHF
+050000150.RDS  050000150.RSS  050000150.THF  050000150.ZDS  050000150.ZSS
+050000150.REX  050000150.RVF  050000150.TSS  050000150.ZEX  050000150.ZVF 
+and are in units of ground velocity of <I>cm/s</I> for a step-like source time function for a seismic moment of 1.0E+20 dyne-cm.
+<H3>Randall</H3>
+<PRE>
+      time mijkennett << EOF
+      rCUS.mod
+      EOF
+      #
+      # -d for displacement, 13 reducing velocity, -1.0 time shift
+      #
+      #1e9,0.0
+      xtsynth -d <<EOF
+      13.0,-1.0
+      EOF
+      
+      #####
+      #       put to Langston convention
+      #####
+      for i in *_mxx
+      do
+      B=ZSS.PLT
+      echo ZSS
+      gfconvert ZSS ZSS 1.0
+      done
+</PRE>
+<P>The model file is <A HREF="rCUS.mod.txt">rCUS.mod</A>
+<P>The Randall Greens function have names like r_0500_0015_pz.clv t_0500_0015_pz.clv and z_0500_0015_pz.clv
+which are identical.  We use the following files for the comparison: z_0500_0015_pz.clv  z_0500_0015_pz.vds	z_0500_0015_sr.clv  z_0500_0015_sr.vds	z_0500_0015_st.vds
+z_0500_0015_pz.iso  z_0500_0015_pz.vss	z_0500_0015_sr.iso  z_0500_0015_sr.vss	z_0500_0015_st.vss
+and are in units of ground velocity of <I>cm/s</I> for a step-like source time function for a seismic moment of 1.0E+20 dyne-cm.
+<H3>Preparation for Comparison</H3>
+
+<P>
+The Green's functions are filtered using the <B>gsac</B> commands 
+<P>
+<PRE>
+      hp c 0.01 n 3
+      lp c 0.10 n 3
+</PRE>
+<P>
+Plots are created showing the first 300 seconds of the traces. Traces in a plot have hte same vertical scale.
+<P>
+Since the Herrmann Green's functions are in units of velocity, these are
+integrated for comparison after the filter operations:
+<P>
+<PRE>
+      int
+</PRE>
+<P>
+<P>The focus of the comparison is on long periods, for which the slight difference in Q models will not be significant. However there will be slight timing differences since Randall's code uses <I>acausal Q</I> for reasons of speed, which the Herrmann code uses <I>causal Q</I>.
+
+
+<H2>Comparison</H2>
+<TABLE>
+<TR>
+	<TD>Herrmann</TD>
+	<TD>Randall</TD>
+	<TD><CENTER>Comparison</CENTER></TD
+	<TD>Herrmann</TD>
+	<TD>Randall</TD>
+	<TD><CENTER>Comparison</CENTER></TD
+<TR>
+	<TD>ZDD</TD>
+	<TD>z.clv</TD>
+	<TD><IMG SRC="ZDD.png"></TD>
+	<TD>RDD</TD>
+	<TD>r.clv</TD>
+	<TD><IMG SRC="RDD.png"></TD>
+</TR>
+<TR>
+	<TD>ZDS</TD>
+	<TD>z.vds</TD>
+	<TD><IMG SRC="ZDS.png"></TD>
+	<TD>RDS</TD>
+	<TD>r.vds</TD>
+	<TD><IMG SRC="RDS.png"></TD>
+</TR>
+<TR>
+	<TD>TDS</TD>
+	<TD>t.vds</TD>
+	<TD><IMG SRC="TDS.png"></TD>
+	<TD>ZSS</TD>
+	<TD>z.vss</TD>
+	<TD><IMG SRC="ZSS.png"></TD>
+</TR>
+<TR>
+	<TD>RSS</TD>
+	<TD>r.vss</TD>
+	<TD><IMG SRC="RSS.png"></TD>
+	<TD>TSS</TD>
+	<TD>t.vss</TD>
+	<TD><IMG SRC="TSS.png"></TD>
+</TR>
+<TR>
+	<TD>ZEX</TD>
+	<TD>z.iso</TD>
+	<TD><IMG SRC="ZEX.png"></TD>
+	<TD>REX</TD>
+	<TD>r.iso</TD>
+	<TD><IMG SRC="REX.png"></TD>
+</TR>
+</TABLE>
+<H2>Conclusion</H2>
+<P>The conclusions from this test are that  the 'z.vds/ZDS', 'r.vds/RDS' and 't.vss/TSS' 
+differ only in sign. After sign correction, the amplitudes of all agree.
+<P>Thus for the Greens functions form Herrmann's Computer Programs in Seismology can
+be used with code which previously use the Randall Green's functions, this difference is
+accounted for.
+<P>
+<center>Last changed Tue Feb 23 17:15:41 UTC 2010 </center>
+</BODY>
+</HTML>

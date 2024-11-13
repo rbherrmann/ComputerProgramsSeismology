@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-15"
+ http-equiv="content-type">
+  <title>idoevt</title>
+</head>
+<body>
+<h2>Annotated IDOEVT&nbsp; for use with SEED data</h2>
+<br>
+<pre style="margin-left: 40px;">#!/bin/sh<br>set -x<br><br>#####<br>#       script for processing IRIS Digital Data<br>#####<br><br>######<br>#       shell script to make entries for the various command files<br>######<br>YEAR=2006	<span
+ style="color: rgb(255, 0, 0); font-weight: bold;">Change the following for the event. No spaces are permitted near the = sign</span><br>MO=05<br>DY=10<br>HR=02<br>MN=42<br>SEC=56<br>MSEC=300<br>LAT=52.71<br>LON=-169.24<br>DEP=56.0<br>MAG=6.3<br><br><br>#####<br>#       No changes below here<br>#####<br><br>if [ -d ../GOOD ]	<span
+ style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">Create the GOOD directory for review. Never change original data</span></span><br>then<br>        echo GOOD exists<br>else<br>        mkdir ../GOOD<br>fi<br><span
+ style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">rdseed creates SAC files ending in .SAC. For each of the SAC files we get information from the<br>trace header on station name, component name, location, network, and sample rate. We also use<br>the sample rate to determine the bands for deconvolution. We place the event locaiton into the<br>trace header.<br><br>The IRIS command evalresp (included in CPS) is used to read the RESP file to prepare a table of<br>amplitude and phase resposne for the deconvolution.<br><br>The station files are then placed in the parallel directory called GOOD for quality control review. <br>At this point the traces are renamed. The trace file 2006.130.02.49.27.4852.IU.ULN.00.BHZ.R.SAC<br>is placed in ../GOOD as ULNBHZ.S and the deconvolved trace (meters/sec) is placed in ../GOOD as<br>ULNBHZ.sac <br><br></span></span><br>for i in *.SAC<br>do<br>NET=`saclhdr -KNETWK $i`<br>KSTNM=`saclhdr -KSTNM $i`<br>KCMPNM=`saclhdr -KCMPNM $i`<br>LOC=`saclhdr -KHOLE $i`<br>DOY=`saclhdr -NZJDAY $i`<br>DELTA=`saclhdr -DELTA $i`<br>FHH=`echo $DELTA | awk '{print 0.40/$1}' `<br>FHL=`echo $DELTA | awk '{print 0.25/$1}' `<br>cp RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp<br>evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} 0.001 ${FHH} 2049 -u 'vel' -f resp<br>gsac &lt;&lt; EOF<br>r $i<br>ch EVLA $LAT EVLO $LON EVDP $DEP<br>ch O CAL $YEAR $MN $DY $HR $MN $SEC $MSEC<br>ch lovrok true<br>ch lcalda true<br>wh<br>rtr<br>w ../GOOD/${KSTNM}${KCMPNM}.S<br>transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE FREQLIMITS 0.005 0.01 ${FHL} ${FHH}<br>w ../GOOD/${KSTNM}${KCMPNM}.sac<br>quit<br>EOF<br><br>done<br>#SCRIPT FOR IRIS DATA<br></pre>
+<br>
+<br>
+</body>
+</html>

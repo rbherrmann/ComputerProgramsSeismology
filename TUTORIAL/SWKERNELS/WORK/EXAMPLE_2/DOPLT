@@ -1,0 +1,89 @@
+#!/bin/sh
+
+rm -f love rayl
+ed srfker96.txt << EOF
+/Anelastic Love/
+/LAYER/+1,/_________/-1w love
+/Anelastic Rayleigh/
+/LAYER/+1,/_________/-1w rayl
+q
+EOF
+
+#####
+#    plot the columns
+#####
+# Love
+#   1        2         3          4          5          6         7          8          9
+# LAYER    THICK     dc/db      dU/db      dc/dh      dU/dh     dc/dQbi    dU/dQbi    dg/dQbi
+#####
+for COL in 3 4 5 6 7 8 9
+do
+case ${COL} in
+	3) FTIT="LDCDB" ; TIT="Love dc/db" ;;
+	4) FTIT="LDUDB" ; TIT="Love dU/db" ;;
+	5) FTIT="LDCDH" ; TIT="Love dc/dh" ;;
+	6) FTIT="LDUDH" ; TIT="Love dU/dh" ;;
+	7) FTIT="LDCDQB" ; TIT="Love dc/dQbi" ;;
+	8) FTIT="LDUDQB" ; TIT="Love dU/dQbi" ;;
+	9) FTIT="LDGDQB" ; TIT="Love dg/dQbi" ;;
+esac
+#####
+#    get the extreme values for the plot
+#####
+cat > awksc << EOF
+{ print \$1, \$${COL} }
+EOF
+cat love | awk -f awksc > xy.dat
+VMAX=`cat xy.dat | awk ' BEGIN { VMX=0.0 } { if ( $2 < 0.0 ) $2 = - $2 ; if ( $2 > VMX ) VMX = $2 } END { print VMX } ' ` 
+YMAX=`echo $VMAX | awk '{ if ( $1 < 0.0 ) $1 = - $1 ; print $1 }' `
+YMIN=`echo $VMAX | awk '{ if ( $1 < 0.0 ) $1 = - $1 ; print -$1 }' `
+XMAX=`tail -1 love | awk '{print $1}' `
+cat > cmdfil << EOF
+'xy.dat' 2 0.02  'NO'
+EOF
+echo $FTIT $TIT $XMAX $YMIN $YMAX
+genplt -TX "Layer" -TY "${TIT}" -XMIN 0 -XMAX ${XMAX} -YMIN ${YMIN} -YMAX ${YMAX} -C cmdfil -XLEN 6.0 -YLEN 3.0 > /dev/null
+plotnps -BGFILL -F7 -W10 -EPS -K < GENPLT.PLT > t.eps
+convert -trim -rotate 90 t.eps ${FTIT}.png
+done
+
+#####
+# Rayleigh
+#   1        2         3          4          5          6         7          8          9         10          11        12         13         14
+# LAYER    THICK     dc/da      dc/db      dU/da      dU/db      dc/dh      dU/dh     dc/dQai    dc/dQbi    dU/dQai    dU/dQbi    dg/dQai    dg/dQbi
+#####
+for COL in 3 4 5 6 7 8 9 10 11 12 13 14 
+do
+case ${COL} in
+	3) FTIT="RDCDA" ; TIT="Rayleigh dc/da" ;;
+	4) FTIT="RDCDB" ; TIT="Rayleigh dc/db" ;;
+	5) FTIT="RDUDA" ; TIT="Rayleigh dU/da" ;;
+	6) FTIT="RDUDB" ; TIT="Rayleigh dU/db" ;;
+	7) FTIT="RDCDH" ; TIT="Rayleigh dc/dh" ;;
+	8) FTIT="RDUDH" ; TIT="Rayleigh dU/dh" ;;
+	9) FTIT="RDCDQA" ; TIT="Rayleigh dc/dQai" ;;
+	10) FTIT="RDCDQB" ; TIT="Rayleigh dc/dQbi" ;;
+	11) FTIT="RDUDQA" ; TIT="Rayleigh dU/dQai" ;;
+	12) FTIT="RDUDQB" ; TIT="Rayleigh dU/dQbi" ;;
+	13) FTIT="RDGDQA" ; TIT="Rayleigh dg/dQai" ;;
+	14) FTIT="RDGDQB" ; TIT="Rayleigh dg/dQbi" ;;
+esac
+cat > awksc << EOF
+{ print \$1, \$${COL} }
+EOF
+cat rayl | awk -f awksc > xy.dat
+VMAX=`cat xy.dat | awk ' BEGIN { VMX=0.0 } { if ( $2 < 0.0 ) $2 = - $2 ; if ( $2 > VMX ) VMX = $2 } END { print VMX } ' ` 
+YMAX=`echo $VMAX | awk '{ if ( $1 < 0.0 ) $1 = - $1 ; print $1 }' `
+YMIN=`echo $VMAX | awk '{ if ( $1 < 0.0 ) $1 = - $1 ; print -$1 }' `
+XMAX=`tail -1 rayl | awk '{print $1}' `
+cat > cmdfil << EOF
+'xy.dat' 2 0.02  'NO'
+EOF
+echo $FTIT $TIT $XMAX $YMIN $YMAX
+genplt -TX "Layer" -TY "${TIT}" -XMIN 0 -XMAX ${XMAX} -YMIN ${YMIN} -YMAX ${YMAX} -C cmdfil -XLEN 6.0 -YLEN 3.0 > /dev/null
+plotnps -BGFILL -F7 -W10 -EPS -K < GENPLT.PLT > t.eps
+convert -trim -rotate 90 t.eps ${FTIT}.png
+done
+
+
+rm -f t.eps GENPLT.PLT awksc love rayl

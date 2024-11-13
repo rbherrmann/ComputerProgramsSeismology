@@ -1,0 +1,173 @@
+<H3>Waveform Inversion </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="wmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+hp c 0.02 n 3
+lp c 0.10 n 3
+</PRE>
+The results of this grid search from 0.5 to 19 km depth are as follow:
+<P>
+<PRE>
+           DEPTH  STK   DIP  RAKE   MW    FIT
+WVFGRD96    0.5    90    75    -5   3.44 0.3185
+WVFGRD96    1.0    85    60   -10   3.50 0.3308
+WVFGRD96    2.0    85    70   -25   3.52 0.3465
+WVFGRD96    3.0    85    70   -20   3.53 0.3373
+WVFGRD96    4.0    90    80   -15   3.52 0.3230
+WVFGRD96    5.0   270    85    20   3.53 0.3116
+WVFGRD96    6.0   270    85    20   3.53 0.3061
+WVFGRD96    7.0   270    80    20   3.54 0.3019
+WVFGRD96    8.0   270    80    15   3.55 0.2978
+WVFGRD96    9.0   270    80    15   3.56 0.2942
+WVFGRD96   10.0   275    75    20   3.57 0.2911
+WVFGRD96   11.0   275    75    20   3.58 0.2858
+WVFGRD96   12.0   275    70    15   3.58 0.2811
+WVFGRD96   13.0   275    75    15   3.59 0.2775
+WVFGRD96   14.0   275    70    15   3.60 0.2744
+WVFGRD96   15.0   275    70    15   3.60 0.2721
+WVFGRD96   16.0   275    75    15   3.61 0.2698
+WVFGRD96   17.0   275    70    15   3.62 0.2671
+WVFGRD96   18.0   275    70    15   3.63 0.2640
+WVFGRD96   19.0   275    70    15   3.63 0.2619
+WVFGRD96   20.0   275    70    15   3.65 0.2596
+WVFGRD96   21.0   275    70    15   3.65 0.2561
+WVFGRD96   22.0   275    70    15   3.66 0.2537
+WVFGRD96   23.0   275    65    15   3.67 0.2517
+WVFGRD96   24.0   275    65    15   3.67 0.2498
+WVFGRD96   25.0    90    90   -20   3.67 0.2478
+WVFGRD96   26.0   270    85   -20   3.65 0.2481
+WVFGRD96   27.0   270    80   -10   3.66 0.2481
+WVFGRD96   28.0   270    80   -15   3.66 0.2485
+WVFGRD96   29.0    90    90   -15   3.68 0.2495
+WVFGRD96   30.0    90    90   -15   3.69 0.2509
+WVFGRD96   31.0    90    90   -15   3.70 0.2515
+WVFGRD96   32.0    90    85   -15   3.70 0.2518
+WVFGRD96   33.0    90    85   -15   3.71 0.2521
+WVFGRD96   34.0    90    85   -10   3.71 0.2525
+WVFGRD96   35.0    90    85   -10   3.72 0.2523
+WVFGRD96   36.0    90    85   -10   3.73 0.2511
+WVFGRD96   37.0    90    85   -10   3.74 0.2502
+WVFGRD96   38.0    90    85   -10   3.75 0.2484
+WVFGRD96   39.0    90    85   -10   3.77 0.2475
+WVFGRD96   40.0    90    80   -10   3.79 0.2480
+WVFGRD96   41.0    90    80   -10   3.81 0.2472
+WVFGRD96   42.0    90    80   -10   3.82 0.2456
+WVFGRD96   43.0    90    80   -10   3.83 0.2443
+WVFGRD96   44.0    90    80   -10   3.84 0.2422
+WVFGRD96   45.0    90    80   -10   3.84 0.2405
+WVFGRD96   46.0    90    80   -10   3.85 0.2385
+WVFGRD96   47.0    90    80   -10   3.86 0.2368
+WVFGRD96   48.0    90    80   -10   3.86 0.2346
+WVFGRD96   49.0    90    85   -10   3.87 0.2330
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFGRD96    2.0    85    70   -25   3.52 0.3465
+</PRE>
+<P>
+The mechanism correspond to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="wfmplot.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="wfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+hp c 0.02 n 3
+lp c 0.10 n 3
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="wcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<TABLE>
+<TR>
+	<TD>
+	<IMG SRC="wfmmfit.png" NAME="Focal mechanism sensitivity at the preferred depth," ALIGN="LEFT">
+	</TD>
+</TR>
+<TR>
+	<TD>
+	Focal mechanism sensitivity at the preferred depth. The red color indicates a very good fit to thewavefroms.
+Each solution is plotted as a vector at a given value of strike and dip with the angle of the vector representing the rake angle, measured, with respect to the upward vertical (N) in the figure. 
+	</TD>
+</TR>
+</TABLE>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="wdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+

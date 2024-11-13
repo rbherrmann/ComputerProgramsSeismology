@@ -1,0 +1,18 @@
+ 
+Usage: srotate96 -AZ az [-U|-STRESS|-STRAIN] -FILE prototype
+  -AZ az (required) angle between r- and x-axes
+  -FILE prototype (required) identifier for filename 
+       for the example below this could be ../NEW/005000_0100_0010
+ -U  Rotate the Ur Ut Uz from [sh]pulse96strain to Ux Uy Uz
+       if they exist, e.g., ../NEW/005000_0100_0010.Ur etc
+       to create 005000_0100_0010_Ux etc in the current directory
+ -STRAIN  Rotate the Err Erf .. Ezz  from [sh]pulse96strain to Exx Eyy ..
+       if they exist, e.g., ../NEW/005000_0100_0010.Err etc
+       to create 005000_0100_0010_Exx etc in the current directory
+ -STRESS  Rotate the Srr Srf .. Szz  from [sh]pulse96strain to Sxx Syy ..
+       if they exist, e.g., ../NEW/005000_0100_0010.Srr etc
+       to create 005000_0100_0010_Sxx etc in the current directory
+ -ROTATE  Rotate the Wrf Wrz Wfz  from [sh]pulse96strain to Wxy Wxz Wyz
+       if they exist, e.g., ../NEW/005000_0100_0010.Wrf etc
+       to create 005000_0100_0010_Wxy etc in the current directory
+ -h           (default false) online help

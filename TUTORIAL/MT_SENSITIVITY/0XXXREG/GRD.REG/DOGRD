@@ -1,0 +1,53 @@
+#!/bin/sh
+
+NSHFT=40
+rm -fr FMDSUM
+for HS in 0005 0010 0020 0030 0040 0050 0060 0070 0080 0090 \
+	0100 0110 0120 0130 0140 0150 0160 0170 0180 0190 \
+	0200 0210 0220 0230 0240 0250 0260 0270 0280 0290 \
+	0300 0310 0320 0330 0340 0350 0360 0370 0380 0390 \
+	0400 0410 0420 0430 0440 0450 0460 0470 0480 0490 
+do
+DOSTA ${HS} > /dev/null 2>&1
+wvfgrd96 -N ${NSHFT} << EOF
+ww
+Oout.${HS}
+EOF
+cat fmdfit.dat >> FMDSUM
+cat fmdfit.dat
+for GRN in ZDD RDD ZDS RDS TDS ZSS RSS TSS ZEX REX 
+do
+	rm *.${GRN}
+done
+done
+
+#####
+#	get final prediction - which is the one with the best fit
+#	we just need the depth
+#####
+Hbest=`cat FMDSUM | sort -n -k 7 | tail -1 | awk '{printf "%4.4d",$2 *10}'  `
+
+for HS in ${Hbest}
+do
+DOSTA ${HS} > /dev/null 2>&1
+wvfgrd96 -N ${NSHFT} << EOF
+ww
+Oout.${HS}
+EOF
+for GRN in ZDD RDD ZDS RDS TDS ZSS RSS TSS ZEX REX 
+do
+	rm *.${GRN}
+done
+done
+
+STK=`cat fmdfit.dat | awk '{print $3}' `
+DIP=`cat fmdfit.dat | awk '{print $4}' `
+RAKE=`cat fmdfit.dat | awk '{print $5}' `
+MW=`cat fmdfit.dat | awk '{print $6}' `
+
+fmplot -FMPLMN -P -S $STK -D $DIP -R $RAKE
+plotnps -BGFILL -F7 -EPS -S0.5 < FMPLOT.PLT > j
+convert  -trim j wfmplot.png
+rm FMPLOT.PLT
+rm -f j
+echo $Hbest

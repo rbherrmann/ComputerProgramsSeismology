@@ -1,0 +1,121 @@
+#!/bin/sh
+
+#####
+#    attempt to clone syntax of the USGS CWBqeury 
+#    for use with the GEOFON fdsnws_fetch
+#    One difference is that CWBquery will provide data
+#    in sac format and sac pole-zero format for stations 
+#    within a rabge of distances of a given latitude and longitude
+#    This will be done in software here
+#
+#    For everything to work, we need the Computer Programs in Seismology redodate
+#    and the IRIS mseed2sac
+#
+#    Finally the variables DURATION which is the number of seconds after origin time
+#    and DEG which is the outer radius of the search region and OFFSET which is the
+#    number of seconds before the origin time are set in this
+#    script. Just modify these values as required
+#####
+
+if [ $# -ne 11 ]
+then
+echo DOFDSNQUERY YEAR MO DY HR MN SC MSC  LAT   LON   DEP MAG
+echo DOFDSNQUERY 2022 11 09 06 07 27 000 43.93 13.31 10.0 5.8
+	echo $*
+	exit 0
+fi
+
+#####
+#    convert command line parameters to variable names
+#####
+YEAR="${1}"
+MO="${2}"
+DY="${3}"
+HR="${4}"
+MN="${5}"
+SEC="${6}"
+MSEC="${7}"
+LAT="${8}"
+LON="${9}"
+DEP="${10}"
+MAG="${11}"
+
+
+#####
+#    define search parameters
+#    The script finds all stations within DEG degrees of the coordinate (LAT,LON)
+#    The time window of the data download is
+#    ORIGIN_TIME - OFFSET to ORIGIN_TIME + DURATION seconds, where the
+#    ORIGIN_TIME = YEAR MO DY HR MN SEC MSEC
+#
+#    These values can be changed by the user
+#####
+DEG=4.0
+DURATION=300
+OFFSET=-60
+
+#####
+#    define the start and end dates in the format required by fdsnws_fetch
+#    redodate is part of the Computer Programs in Seismology package
+#####
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${OFFSET} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ",$1,$2,$3,$4,$5,$6}' `
+
+echo $START
+echo $END
+
+set -x
+#####
+#    get a list of stations within the search region
+#    station.txt is not used later, but may be of interest
+#    channel.txt is the file that is used by mseed2sac to put station/channel parameters into the Sac file headers.
+#    channel.txt will be used here to define the network-station-channel to be downloaded.
+#
+#    Note this use of fdsnws_fetch permits a geographical search indicated by the last part of the query
+#####
+fdsnws_fetch -N '*' -S '*' -L '*' -C 'BH*,HH*' -s "${START}" -e "${END}" -y station -q level=station -v -o station.txt -q format=text -q latitude="${LAT}" -q longitude="${LON}" -q maxradius="${DEG}"
+fdsnws_fetch -N '*' -S '*' -L '*' -C 'BH*,HH*' -s "${START}" -e "${END}" -y station -q level=channel -v -o channel.txt -q format=text -q latitude="${LAT}" -q longitude="${LON}" -q maxradius="${DEG}"
+
+#####
+# Typical contents of channel.txt
+#
+#Network|Station|Location|Channel|Latitude|Longitude|Elevation|Depth|Azimuth|Dip|SensorDescription|Scale|ScaleFreq|ScaleUnits|SampleRate|StartTime|EndTime
+#GE|MARCO||BHE|40.29724|15.80632|933.0|1.0|90.0|0.0|GFZ:GE1993:STS-2.5/g=1500|629145000.0|0.02|M/S|20.0|2021-06-04T00:00:00|
+#GE|MARCO||BHN|40.29724|15.80632|933.0|1.0|0.0|0.0|GFZ:GE1993:STS-2.5/g=1500|629145000.0|0.02|M/S|20.0|2021-06-04T00:00:00|
+#
+#####
+# make a simple tabulation without the | separators for use with bash while loop
+#####
+cat channel.txt | grep -vi Network  | awk 'BEGIN { FS = "|" } ;{if($3 == "") LOC="ND" ; else LOC=$3 ;print $1, $2, LOC, $4, $5, $6, $7 }' > plist
+#####
+#GE MARCO ND BHE 40.29724 15.80632 933.0
+#GE MARCO ND BHN 40.29724 15.80632 933.0
+#GE MARCO ND BHZ 40.29724 15.80632 933.0
+#####
+# now for each network station pair get components. We only need the NET STA CMP codes
+# It is assumed that the adjacent directory ../Sac exists. 
+#####
+while read NET STA LOC  CMP LAT LON ELEV
+do
+	fdsnws_fetch -N ${NET} -S ${STA} -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}    -v -o ${NET}.${STA}.data.mseed
+	fdsnws_fetch -N ${NET} -S ${STA} -L '*' -C 'BH*,HH*' -s ${START}  -e ${END} -y station -q level=response    -v -o ${NET}.${STA}.station.xml
+	#####
+	#    convert station xml to dataless
+	#####
+
+	java -jar ~/bin/stationxml-seed-converter-2.1.0.jar --input ${NET}.${STA}.station.xml --output ${NET}.${STA}.dataless
+	(cd ../Sac
+	rdseed -f ../Orig/${NET}.${STA}.data.mseed -g ../Orig/${NET}.${STA}.dataless -p -R -o -d 1
+	)
+
+	#
+done < plist
+
+#####
+#    The ../Sac directory will now contain files such as
+#    2022.113.02.19.29.6800.GE.MARCO..HHZ.D.SAC
+#    RESP.GE.MARCO..HHZ
+#    SAC_PZs_GE_MARCO_HHZ__2021.155.00.00.00.0000_2599.365.23.59.59.99999
+#####
+
+

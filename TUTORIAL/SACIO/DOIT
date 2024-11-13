@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#####
+#	compile the write program
+#	run it and use gsac to plot
+#####
+
+gcc writesac.c sacsubc.c
+a.out
+
+gsac << EOF
+r imp.sac filt.sac
+fileid name
+color list red blue
+bg plt
+p
+quit
+EOF
+
+plotgif -F7 -W10 -K -C16 < P001.PLT > p001.gif
+rm P001.PLT
+
+gcc readsac.c sacsubc.c
+a.out > readsac.out
+
+rm a.out
+
+

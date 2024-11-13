@@ -1,0 +1,47 @@
+#!/bin/sh
+
+
+#####
+#     create some data files
+#####
+
+cat > 01.xy << EOF
+1 1
+2 2
+3 4
+4 3 
+5 5
+EOF
+
+cat > 02.xy << EOF
+10 10
+9 9
+8 7
+7 8
+6 6
+EOF
+
+cat > 03.xy << EOF
+0 0
+10 10
+EOF
+
+cat > cmdfil << EOF
+'03.xy' 1 0.05 'NO'
+'01.xy' 2 0.00 'SQ'
+EOF
+
+cat > acmdfil << EOF
+'02.xy' 1060 0.02 'CI' 0.10
+EOF
+
+genplt -C cmdfil -A acmdfil -TX 'X axis (m)' -TY 'Y axis (km)' -XMIN 0 -XMAX 10 -YMIN 0 -YMAX 10
+
+#####
+#   cleanup
+#####
+rm -f ??.xy
+plotnps -F7 -W10 -EPS -K < GENPLT.PLT > t.eps
+convert -trim  t.eps ngenplt.png
+rm -f t.eps 
+rm -f GENPLT.PLT

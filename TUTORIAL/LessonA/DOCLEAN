@@ -1,0 +1,22 @@
+#!/bin/sh
+
+
+#####
+#	clean up
+#####
+rm -f SLEGN*
+rm -f SREGN*
+rm -f dfile
+rm -f disp.d
+rm -f simple.mod
+rm -f *egn
+rm -f sdisp96*
+rm -f *.sac
+rm -f *.dsp
+rm -fr MFT*
+rm -fr tmp*
+
+rm -f mft*
+rm -f *PLT
+rm -f sobs.d
+rm -f modl*

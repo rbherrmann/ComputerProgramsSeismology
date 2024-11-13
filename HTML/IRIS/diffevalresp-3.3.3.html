@@ -1,0 +1,83 @@
+<HTML>
+<HEAD>
+	<TITLE>Diff CPS/evalresp.3.3.3.slu vs IRIS_DISTRIBUTION/evalresp.3.3.3</TITLE>
+</HEAD>
+<BODY>
+<H2>evalresp</H2>
+<P>This details the differences between the IRIS distribution of <B>evalresp</B> and the changes made for inclusion in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+<B>diff parse_fctns.c ../evalresp-3.3.3.slu/parse_fctns.c</B>
+</P>
+<PRE>
+11a12
+>       5/2008 -- [EJH]  modified to handle extra long FIR filters
+338a340,347
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+>   static int prev_seq_number;
+>   /* END EJH CHANGE */
+383a393,407
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>  
+>      TEST the sequencing
+>   */
+> /*
+> 
+> fprintf(stderr, "curr_seq_no = %d stage_ptr->sequence_no = %d\n", curr_seq_no, stage_ptr->sequence_no);
+> fprintf(stderr, "prev_seq_number = %d\n", prev_seq_number);
+> */
+>   /* END EJH CHANGE */
+> 
+385a410,418
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+> if ( curr_seq_no == prev_seq_number )
+>       ;
+> else
+386a420,423
+>   /* END EJH CHANGE */
+> /*
+>   stage_ptr->input_units = check_units(line);
+> */
+388a426,437
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+> if ( curr_seq_no == prev_seq_number )
+>       ;
+> else
+>   stage_ptr->output_units = check_units(line);
+>   /* END EJH CHANGE */
+> /*
+389a439
+> */
+437a488,495
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+>   prev_seq_number = curr_seq_no;
+>   /* END EJH CHANGE */
+</PRE>
+
+<CENTER>Last changed October 3, 2010</CENTER>
+</BODY>
+</HTML>
+

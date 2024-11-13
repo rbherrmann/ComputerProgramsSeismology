@@ -1,0 +1,40 @@
+#!/bin/sh
+
+#####
+#	put in the MINEOS solutions after
+#	units, integration
+#####
+
+MYPWD=`pwd`
+for DEG in 030 060 090
+do
+cd ${MYPWD}
+	for DEP in 010 100 700
+	do
+		if [ ! -d TEST.${DEP}.${DEG} ]
+		then
+			mkdir TEST.${DEP}.${DEG}
+		fi
+		for MECH in SS DS DD
+		do
+			if [ ! -d TEST.${DEP}.${DEG}/${MECH}.MINEOS ]
+			then
+				mkdir  TEST.${DEP}.${DEG}/${MECH}.MINEOS
+			fi
+			for comp in Z R T
+			do
+				#####
+				# make m/sec
+				#####
+gsac << EOF
+r nDEMO6/${MECH}_Syndat_${DEP}/*.${DEG}.LH${comp}.SAC
+rtr
+int
+div 1e+9
+w TEST.${DEP}.${DEG}/${MECH}.MINEOS/LH${comp}
+quit
+EOF
+			done
+		done
+	done
+done

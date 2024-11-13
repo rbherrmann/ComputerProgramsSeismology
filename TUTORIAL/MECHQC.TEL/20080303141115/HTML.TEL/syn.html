@@ -1,0 +1,135 @@
+<H2>Forward Synthetic</H2>
+<P>
+All observed and Greens function waveforms are corrected to instrument response to ground velocity in meters/sec for the passband of 0.004 - 5 Hz. The traces were then lowpass filtered at 0.25 Hz and interpolated to a sample rate of 1 second. 
+<P>
+The moment tensor solution used  has the parameters:
+<PRE>
+HS=37
+STK=133
+DIP=51
+RAKE=-85
+MW=6.8 
+
+The Green's function closest to the desired depth was
+DEP=0370 , where (DEP/10) is the computed depth.
+</PRE>
+The cut windows attempt to include the P, pP, sP, pS, S and sS arrivals. However, one must be very careful about the fact that PP may be included in some distance ranges.
+<P>
+The waveforms are then 
+bandpass filtered by the application of the following high- and low-pass stages (an optional microseism filter):
+<PRE>
+hp c 0.0083 2
+lp c 0.0250 2
+int
+br c 0.12 0.25 n 4 p 2
+</PRE>
+The traces were next integrated to ground displacement in meters.
+Finally the observed data are interpolated to have the same sampling at the Green's functions.
+<BR>
+<I>NOTE: this was done for speed. The proper sequence is to read traces, filter and then cut - gsac will be modified to introduce a command CUTWR to define the cut upon a write.</I>
+<P>
+The following filter ranges are used according to the moment magnitude Mw:
+<PRE>
+   FILTER_BAND   1/FH(s)  1/FL(s)
+       1           60     12      Mw < 6.4
+       2          100     20      6.4 < Mw <= 6.9
+       3          120     40      Mw > 6.9
+</PRE>
+<P>
+The map displays the distribution of stations used for this source inversion.
+<TABLE>
+<TR><TD>
+<BR>
+<IMG SRC="wmap.png">
+<BR>Location of the earthquake (yellow star) and great circle path from the epicenter to each station (red) [created using GMT (Wessel, P., and W. H. F. Smith, New version of Generic Mapping Tools released, <I>EOS Trans. AGU, 76</I> 329, 1995.)]<BR>
+</TD></TR>
+</TABLE>
+<P>
+<H3>Detailed Waveform Comparison </H3>
+<TABLE>
+<TR><TD><B>P-wave Z component</B></TD></TR>
+<TR><TD>
+<IMG SRC="wcmp1.png">
+</TD></TR>
+<TR><TD>
+Observed (red) and predicted seismograms (blue) ordered by increasing epicentral distance. Each pair of traces is annotated with the wave type and a station identifier (station, network, and channel id's), epicentral distance in degrees, source-to-station azimuth in degrees. Each seismogram pair is plotted with the same scale and the peak amplitudes in meters are shown above to the left of each trace. The optimal time shift between the observed first arrival and the predicted first arrival (in seconds) is shown above the prediction on the right. Red circles flag seismograms with amplitude misfits of a factor of 2 or more. 
+</TD></TR>
+<TR><TD><B>SH-wave T component</B></TD></TR>
+<TR><TD>
+<IMG SRC="wshtcmp1.png">
+</TD></TR>
+<TR><TD>
+Observed (red) and predicted seismograms (blue) ordered by increasing epicentral distance. Each pair of traces is annotated with the wave type and a station identifier (station, network, and channel id's), epicentral distance in degrees, source-to-station azimuth in degrees. Each seismogram pair is plotted with the same scale and the peak amplitudes in meters are shown above to the left of each trace. The optimal time shift between the observed first arrival and the predicted first arrival (in seconds) is shown above the prediction on the right. Red circles flag seismograms with amplitude misfits of a factor of 2 or more. 
+</TD></TR>
+<TR><TD><B>SV-wave R component</B></TD></TR>
+<TR><TD>
+<IMG SRC="wsvrcmp1.png">
+</TD></TR>
+<TR><TD>
+Observed (red) and predicted seismograms (blue) ordered by increasing epicentral distance. Each pair of traces is annotated with the wave type and a station identifier (station, network, and channel id's), epicentral distance in degrees, source-to-station azimuth in degrees. Each seismogram pair is plotted with the same scale and the peak amplitudes in meters are shown above to the left of each trace. The optimal time shift between the observed first arrival and the predicted first arrival (in seconds) is shown above the prediction on the right. Red circles flag seismograms with amplitude misfits of a factor of 2 or more. 
+</TD></TR>
+</TABLE>
+<H3>Waveforms used</H3>
+The following waveforms are used for the plot above. Note that the naming convention used by the generating program does not distinguish between LH, BH and HH channels. One can change the DOPZSTA, DOSHTSTA and DOSVRSTA scripts to preserve the component names.
+<P>
+CSSGEBHR
+CSSGEBHT
+CSSGEBHZ
+HLGGEBHR
+HLGGEBHT
+HLGGEBHZ
+ISPGEBHR
+ISPGEBHT
+ISPGEBHZ
+KARNGEBHR
+KARNGEBHT
+KARNGEBHZ
+KBSGE00BHR
+KBSGE00BHT
+KBSGE00BHZ
+KMBOGE00BHR
+KMBOGE00BHT
+KMBOGE00BHZ
+KSDIGEBHR
+KSDIGEBHT
+KSDIGEBHZ
+KWPGEBHR
+KWPGEBHT
+KWPGEBHZ
+LASTGEBHR
+LASTGEBHT
+LASTGEBHZ
+MALTGEBHR
+MALTGEBHT
+MALTGEBHZ
+MORCGEBHR
+MORCGEBHT
+MORCGEBHZ
+PSZGEBHR
+PSZGEBHT
+PSZGEBHZ
+PULGEBHR
+PULGEBHT
+PULGEBHZ
+RUEGEBHR
+RUEGEBHT
+RUEGEBHZ
+SIVAGEBHR
+SIVAGEBHT
+SIVAGEBHZ
+SUMGGEBHR
+SUMGGEBHT
+SUMGGEBHZ
+SUWGEBHR
+SUWGEBHT
+SUWGEBHZ
+TIRRGEBHR
+TIRRGEBHT
+TIRRGEBHZ
+VSUGEBHR
+VSUGEBHT
+VSUGEBHZ
+ZKRGEBHR
+ZKRGEBHT
+ZKRGEBHZ
+<P>

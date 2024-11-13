@@ -1,0 +1,132 @@
+#!/bin/sh
+
+
+DOWNLOAD="ftp://ftp.iris.washington.edu/pub/userdata/RBHerrmann/20100102SIUC.831"
+#wget ${DOWNLOAD}
+
+
+#####
+#	do not change after here
+#####
+
+#####
+#	clean up
+#####
+rm -f *.SAC
+#####
+#	use basename to get the actual seed file on the local machine
+#	which will be 20100102SIUC.831 in this example
+#####
+SEEDFILE=`basename ${DOWNLOAD}`
+
+rdseed -f ${SEEDFILE} -R -d -o 1
+
+#####
+#	perform the PSD
+#####
+
+for TRACE in *.SAC
+do
+
+#####
+#	get information from the file
+#####
+
+KSTNM=`saclhdr -KSTNM $TRACE`
+KCMPNM=`saclhdr -KCMPNM $TRACE`
+DELTA=`saclhdr -DELTA $TRACE`
+NPTS=`saclhdr -NPTS $TRACE`
+FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+YEAR=`saclhdr -NZYEAR $TRACE`
+DOY=`saclhdr -NZJDAY $TRACE`
+KNETWK=`saclhdr -KNETWK $TRACE`
+KHOLE=`saclhdr -KHOLE $TRACE`
+
+#####
+#	define the lower frequency bound which is 1/4 length of record
+#####
+FLH=`echo $NPTS $DELTA | awk '{print 1.0/($1*$2)}' `
+#####
+#	we will not rewrite the KNETWK and KHOLE in the headers with new values
+#	but we need to match patterns in the RESP file
+#####
+	if [ -z "${KNETWK}" ]
+	then
+		NET=""
+	else
+		if [ "${KNETWK}" = "-12345" ]
+		then
+				NET=""
+		else
+				NET="${KNETWK}"
+		fi
+	fi
+	if [ -z "${KHOLE}" ]
+	then
+		LOC=""
+	else
+		if [ "${KHOLE}" = "-12345" ]
+		then
+				LOC=""
+		else
+				LOC="${KHOLE}"
+		fi
+	fi
+
+RESPFILE=RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} 
+
+
+#####
+#	create the acceleration response in terms of M/S**2
+#####
+evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} ${FLH} ${FHH} 2049 -u 'acc' -f ${RESPFILE}
+
+
+sacpsd -f  ${TRACE} -r AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} -5  
+
+#####
+#	rename the plot file
+#####
+mv SACPSD.PLT ${KNETWK}${KSTNM}.${KCMPNM}.${YEAR}.${DOY}.PLT
+
+done
+
+#####
+#	now make the composite plot of individual components
+#####
+for COMP in Z N E
+do
+	case ${COMP} in
+		Z) FN=08;;
+		N) FN=09;;
+		E) FN=10;;
+	esac
+	ls *${COMP}_*.psd > afile
+
+	sacpsd -A afile
+	plotnps -K -EPS -F7 -W10 < SACPSD.PLT > t.eps
+	EPSTOPNG t.eps
+	mv t.png Fig${FN}.png
+	rm *.eps
+	rm SACPSD.PLT afile
+done
+
+#####
+#	for a special study we want the original plots for the
+#	Z component
+#####
+for i in `ls *Z.${YEAR}.${DOY}.PLT`
+do
+	B=`basename $i .PLT`
+	plotnps -F7 -W10 -EPS -K < $i > t.eps
+	gm convert -trim t.eps ${B}.png
+	rm t.eps
+done 
+
+#####
+#	clean up
+#####
+	rm -f sacpsd.out RESP* SAC_PZs* 
+	rm -f AMP* PHASE*
+

@@ -1,0 +1,30 @@
+#!/bin/sh
+
+fdsnws_fetch -N '*' -S 'KIP' -L '*' -C 'LHZ' -s "2010-02-27T07:00:00Z" -e "2010-02-27T08:00:00Z" -v -o data.mseed
+fdsnws_fetch -N '*' -S 'KIP' -L '*' -C '*' -s "2010-02-27T07:00:00Z" -e "2010-02-27T08:00:00Z" -y station -q format=text -q level=channel  -v -o channel.txt
+mseed2sac -f 3 data.mseed -m channel.txt
+
+#####
+#   plot it with gsac and then make a png with ImageMagick
+#####
+
+gsac << EOF
+r *SAC
+fileid list fname stla stlo concat on format colon
+bg plt
+p
+q
+EOF
+
+#####
+#     convert to PNG
+#####
+
+for i in *.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done
+

@@ -1,0 +1,51 @@
+#!/bin/sh
+
+#####
+#   test the xy output of shwmod96
+#   and then use genplt to plot the progiles
+#####
+
+#####
+#    create the xy files - this also creates SHWMOD.PLT which will be ignoted
+#####
+for T in P S D QP QS
+	do shwmod96 -XY -$T -M nnCIA.mod
+	rm SHWMOD96.PLT
+done
+
+#####
+#    now make Vp Vs Rho plot
+#####
+
+cat > lcmdfil << EOF
+'nnCIA.mod.VP.xy' 2 0.05 'NO' 0.05 'Vp (km/s)'
+'nnCIA.mod.VS.xy' 4 0.05 'NO' 0.05 'Vs (km/s)'
+'nnCIA.mod.DEN.xy'  1 0.05 'NO' 0.05 'Rho (mm/cm^3)'
+EOF
+genplt -XMIN 0.0 -XMAX 50.0 -XDOWN -YMIN 1 -YMAX 9 -L lcmdfil -LPOS 'MR' -TX 'Depth (km)' -TY ' '
+mv GENPLT.PLT PSD.PLT
+
+#####
+#    now make Qp_inv Qs_inv plot using a log scale
+######   
+cat > lcmdfil << EOF
+'nnCIA.mod.QPI.xy' 2 0.05 'NO' 0.05 '1/Qp'
+'nnCIA.mod.QSI.xy' 4 0.05 'NO' 0.05 '1/Qs'
+EOF
+genplt -XMIN 0.0 -XMAX 50.0 -XDOWN -YMIN 0.0001 -YMAX 1 -YLOG  -L lcmdfil -LPOS 'MR' -TX 'Depth (km)' -TY ' '
+mv GENPLT.PLT Q.PLT
+
+rm -f GENPLT.PLT
+
+#####
+#    amke the EPS and PNG (using ImageMagick)
+#####
+for i in *.PLT
+do
+	B=`basename $i .PLT`
+	plotnps  -F7 -W15 -EPS -K < ${i}  > t.eps
+	convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+	rm -f t.eps
+done
+
+

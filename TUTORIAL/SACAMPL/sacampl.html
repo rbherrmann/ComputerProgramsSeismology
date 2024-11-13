@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>sacrmsl</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body>
+    <h1>sacampl</h1>
+    <h2>Introduction</h2>
+    <p>David Boore has written many papers related to strong ground
+      motion and also developed a set of
+      computer programs to support his research. His home page giving publications, computer
+      codes and lectures is <a href="https://www.daveboore.com/">https://www.daveboore.com/ore.com/</a>. The SMSIM (stochastic-method simulation) package is widely used.
+      Originally included in this package was a program to estimate
+      site-amplification through the use of the quarter-wavelength
+      approximation <br>
+    </p>
+    <p>[<span style="color: rgb(0, 0, 0); font-family: Times; font-size:
+        medium; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; font-weight: 400; letter-spacing:
+        normal; orphans: 2; text-align: start; text-indent: 0px;
+        text-transform: none; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; white-space: normal;
+        text-decoration-thickness: initial; text-decoration-style:
+        initial; text-decoration-color: initial; display: inline
+        !important; float: none;">Boore, D.M. and L.T. Brown (1998).
+        Comparing shear-wave velocity profiles from inversion of
+        surface-wave phase velocities with downhole measurements:
+        Systematic differences between the CXW method and downhole
+        measurements at six USC strong-motion sites,<span>&nbsp;</span></span><em
+        style="color: rgb(0, 0, 0); font-family: Times; font-size:
+        medium; font-variant-ligatures: normal; font-variant-caps:
+        normal; font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        white-space: normal; text-decoration-thickness: initial;
+        text-decoration-style: initial; text-decoration-color: initial;">Seismol.
+
+        Research Letters</em><span style="color: rgb(0, 0, 0);
+        font-family: Times; font-size: medium; font-style: normal;
+        font-variant-ligatures: normal; font-variant-caps: normal;
+        font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        white-space: normal; text-decoration-thickness: initial;
+        text-decoration-style: initial; text-decoration-color: initial;
+        display: inline !important; float: none;"><span>&nbsp;</span></span><strong
+        style="color: rgb(0, 0, 0); font-family: Times; font-size:
+        medium; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        white-space: normal; text-decoration-thickness: initial;
+        text-decoration-style: initial; text-decoration-color: initial;">69</strong><span
+        style="color: rgb(0, 0, 0); font-family: Times; font-size:
+        medium; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; font-weight: 400; letter-spacing:
+        normal; orphans: 2; text-align: start; text-indent: 0px;
+        text-transform: none; widows: 2; word-spacing: 0px;
+        -webkit-text-stroke-width: 0px; white-space: normal;
+        text-decoration-thickness: initial; text-decoration-style:
+        initial; text-decoration-color: initial; display: inline
+        !important; float: none;">,<span>&nbsp;</span></span><a
+        href="https://www.daveboore.com/pubs_online/boore_brown_srl_1998.pdf"
+        style="font-family: Times; font-size: medium; font-style:
+        normal; font-variant-ligatures: normal; font-variant-caps:
+        normal; font-weight: 400; letter-spacing: normal; orphans: 2;
+        text-align: start; text-indent: 0px; text-transform: none;
+        widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        white-space: normal;">222-229. (778 Kb)] </a><br>
+    </p>
+    <p>Although the SiteAmp code is distributed separately from the
+      current SMSIM package, the <i>site_amp.for </i>(dated Aug 13,
+      2001) is used here to check the CPS <b>sacampl</b> program.</p>
+    <h2>sacampl</h2>
+    <p>This program uses a velocity model in the MDOEL96 format of
+      Computer Programs in Seismology and command line arguments.&nbsp;
+      For the current version the response is computed at frequencies
+      between 0.1 and 20Hz at increments of 0.1Hz. The command sequence
+      is<br>
+    </p>
+    <pre> Usage: sacamp -M model   [-P | -S ] [-A angdeg | -AYPay_parameter] [-TXT] [-?] [-h]<br> -M model   (default none )  Earth model file<br> -P         (default false )  P response<br> -S         (default true  )  S response<br> -A  angdeg (default none )  S angle incidence at base<br> -RAYP  ray_parameter (default none) (s/km) if model in km<br>        NOTE: Either the angle or the ray parameter is required<br> -TXT       (default false) Output in file sacamp.txt<br> -?         (default none )  this help message <br> -h         (default none )  this help message<br></pre>
+    <p>The default output will be two Sac binary amplitude spectra files
+      named <i>AMP.sac.am</i> and <i>KAMP.sac.am</i>. The first file
+      contains the quarter-wavelength site effect. The second is the
+      first multiplied by the site attenuation factor [ -
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mi>x</mi><mi>p</mi><mo
+              stretchy="false">(</mo><mo>−</mo><mi>π</mi><mi>f</mi><mi>κ</mi><mo
+              stretchy="false">)],&nbsp; <font face="Helvetica, Arial,
+                sans-serif">where κ = Σ (t<sub>i</sub>/q<sub>i</sub>)&nbsp;
+              </font></mo></mrow></semantics></math><math
+        xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo
+              stretchy="false"><mrow><msub><mi></mi></msub></mrow></mo></mrow></semantics></math><math
+        xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo
+              stretchy="false"><mrow><mo stretchy="false"><font
+                    face="Helvetica, Arial, sans-serif"> gives&nbsp; the
+                    attenuation effect of all layers above the base
+                    layer of the model</font><font size="+1"><font
+                      face="Helvetica, Arial, sans-serif">. </font></font><font
+                    face="Helvetica, Arial, sans-serif">In the
+                    computation of κ, I assume vertical wave
+                    propagation.<br>
+                  </font></mo></mrow></mo></mrow></semantics></math></p>
+    <p><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo
+              stretchy="false"><mrow><mo stretchy="false"><font
+                    face="Helvetica, Arial, sans-serif"><br>
+                    If the <i>-TXT </i>option is invoked, a text file
+                    <i>sacampl.txt </i>is created, the output of which
+                    contains three columns: frequency, site-response, <br>
+                    site-response with kappa effect, as show in the
+                    example below. The output will be in order of
+                    increasing frequency.</font></mo></mrow></mo></mrow><annotation
+            encoding="TeX">exp( - \pi f \kappa )<br>
+          </annotation></semantics></math></p>
+    <blockquote>
+      <p><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo
+                stretchy="false"></mo></mrow><annotation encoding="TeX">\kappa
+              = \sum (t_i / Q_i )</annotation></semantics></math></p>
+    </blockquote>
+    <p><br>
+    </p>
+    <h2>Comparison</h2>
+    <p>The table gives the data files and command sequence to run the
+      two programs. <b>SITE_AMP </b>has a interactive input while <b>sacampl
+
+      </b>is controlled form the command line.<br>
+    </p>
+    <table width="100%" cellspacing="2" cellpadding="2" border="2">
+      <tbody>
+        <tr>
+          <td valign="top" align="center">site_amp<br>
+          </td>
+          <td valign="top" align="center">sacampl<br>
+          </td>
+        </tr>
+        <tr align="center">
+          <td rowspan="1" colspan="2" valign="top">Model <br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">t_amp.dat:<br>
+            <pre><b> Sample input file to site_amp</b><b><br></b><b>       Depth    SVel     Dens   1/Q</b><b><br></b><b>           0   0.300      2.0   0.10</b><b><br></b><b>       0.010   0.300      2.0   0.10  ! constant from 0.000 to 0.010</b><b><br></b><b>       0.010   0.600      2.0   0.06</b><b><br></b><b>       0.020   0.600      2.0   0.06  ! constant from 0.010 to 0.020</b><b><br></b><b>       0.020   0.800      2.0   0.05</b><b><br></b><b>       0.040   0.800      2.0   0.05  ! constant from 0.020 to 0.040</b><b><br></b><b>       0.040   1.500      2.2   0.02</b><b><br></b><b>       0.060   1.500      2.2   0.02  ! constant from 0.040 to 0.060</b><b><br></b><b>       0.060   2.500      2.5   0.01</b><b><br></b><b>       0.160   2.500      2.5   0.01  ! constant from 0.060 to 0.160</b><br></pre>
+          </td>
+          <td valign="top">soil.mod:<br>
+            <pre><b>MODEL.01<br>Soil model with Q<br>ISOTROPIC<br>KGS<br>FLAT EARTH<br>1-D<br>CONSTANT VELOCITY<br>LINE08<br>LINE09<br>LINE10<br>LINE11<br>H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)&nbsp;&nbsp; QP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QS&nbsp; ETAP&nbsp; ETAS&nbsp; FREFP&nbsp; FREFS<br>0.0100&nbsp; 1.5&nbsp;&nbsp;&nbsp;&nbsp; 0.3&nbsp;&nbsp;&nbsp;&nbsp; 2.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.05&nbsp;&nbsp; 0.10&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br>0.0100&nbsp; 1.5&nbsp;&nbsp;&nbsp;&nbsp; 0.6&nbsp;&nbsp;&nbsp;&nbsp; 2.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.03&nbsp;&nbsp; 0.06&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br>0.0200&nbsp; 1.6&nbsp;&nbsp;&nbsp;&nbsp; 0.8&nbsp;&nbsp;&nbsp;&nbsp; 2.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.025&nbsp; 0.05&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br>0.0200&nbsp; 3.0&nbsp;&nbsp;&nbsp;&nbsp; 1.5&nbsp;&nbsp;&nbsp;&nbsp; 2.2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.01&nbsp;&nbsp; 0.02&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br>0.1000&nbsp; 5.0&nbsp;&nbsp;&nbsp;&nbsp; 2.5&nbsp;&nbsp;&nbsp;&nbsp; 2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005&nbsp; 0.01&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br>0.0&nbsp;&nbsp;&nbsp;&nbsp; 6.0&nbsp;&nbsp;&nbsp;&nbsp; 3.5&nbsp;&nbsp;&nbsp;&nbsp; 2.7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000&nbsp; 0.000&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1</b></pre>
+          </td>
+        </tr>
+        <tr align="center">
+          <td rowspan="1" colspan="2" valign="top">Execution</td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <pre><b>SITE_AMP<br></b><b>&nbsp;Enter name of model file (cr to quit): </b><b><br></b><b>t_amp.dat</b><b><br></b><b>   Does model file contain either Q or 1/Q (y/n)? </b><b><br></b><b>y</b><b><br></b><b>     Q is in model file; note that Q &lt; 1.0 is taken is 1/Q.</b><b><br></b><b>   Specify a kappa for exp(-pi*k*f) (y/n)? </b><b><br></b><b>n</b><b><br></b><b>   Enter name of output file (cr = &lt;stem&gt;.asc): </b><b><br></b><b>t.txt</b><b><br></b><b>   Do you want to specify density coefficients (y,n)? </b><b><br></b><b>n</b><b><br></b><b><br></b><b>   The program must determine the line on which the data start.</b><b><br></b><b>   To help do this, here are the first three lines of the input file:</b><b><br></b><b><br></b><b>   Line 1:  Sample input file to site_amp                              </b><b><br></b><b>   Line 2:        Depth    SVel     Dens   1/Q                         </b><b><br></b><b>   Line 3:            0   0.300      2.0   0.10                        </b><b><br></b><b><br></b><b>   Enter the line on which the data start (2 or 3): </b><b><br></b><b>3</b><b><br></b><b><br></b><b>   The model appears to be piecewise continuous;</b><b><br></b><b>      if so, press ENTER; if not, press n: </b><b><br></b><b>(hit return her)</b><b><br></b><b>   Enter source velocity and density: </b><b><br></b><b>3.5 2.7</b><b><br></b><b>   Enter angle-of-incidence at source level (in degrees): </b><b><br></b><b>10</b><b><br></b><b>   Specify frequencies(y/n)?: </b><b><br></b><b>y</b><b><br></b><b>     Tabulated frequencies(y/n)?: </b><b><br></b><b>n</b><b><br></b><b>     Individual frequencies(y/n)?: </b><b><br></b><b>n</b><b><br></b><b>     No, so enter freqlow, freqhigh, nfreq: </b><b><br></b><b>0.1 20 200</b><b><br></b><b>       Log-spaced frequencies(y/n)?: </b><b><br></b><b>n</b><b><br></b><b> FINISHED --- Loop back for another case</b><b><br></b><b><br></b><b>   Enter name of model file (cr to quit):</b><b><br></b><b>(hit return here)</b> <br></pre>
+          </td>
+          <td valign="top"><b>sacampl -M soil.mod -S -A 10 -TXT</b><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The <b>site_amp </b>creates the file <i>t.txt </i>while <b>sacampl
+
+      </b>creates the Sac files <i>AMP.sac.am </i>and <i>KAMP.sac.am</i>
+      and the text file <i>sacampl.txt.&nbsp;&nbsp; </i>Here we
+      compare selected columns (13,14,16) of the <b>site_amp </b>output
+
+      to the <i>sacampl.txt. </i>Note for this comparison the <i>sacampl.txt</i>
+      has been sorted in terms of decreasing frequency. The columns
+      display the frequency, site site amplification without Q
+      attenuation, and the effective amplification that includes&nbsp;
+      the Q effect of the entire column, e.g., column 2 multiplied
+      by&nbsp; ( -
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mi>x</mi><mi>p</mi><mo
+              stretchy="false">(</mo><mo>−</mo><mi>π</mi><mi>f</mi><mi>κ</mi><mo
+              stretchy="false">)</mo></mrow><annotation encoding="TeX">exp(
+
+            - \pi f \kappa )</annotation></semantics></math>.<br>
+    </p>
+    <table width="100%" cellspacing="2" cellpadding="2" border="2">
+      <tbody>
+        <tr align="center">
+          <td rowspan="1" colspan="2" valign="top"><b>Incident
+              angle&nbsp; of 10 degrees</b><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" align="center"><b>site_amp</b><br>
+          </td>
+          <td valign="top" align="center"><b>sacampl</b><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <pre><b>t_amp-f   t_amp-a   t_ampak</b><b><br></b><b>2.000E+01 3.939E+00 2.659E+00</b><b><br></b><b>1.000E+01 3.939E+00 3.236E+00</b><b><br></b><b>9.000E+00 3.939E+00 3.301E+00</b><b><br></b><b>8.000E+00 3.939E+00 3.366E+00</b><b><br></b><b>7.000E+00 3.814E+00 3.324E+00</b><b><br></b><b>6.000E+00 3.596E+00 3.196E+00</b><b><br></b><b>5.000E+00 3.411E+00 3.092E+00</b><b><br></b><b>4.000E+00 3.114E+00 2.879E+00</b><b><br></b><b>3.000E+00 2.687E+00 2.533E+00</b><b><br></b><b>2.000E+00 1.817E+00 1.747E+00</b><b><br></b><b>1.000E+00 1.240E+00 1.216E+00</b><b><br></b><b>9.000E-01 1.208E+00 1.186E+00</b><b><br></b><b>8.000E-01 1.178E+00 1.159E+00</b><b><br></b><b>7.000E-01 1.150E+00 1.134E+00</b><b><br></b><b>6.000E-01 1.124E+00 1.111E+00</b><b><br></b><b>5.000E-01 1.100E+00 1.089E+00</b><b><br></b><b>4.000E-01 1.078E+00 1.069E+00</b><b><br></b><b>3.000E-01 1.056E+00 1.050E+00</b><b><br></b><b>2.000E-01 1.036E+00 1.032E+00</b><b><br></b><b>1.000E-01 1.018E+00 1.016E+00</b><br></pre>
+          </td>
+          <td valign="top">
+            <pre><b> Freq(Hz)    Amp     Amp(kappa)</b><b><br></b><b> 2.000E+01 3.939E+00 2.659E+00</b><b><br></b><b> 1.000E+01 3.939E+00 3.236E+00</b><b><br></b><b> 9.000E+00 3.939E+00 3.301E+00</b><b><br></b><b> 8.000E+00 3.939E+00 3.366E+00</b><b><br></b><b> 7.000E+00 3.814E+00 3.324E+00</b><b><br></b><b> 6.000E+00 3.596E+00 3.196E+00</b><b><br></b><b> 5.000E+00 3.411E+00 3.092E+00</b><b><br></b><b> 4.000E+00 3.039E+00 2.809E+00</b><b><br></b><b> 3.000E+00 2.488E+00 2.346E+00</b><b><br></b><b> 2.000E+00 1.692E+00 1.627E+00</b><b><br></b><b> 1.000E+00 1.217E+00 1.193E+00</b><b><br></b><b> 9.000E-01 1.188E+00 1.168E+00</b><b><br></b><b> 8.000E-01 1.162E+00 1.144E+00</b><b><br></b><b> 7.000E-01 1.137E+00 1.121E+00</b><b><br></b><b> 6.000E-01 1.114E+00 1.101E+00</b><b><br></b><b> 5.000E-01 1.092E+00 1.081E+00</b><b><br></b><b> 4.000E-01 1.071E+00 1.063E+00</b><b><br></b><b> 3.000E-01 1.052E+00 1.046E+00</b><b><br></b><b> 2.000E-01 1.034E+00 1.030E+00</b><b><br></b><b> 1.000E-01 1.016E+00 1.014E+00</b><br></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The site amplification is based on the velocity density model.
+      The kappa effect is for the entire column from the base of the
+      model upward.&nbsp; The comparison for an S-wave incident at an
+      angle of 10 degrees is quite good. For an incidence angle of 45
+      degrees, the comparison is now<br>
+    </p>
+    <table width="100%" cellspacing="2" cellpadding="2" border="2">
+      <tbody>
+        <tr align="center">
+          <td rowspan="1" colspan="2" valign="top"><b>Incident
+              angle&nbsp; of 45 degrees</b><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" align="center"><b>site_amp<br>
+            </b></td>
+          <td valign="top" align="center"><b>sac_amp<br>
+            </b></td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <pre><b>t_amp-f   t_amp-a   t_ampak</b><b><br></b><b>2.000E+01 3.340E+00 2.255E+00</b><b><br></b><b>1.000E+01 3.340E+00 2.745E+00</b><b><br></b><b>9.000E+00 3.340E+00 2.799E+00</b><b><br></b><b>8.000E+00 3.340E+00 2.855E+00</b><b><br></b><b>7.000E+00 3.235E+00 2.819E+00</b><b><br></b><b>6.000E+00 3.050E+00 2.711E+00</b><b><br></b><b>5.000E+00 2.895E+00 2.624E+00</b><b><br></b><b>4.000E+00 2.645E+00 2.445E+00</b><b><br></b><b>3.000E+00 2.285E+00 2.155E+00</b><b><br></b><b>2.000E+00 1.562E+00 1.502E+00</b><b><br></b><b>1.000E+00 1.116E+00 1.094E+00</b><b><br></b><b>9.000E-01 1.094E+00 1.075E+00</b><b><br></b><b>8.000E-01 1.075E+00 1.059E+00</b><b><br></b><b>7.000E-01 1.059E+00 1.044E+00</b><b><br></b><b>6.000E-01 1.044E+00 1.032E+00</b><b><br></b><b>5.000E-01 1.032E+00 1.022E+00</b><b><br></b><b>4.000E-01 1.022E+00 1.014E+00</b><b><br></b><b>3.000E-01 1.013E+00 1.007E+00</b><b><br></b><b>2.000E-01 1.007E+00 1.003E+00</b><b><br></b><b>1.000E-01 1.002E+00 1.000E+00</b><br></pre>
+          </td>
+          <td valign="top">
+            <pre><b> Freq(Hz)    Amp     Amp(kappa)</b><b><br></b><b> 2.000E+01 3.340E+00 2.255E+00</b><b><br></b><b> 1.000E+01 3.340E+00 2.745E+00</b><b><br></b><b> 9.000E+00 3.340E+00 2.799E+00</b><b><br></b><b> 8.000E+00 3.340E+00 2.855E+00</b><b><br></b><b> 7.000E+00 3.235E+00 2.819E+00</b><b><br></b><b> 6.000E+00 3.050E+00 2.711E+00</b><b><br></b><b> 5.000E+00 2.895E+00 2.624E+00</b><b><br></b><b> 4.000E+00 2.581E+00 2.386E+00</b><b><br></b><b> 3.000E+00 2.116E+00 1.995E+00</b><b><br></b><b> 2.000E+00 1.455E+00 1.399E+00</b><b><br></b><b> 1.000E+00 1.095E+00 1.074E+00</b><b><br></b><b> 9.000E-01 1.077E+00 1.058E+00</b><b><br></b><b> 8.000E-01 1.061E+00 1.044E+00</b><b><br></b><b> 7.000E-01 1.047E+00 1.033E+00</b><b><br></b><b> 6.000E-01 1.035E+00 1.023E+00</b><b><br></b><b> 5.000E-01 1.024E+00 1.014E+00</b><b><br></b><b> 4.000E-01 1.016E+00 1.008E+00</b><b><br></b><b> 3.000E-01 1.009E+00 1.003E+00</b><b><br></b><b> 2.000E-01 1.004E+00 1.000E+00</b><b><br></b><b> 1.000E-01 1.001E+00 9.991E-01</b><br></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Here there are slight differences at frequencies less than
+      5Hz.&nbsp; <br>
+    </p>
+    <p>The comparison give confidence in the <b>sacampl </b>program.<br>
+    </p>
+    <h2>Use of sacampl</h2>
+    <p>The reason for writing this program was to be able to have the
+      site amplification in the format of a Sac file and to use the
+      same&nbsp; velocity model format as used in the execution of
+      synthetic seismogram codes of Computer Programs in
+      Seismology.&nbsp; In the examples that follow this site
+      amplification is compared to plane-wave synthetics and complete
+      wavenumber integration synthetics. To emulate the site
+      amplification response, the computations are based on two set of
+      models: a halfspace to represent the hard rock site, and the same
+      model with a thin veneer of low velocity materials to represent a
+      soil site. The procedure will be to compute Green's functions at
+      the surface of the two models, compute the Fourier amplitude
+      spectra, and then to form the ratio of spectra at the soil site to
+      the hard rock site. These will be compared to the <b>sacampl </b>prediction.<br>
+    </p>
+    <p>The computations that follow require the March, 2024 release of
+      Computer Programs in Seismology which now better supports the
+      Amplitude spectra format of Sac files by <b>gsac.</b><br>
+    </p>
+    <p><a moz-do-not-send="true" href="sacampl_pw.html">Plane Wave Study</a><br> </p>
+    <p><a moz-do-not-send="true" href="sacampl_wk.html">Complete Synthetic Study</a><br> </p>
+    <p><a moz-do-not-send="true" href="surface_wave.html">Surface wave approach</a><br> </p>
+
+    <h2>Discussion</h2>
+    <p>This program was written very quickly. As such there may be some
+      differences with respect to the results of <b>site_amp</b>. For
+      the simple comparison made above, these differences do not seem
+      significant.<br>
+    </p>
+    <p>The comparison of the site response estimation using synthetics
+      shows that the SH response is similar to that given by <b>sacampl</b>.
+      The surprising results is the large radial component
+      amplification.<br>
+    </p>
+    <p> As remarked in the plane-wave study for large angles of incidence, and as seen in the time domain study at large distances, for which the angle of incidence is large, the site effect of the radial component because very large. As a matter of fact at an epicentral distance of 20 km, angle of incidence of 63<sup>o</sup> the radial ratio is very large at a frequency of 3 Hz. The surface wave approach show a large resonance at about 4 Hz. The surface-wave study indicates the importance of the radial ellipticity, but cannot include the tempering factors of attenuation which will reduce the level at high frequencies.
+      
+    </p>
+<h2>Summary</h2>
+    <p>
+The output of <br>sacampl</b> may be useful as a first approximation of site amplification. Since it is run from the command line, it would be easy to loop through different velocity models in a bath processing environment. 
+    </p>
+<p>The only caveat here is that the site response of the Fourier amplification and not the Response Spectra amplification</p>.
+  </body>
+</html>

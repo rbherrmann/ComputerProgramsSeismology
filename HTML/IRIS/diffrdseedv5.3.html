@@ -1,0 +1,156 @@
+<HTML>
+<HEAD>
+        <TITLE>Diff CPS/rdseedv5.3.slu vs IRIS_DISTRIBUTION/rdseedv5.3</TITLE>
+</HEAD>
+<BODY>
+<H2>rdseedv5.3</H2>
+<P>This details the differences between the IRIS distribution of <B>rdseedv5.3</B> the changes made for inclusion in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+<PRE>
+<b>
+-------------------
+diff Main/output_resp.c ../rdseedv5.3/Main/output_resp.c
+-------------------
+</b>
+<         /* Begin RBH 04 DEC 2009 */
+<         char sacpolezero_name[100];
+< 	struct time start;
+< 	struct time end;
+< 	void cnvt_end_time();
+<         /* End   RBH 04 DEC 2009 */
+109,173d102
+< /* ADDITION R B HERRMANN November 16, 2007
+<         to provide more information the dataless SEED about the stations
+<         modified 04 DEC 2009 to define the SAC Polezero file name
+< 	Modified 10 APR 2012 to get around CYGWIN format limit
+< */
+< 	timecvt(&start, current_channel->start);
+< 
+< 
+< 	/* code fragment modified from Main/output_sac.c for consistency in Sac PZ file name */
+< 	if (current_channel->end == NULL)
+< 	{
+< 		current_channel->end = calloc(100,sizeof(char));
+< 		strcpy(current_channel->end, "2599,365,23:59:59");
+< 	}
+< 
+< 	if (strcasecmp(current_channel->end, "N/A") == 0)
+< 	{
+< 		free(current_channel->end);
+< 		current_channel->end = calloc(100,sizeof(char));
+< 		strcpy(current_channel->end, "2599,365,23:59:59");
+< 	}
+< 	timecvt(&end, current_channel->end);
+< 	cnvt_end_time(&end);
+< 
+< sprintf(sacpolezero_name,"SAC_PZs_%s_%s_%s_%s_%04d.%03d.%02d.%02d.%02d.%04d_%04d.%03d.%02d.%02d.%02d.%04d",
+<                                 current_station->network_code ?
+<                                                 current_station->network_code :
+<                                                 "NA",
+<                                 current_station->station,
+<                                 current_channel->channel,
+<                                 current_channel->location,
+<                                 start.year,
+<                                 start.day,
+<                                 start.hour,
+<                                 start.minute,
+<                                 start.second,
+<                                 start.fracsec,
+<                                 end.year,
+<                                 end.day,
+<                                 end.hour,
+<                                 end.minute,
+<                                 end.second, end.fracsec);
+< /* The original sprintf attemped to write everything including 
+<    outfile_name and sacpolezero_name
+<    However this broke in Cygwin due to an overflow in lgstr in CYGWIN.DLL. So
+<    Two additional fprintf's are used for these last two entries
+<   */
+< fprintf(stderr,"%3s %5s %2s %3s %25s %25s %10.6f %11.6f %7.1f %5.1f %5.1f %10.4g ",
+< 	current_station->network_code ? current_station->network_code : "**",
+< 	current_station->station,
+< 	current_channel->location[0]  ?  current_channel->location : "**",
+< 	current_channel->channel,
+< 	current_channel->start,
+< 	current_channel->end,
+< 	current_channel->latitude,
+< 	current_channel->longitude,
+< 	current_channel->elevation,
+< 	current_channel->dip,
+< 	current_channel->azimuth,
+< 	current_channel->samplerate);
+< fprintf(stderr,"%s ", outfile_name);
+< fprintf(stderr,"%s \n",sacpolezero_name);
+< 
+< /* END ADDITION R B HERRMANN November 16, 2007
+< */
+<b>
+-------------------
+diff Main/output_sac.c ../rdseedv5.3/Main/output_sac.c
+-------------------
+</b>
+126d125
+< /* R. B. Herrmann modified comments on SAC pole-zero file */
+1646,1649c1645,1648
+< 	fprintf(fptr, "* LATITUDE    (deg) : %-10.6f\n",	current_channel->latitude);
+< 	fprintf(fptr, "* LONGITUDE   (deg) : %-11.6f\n",	current_channel->longitude);
+< 	fprintf(fptr, "* ELEVATION     (m) : %-7.1f\n", 	current_channel->elevation);
+< 	fprintf(fptr, "* DEPTH         (m) : %-5.1f\n", 	current_channel->local_depth);
+---
+> 	fprintf(fptr, "* LATITUDE          : %-10.6f\n",	current_channel->latitude);
+> 	fprintf(fptr, "* LONGITUDE         : %-11.6f\n",	current_channel->longitude);
+> 	fprintf(fptr, "* ELEVATION         : %-7.1f\n", 	current_channel->elevation);
+> 	fprintf(fptr, "* DEPTH             : %-5.1f\n", 	current_channel->local_depth);
+1651,1653c1650,1652
+< 	fprintf(fptr, "* DIP         (deg) : %-5.1f\n", 	current_channel->dip + 90.0);   
+< 	fprintf(fptr, "* AZIMUTH     (deg) : %-5.1f\n", 	current_channel->azimuth);
+< 	fprintf(fptr, "* SAMPLE RATE  (Hz) : %-3.1f\n",  current_channel->samplerate);
+---
+> 	fprintf(fptr, "* DIP               : %-5.1f\n", 	current_channel->dip + 90.0);   
+> 	fprintf(fptr, "* AZIMUTH           : %-5.1f\n", 	current_channel->azimuth);
+> 	fprintf(fptr, "* SAMPLE RATE       : %-3.1f\n",  current_channel->samplerate);
+1661,1664d1659
+< 	fprintf(fptr, "* Site Name         : %s\n",
+< 		current_station->name? current_station->name: "");                   /* RBH addition */
+< 	fprintf(fptr, "* Owner             : ");
+< 		find_type33(fptr, current_station->owner_code);                      /* RBH addition */
+
+<b>
+-------------------
+diff Main/summary.c ../rdseedv5.3/Main/summary.c
+-------------------
+</b>
+698d697
+< 		/* Changed from fabsl to fabs R B Herrmann SLU April 10, 2012
+700,702d698
+<  		*/
+< 
+< 		this_diff = fabs(diff_start) + fabs(diff_end);
+<b>
+-------------------
+diff Parsers/parse_50.c ../rdseedv5.3/Parsers/parse_50.c
+-------------------
+</b>
+55,57d54
+< 	/* BEGIN R B Herrmann September 3, 2009 */
+< 	int i;
+< 	/* END R B Herrmann September 3, 2009 */
+104,110d100
+< 	/* BEGIN R B Herrmann September 3, 2009
+< 		get rid of non-printing characters from the name */
+< 	for(i=0; i < strlen(type50.name); i++){
+< 		if(! isprint(type50.name[i])) type50.name[i] = '\0';
+< 	}
+< 	/* END  R B Herrmann September 3, 2009 */
+< 
+<b>
+-------------------
+diff Utilities/log_errors.c ../rdseedv5.3/Utilities/log_errors.c
+-------------------
+</b>
+33d32
+< #include <string.h>
+</PRE>
+<CENTER>Last changed April 10, 2012</CENTER>
+</BODY>
+</HTML>

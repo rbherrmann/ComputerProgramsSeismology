@@ -1,0 +1,115 @@
+#!/bin/sh
+
+echo Testing Embayment response
+
+#####
+#    clean up previous results
+#####
+
+if [ ! -d CUSMOD ]
+then
+	mkdir CUSMOD
+fi
+if [ ! -d CUSEMB ]
+then
+	mkdir CUSEMB
+fi
+
+rm -f */*.sac
+
+for GCARC in 50 
+do
+
+for HS in  600
+do
+
+hudson96 -GCARC ${GCARC} -HS ${HS} -TEL ../MODELS/tak135sph.mod -REC ../MODELS/CUSEMB.mod -NPTS 8192 -DT 0.05 
+hpulse96 -p -l 1 -V > file96
+cd CUSEMB 
+cat ../file96 | \
+	fmech96 -S 45 -D 45 -R 45 -AZ 45 -MW 4 -ROT | \
+        f96tosac -B
+cd ..
+cp hudsonrec.mod CUSEMB.model
+
+
+hudson96 -GCARC ${GCARC} -HS ${HS} -TEL ../MODELS/tak135sph.mod -REC ../MODELS/CUS.mod -NPTS 8192 -DT 0.05 
+hpulse96 -p -l 1 -V > file96
+cd CUSMOD 
+cat ../file96 | \
+	fmech96 -S 45 -D 45 -R 45 -AZ 45 -MW 4 -ROT | \
+        f96tosac -B
+cd ..
+cp hudsonrec.mod CUSMOD.model
+
+done
+done
+
+#####
+# make a plot
+#####
+gsac << EOF
+r */*.sac
+fileid name
+bg plot
+p
+quit
+EOF
+
+plotnps -F7 -W10 -EPS -K < P001.PLT > p001.eps
+convert -trim p001.eps p001.png
+
+#####
+# show the models
+#####
+shwmod96 -K -1 -LEG -VMIN 0 -VMAX 5 -ZMAX 60 CUSEMB.model CUSMOD.model
+plotnps -F7 -W10 -EPS -K < SHWMOD96.PLT > shwmod96.eps
+convert -trim shwmod96.eps shwmod96.png
+
+#####
+#   now redo this using only the receiver crust
+#####
+rm -f */*.sac
+
+for GCARC in 50 
+do
+
+for HS in  600
+do
+
+hudson96 -GCARC ${GCARC} -HS ${HS} -TEL ../MODELS/tak135sph.mod -REC ../MODELS/CUSEMB.mod -NPTS 8192 -DT 0.05  -NOSRC -NOTEL
+hpulse96 -p -l 1 -V > file96
+cd CUSEMB 
+cat ../file96 | \
+	fmech96 -S 45 -D 45 -R 45 -AZ 45 -MW 4 -ROT | \
+        f96tosac -B
+cd ..
+cp hudsonrec.mod CUSEMB.model
+
+
+hudson96 -GCARC ${GCARC} -HS ${HS} -TEL ../MODELS/tak135sph.mod -REC ../MODELS/CUS.mod -NPTS 8192 -DT 0.05  -NOSRC -NOTEL
+hpulse96 -p -l 1 -V > file96
+cd CUSMOD 
+cat ../file96 | \
+	fmech96 -S 45 -D 45 -R 45 -AZ 45 -MW 4 -ROT | \
+        f96tosac -B
+cd ..
+cp hudsonrec.mod CUSMOD.model
+
+done
+done
+
+#####
+# make a plot
+#####
+gsac << EOF
+r */*.sac
+fileid name
+xlim b b 80
+bg plot
+p
+quit
+EOF
+
+plotnps -F7 -W10 -EPS -K < P001.PLT > p002.eps
+convert -trim p002.eps p002.png

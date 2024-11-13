@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials - Moment Tensor
+      Sensitivity</title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h2>Introduction</h2>
+    The determination of earthquake source parameters through moment
+    tensor inversion is a non-linear problem that is affected by many
+    factors which may not be well understood. In the opinion of this
+    author, the association of error to the source parameters may be
+    impossible.
+    <p> The factors affecting the inversion result are many and include
+      the following:<br>
+    </p>
+    <ul>
+      <li>Earth structure along the path between the source and the
+        seismic station</li>
+    </ul>
+    <blockquote>The objective of the codes for determining source
+      parameters is to model the observed waveforms through a
+      theoretical wave propagation model. The simplest assumption is to
+      assume a single, simple wave propagation model to all observation
+      points. This assumption is never correct, but will be adequate if
+      the focus is on modeling&nbsp; the lower frequency content in the
+      observed waveforms. As one uses higher frequencies, the inability
+      to model 3-D wave propagation, because of the synthetic seismogram
+      codes used and the assumptions about the Earth model, affect the
+      inversion.<br>
+    </blockquote>
+    <ul>
+      <li>Shallow structure beneath the seismic station</li>
+    </ul>
+    <blockquote>Even if the path is relatively simple,&nbsp; a site
+      response may affect the levels of recorded motion.<br>
+    </blockquote>
+    <ul>
+      <li>Seismic instrumentation</li>
+    </ul>
+    <blockquote>Recorded data are noisy because of inherent instrumental
+      noise and installation of the instrument.&nbsp; Such noise can be
+      documented and perhaps mitigated through the selection of the
+      instrumentation and care in installation.<br>
+    </blockquote>
+    <ul>
+      <li>Earth noise</li>
+    </ul>
+    <blockquote>This noise arises through human activity and natural
+      processes related often to atmospheric effects. These noise levels
+      dynamically change on time scales varying from hours, for human
+      activity, to months, for seasonal changes.<br>
+    </blockquote>
+    <ul>
+      <li>The distribution of observations<br>
+      </li>
+    </ul>
+    <blockquote>The actual observations depend on the source depth and
+      source process. &nbsp; One can easily think of distributions of
+      stations whose observations in the presence of noise provide no
+      information for a particular source mechanism. <br>
+    </blockquote>
+    The purpose of this tutorial is to&nbsp; examine the effect of noise
+    on source inversion results and&nbsp; to determine if goodness of
+    fit parameters can be modeled in a synthetic study. This tutorial
+    will consider a small earthquake in Arkansas, <a
+      href="20130522171939/HTML.REG/index.html">Earthquake of May 22,
+      2013</a>.&nbsp; <br>
+    <br>
+    Another aspect of this example is that the ability of determining
+    source parameters as a function of source size may be useful in
+    defining the&nbsp;&nbsp; capabilities of a seismic network.<br>
+    <h2>Modeling noise</h2>
+    <p>The new tool developed for this study is the program <b>sacnoise</b>.
+      Using the USGS Albuquerque Seismc Lab New Low Noise Model (NLNM)
+      and New High Noise Model (NHNM), an acceleration<br>
+      history in units of&nbsp; meters/s/s (M/S**2) is created as a sac
+      file.&nbsp; The source code and Makefile are given in this
+      distribution in MT_SENSITIVITY/src.&nbsp; The current command
+      syntax is obtained by running the program using the <b>-h </b>flag:<br>
+    </p>
+    <blockquote>
+      <pre>rbh&gt; sacnoise -h<br>Usage: sacnoise -pval pval -seed seed -dt dt -npts npts <br>  Create time series of noise based on ASL NLNM and NHNM models. The output has units of <br>     m/s**2   (default)<br>  The noise level can be adjusted between the low and high noise models with pval<br>     pval=1   High noise model<br>     pval=0.5 mid-noise model<br>     pval=0   Low  noise model<br> -dt   dt     (default 1.0) sample interval <br> -npts npts   (default 32768) length of time series <br> -pval pval   (default 0.5) <br> -seed seed   (default 12345) Integer random number seed <br> -h           (default false) online helpjk<br><br></pre>
+    </blockquote>
+    To illustrate the usage and&nbsp; the use of the <i>pval</i>
+    parameter, the script <b>DOIT </b>in MT_SENSITIVITY/NOISEPLOTS/
+    does the following:<br>
+    <ul>
+      <li>Creates 100000 sample long random accelerations for a 0.1 s
+        sample interval using different random number seeds for <i>pval
+          = 0.0, 0.2, 0.3, 0.4 and 1.0.</i> The output of
+        simulation&nbsp; is in the file <i>O.sac</i>.<br>
+      </li>
+      <li>For each sac file,&nbsp; the program <b>sacpsd</b> is used to
+        compute the power spectrum with tabular output in files named as
+        0.3.psd, for example.</li>
+      <li>Finally, all PSD estimates are plotted together using another
+        invocation of <b>sacpsd</b>.</li>
+    </ul>
+    The plot so created is<br>
+    <br>
+    <table width="50%" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr align="center">
+          <td valign="top"><img alt="sacnoise power spectra"
+              src="NOISEPLOTS/NOISEPSD.png" height="463" width="638"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Fig. 1. Comparison of acceleration PSD from <b>sacnoise</b>
+            simulations to the ASL NLNM (lower black curve) and NHNM
+            (upper black curve).<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    This figure illustrates the use of the <i>pval </i>parameter.&nbsp;
+
+
+
+    The fact that the simulations for <i>pval=0.0</i> and <i>1.0</i>
+    do not lie&nbsp; exactly on the NLNM and NHNM curves is because only
+    one short simulation was performed. To perform realistic modeling,
+    it would be useful to use <b>sacpsd</b> to determine actual noise
+    PSD for stations in a network to guide the choice of the <i>pval</i>.
+    It might also be useful to extend the program to read an actual
+    noise power spectrum for the generation of simulation.<br>
+    <br>
+    <h2>Simulations for source inversion study</h2>
+    <p>The scripts are provided investigate the earthquake of 2013/05/22
+      17:19:39. The driver script DOIT2 performs 6 simulations as
+      follow:<br>
+    </p>
+    <pre>&nbsp; Velocity Model&nbsp;&nbsp; Strike&nbsp;&nbsp; Dip&nbsp; Rake&nbsp; Source Depth&nbsp;&nbsp; Mw&nbsp; Noise (pval)  Inversion</pre>
+    <pre>&nbsp;       CUS&nbsp;         85      70   -20      2.0       3.38  0.3          <a href="CUS.85.70.-20.0020.3.38.0.3/HTML.REG/index.html">CUS.85.70.-20.0020.3.38.0.3/</a>
+&nbsp;       CUS&nbsp;         85      70   -20      2.0       3.00  0.3          <a href="CUS.85.70.-20.0020.3.00.0.3/HTML.REG/index.html">CUS.85.70.-20.0020.3.00.0.3/</a><br>&nbsp;       CUS&nbsp;         85      70   -20      2.0       4.00  0.3          <a href="CUS.85.70.-20.0020.4.00.0.3/HTML.REG/index.html">CUS.85.70.-20.0020.4.00.0.3/</a>
+<br>&nbsp;       CUS&nbsp;         85      70   -20      2.0       3.00  0.4          <a href="CUS.85.70.-20.0020.3.00.0.4/HTML.REG/index.html">CUS.85.70.-20.0020.3.00.0.4/</a><br>&nbsp;       CUS&nbsp;         85      70   -20      2.0       3.59  0.4          <a href="CUS.85.70.-20.0020.3.50.0.4/HTML.REG/index.html">CUS.85.70.-20.0020.3.50.0.4/</a><br>&nbsp;       CUS&nbsp;         85      70   -20      2.0       4.00  0.4          <a href="CUS.85.70.-20.0020.4.00.0.4/HTML.REG/index.html">CUS.85.70.-20.0020.4.00.0.4/</a><br><br>    Real Data        85      70   -20      2.0       3.38               <a href="20130522171939/HTML.REG/index.html">20130522171939</a>           [<font color="#ff0000">This is not part of the simulation but for reference<font color="#000000">]</font></font><br>       <br>   <br></pre>
+    <p>The first simulation uses the Mw determined for the
+      earthquake.&nbsp; The next two vary the Mw. The reason is that we
+      might expect better results for a larger Mw which will provide
+      greater signal-to-noise than for the smaller event.&nbsp; The last
+      three simulations increase the noise level in another examination
+      of the lower limit of applicability of the source inversion.&nbsp;
+      The selected solution for each simulation is given in the files
+      with names such as
+      CUS.85.70.-20.0020.3,38.0.3/HTML.REG/fmdfit.dat.&nbsp; <br>
+    </p>
+    <p>The goodness of fit parameters for the actual data set and for
+      the six simulations are as follow.<br>
+    </p>
+    <blockquote>
+      <pre>    Directory                 H  STK DIP RAKE  Mw    FIT<br>20130522171939               2.0  85  70  -20 3.38 0.5615<br><br>CUS.85.70.-20.0020.3.38.0.3  2.0  85  70  -20 3.39 0.3885
+<br>CUS.85.70.-20.0020.3.00.0.3  2.0 275  80   40 3.09 0.0639<br>CUS.85.70.-20.0020.4.00.0.3  2.0  85  70  -20 4.00 0.9777
+<br>CUS.85.70.-20.0020.3.00.0.4  8.0 130  60   45 3.19 0.0379<br>CUS.85.70.-20.0020.3.50.0.4  2.0  85  70  -25 3.52 0.3465<br>CUS.85.70.-20.0020.4.00.0.4  2.0  85  70  -20 4.00 0.9430<br></pre>
+    </blockquote>
+    <p>We see that the goodness of fit in the simulations depends on the
+      event magnitude, with larger magnitudes giving a better fit,
+      because the increased signal-to-noise ratio. As noise is
+      increased, the fit degrades. &nbsp; Some figures from the detailed
+      presentation of the processing results may help put the results in
+      perspective. We will first compare the goodness of fit plots for
+      the real data set and the first three simulations.<br>
+    </p>
+    <p><br>
+    </p>
+    <table width="100%" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td valign="top" align="center">
+            <pre>20130522171939 </pre>
+          </td>
+          <td valign="top" align="center">
+            <pre>CUS.85.70.-20.0020.3.38.0.3</pre>
+          </td>
+          <td valign="top" align="center">
+            <pre>CUS.85.70.-20.0020.3.00.0.3</pre>
+          </td>
+          <td valign="top" align="center">
+            <pre>CUS.85.70.-20.0020.4.00.0.3</pre>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" align="center"><img
+              src="20130522171939/HTML.REG/wfmdfit.png"
+              alt="20130522171939/HTML.REG/wfmdfit.png" height="236"
+              width="316"><br>
+          </td>
+          <td valign="top" align="center"><img
+              alt="CUS.85.70.-20.0020.3.38.0.3/HTML.REG/wfmdfit.png"
+              src="CUS.85.70.-20.0020.3.38.0.3/HTML.REG/wfmdfit.png"
+              height="236" width="316"><br>
+          </td>
+          <td valign="top" align="center"><img
+              src="CUS.85.70.-20.0020.3.00.0.4/HTML.REG/wfmdfit.png"
+              alt="CUS.85.70.-20.0020.3.00.0.4/HTML.REG/wfmdfit.png"
+              height="236" width="316"><br>
+          </td>
+          <td valign="top" align="center"><img
+              alt="CUS.85.70.-20.0020.4.00.0.3/HTML.REG/wfmdfit.png"
+              src="CUS.85.70.-20.0020.4.00.0.3/HTML.REG/wfmdfit.png"
+              height="244" width="316"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" align="center">Fig 2a<br>
+          </td>
+          <td valign="top" align="center">Fig 2b<br>
+          </td>
+          <td valign="top" align="center">Fig 2c<br>
+          </td>
+          <td valign="top" align="center">Fig 2d<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>This figure presents the goodness of fit&nbsp; (1.0 is the best
+      fit)&nbsp; as a function of source depth and displays the focal
+      mechanism for the best fit at each depth.&nbsp; First note that
+      the data set for the actual event did not have a well defined best
+      fit. The selected source depth of 2 km is very subtle. The
+      fundamental question is&nbsp;&nbsp; whether the source depth and
+      fault parameters are actually known.&nbsp; The simulation also
+      uses more vertical and radial traces than the real data set.&nbsp;
+      <br>
+    </p>
+    <p>Interestingly Fig 2b, which is based on synthetics shows a very
+      similar pattern of best fit as a function of depth.&nbsp; In this
+      case the solution is known, which provides the basis for
+      determining if the solution is correct.&nbsp; If the event had
+      been smaller, e.g., Mw=3.0, Fig 2c shows that the fit degrades
+      because of the lower signal-to-noise ratio. The simulation does
+      provide a good estimate of the Mw.&nbsp; Finally, if the event had
+      been larger, Fig 2d, there would have been better control on the
+      depth.<br>
+    </p>
+    <p>In comparing Fig2b to Fig2d, it seems as if the pattern would be
+      similar if the fit is plotted logarithmically. This is based on
+      the ratio of the best fit value at the 2 km depth&nbsp; to the
+      lower value at a 50 km depth.<br>
+    </p>
+    <p>To see the effect of noise consider the waveforms for the
+      pval=0.4 simulations:<br>
+    </p>
+    <table width="75%" border="1" cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td valign="top" align="center">CUS.85.70.-20.0020.3.00.0.4<br>
+          </td>
+          <td valign="top" align="center">CUS.85.70.-20.0020.3.50.0.4<br>
+          </td>
+          <td valign="top" align="center">CUS.85.70.-20.0020.4.00.0.4<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" align="center"><img
+              alt="CUS.85.70.-20.0020.3.00.0.4/HTML.REG/wcmp1.png"
+              src="CUS.85.70.-20.0020.3.00.0.4/HTML.REG/wcmp1.png"
+              height="429" width="523"><br>
+          </td>
+          <td valign="top" align="center"><img
+              alt="CUS.85.70.-20.0020.3.50.0.4/HTML.REG/wcmp1.png"
+              src="CUS.85.70.-20.0020.3.50.0.4/HTML.REG/wcmp1.png"
+              height="429" width="523"><br>
+          </td>
+          <td valign="top" align="center"><img
+              alt="CUS.85.70.-20.0020.4.00.0.4/HTML.REG/wcmp1.png"
+              src="CUS.85.70.-20.0020.4.00.0.4/HTML.REG/wcmp1.png"
+              height="429" width="523"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" align="center">Fig. 3a<br>
+          </td>
+          <td valign="top" align="center">Fig. 3b<br>
+          </td>
+          <td valign="top" align="center">Fig. 3c<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Figure 3 compares the waveforms to be modeled (red) to the
+      predicted best fit (blue). The time shift for best fit and
+      reduction in variance are indicated to the right of each trace and
+      the peak filtered velocity (0.02 - 0.10 Hz) is indicated at the
+      left.&nbsp; The actual source inversion used at window width of
+      only 75 seconds whereas the simulation used a window of 270
+      seconds as a test of the superposition of noise and the clean
+      synthetic.<br>
+    </p>
+    <p>In comparing the the fits to the observed data to those of the
+      Mw=3.38 pval=0.3 simulations. a similar pattern is seen.&nbsp; For
+      the actual data, many traces were judged too noisy for the source
+      inversion. These were typically the Z and R traces at the larger
+      distances. The simulations indicate that the analyst required a
+      S/N of at least 2 or greater before judging a trace useful.<br>
+    </p>
+    <p>Perhaps it may be possible to change the grid search used by <b>wvfgrd96
+
+
+      </b>from a single pass to a two-pass process. The second pass
+      would examine the fit to each trace and then automatically
+      down-weight or reject a trace if the fit is less than 20%, or
+      so.&nbsp; The effect of the time window on the fit parameter would
+      have to be investigated.<br>
+    </p>
+    <h2>Annotated processing scripts</h2>
+    The following scripts are provided in this distribution. The
+    annotated scripts are given in the following links:
+    <ul>
+      <li><a href="doit2.html">DOIT2</a> - this is the driver for
+        simulation 2</li>
+      <li><a href="domkmod2.html">DOMKMOD2</a> - this creates the
+        simulated traces, set up and runs the inversion</li>
+      <li><a href="doll.html">DOLL</a> - this utility script estimates
+        the station coordinates from the epicenter and distance and
+        azimuth to each station</li>
+    </ul>
+    <h2>Distribution</h2>
+    <p>The processing scripts for this tutorial are in <a
+        href="Dist.tgz">Dist.tgz</a>.&nbsp; Click and save on the link
+      to save this file on your machine. Then unpack using the command<br>
+    </p>
+    <blockquote>
+      <pre>gunzip -c Dist.tgz | tar xvf -<br><br></pre>
+    </blockquote>
+    The result of unpacking will be <br>
+    <pre>MT_SENSITIVITY/<br>               |---0XXXREG/<br>               |---20130522171939/<br>               |---CUS.85.70.-20.0020.3.00.0.3/<br>               |---CUS.85.70.-20.0020.3.00.0.4/<br>               |---CUS.85.70.-20.0020.3.38.0.3/<br>               |---CUS.85.70.-20.0020.3.50.0.4/<br>               |---CUS.85.70.-20.0020.4.00.0.3/<br>               |---CUS.85.70.-20.0020.4.00.0.4/<br>               |---DOIT2<br>               |---DOLL<br>               |---DOMKMOD2<br>               |---DOPACK<br>               |---NOISEPLOTS/<br>               |---doit2.html<br>               |---doll.html<br>               |---domkmod2.html<br>               |---index.html<br>               |---src/<br></pre>
+    <br>
+    After unpacking,<br>
+    <pre>cd MT_SENSITIVITY/src<br>make<br><br></pre>
+    This will compile the program <b>sacnoise</b>. You can then cd
+    ..&nbsp;&nbsp; and run the DOIT2 script<br>
+  </body>
+</html>

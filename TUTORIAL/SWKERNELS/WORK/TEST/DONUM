@@ -1,0 +1,92 @@
+#!/bin/sh
+
+DELVP="$1"
+DELVS="$2"
+DELQAI="$3"
+DELQBI="$4"
+DELH="$5"
+
+cat > tdisp.d << EOF
+SURF96 L C X  0  14.2000     4.0000     0.1000
+SURF96 L U X  0  14.2000     4.0000     0.1000
+SURF96 L G X  0  14.2000     4.0000     0.1000
+SURF96 R C X  0  14.2000     4.0000     0.1000
+SURF96 R U X  0  14.2000     4.0000     0.1000
+SURF96 R G X  0  14.2000     4.0000     0.1000
+EOF
+#SURF96 R C X   0      9.9000     4.0000     0.1000
+#SURF96 R U X   0     10.1000     4.0000     0.1000
+#SURF96 R C X   0     10.1000     4.0000     0.1000
+#SURF96 R U X   0      9.9000     4.0000     0.1000
+
+cat > sobs.d << EOF
+  4.99999989E-04  4.99999989E-04   0.0000000      4.99999989E-03   0.0000000 
+    1    1    1    1    1    1    1    0    1    0
+t.mod                  
+tdisp.d                                                       
+EOF
+
+#####
+#    read in the model perturbations
+#####
+
+
+#####
+#    create the model perturbations
+#####
+rm -fr srfker96.txt
+
+for MOD in 1 2 3 4 5
+do
+	read H VP VS RHO QP QS ETAP ETAS FRP FRS < 0.mod
+	case ${MOD} in
+		1) VP=`echo $VP $DELVP | awk '{print $1 + $2}' ` ;;
+		2) VS=`echo $VS $DELVS | awk '{print $1 + $2}' ` ;;
+		3) QP=`echo $QP $DELQAI | awk '{print $1 + $2}' ` ;;
+		4) QS=`echo $QS $DELQBI | awk '{print $1 + $2}' ` ;;
+		5) H=`echo $H $DELH | awk '{print $1 + $2}' ` ;;
+	esac
+	echo $H $VP $VS $RHO $QP $QS $ETAP $ETAS $FRP $FRS > ${MOD}.mod
+done 
+
+
+
+for MOD in 0 1 2 3 4 5
+do
+	cat top.mod > t.mod
+        cat ${MOD}.mod >> t.mod
+	cat bot.mod >> t.mod
+echo $MOD ; tail -5 t.mod
+cp t.mod model.${MOD}
+
+surf96 39
+surf96 35 2
+tsurf96 1 2 > ${MOD}.OUT
+tsurf96 17 12 >> ${MOD}.OUT
+surf96 39
+done
+
+#####
+#    get the partials for the initial model
+#####
+
+cat top.mod 0.mod bot.mod > t.mod
+surf96 39
+surf96 35 2
+surf96 1 2
+echo GAMMA
+surf96 12 11  
+echo VELOCITY
+surf96 17 16
+
+#####
+#   plot the parameters
+#####
+
+#shwmod96 -S  -VMIN 2 -VMAX 5 -LEGIN -K -1 model.? > /dev/null ; mv SHWMOD96.PLT S.PLT
+#shwmod96 -P  -VMIN 3 -VMAX 9 -LEGIN -K -1 model.? > /dev/null ; mv SHWMOD96.PLT P.PLT
+#shwmod96 -QP -VMIN 0 -VMAX 0.01 -LEGIN -K -1 model.? > /dev/null ; mv SHWMOD96.PLT QP.PLT
+#shwmod96 -QS -VMIN 0 -VMAX 0.01 -LEGIN -K -1 model.? > /dev/null ; mv SHWMOD96.PLT QS.PLT
+#
+srfker96 >> srfker96.txt
+surf96 39

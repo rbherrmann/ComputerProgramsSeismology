@@ -1,0 +1,85 @@
+#!/bin/sh
+DEST=../FINAL
+FHIGH=0.005
+
+#####
+#	script for processing IRIS Digital Data
+#####
+
+if [ -d  ${DEST} ]
+then
+	echo ${DEST} exists
+else
+	mkdir ${DEST}
+fi
+
+if [ -d TEMP ]
+then
+	echo TEMP exists
+else
+	mkdir TEMP
+fi
+
+
+for i in *.sac
+do
+
+gsac > /dev/null 2>&1 << EOF
+r $i
+rtr
+hp c ${FHIGH} np 2
+w TEMP/$i
+quit
+EOF
+done
+
+
+cd TEMP
+for i in *BHZ.sac
+do
+if [ -f $i ] 
+then
+echo $i
+
+KSTNM=`saclhdr -KSTNM $i`
+gsac > /dev/null 2>&1 << EOF
+r ${KSTNM}BH*.sac 
+rotate3 to gc
+w 
+quit
+EOF
+rm ${KSTNM}BH?.sac
+mv ${KSTNM}BH* ../${DEST}
+else
+	echo $i does not exist
+fi
+done
+
+for i in *HHZ.sac
+do
+echo $i
+if [ -f $i ]
+then
+
+KSTNM=`saclhdr -KSTNM $i`
+echo $KSTNM
+#gsac > /dev/null 2>&1 << EOF
+gsac  << EOF
+ls
+r ${KSTNM}HH?.sac 
+rot3 to gc
+w 
+EOF
+rm ${KSTNM}HH?.sac
+mv ${KSTNM}HH* ../${DEST}
+else
+	echo $i does not exist
+fi
+done
+
+
+cd ..
+
+
+
+#SCRIPT FOR IRIS DATA

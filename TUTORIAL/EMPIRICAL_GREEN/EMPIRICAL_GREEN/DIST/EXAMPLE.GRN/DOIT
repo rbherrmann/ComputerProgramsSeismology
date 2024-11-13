@@ -1,0 +1,124 @@
+#!/bin/bash
+
+#####
+#   maek synthetic seismographs for a point force to
+#   emulate the interstation Greens functions
+#####
+
+#####
+#   compute the eigenfunctions
+#####
+
+
+DT=0.25
+NPTS=2048
+DIST=1000.
+cat > dfile << EOF
+${DIST} ${DT} ${NPTS} 0.0 0.0
+EOF
+sprep96 -d dfile -R -L -M CUS.mod -HS 0.01 -HR 0.0 -NMOD 1
+sdisp96
+sregn96
+slegn96
+
+
+
+#####
+#    compute Z N E synthetics for a source at (-200,0) and
+#    a receiver at (200,0)
+#####
+XS=-200
+YS=0
+EVLA=`echo $YS | awk '{print $1/111.195}' `
+EVLO=`echo $XS | awk '{print $1/111.195}' `
+
+P1X=-200.0
+P1Y=0.0
+P2X=200.0
+P2Y=0.0
+STLA2=`echo $P2Y | awk '{print $1/111.195}' `
+STLO2=`echo $P2X | awk '{print $1/111.195}' `
+DIST2=`udelaz -DIST -EVLA $EVLA -EVLO $EVLO -STLA $STLA2 -STLO $STLO2`
+AZ2=`  udelaz -AZ   -EVLA $EVLA -EVLO $EVLO -STLA $STLA2 -STLO $STLO2`
+BAZ2=` udelaz -BAZ  -EVLA $EVLA -EVLO $EVLO -STLA $STLA2 -STLO $STLO2`
+
+cat > dfile << EOF
+${DIST2} ${DT} ${NPTS} 0.0 0.0
+EOF
+
+
+
+
+#####
+#    compute the Greens functions
+#####
+spulse96 -Z -p -V -l 2 -d dfile -ALL | f96tosac -G 
+
+#####
+#    make the synthetics
+#    Use *.ZEX as a guid to the file name
+#####
+F=`ls *.ZEX`
+B=`basename $F .ZEX`
+
+#####
+#    make 3 component synthetics for a vertical upward force
+#    and the integrate and multiply by -1
+#####
+FD=-1.0
+FN=0
+FE=0
+gsac << FOE
+mt to ZNE AZ ${AZ2} BAZ ${BAZ2} FN $FN FE $FE FD $FD FILE $B
+ch EVLA $EVLA EVLO $EVLO STLA $STLA2 STLO $STLO2
+int
+mul -1
+w
+mv T.Z Z1Z2
+mv T.N Z1N2
+mv T.E Z1E2
+q
+FOE
+
+
+#####
+#    make 3 component synthetics for a force oriented
+#    in the N direction
+#    and the integrate and multiply by -1
+#####
+FD=0
+FN=1
+FE=0
+gsac << FOE
+mt to ZNE AZ ${AZ2} BAZ ${BAZ2} FN $FN FE $FE FD $FD FILE $B
+ch EVLA $EVLA EVLO $EVLO STLA $STLA2 STLO $STLO2
+int
+mul -1
+w
+mv T.Z N1Z2
+mv T.N N1N2
+mv T.E N1E2
+q
+FOE
+
+#####
+#    make 3 component synthetics for a force oriented
+#    in the E direction
+#    and the integrate and multiply by -1
+#####
+FD=0
+FN=0
+FE=1
+gsac << FOE
+mt to ZNE AZ ${AZ2} BAZ ${BAZ2} FN $FN FE $FE FD $FD FILE $B
+ch EVLA $EVLA EVLO $EVLO STLA $STLA2 STLO $STLO2
+int
+mul -1
+w
+mv T.Z E1Z2
+mv T.N E1N2
+mv T.E E1E2
+q
+FOE
+
+

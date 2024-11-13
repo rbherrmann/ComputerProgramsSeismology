@@ -1,0 +1,276 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="20060622;8503300">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8552700">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<H1>Shear-Wave Velocities from the Cross-Correlation of Ground Noise
+in the South of Spain</H1>
+<P><BR><BR>
+</P>
+<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Introduction</FONT></FONT></P>
+<P>This note describes the initial results of applying the technique
+of cross-correlation of ground noise to obtain inter-station Green's
+functions between broadband stations run by IAG of the University of
+Granada. Software and data processing scripts will be presented.</P>
+<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Data
+Set</FONT></FONT></P>
+<P>The evaluation data set consisted of 30 days of data from three
+broadband stations (ACLR, ASCB and VELZ). The station coordinates and
+a plot of locations are as follow:</P>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=4 CELLSPACING=3>
+	<COL WIDTH=85*>
+	<COL WIDTH=85*>
+	<COL WIDTH=85*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=33%>
+				<P ALIGN=CENTER>Station</P>
+			</TH>
+			<TH WIDTH=33%>
+				<P ALIGN=CENTER>Latitude</P>
+			</TH>
+			<TH WIDTH=33%>
+				<P ALIGN=CENTER>Longitude</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>ASCB</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>37.0394</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>-2.0057</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>ACLR</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>37.1897</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>-2.5822</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>VELZ</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>37.5838</P>
+			</TD>
+			<TD WIDTH=33%>
+				<P ALIGN=CENTER>-1.9880</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=CENTER><IMG SRC="map.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=462 HEIGHT=557 BORDER=0></P>
+<P>The interstation distances are ACLR-ASCB 54 km, ACLR-VELZ 68 km,
+and ASCB-VELZ 60 km</P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Data
+Preparation</FONT></FONT></P>
+<P>The data were in SEISAN binary format. Since the <I>sacsei</I> did
+not work properly under LINUX, I used the <I>seiasc</I> pre-compiled
+for LINUX to create and ASCII SEISAN file, which was then converted
+to SAC binary using the attached program <I>seiascsacbin </I>( g77
+seiascsacbin.f -o seiascsacbin) [<A HREF="seiascsacbin.f">seiascsacbin.f</A>]
+</P>
+<P>Before discussing the preparation and processing, the directory
+organization in important: 
+</P>
+<PRE>/rrd0/home/rbh/DATA/FLOR/----
+                            |
+                            |----2005/--
+                            |          |-----305/
+                            |          ...
+                            |          |-----317/
+                            |          |       |---ACLRBHE  ACLRBHN  ACLRBHZ  ASCBBHE  ASCBBHN  ASCBBHZ  VELZBHE  VELZBHN  VELZBHZ
+                            |          ...
+                            |          |-----334/
+                            |
+                            |----WORK/
+                            |      |--DOIT seiasc* seiascsacbin* seiascsacbin.f
+                            |
+                            |----TEMP/
+                            |
+                            |----NOISE/
+                            |      |-----DOCORRBH ACLRBHTVELZBHT.WSTK
+                            |
+                            |----RAW/
+                            |      |----ACLR/
+                            |      |       |----2005-11-30-2329-42S.CLR___003 2005-11-30-2359-42S.CLR___003
+                            |      |----ASCB/
+                            |      |----VELZ
+                            |
+                            |-----MFT/</PRE><P>
+<I>RAW</I> contains the SEISAN files from the the stations. These
+were organized by station into subdirectories, and the station day
+was split into 30 minute chunks</P>
+<P>The first tack was to convert these into binary SAC day files.
+This is done by the shell SCRIPT <A HREF="DOIT">DOIT</A>. This script
+is annotated. Basically for each station, for each day, for each 30
+minute segment, convert to SAC, reset the SAC header values, insert
+the station coordinates, insert the station component orientation,
+resample to 0.05 sec (the high frequencies will not be needed at
+these interstation distances, and bu making the trace files smaller,
+the size of the Fast Fourier Transforms used, is significantly
+reduced. Then save the trace day file in the directory organization
+required by the noise correlation script. Thus for station ACLR, Z
+component for November 1, 2005, the day trace ACLRBHZ is placed in
+the subdirectory 2005/305 
+</P>
+<P>This conversion to SAC took a lot of time. Mostly because I did
+this on my RAID, so that there was a lot of overhead. 
+</P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Noise
+Cross-correlation</FONT></FONT></P>
+<P>This was run from the script in the <I>NOISE</I> directory. The
+processing script is called <A HREF="DOCORRBH">DOCORRBH</A>. This
+script is also heavily commented. If you keep the naming convention
+used here, you only have to change the shell variables in the first
+49 lines, and also the <I>for STA1 in </I>and <I>case ${STA1}</I>
+statements starting at line 356 
+</P>
+<P>This script will cross-correlate one-hour segments of the data
+set. As written, it will save a window of -600 to 600 seconds of the
+one-hour cross-correlation. Recall that the inter-station Green's
+function will be dominated by the surface-wave pulse, that we are
+interested in regional wave propagation. Thus this window should be
+wide enough to contain the Green's function out to distances of 1500
+km station separation (assuming a 2.5 km/s propagation speed). 
+</P>
+<P>Next frequency limits are defined, here a passband of 0.02 - 5.0
+Hz. The 0.02 Hz is probably the lowest frequency that could be
+resolved at regional distances. The 5.0 Hz reflects that fact that
+the Nyquist frequency is 10 Hz for a sampling interval of 0.05 s. 
+</P>
+<P>A high pass corner at 100 sec, is used for stability 
+</P>
+<P>The variable <I>BASE</I> states the location of the parent
+directory containing the data, e.g., the <I>FLOR</I> above. The <I>TEMP</I>
+is created by the script, and all temporary processing is done there.
+The final results are then copied to the directory from which the
+<I>DOCORRBH</I> was run.</P>
+<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Greens
+functions and group velocities</FONT></FONT></P>
+<P>The following <I>gsac</I> commands were run from within the DOC
+directory to plot the results 
+</P>
+<PRE>GSAC - Computer Programs in Seismology [V1.1 10 JAN 2005]
+       Copyright 2004, 2005, 2006 R. B. Herrmann
+GSAC&gt; r ../NOISE/*Z.WSTK
+../NOISE/ACLRBHZASCBBHZ.WSTK ../NOISE/ACLRBHZVELZBHZ.WSTK ../NOISE/ASCBBHZVELZBHZ.WSTK
+GSAC&gt; sort dist
+Sorting on DIST in ascending order
+GSAC&gt; rtr
+GSAC&gt; bp c 0.05 2 n 2 p 2
+BP: corners fl 0.050000 fh 2.000000 npoles 2 pass 2 Butterworth
+GSAC&gt; xlim o o 50
+GSAC&gt; markt on
+GSAC&gt; fileid name
+GSAC&gt; p</PRE><P>
+The result is 
+<IMG SRC="P001.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=606 HEIGHT=468 BORDER=0>
+</P>
+<P>Group velocity analysis was performed using <I>do_mft -G
+../NOISE/*.WSTK</I>. Group velocity analysis is tricky. We must be
+very careful in the choice the the filter ALPHA parameter (here I use
+12.5 for these short distances. We must also know what to select.
+This is not easy because there is noise in the Green's functions. In
+a Korea study, we found that we could only believe the 1 - 3 second
+periods at a distance of 20 km, but that at larger distances we could
+believe the dispersion from 1 - 20 seconds. This resolution test can
+be done by using synthetics for surface motions due to a point force
+acting at the surface for a reasonable model for the region. 
+</P>
+<P>I found good dispersion for all paths. Examples of the MFT graphs
+are 
+</P>
+<P><A HREF="ACLRBHRVELZBHR.png">ACLRBHRVELZBHR.png</A> 
+</P>
+<P><A HREF="ACLRBHTVELZBHT.png">ACLRBHTVELZBHT.png</A> 
+</P>
+<P><A HREF="ACLRBHZVELZBHZ.png">ACLRBBHZVELZBHZ.png</A> 
+</P>
+<P><A HREF="ASCBBHRVELZBHR.png">ASCBBHRVELZBHR.png</A> 
+</P>
+<P><A HREF="ASCBBHTVELZBHT.png">ASCBBHTVELZBHT.png</A> 
+</P>
+<P><A HREF="ASCBBHZVELZBHZ.png">ASCBBHZVELZBHZ.png</A> 
+</P>
+<P><A HREF="ACLRBHRASCBBHR.png">ACLRBHRASCBBHR.png</A> 
+</P>
+<P><A HREF="ACLRBHTASCBBHT.png">ACLRBHTASCBBHT.png</A> 
+</P>
+<P><A HREF="ACLRBHZASCBBHZ.png">ACLRBHZASCBBHZ.png</A> 
+</P>
+<P>The following table presents the Love and Rayleigh group velocity
+dispersion from these files. 
+</P>
+<TABLE CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P><IMG SRC="sldspu.png" NAME="graphics3" ALIGN=BOTTOM WIDTH=509 HEIGHT=479 BORDER=0></P>
+			<P ALIGN=CENTER>Love wave group velocities</P>
+		</TD>
+		<TD>
+			<P><IMG SRC="srdspu.png" NAME="graphics4" ALIGN=BOTTOM WIDTH=509 HEIGHT=479 BORDER=0></P>
+			<P ALIGN=CENTER>Rayleigh wave group velocities</P>
+		</TD>
+	</TR>
+</TABLE>
+<P>The <I>surf96</I> combined dispersion file is <BR><A HREF="surf.disp">surf.disp</A>
+Cross-correlation of ground noise will work for southern Spain. The
+cross-correlations may improve if we add another 30 days of data to
+the processing 
+</P>
+<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Stacked
+waveforms</FONT></FONT></P>
+<P>The following are the SAC binary files of the stacked waveforms.
+The SAC header value IHDR11 shows the number of traces that were
+stacked to create this result. Note that since we stack the day
+crosscorrealtion and the reversed day cross-correlation, the numebr
+of days actually stacked in IHDR11/2 
+</P>
+<P>Since these are in INTEL, format, the safest thing to do before
+looking at them is to use the <I>saccvt</I> routine of Computer
+Programs in Seismology 3.30 in a shell script as follows 
+</P>
+<PRE>for i in *.WSTK
+do
+        saccvt -I &lt; $i &gt; tmp
+        mv tmp $i
+done</PRE><P>
+You can safely use these SAC files on your computer. 
+</P>
+<P>The files are 
+</P>
+<P><BR><A HREF="ACLRBHRASCBBHR.WSTK">ACLRBHRASCBBHR.WSTK</A>
+<BR><A HREF="ACLRBHRVELZBHR.WSTK">ACLRBHRVELZBHR.WSTK</A>
+<BR><A HREF="ACLRBHTASCBBHT.WSTK">ACLRBHTASCBBHT.WSTK</A>
+<BR><A HREF="ACLRBHTVELZBHT.WSTK">ACLRBHTVELZBHT.WSTK</A>
+<BR><A HREF="ACLRBHZASCBBHZ.WSTK">ACLRBHZASCBBHZ.WSTK</A>
+<BR><A HREF="ACLRBHZVELZBHZ.WSTK">ACLRBHZVELZBHZ.WSTK</A>
+<BR><A HREF="ASCBBHRVELZBHR.WSTK">ASCBBHRVELZBHR.WSTK</A>
+<BR><A HREF="ASCBBHTVELZBHT.WSTK">ASCBBHTVELZBHT.WSTK</A>
+<BR><A HREF="ASCBBHZVELZBHZ.WSTK">ASCBBHZVELZBHZ.WSTK</A> 
+</P>
+<H1></H1>
+</BODY>
+</HTML>

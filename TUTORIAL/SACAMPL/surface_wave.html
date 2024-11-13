@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>sacrmsl</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body>
+  <h2>Introduction</h2>
+<p>
+A paper by Bowden and Tsai (2017) discussed ground motion amplification for surface waves. They considered a
+horizontally propagating surface wave in a uniform medium and also the same surface wave impinging on a basin. The
+amplitude of the surface wave in the basin with respect to the incident signal was given a simple relation
+in terms of the eigenfunctions of the two models, as
+<br> A/A_{ref} = (UIx/Ux_{ref}) sqrt [( c_ref A_0^{ref})/(c A_0 )]
+<br>
+which is given by Keilis-Borok et al (1989). The <i>x</i> takes on R, T or Z to represent the surface motion of the CPS
+UR, UT or UZ eigenfunctions.
+</p>
+<p>
+<pre>
+Bowden, D. C., and V. C. Tsai (2017), Earthquake ground motion amplification 
+   for surface waves, Geophys. Res.  Lett., 44, 121–127, doi:10.1002/ 2016GL071885.
+Keilis-Borok, V. I. (1989). Seismic surface waves in a laterally inhomogeneous Earth, 
+   ed. V. I., Borok, Kluwer Academic Publishers, Dordrecht.
+</pre>
+</p>
+<h2>Computations</h2>
+The shell script <a href="SW/DOIT">SW/DOIT</a> calls <a href="SW/DOMH">SW/DOMH</a> to evaluate this formula. The resulting figure is
+<br>
+<table>
+<tr><td><img src="SW/ABSAMP.png"></td></tr>
+</table>
+  </body>
+</html>

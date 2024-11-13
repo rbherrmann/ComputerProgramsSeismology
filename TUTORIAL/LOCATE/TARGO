@@ -1,0 +1,13 @@
+#!/bin/sh
+tar cf - DAT/*SAC | gzip -c > event.tgz
+
+cd ..
+tar cf - LOCATE/index.html \
+	LOCATE/event.tgz \
+	LOCATE/elocate.txt \
+	LOCATE/elocate.dat \
+	LOCATE/Fig01.png \
+	LOCATE/Fig02.png \
+	LOCATE/Fig03.png \
+	LOCATE/Fig04.png \
+	LOCATE/slufm.png | gzip -c > LOCATE.tgz

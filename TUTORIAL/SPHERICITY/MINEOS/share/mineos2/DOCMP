@@ -1,0 +1,119 @@
+#!/bin/sh
+
+FL0=0.002
+FL1=0.003
+FH1=0.05
+FH0=0.10
+
+
+if [ $# != 3 ]
+then
+	echo Usage: $0 DEPTH GCARC MECH
+	echo '      where '
+	echo '      DEPTH is one of 010 100 700 '
+	echo '      GCARC is one of 030 060 090 '
+	echo '      MECH is one of SS DS DD '
+	exit  0
+fi
+
+HS=$1
+ARC=$2
+MECH=$3
+
+case $HS in
+	010) DEPTH=" 10.0000";;
+	100) DEPTH="100.0000";;
+	700) DEPTH="700.0000";;
+	*)         echo Usage: $0 DEPTH GCARC MECH
+        echo '      where '
+        echo '      DEPTH is one of 010 100 700 '
+        echo '      GCARC is one of 010 030 060 090 '
+        echo '      MECH is one of SS DS DD EX '
+        exit  0 ;;
+
+esac
+
+#####
+#       for each of the GREEN function directories
+#       compute the synthetic
+#####
+
+if [ ! -d TEMP${MECH} ]
+then
+        mkdir TEMP${MECH}
+fi
+
+rm -f TEMP${MECH}/*
+	
+#####
+#	go to the TEST.???.??? directory
+#####
+
+
+
+
+
+
+cd TEMP${MECH}
+
+cp ../${MECH}*/*LH[ZRT] .
+pwd
+B=`saclhdr -B D.-Z.LHZ`
+E=`saclhdr -E D.-Z.LHZ`
+echo $MECH $B $E
+gsac << EOF
+cut o $B o $E
+r *LHZ *LHR *LHT
+rtr
+transfer from none to none freqlimits $FL0 $FL1 $FH1 $FH0
+int 
+rtr
+w
+quit
+EOF
+
+rm -f *.PLT
+
+for GREEN in NEW-Z 
+do
+case $GREEN in
+	NEW-Z) POW="D.-Z" ; KOLOR=1000 ;;
+esac
+DONDDIFF LHZ ${POW}.LHZ $KOLOR
+mv CMPSAC.PLT ${POW}.Z.PLT
+DONDDIFF LHR ${POW}.LHR $KOLOR
+mv CMPSAC.PLT ${POW}.R.PLT
+DONDDIFF LHT ${POW}.LHT $KOLOR
+mv CMPSAC.PLT ${POW}.T.PLT
+done
+
+#####
+#	now make a final graphic
+#####
+
+cat *T.PLT | plotgif -K -C16 -F7 -W10 -EPS -K >  ${HS}.${ARC}.${MECH}.T.gif
+cat *Z.PLT | plotgif -K -C16 -F7 -W10 -EPS -K >  ${HS}.${ARC}.${MECH}.Z.gif
+cat *R.PLT | plotgif -K -C16 -F7 -W10 -EPS -K >  ${HS}.${ARC}.${MECH}.R.gif
+
+rm -fr *PLT
+for GREEN in NEW-Z 
+do
+case $GREEN in
+	NEW-Z) POW="D.-Z" ; KOLOR=1000 ;;
+esac
+DONNDDIFF LHZ ${POW}.LHZ $KOLOR
+mv CMPSAC.PLT ${POW}.Z.PLT
+DONNDDIFF LHR ${POW}.LHR $KOLOR
+mv CMPSAC.PLT ${POW}.R.PLT
+DONNDDIFF LHT ${POW}.LHT $KOLOR
+mv CMPSAC.PLT ${POW}.T.PLT
+done
+
+#####
+#	now make a final graphic
+#####
+
+cat *T.PLT | plotgif -K -C16 -F7 -W10 -EPS -K >  ${HS}.${ARC}.${MECH}.TL.gif
+cat *Z.PLT | plotgif -K -C16 -F7 -W10 -EPS -K >  ${HS}.${ARC}.${MECH}.ZL.gif
+cat *R.PLT | plotgif -K -C16 -F7 -W10 -EPS -K >  ${HS}.${ARC}.${MECH}.RL.gif
+rm -fr *PLT

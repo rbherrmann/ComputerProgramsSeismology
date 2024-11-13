@@ -1,0 +1,78 @@
+#!/bin/sh
+
+#####
+#	script for processing IRIS Digital Data
+#####
+YEAR=2002
+YR=02
+MO=06
+DY=18
+HR=17
+MN=37
+SEC=16
+MSEC=000
+LAT=37.97
+LON=-87.79
+DEP=5.0
+MAG=4.9
+NAME=Evansville
+
+
+#####
+#	No changes below here
+#####
+
+if [ -d ../GOOD ]
+then
+	echo GOOD exists
+else
+	mkdir ../GOOD
+fi
+
+
+
+for i in *.SAC
+do
+rm -f AMP* PHASE*
+NET=`saclhdr -KNETWK $i`
+LOC=`saclhdr -KHOLE $i`
+if [  ${LOC} ]
+then
+	if [ ${LOC} = "-12345" ]
+	then
+		LOC=""
+	fi
+fi
+KSTNM=`saclhdr -KSTNM $i`
+KCMPNM=`saclhdr -KCMPNM $i`
+DELTA=`saclhdr -DELTA $i`
+DOY=`saclhdr -NZJDAY $i`
+echo RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp
+cp RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp
+evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} 0.01 50.0 1000 -u 'vel' -f resp
+mv AMP* afile
+mv PHASE* pfile
+#####
+#	set upper limits for deconvolution
+#	according to sampling interval
+#####
+F4=`echo $DELTA | awk '{print 1.0/($1 * 4.0)}'`
+F3=`echo $DELTA | awk '{print 1.0/($1 * 8.0)}'`
+echo $KSTNM $KCMPNM $F3 $F4
+
+gsac << EOF
+r $i
+ch EVLA $LAT EVLO $LON EVDP $DEP
+ch OGMT $YEAR $DOY $HR $MN $SEC $MSEC
+ch lovrok true
+ch lcalda true
+wh
+rtr
+w ../GOOD/${KSTNM}${KCMPNM}.S
+transfer from eval subtype  afile pfile TO NONE FREQLIMITS 0.005 0.01 ${F3} ${F4}
+w ../GOOD/${KSTNM}${KCMPNM}.sac
+quit
+EOF
+
+done
+

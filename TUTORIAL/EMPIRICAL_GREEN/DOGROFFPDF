@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for BASE in MFT
+do
+groff -ms -te -P-pletter ${BASE}.trf > ${BASE}.ps
+ps2pdf -sPAPERSIZE=letter ${BASE}.ps
+
+done

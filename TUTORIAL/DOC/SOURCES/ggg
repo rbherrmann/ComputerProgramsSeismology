@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+
+# Run the command into Ps
+# Run gv with the -watch option
+# go into a loop watching the file and rerun command whenever the file
+# has changed.
+
+use POSIX ":sys_wait_h";
+
+$usage = "usage: $0 comand -args -args filename\n as in\n   g groff -mgs -s -p -t mypaper.ms\n";
+
+die $usage unless -f $ARGV[$#ARGV];
+#####
+#$file = $ARGV[$#ARGV];
+# pop the file off the array, leaving rest of command clean
+#####
+$file = pop(@ARGV);
+$cmd = "@ARGV > /dev/null";
+print"Command is: $cmd\n" ;
+print"Watch file: $file\n" ;
+$gv = "gv -spartan -antialias main.ps";
+
+system $cmd;
+$pid = fork;
+if ($pid == 0) {
+        exec $gv;
+        die $gv;
+}
+$stat{$file} = (stat($file))[9];
+open(F, $file);
+while (<F>) {
+        next unless /^\.so\s+(.*)\s*$/;
+        $stat{$1} = (stat($1))[9];
+}
+close(F);
+while (1) {
+        select(undef, undef, undef, .2);
+        $kid = waitpid($pid,&WNOHANG);
+        exit 0 if (kill(0, $pid) != 1);
+        $doit = 0;
+        foreach $f (keys %stat) {
+                if ($stat{$f} != (stat($f))[9]) {
+                        $stat{$f} = (stat($f))[9];
+                        $doit = 1;
+                }
+        }
+        if ($doit) {
+                system $cmd;
+                kill(1, $pid);
+        }
+}

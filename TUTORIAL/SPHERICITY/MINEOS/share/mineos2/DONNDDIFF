@@ -1,0 +1,26 @@
+#!/bin/sh
+
+FILE1=$1
+FILE2=$2
+KOLOR=$3
+gsac << EOF
+r $FILE1 $FILE2
+hp c 0.002 n 2
+lp c 0.005 n 2
+w 1.sac 2.sac
+r 1.sac 2.sac
+subf
+w 1m1.sac 1m2.sac
+r 1.sac 2.sac 1m2.sac
+pctl ylen 3.0
+ylim all
+bg plt
+fileid name
+color list red
+ygrid on minor off color 1050 dotted
+p
+mv P001.PLT CMPSAC.PLT
+quit
+EOF
+
+rm 1.sac 2.sac 1m1.sac 1m2.sac

@@ -1,0 +1,201 @@
+#!/bin/sh
+#TOP="/home/rbh/mnwdir"
+TOP=""
+
+
+#####
+#	SLUQuery - get waveforms from local storage and
+#	return as sac files
+#
+#	Created: 24 FEB 1010
+#	Changes:
+#
+#	SLUQuery -b 2010/02/07-12:00:00 -d 3600 -s NM.....BH...
+#	SLUQuery -b 2010/38-12:00:00 -d 3600 -s .......BH...
+#
+#####
+
+#####
+#	define the master list of all data 
+#####
+
+MASTERLIST="/home/rbh/PROGRAMS.310t/NETWORK/TESTSLU/list"
+
+function usage {
+	echo "Usage: SLUQuery SLUQuery -b DATETIME  -d duration  -s NNSSSSSCCCLL"
+	echo "     where"
+	echo "  DATETIME is the time of the first sample in the form"
+	echo "          2010/02/07-12:00:00"
+	echo "       or"
+	echo "          2010,38-12:00:00"
+	echo ""
+	echo "  duration is the number of seconds of trace desired"
+	echo ""
+	echo "  NNSSSSSCCCLLL   is a pattern to search data entries"
+	echo "        Note a '.' matched any character"
+	echo "        (Note CWBQuery permits more expressions and regexp"
+	exit 1
+}
+
+
+function setdate {
+	if [ $# -eq 6 ]
+	then
+		YMD="YES"
+		YYYY="$1"
+		MO="$2"
+		DD="$3"
+		HH="$4"
+		MN="$5"
+		SS="$6"
+	else
+		YMD="NO"
+		YYYY="$1"
+		DOY="` echo $2 | awk '{printf "%3.3d", $1}' `"
+		HH="$3"
+		MN="$4"
+		SS="$5"
+	fi
+}
+
+
+
+
+if [ $# -eq 0 ]
+then
+	usage
+fi
+
+#####
+#	defaults
+#####
+verbose="YES"
+fillvalue="0"
+while getopts qb:d:s:t:o:f: input
+do
+	case ${input} in
+		d) duration="$OPTARG" ;;
+		b) begin="$OPTARG" ;;
+		s) pattern="$OPTARG" ;;
+		t) output_type="$OPTARG" ;;
+		o) output_mask="$OPTARG" ;;
+		q) verbose="NO" ;;   
+		f) fillvalue="$OPTARG" ;;
+		h|'?') usage;;
+	esac
+
+done
+
+#####
+#	NOTE - output type is always sac
+#	       output mask is always that defined rdseed?
+#####
+output_type=sac
+
+
+#####
+#	now determine the time 
+#####
+DATETIME=`echo $begin | sed -e 's/-/ /;s/:/ /g;s:/: :g' `
+
+setdate ${DATETIME}
+ 
+if [ ${YMD} = "YES" ]
+then 
+	DOY=`date --date="${YYYY}/${MO}/${DD} ${HH}:${MN}:${SS}" +%j `
+	echo Processing begin at YMDHMS: $YYYY $MO $DD \(${DOY}\) $HH $MN $SS
+	
+else
+	echo Processing begin at YDHMS: $YYYY $DOY  $HH $MN $SS
+fi
+
+echo ""
+echo Trying to get the following data
+echo ""
+
+#####
+#	find all pattern matchs in the MASTERLIST that match the pattern
+#####
+for PATTERN in `grep $pattern $MASTERLIST`
+do
+	NET="`expr substr $PATTERN 1 2  | sed -e 's/\./ /g;s/ //g' `"
+	STA="`expr substr $PATTERN 3 5  | sed -e 's/\./ /g;s/ //g' `"
+	CMP="`expr substr $PATTERN 8 3  | sed -e 's/\./ /g;s/ //g' `"
+	LOC="`expr substr $PATTERN 11 2 | sed -e 's/\./ /g;s/ //g' `"
+	echo $NET $STA $CMP $LOC $YYYY $DOY  $HH $MN $SS $duration
+#####
+#	SPECIAL HACK
+#####
+case "${STA}.${LOC}" in
+	SLM.|FVM.|PVMO.)
+		ls ${TOP}/net/wiggles/cnmsn/${STA}/${CMP}.D/* \
+		| grep ${STA}.${NET}.${CMP}.D.${YYYY}.${DOY} > j
+	SEEDFILE=`cat j`
+DATALESS="${TOP}/net/wiggles/irisdata1/seedcalibration/NM.${STA}/out.seed"
+	;;
+	SLM.00|UTMT.01)
+		ls ${TOP}/net/wiggles/cnmsn/seiscomp/acquisition/archive/${STA}/${LOC}.${CMP}.D/* \
+		| grep ${STA}.${NET}.${LOC}.${CMP}.D.${YYYY}.${DOY} > j
+SEEDFILE=`cat j`
+DATALESS="${TOP}/net/wiggles/irisdata1/seedcalibration/NM.${STA}.${LOC}/out.seed"
+	;;
+	*)
+		ls ${TOP}/net/wiggles/cnmsn/seiscomp/acquisition/archive/${STA}/${CMP}.D/* \
+		| grep ${STA}.${NET}.${CMP}.D.${YYYY}.${DOY} > j
+SEEDFILE=`cat j`
+DATALESS="${TOP}/net/wiggles/irisdata1/seedcalibration/NM.${STA}/out.seed"
+esac
+
+
+echo SEEDFILE
+ls -l $SEEDFILE
+echo DATALESS
+ls -l $DATALESS
+
+
+#####
+#	only process iff the file j exists and is a non zero length
+#####
+
+if [ -s j ]
+then
+if [ ! -z "${SEEDFILE}" ]
+then
+#####
+#	HACK
+#####
+
+FROM=${YYYY}.${DOY},${HH}:${MN}:${SS}
+#####
+#	qmerge:
+#	#####-T Exact trim -- trim data to closest specified time.
+#	   Default is to trim to nearest inclusive block boundary.
+#      -f date	    From date - ignore data before this date.
+#      -t date	    To date - ignore data from this date on.
+#		yyyy/mm/dd/hh:mm:ss.ffff
+#		yyyy/mm/dd.hh:mm:ss.ffff
+#		yyyy/mm/dd,hh:mm:ss.ffff
+#		yyyy.ddd,hh:mm:ss.ffff
+#		yyyy,ddd,hh:mm:ss.ffff
+#	-s interval span interval.  Alternate way of specifying end time.
+#	   Interval can be an integer followed immediately by
+#	   S, M, H, or d for seconds, minutes, hours, or days.
+#
+#####
+cat ${SEEDFILE} | qmerge -T -f ${FROM} -s ${duration} > t.mseed
+rdseed -f t.mseed -g ${DATALESS} -R -d -o 1 > rdseed.out 2>&1
+#####
+#	cleanup
+#	note that SEEDFILE is a masterfile that CANNOT be erased
+#####
+	rm -fr t.mseed 
+
+	fi
+fi
+
+	rm -f j
+done  
+#####
+#	end PATTERN loop
+#####
+

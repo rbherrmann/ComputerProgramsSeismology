@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=ISO-8859-1">
+    <title>Computer Programs in Seismology - Installation</title>
+  </head>
+  <body>
+    <h2>Cygwin</h2>
+    This is for Windows
+    <h3>Download</h3>
+    <ul>
+      <li> Go to <a href="www.cygwin.com">http://www.cygwin.com</a>. </li>
+      <li> Download <a href="www.cygwin.com/setup.exe"> setup.exe</a></li>
+      Install Cygwin On your computer click on the setup.exe. The
+      following menus show the sequence for Cygwin 1.7.11-1
+      <p>
+        <table>
+          <tbody>
+            <tr>
+              <td> <img src="Screenshot-1.png"><br>
+                Figure 1. Initial screen after starting setup.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-2.png"><br>
+                Figure 2. There are several choices. Download and
+                install, download, or install from an earlier download.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-3.png"><br>
+                Figure 3. Here one indicates where the final Cygwin will
+                be installed.&nbsp; Make sure that you have about 10-20
+                Gb<br>
+                of space available.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-4.png"><br>
+                Figure 4. This indicates the location of the downloaded
+                distribution.&nbsp; The Setup package will refer to this
+                location when <br>
+                updating.&nbsp; This can also be put on a distribution
+                disk to build Cygwin on other machines.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-5.png"><br>
+                Figure 5. the default values are good if you do not have
+                to worry about a firewall.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-6.png"><br>
+                Figure 6.Select one site that is close to your location.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-7.png"><br>
+                Figure 7. This shows all package categories for
+                software.&nbsp; By clicking on the <span
+                  style="font-style: italic;">Default</span> you can <span
+                  style="font-style: italic;">Install</span> everything,
+                <br>
+                or uninstall.&nbsp; <br>
+                <br>
+                By clicking on the + the category opens so that you can
+                view the packages in that category.<br>
+                <br>
+                <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <img src="Screenshot-8.png"><br>
+                Figure 8. For each entry <span style="font-style:
+                  italic;">Skip</span> means not to install the software
+                package. Other options are to remove, re-install or use
+                <br>
+                another version.<br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </p>
+      <p> To compile and use the Computer Programs in Seismology
+        package, install the following packages:<br>
+      </p>
+      <p><br>
+      </p>
+      <center>
+        <table>
+          <tbody>
+            <tr>
+              <td>Archive</td>
+              <td>zip</td>
+              <td>Programs to create ZIP archives</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>unzip</td>
+              <td>Programs to unpack ZIP archives</td>
+            </tr>
+            <tr>
+              <td>Devel </td>
+              <td>gcc4</td>
+              <td>gcc Versionb 4 compilers</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>gcc4-core</td>
+              <td> <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>gcc4-gfortran</td>
+              <td>Forrtran 95/77 compiler</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>gdb</td>
+              <td>GNU debugger</td>
+            </tr>
+            <tr>
+              <td>Editors </td>
+              <td>ed</td>
+              <td>Line editor which is useful in shells cripts</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>gvim</td>
+              <td>GUI based editor</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>vim</td>
+              <td>VI editor</td>
+            </tr>
+            <tr>
+              <td>Graphics </td>
+              <td>GraphicsMagick</td>
+              <td>Package for converting graphics files.
+                <p>Used to convert EPS to PNG, e.g., gm convert -trim
+                  t.eps t.png</p>
+              </td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>ImageMagick</td>
+              <td>Package for converting graphics files.
+                <p>Used to convert EPS to PNG, e.g., convert -trim t.eps
+                  t.png This package has a default behavior of a
+                  transparent background.</p>
+              </td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>epstool</td>
+              <td>Tool for manipulating EPS files</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>ghostscript</td>
+              <td>Display and convert PostScript files</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>ghostscript-fonts-std</td>
+              <td> <br>
+              </td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>gv</td>
+              <td>PostScript or PDF viewer. You can also use display or
+                gm display for single pages</td>
+            </tr>
+            <tr>
+              <td>Libs </td>
+              <td>libncurses-devel</td>
+              <td>Required by <span style="font-style: italic;
+                  font-weight: bold;">gsac</span> and <span
+                  style="font-style: italic; font-weight: bold;">dialog</span></td>
+            </tr>
+            <tr>
+              <td>Math </td>
+              <td>bc</td>
+              <td>Simple command line calculator</td>
+            </tr>
+            <tr>
+              <td>Net </td>
+              <td>openssh</td>
+              <td>Require to have Secure SHell connections to other
+                computers</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>openssl</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>sunrpc</td>
+              <td>Has XDR development files required by <span
+                  style="font-style: italic; font-weight: bold;">rdseed</span></td>
+            </tr>
+            <tr>
+              <td>Text </td>
+              <td>a2ps</td>
+              <td>Convert text to PostScript for printing</td>
+            </tr>
+            <tr>
+              <td> <br>
+              </td>
+              <td>enscript</td>
+              <td>Convert text to PostScript for printing</td>
+            </tr>
+            <tr>
+              <td>Web </td>
+              <td>wget</td>
+              <td>Powerful command-line tool to get files from FTP or
+                WEB sites</td>
+            </tr>
+            <tr>
+              <td>X11 </td>
+              <td>Install all - click on the default</td>
+            </tr>
+          </tbody>
+        </table>
+      </center>
+      <p></p>
+      <h3>Install the most recent rbhenv.tgz</h3>
+      After you have Cygwin installed, start Cygwin by clicking the
+      Cygwin Terminal shortcut&nbsp; on the desktop:<br>
+      <br>
+      <br>
+      <table>
+        <tbody>
+          <tr>
+            <td><img src="Screenshot-0.png"><br>
+              Clock on the "Cygwin Terminal" icon</td>
+          </tr>
+        </tbody>
+      </table>
+      <p> In the terminal window, unpack <a href="rbhenv.tgz">
+          rbhenv.tgz</a>. <br>
+        Unpack using the command: <br>
+      </p>
+      <pre>                  gunzip -c rbhenv.tgz | tar xvf - 
+		</pre>
+      <h3>Start the graphics</h3>
+      xinit
+      <p></p>
+      <center>Last changed April 1, 2012</center>
+      <p></p>
+    </ul>
+  </body>
+</html>

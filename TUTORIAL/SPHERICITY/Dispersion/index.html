@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Earth Flattening - Surface Wave</title>
+</head>
+<body>
+<h2 style="text-align: left;">Earth flattening - surface-wave dispersion</h2>
+<h3>Introduction</h3>
+In 2004, David Harkrider investigated the appropriateness of the
+Earth-flattening approximation by comparing the phase velocities from <span
+ style="font-style: italic;">minos </span>to those from his
+plane-layer dispersion codes.&nbsp; To make the comparison easier, he
+replaced the <span style="font-style: italic;">l</span> order
+parameter in <span style="font-style: italic;">minos&nbsp; </span>by
+a float, so that he could get the effective free oscillation dispersion
+at periods such as 100 or 200 seconds.&nbsp; He restricted his
+comparison to the dispersion for infinite-Q models<br>
+<br>
+The objective here is to apply the concept of his comparison to the
+same model and transformations used for the waveform comparison.&nbsp;
+In doing we wish to check the flattening approximation used in the
+dispersion inversion program <span style="font-weight: bold;">surf96</span>,
+which is a newer version of David Russell's 1985 version.&nbsp; The
+flattening approximation of Russell is based on the work of Schwab and
+Knopoff (1972). The primary difference here is that we use the Biswas
+(1972) density mapping (PAGEOPH 96, 61-74, 1972) and that we do not use
+the average layer velocity of Schwab and Knopoff (1972) (Methods of
+Computational Physics, Vol 12).<br>
+<br>
+We use the <span style="font-weight: bold;">surf96 </span>program for
+the comparison because that program permits the computation for the
+effects of causal Q on the group velocity dispersion. We will also
+compare the spatial attenuation values <span
+ style="font-style: italic;">gamma.</span> <br>
+<br>
+The first step was to convert from the <span
+ style="font-style: italic;">mineos </span>output <br>
+<br>
+<span style="font-family: monospace;">&nbsp;&nbsp;&nbsp; n
+t&nbsp;&nbsp; l&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+C(km/s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+f(mHz)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+T(sec)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+U(km/s)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Q<br>
+&nbsp;&nbsp;&nbsp; 0 s&nbsp; 999&nbsp;&nbsp;&nbsp;
+3.277979&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+81.84677&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+12.21795&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2.926002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+185.5879&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.4165177E-02<br>
+</span><br>
+to the <span style="font-weight: bold;">surf96 </span>dispersion
+format:<br>
+<br>
+<pre>SURF96 R C X 0 12.21795 3.277979 0.0010<br>SURF96 R U X 0 12.21795 2.926002 0.0010<br>SURF96 R G X 0 12.21795  4.73508e-04 1.00000e-08<br></pre>
+The conversion is straight forward. However to estimate <span
+ style="font-style: italic;">gamma</span> we use the Aki and Richard
+(2002) definition (equations 7.03/7.04) to give <span
+ style="font-style: italic;">gamma = pi / Q U T </span>.<br>
+<br>
+Because the <span style="font-weight: bold;">surf96 </span>code only
+permits a fluid layer at the top of the model, we approximate the
+effect of the liquid core by replacing the outer core with a single
+layer with <span style="font-style: italic;"><span
+ style="font-weight: bold;">model96</span></span> parameters<br>
+<br>
+<pre>    47.8301     8.0191     0.0010     9.9543  0.578E+05   0.00       0.00       0.00       1.00       1.00<br><br></pre>
+and then modified the surface-wave disperesion and inversion codes to
+use that false S-velocity for the dispersion relation, but not to use
+that low velocity in the root search. By adding this single layer, the
+higher modes are fit better at the longer periods. This model is called
+<a href="nntak135sph.mod">nntak135sph.mod</a>.<br>
+<br>
+The plane-layer&nbsp; dispersion computations do not account for
+gravity.&nbsp; The free-oscillation computations include the effect of
+gravity up to frequencies of 10.0 mHz. We did not check the effect for
+higher frequencies.<br>
+<br>
+<span style="color: rgb(255, 0, 0);"></span>
+Fri Dec 28 13:53:41 CST 2007: I modified <span
+ style="font-weight: bold;">srfdis96,</span> <span
+ style="font-weight: bold;">srfdrl96, srfdrr96, sdisp96, sregn96 </span>and<span
+ style="font-weight: bold;"> slegn96 </span>to permit a fluid core by
+specifiying the shear-wave velocity in the core as 0.001 km/s. The
+logic for selecting the phase velocity search window assumes that this
+is a fluid and only uses the P-velocity as a guide. The test is made on
+whether the transformed velocity is &gt; 0.01 km/sec, e.g.,<br>
+<br>
+<pre>        do 20 i=1,mmax<br>        if(b(i).gt.0.01 .and. b(i).lt.betmn)then<br>            betmn = b(i)<br>            jmn = i<br>            jsol = 1<br>        elseif(b(i).le.0.01 .and. a(i).lt.betmn)then<br>            betmn = a(i)<br>            jmn = i<br>            jsol = 0<br>        endif<br>        if(b(i).gt.betmx) betmx=b(i)<br>   20 continue<br>      WRITE(6,*)'betmn, betmx:',betmn, betmx<br><br></pre>
+The Love wave eigenfunction program ignores the low S-velocity, but the
+boundary condition of a stress-free boundary is correctly
+applied.&nbsp;
+The advantage of this subterfuge is that the effects of a fluid core on
+the Rayleigh dispersion can be seen.<br>
+<br>
+To perform the comparison, I go to the directory
+MINEOS/share/mineos1/nnDEMO6 (this appears when the MINEOS.tgz is
+unpacked), create the free oscillation synthetics&nbsp; <br>
+&nbsp;&nbsp;&nbsp; RUN_MINEOS.sh tak135-f<br>
+&nbsp;&nbsp;&nbsp; <br>
+then I run DOSEL to make the comparison, which polulates the
+MINEOS/sahre/mineos1/HTML.SW with graphics, and finally&nbsp; I run
+DOCLEAN to clean up the directory.<br>
+<br>
+Using the command&nbsp; <span style="font-weight: bold;">surf96 1 17</span>&nbsp;
+<a href="17.txt">(17.txt)</a> we can compare the observed (mineos)
+dispersion (and the surface-wave
+predicted dispersion with the current flattening model) at the long
+periods:<br>
+<br>
+<pre style="margin-left: 40px;"><small>   <big>    Mode        Period       Observed      Predicted <br> L C    0    301.7149963      5.2029619      5.2837887      <br> L C    0    347.5029907      5.3578548      5.4408402      <br> L C    0    392.8059998      5.5085521      5.5924311      <br> L C    0    506.1719971      5.8580852      5.9402952      <br><br> L U    0    301.7149963      4.3387032      4.4140792      <br> L U    0    347.5029907      4.3883481      4.4704652      <br> L U    0    392.8059998      4.4559240      4.5439758      <br> L U    0    506.1719971      4.6907072      4.7881312      <br><br> R C    0    297.7600098      5.2720690      5.3223057      <br> R C    0    347.7680054      5.6149321      5.6543474      <br> R C    0    407.5010071      5.9535398      5.9821863      <br> R C    0    503.4719849      6.3606620      6.3766308      <br><br> R U    0    297.7600098      3.7275290      3.8109736      <br> R U    0    347.7680054      4.0285168      4.1075196      <br> R U    0    407.5010071      4.4197330      4.4858279      <br> R U    0    503.4719849      4.9883242      5.0503368      <br><br><small><br></small></big></small><small><br></small></pre>
+The interesting part of this comparison is that if we wish to fit
+observations in the time domain to with 4 sec at a 90 degree epicentral
+distance, we would require a<br>
+precision better than 4/ 4000, or 0.1%.&nbsp; The dispersion
+comparison here shows deviations&nbsp; of 2%.&nbsp; Of course this
+difference also reflects the use of the Schwab and Knopoff adjustment
+factor of<br>
+<br>
+c = c / tm<br>
+u = u * tm<br>
+where <br>
+&nbsp;&nbsp;&nbsp; tm = sqrt(1.+(3.*c/(2.*a*om))**2)&nbsp; [a is the
+radius of the Earth and om is the angulat frequency] for Love<br>
+and<br>
+&nbsp;&nbsp;&nbsp; tm = sqrt(1.+(c/(2.*a*om))**2)&nbsp; for Rayleigh. <br>
+Note that the wavenumber integration synthetics do not have such a
+factor!<br>
+<pre style="margin-left: 40px;"><br></pre>
+<br>
+<h3>Dispersion Comparison</h3>
+We compute the dispersion for&nbsp; two models - the spherical model
+with flattening, e.g., with the keyword <span
+ style="font-style: italic;">SPHERICAL EARTH</span>, and the same model
+treated as a flat-Earth model, e.g., replacing the <span
+ style="font-style: italic;">SPHERICAL EARTH </span>keywork with <span
+ style="font-style: italic;">FLAT EARTH</span> in the file
+nntak135sph.mod. The observed (mineos) and <span
+ style="font-weight: bold;">surf96 </span>predicted dispersion are in
+the file <a href="17.txt">17.txt</a>.<br>
+<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">No flattening</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">Flattening</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><img
+ style="width: 680px; height: 352px;" alt="Flat dispersion"
+ src="qflatDEMO6SRFPHV96.png"></td>
+      <td style="vertical-align: top;"><img
+ style="width: 680px; height: 352px;" alt="flattened dispersion"
+ src="qDEMO6SRFPHV96.png"></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Comparison of non-flattened
+dispersion predictions (solid curves) to
+free oscillation values (symbols). Phase velocity is indicated by
+circle and the group velocity by a triangle. Modes: fundamental is
+black, 1'st is red,&nbsp; 2'nd is green and 3'rd is blue.</td>
+      <td style="vertical-align: top;">Comparison of Earth-flattening
+dispersion predictions (solid curves) to free oscillation values
+(symbols). Phase velocity is indicated by circle and the group velocity
+by a triangle. Modes: fundamental is black, 1'st is red, 2'nd is
+green and 3'rd is blue.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The difference in the use of flattening instead of no-flattening is
+especially noticeable in the higher modes. At periods greater than 300
+seconds, the differences are noticeable even in the fundamental mode.<br>
+<h3><br>
+</h3>
+<h3>Gamma Comparison</h3>
+The observed (mineos) and <span style="font-weight: bold;">surf96 </span>predicted
+gamma dispersion are in the file <a href="12.txt">12.txt</a>.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">No flattening</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">Flattening</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 680px; height: 352px;" alt="Flat gamma"
+ src="qflatDEMO6SRFPHG96.png"><br>
+      </td>
+      <td style="vertical-align: top;"><img
+ style="width: 680px; height: 352px;" alt="flattened gamma"
+ src="qDEMO6SRFPHG96.png"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Comparison of non-flattened
+gamma predictions (solid curves) to
+free oscillation values (symbols). Modes: fundamental is
+black, 1'st is red, 2'nd is green and 3'rd is blue. </td>
+      <td style="vertical-align: top;">Comparison of Earth-flattening
+gamma predictions (solid curves) to free oscillation values
+(symbols).&nbsp; Modes: fundamental is black, 1'st is red, 2'nd is
+green and 3'rd is blue. </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The results of the <span style="font-style: italic;">gamma</span>
+comparison indicates that the differences are small.&nbsp; One reason
+is that the <span style="font-style: italic;">gamma</span> is defines
+as <span style="font-style: italic;">pi f / Q U T</span>, and the
+values are quite small at long period.<br>
+<br>
+<br>
+<br>
+<center>Last Changed February 4, 2008<br>
+</center>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<html>
+<head>
+<title>Using Fetchdata with SLU Moment Tensor</title>
+<style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+</head>
+<body>
+<h2>Introduction</h2>
+At the time of the initial release of Computer Programs in Seismology in 1996, the INTERNET was young and seismic data were distributed in SEED volumes, which contained the waveforms, responses and meta-data such as information about instrument locations and orientations.
+<p>
+Since then, the methods of data access have changed as has the ability to acquire data from multiple data archives. Currently many data centers support the FDSN Web Services: <a href="https://www.fdsn.org/webservices/datacenters/">https://www.fdsn.org/webservices/datacenters/</a>. , which may include services for acquiring data, station or event information. Using these services requires software. The IRIS DMC distributes Perl scripts to access these services:
+<table>
+<tr>
+<td>FetchData   </td>
+<td><a href="https://seiscode.iris.washington.edu/projects/ws-fetch-scripts/files">(Download)</a> </td>
+<td>Fetch time series data (miniSEED), simple metadata (ASCII) and instrument responses (SEED RESP and SAC PZs).
+</td></tr><tr>
+<td>FetchEvent  </td>
+<td><a href="https://seiscode.iris.washington.edu/projects/ws-fetch-scripts/files">(Download)</a> </td>
+<td>Fetch event (earthquake) information in ASCII (text) format, XML can also be saved.
+</td><tr></tr>
+<td>FetchMetadata       </td>
+<td><a href="https://seiscode.iris.washington.edu/projects/ws-fetch-scripts/files">(Download) </a>        </td>
+<td>Fetch basic time series channel metadata in ASCII (text) format, XML can also be saved.
+</td></tr>
+</table>
+<p>
+Additional information on these scripts is provided on this <a href="https://seiscode.iris.washington.edu/projects/ws-fetch-scripts/wiki"> Wiki Page</a>. Since these are Perl scripts, read carefully the paragraph on requirements (if you need to install Perl modules, see: <a href="http://www.cpan.org/modules/INSTALL.html"> http://www.cpan.org/modules/INSTALL.html</a>). The wiki also has links to pages that show how to run the scripts and how to use the scripts with non-IRIS data centers.
+<p>
+In addition, you will require an ability to convert FDSN XML to SEED in order to get the instrument responses. The Java program for this purpose, stationxml-seed-converter-2.10.jar, is available at <a href="https://github.com/iris-edu/stationxml-seed-converter">https://github.com/iris-edu/stationxml-seed-converter</a> and the github site includes examples. I have had success with stationxml-seed-converter-2.0.7-SNAPSHOT.jar. The current release is
+<a href="https://github.com/iris-edu/stationxml-seed-converter/releases/download/stationxml-seed-converter-2.1.0/stationxml-seed-converter-2.1.0.jar"> stationxmk-seed-converter-2.10.0</a>.
+<p>
+Always make sure that you are using the current verson of the software.
+<p>
+<h2>CPS Moment Tensor</h2>
+<p>
+The SLU moment tensor effort usually accesses the USGS CWB (Continuous Wave Buffer) to get waveforms and responses for studying earthquake in the United States. However, there were and are times when it is necessary to augment the data from the CWB with data from IRIS.
+<p>
+The FetchData scripts are used to accomplish this. FetchData offers the following options:
+<pre>
+Usage: FetchData [options]
+
+ Options:
+ -v                Increase verbosity, may be specified multiple times
+ -h                Print this help message, if multiple print more help
+ -q                Be quiet, do not print anything but errors
+ -N,--net          Network code, list and wildcards (* and ?) accepted
+ -S,--sta          Station code, list and wildcards (* and ?) accepted
+ -L,--loc          Location ID, list and wildcards (* and ?) accepted
+ -C,--chan         Channel codes, list and wildcards (* and ?) accepted
+ -Q,--qual         Quality indicator, by default no quality is specified
+ -s starttime      Specify start time (YYYY-MM-DD,HH:MM:SS.ssssss)
+ -e endtime        Specify end time (YYYY-MM-DD,HH:MM:SS.ssssss or #[SMHD])
+ --lat min:max     Specify a minimum and/or maximum latitude range
+ --lon min:max     Specify a minimum and/or maximum longitude range
+ --radius lat:lon:maxradius[:minradius]
+                     Specify circular region with optional minimum radius
+ -l listfile       Read list of selections from file
+ -b bfastfile      Read list of selections from BREQ_FAST file
+ -a user:pass      User and password for access to restricted data
+
+ -F [DC1[,DC2]]    Federate the request to multiple data centers if needed
+                     Federation may be limited to an optional list of DCs
+                     Output files are prefixed by data center identifiers
+
+ -o outfile        Fetch time series data and write to output file
+ -sd sacpzdir      Fetch SAC P&Zs and write files to sacpzdir
+ -rd respdir       Fetch RESP and write files to respdir
+ -m metafile       Write basic metadata to specified file
+ -X SXMLfile       Write response-level StationXML to specified file
+</pre>
+<P>
+I note several <i>caveats</i>. The IRIS DMC has a response server that provides the instrument responses as SAC pole-zero files and <tt>evalresp</tt> RESP files. Not all seismogram data centers provide this service. Most, however, will provide the instrument response information as FDSN Station XML. 
+<p>
+The SLU moment-tensor inversion procedure requires the waveforms to be stored in SAC formatted files, which have the correct station coordinates stored in the file header (latitude, longitude). On can get the coordinates using FetchData's <tt>-m metadata</tt> option and then manually set the STLA and STLO fields of the SAC file.
+<p>
+An alternative is to request the Station XML, and then use the <tt>stationxml-seed-converter-2.1.0</tt> to create a data-less seed file. Then the venerable <tt>rdseed</tt> can be used to convert the mini-seed and the data-less seed to a SAC file, place the station information in the SAC header and also create the instrument response files.
+<p>
+
+A shell script to do all this is listed below. Note the presence of the backslashes. This script is used to create another script and the backslashes prevent the first execution from filling in the variables. I call the final code DOFINISH.
+<pre>
+#####
+#     get the data
+#####
+mkdir Sac
+mkdir Orig
+cd Orig
+#####
+#    get everything from IRIS
+#    This used the -F script that asks the vraious data centers
+#    for their holdings that are within DEG degrees of the target
+#    LAT and LON
+#####
+        #####
+        # ask for a time window that starts 60 seconds before the
+        # origin time and ends DURATION seconds later
+        #####
+        START=\`redodate \$YEAR \$MO \$DY \$HR \$MN \$SEC \$MSEC -60 | \
+        awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",\$1,\$2,\$3,\$4,\$5,\$6}' \`
+        END=\`redodate \$YEAR \$MO \$DY \$HR \$MN \$SEC \$MSEC \${DURATION} | \
+        awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",\$1,\$2,\$3,\$4,\$5,\$6}' \`
+        #####
+        #     Ask for all stations within $DEG degrees of the event LAT and LON
+        #####
+        CCORD=\`echo \${LAT} \${LON} \${DEG} | awk '{printf "%f:%f:%f",\$1,\$2,\$3}' \`
+        #####
+        #    now run FetchData
+        #    -F ask all data centers
+        #    -N '*'   all networks at each data center
+        #    -S '*'   all stations
+        #    -C 'BH*,HH*,HN*'  these components
+        #    -radius \${CCORD}   within this distance range
+        #    -s \${START}  start time
+        #    -e \${END}    end time
+        #    -o BH.mseed   this is the name of the miniSEED file
+        #    -m BH.metadata this is the name of the metadata (which is not used)
+        #    -X BH.metaxml this is the name of the FDSN Station XML
+        #####
+
+
+        FetchData -F  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius \${CCORD}  -s \${START}  -e \${END} -o BH.mseed -m BH.metadata -X BH.metaxml 
+        #####
+        #   The Fetch data will create file with names such as
+        #   DMC-BH.mseed etc.
+        #####
+        #    now  process the results of each data center
+        #####
+        for i in *BH.mseed
+        do
+                B=\`basename \$i "-BH.mseed"\`
+                #####
+                # the basename strips off the end and give the name
+                # of the data center so that the files from the different
+                # data centers can be identified
+                #####
+                # use the converter to make a dataless
+                java -jar ~/bin/stationxml-seed-converter-2.0.7-SNAPSHOT.jar --input \${B}-BH.metaxml --output \${B}-BH.dataless
+                ( cd ../Sac
+                        In a sub-shell go to the Sac directory to
+                        convert the miniSEED and datalessSEED to 
+                        sac files and RESP responses
+                        Not that if you want pole-zero files, add a -p
+                        flag to rdseed.
+                rdseed -f ../Orig/\${B}-BH.mseed -g ../Orig/\${B}-BH.dataless -R -d -o 1
+                )
+done
+</pre>
+<p>
+For data from the FDSN I use a DOWSF script which creates the DOFINISH  above. 
+<p>
+For data from the IRIS DMC, I use DOWS. If I execute the command:
+<pre>
+DOWS "2020" "08" "13" "02" "34" "17" "000" "62.237  " " -124.434" "10.0"  " 4.0" "CUS" "NONE" "NONE" "NWT, Canada "
+</pre>
+the script <I>DOFINISH</I> is created, which is as follows:
+<pre>
+#!/bin/sh
+
+#####
+#       set up the event variables
+#####
+YEAR="2020"
+MO="08"
+DY="13"
+HR="02"
+MN="34"
+SEC="17"
+MSEC="000"
+LAT="62.237  "
+LON=" -124.434"
+DEP="10.0"
+MAG=" 4.0"
+REG="CUS"
+NEIC="NONE"
+FELTID="NONE"
+STATE="NWT, Canada "
+
+if [ "CUS" = "EU" ]
+then
+DEG=20
+DURATION=600
+else
+DEG=6.0
+DURATION=300
+fi
+
+
+export MYPWD="/Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA"
+
+#####
+#       deconvolve the instrument response, rotate, decimate, do qc
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
+#####
+#     get the data
+#####
+mkdir Orig
+cd Orig
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+CCORD=`echo ${LAT} ${LON} ${DEG} | awk '{printf "%f:%f:%f",$1,$2,$3}' `
+FetchData  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius ${CCORD}  -s ${START}  -e ${END} -o BH.mseed -m BH.metadata -rd . 
+mseed2sac -f 3 BH.mseed -m BH.metadata
+mv *SAC RESP* ../Sac
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
+#####
+#       deconvolve the instrument response
+#####
+IDOEVT
+#####
+#       rotate to Z R T and ensure that hte signal amplitudes are
+#       greater than 1.0e-10
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
+IDOROT
+#####
+#       decimate for the surface wave analysis
+#####
+IDODEC
+#####
+#       select waveforms according to distance for waveform inversion
+#####
+IDODIST
+#####
+#       perform QC for waveform inversion
+#####
+IDOQC
+
+
+
+#####
+#       do the inversion
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA
+./DOSOLUTION "${YEAR}" "${MO}" "${DY}" "${HR}" "${MN}" "${SEC}" "${MSEC}" "${LAT}" "${LON}" "${DEP}" "${MAG}" "${REG}" "${NEIC}" "${FELTID}" "${STATE}" "${MYPWD}" 
+</pre>
+<p>
+You will see that the backslash-escaped character have avoided the interpretation by DOWS to create the correct DOFINISH.
+<p>
+The difference between the two DOFINISH scripes ariases from the fact that IRIS has a response server whihc provides the RESP files that I require.
+<h2>GMT</h2>
+If you look at the recent SLM regional moment tensor solutions at
+<a href="www.eas.slu.edu/eqc/eqc_mt/MECH.NA">www.eas.slu.edu/eqc/eqc_mt/MECH.NA</a> you will see that GMT is used to several plots: station and epicenter map, focal mechanism and direction of maximum compressive stress axes. I have scripts to use GMT4 and GMT5. In addition, the CPS program <b>gsac</b> has the <i>map</i> and <i>map5</i> commands for use with GMT4 and 5 respectively. Those commands create an annotated shell script <i>map.sh</i> or <i>map5.sh</i> that, when executed, wil create the PostScript files <i>map.eps</i> or <i>map5.eps</i>. The shell scripts can be used a a prototype for fine adjustment of the GMT commands.
+<h2>Scripts</h2>
+To distinguish the scripts that use GMT5, I append a <i>5</i> to the script name.  Thus there are DOWS5, DOSOLUTION5 and DOSETUP5.  In addition the working scripts for the inversion have DOPLTSAC5 in place of DOPLTSAC, OHTML5 inplace of DOHTML.  The DOSETUP5 knows about these.
+<p>
+My current scripts are available in a compressed tar archive: <a href="MECH.NA.tgz">MECH.NA.tgz</a>. To extract the scripts, use something like:
+<pre>
+mkdir MECH.NA
+cd MECH.NA
+gunzip -c ~/MECH.NA.tgz | tr xvf -
+</pre>
+
+
+<center>last changed 16 AUG 2020</center>
+</body>
+</html>
+
+

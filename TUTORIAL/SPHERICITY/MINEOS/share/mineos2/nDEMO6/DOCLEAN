@@ -1,0 +1,6 @@
+#!/bin/sh
+
+echo Cleaning up
+rm -fr DS_* EX_* SS_*  DD_* green* Sundat* tak135* test_*
+rm -fr Syndat* etak*
+rm -fr fort*

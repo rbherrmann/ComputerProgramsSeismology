@@ -1,0 +1,55 @@
+* CHANNEL(NSCL)COJSC  HHN00
+* NETWORK      CO
+* STATION      JSC  
+* COMPONENT    HHN
+* LOCATION     00
+* CREATED      2012/08/28 14:41:54.89
+* EFFECTIVE    2009-04-13 00:00:00.0
+* ENDDATE      2999-12-31 23:59:59.0
+* PARSE FLAGS 0x0 
+* INPUT UNIT   NM
+* OUTPUT UNIT  COUNT
+* DESCRIPTION  Jenkinsville, South Carolina
+* RATE (HZ)    100.0
+* OWNER        South Carolina Seismic Network
+* COORD(NEIC)  CO JSC:  34.2818  -81.2597  102.5
+* COORD(SEED)  CO JSC:  34.2818  -81.2597  102.5
+* ORIENTATION  CO JSC   00 HHN:     0.0   0.0    0.5
+* LAT-SEED     34.2818
+* LONG-SEED    -81.25966
+* ELEV-SEED    102.5
+* DEPTH        0.5
+* DIP          0.0
+* AZIMUTH      0.0
+* INSTRMNTTYPE STS2_120S=120615=RT130=A0B7
+* INSTRMNTCMNT Jenkinsville, South Carolina^South Carolina Seismic Network^^
+* INSTRMNTGAIN 1.5000E03
+* INSTRMNTUNIT V
+* SENS-SEED    9.4370E08
+* SENS-CALC    9.4370E08
+* A0-SEED      1.3592E13
+* A0-CALC      1.3592E13
+* SEEDFLAGS    C
+* ****
+CONSTANT              1.2827E+13
+ZEROS   7
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+        -1.5150E+01   0.0000E+00
+        -1.7660E+02   0.0000E+00
+        -4.6310E+02  -4.3050E+02
+        -4.6310E+02   4.3050E+02
+POLES  10
+        -3.0700E-02  -3.0700E-02
+        -3.0700E-02   3.0700E-02
+        -1.5640E+01   0.0000E+00
+        -9.7340E+01  -4.0070E+02
+        -9.7340E+01   4.0070E+02
+        -3.7480E+02   0.0000E+00
+        -5.2030E+02   0.0000E+00
+        -1.0530E+03  -1.0050E+03
+        -1.0530E+03   1.0050E+03
+        -1.3300E+04   0.0000E+00
+* <EOE>
+* <EOR>

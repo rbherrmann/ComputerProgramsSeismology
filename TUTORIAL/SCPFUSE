@@ -1,0 +1,22 @@
+#!/bin/sh
+
+
+tar cf - \
+	index.html \
+	LessonA  \
+	LessonB  \
+	NOISESPAIN  \
+	SITERESPONSE \
+	SPHERICITY \
+	PMOTION/index.html \
+	PMOTION/*/DOIT \
+	PMOTION/PMOTION.??/*/*.png \
+	RFTN  \
+	SEED  \
+	GEOMSPREAD  \
+	SACIO  \
+	STRUCT/index.html STRUCT/00README STRUCT/RFTN STRUCT/SURF STRUCT/JOINT STRUCT/srj.tgz STRUCT/shwmod96.png \
+	TELESYN/index.html  \
+	DECON \
+	RANDALL \
+        | ( cd  /home/rbh/mnwdir/net/eqinfo/home/eq/Earthquake_Center/CPS/TUTORIAL ; tar xvf - )

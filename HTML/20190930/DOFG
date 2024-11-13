@@ -1,0 +1,97 @@
+#!/bin/sh
+
+#####
+#   display the SN2 SIN4 PAR2 functions
+#   and 2nd derivative
+#####
+gsac << EOF
+pctl xlen 6
+fg imp delta 0.02 npts 256 sin2 1.0
+w sin2
+fg imp delta 0.02 npts 256 sin4 1.0
+w sin4
+fg imp delta 0.02 npts 256 par2 1.0
+w par2
+fg imp delta 0.02 npts 256 sin2 1.0 norm on
+w sin2_norm
+fg imp delta 0.02 npts 256 sin4 1.0 norm on
+w sin4_norm
+fg imp delta 0.02 npts 256 par2 1.0 norm on
+w par2_norm
+
+r sin2 
+dif
+dif
+w sin2_d2
+r sin4
+dif
+dif
+w sin4_d2
+r par2
+dif
+dif
+w par2_d2
+
+r sin2_norm 
+dif
+dif
+w sin2_norm_d2
+r sin4_norm
+dif
+dif
+w sin4_norm_d2
+r par2_norm
+dif
+dif
+w par2_norm_d2
+#####
+#    make plots
+#####
+r sin2 sin4 par2
+fileid name
+ylim all
+bg plt 
+p
+mv P001.PLT FG_1.PLT
+fft
+psp
+mv P002.PLT FG_2.PLT
+
+r sin2_d2 sin4_d2 par2_d2
+fileid name
+ylim all
+bg plt 
+p
+mv P003.PLT FG_3.PLT
+fft
+psp
+mv P004.PLT FG_4.PLT
+
+r sin2_norm sin4_norm par2_norm
+fileid name
+ylim all
+bg plt 
+p
+mv P005.PLT FG_5.PLT
+fft
+psp
+mv P006.PLT FG_6.PLT
+
+r sin2_norm_d2 sin4_norm_d2 par2_norm_d2
+fileid name
+ylim all
+bg plt 
+p
+mv P007.PLT FG_7.PLT
+fft
+psp
+mv P008.PLT FG_8.PLT
+q
+EOF
+for i in FG_?.PLT
+do
+DOPLTPNG $i
+done
+
+rm FG_?.PLT
+rm par2* sin2* sin4*

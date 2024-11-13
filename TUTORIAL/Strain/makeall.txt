@@ -1,0 +1,13 @@
+all: sprep96 sdisp96 \
+	sdpsrf96 sdpegn96 sdpder96 \
+	slegn96 sregn96 \
+	slat2d96 \
+	spulse96 \
+	scomb96 \
+	sdpdsp96 \
+	sdprad96 \
+	sdpspc96 \
+	srfgrd96 \
+	tprep96  tdisp96  tregn96  tlegn96  tdpsrf96  tdpegn96  tdpder96 tpulse96  tcomb96 \
+	strainspulse96 srotate96 \
+	clean

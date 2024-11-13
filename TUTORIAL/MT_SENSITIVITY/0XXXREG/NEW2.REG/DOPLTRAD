@@ -1,0 +1,313 @@
+#!/bin/sh
+
+#####
+#	clean up
+#####
+rm -f mech.plt
+rm -f *.png
+rm -fr *.PLT
+#####
+#	define the mechanism, seismic moment and source depth
+#####
+EIGEN=${GREENDIR}/GMODEL/SW/
+DMIN=100
+DMAX=5000
+
+#SRFGRD96    6.0   20.   85.   15. 0.908 0.957   4.34   4.34 0.8669
+
+HS=6.0
+STK=20
+DIP=85
+RAKE=15
+MW=4.34
+FIT=0.8669
+DEP=006
+
+
+##### DO NOT CHANGE BELOW HERE ####
+
+#####
+#	get focal mechanism of PT axes
+#####
+FIT90=`echo $FIT | awk '{print 0.90*$1}'`
+cat > awkprog << EOF
+{
+if( \$10 > $FIT90) { print \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9, \$10 }
+}
+EOF
+
+sort -n -k 10 fmfit${DEP}.dat | awk -f awkprog  > j
+rm -f fm.plt
+while read i
+do
+echo $i
+ARG1=`echo $i | awk '{print $3}'`
+ARG2=`echo $i | awk '{print $4}'`
+ARG3=`echo $i | awk '{print $5}'`
+fmplot -S $ARG1 -D $ARG2 -R $ARG3 -tP
+cat FMPLOT.PLT >> fm.plt
+ARG1=`echo $i | awk '{print $3 +180}'`
+ARG2=`echo $i | awk '{print $4}'`
+ARG3=`echo $i | awk '{print $5}'`
+fmplot -S $ARG1 -D $ARG2 -R $ARG3 -tP
+cat FMPLOT.PLT >> fm.plt
+done < j
+rm -f j
+plotnps -BGFILL -F7 -W10 -EPS -K < fm.plt > fm.eps
+
+sort -n -k 10 fmfit${DEP}.dat | tail -150 > j
+rm -f fm.plt
+while read i
+do
+echo $i
+ARG1=`echo $i | awk '{print $3}'`
+ARG2=`echo $i | awk '{print $4}'`
+ARG3=`echo $i | awk '{print $5}'`
+fmplot -S $ARG1 -D $ARG2 -R $ARG3 -TP
+cat FMPLOT.PLT >> fm.plt
+ARG1=`echo $i | awk '{print $3 +180}'`
+ARG2=`echo $i | awk '{print $4}'`
+ARG3=`echo $i | awk '{print $5}'`
+fmplot -S $ARG1 -D $ARG2 -R $ARG3 -TP
+cat FMPLOT.PLT >> fm.plt
+done < j
+
+
+
+#####:
+
+fmmfit -DMN 0 -DMX 90 < fmfit${DEP}.dat
+plotnps -BGFILL -K -F7 -W10 -EPS < FMMFIT.PLT > fmmfit.eps
+fmdfit -HMN 0 -HMX 30 -MECH < fmdfit.dat
+plotnps -BGFILL -K -F7 -W10 -EPS < FMDFIT.PLT > fmdfit.eps
+
+
+#####
+#	files for table entry
+#####
+cat > head << EOF
+<TR>
+EOF
+cat > tail << EOF
+</TR>
+EOF
+rm -f tab.html
+echo "<TABLE>" > tab.html
+NFILE=0
+
+
+fmtp -S $STK -D $DIP -R $RAKE  | head -14 > ../HTML.REG/FMTP.out
+echo " " >> ../HTML.REG/FMTP.out
+echo DEPTH = $HS km >> ../HTML.REG/FMTP.out
+echo " " >> ../HTML.REG/FMTP.out
+echo Mw = $MW  >> ../HTML.REG/FMTP.out
+echo Best Fit $FIT - P-T axis plot gives solutions with FIT greater than FIT90 >> ../HTML.REG/FMTP.out
+
+
+rm -f staazdist
+
+
+fmplot -S $STK -D $DIP -R $RAKE -FMPLMN
+plotnps -BGFILL -S0.5 -F7 -EPS < FMPLOT.PLT > fmplot.eps
+
+#####
+#	define reference distance
+#####
+DIST=1000
+MODE=0
+
+#####
+#	Loop over Rayleigh Wave Data
+#####
+
+sdprad96 -PATH ${EIGEN} -R -DIP ${DIP} -RAKE ${RAKE} -STK ${STK} -DIST ${DIST}  -HS ${HS} -M ${MODE} -MW ${MW} -O ALL.DSP  -DMIN ${DMIN} -DMAX ${DMAX} -A
+
+
+sdprad96 -PATH ${EIGEN} -L -DIP ${DIP} -RAKE ${RAKE} -STK ${STK} -DIST ${DIST}  -HS ${HS} -M ${MODE} -MW ${MW} -O ALL.DSP  -DMIN ${DMIN} -DMAX ${DMAX} -A
+
+
+#####
+# I know there are 10  pages of plots maximum, so do them.
+# Also if there is a plot the CALPLOT file must be > 100 bytes in length
+# Use ls -l instead of 'wc' since 'wc' will complain about multi-byte characters
+#####
+
+
+for i in 01 02 03 04 05 06 07 08 09 10
+do
+reframe -N$i -O < SRADL.PLT > kl
+NCHAR=`ls -l  kl | awk '{ANS=0;if ($5 > 100)ANS=1;  print ANS }' `
+if [ "${NCHAR}" = 1 ]
+then
+	plotnps -BGFILL -EPS -F7 -W10 -K < kl > sradl$i.eps
+fi
+reframe -N$i -O < SRADR.PLT > kr
+NCHAR=`ls -l kr | awk '{ANS=0;if ($5 > 100)ANS=1;  print ANS }' `
+if [ "${NCHAR}" = 1 ]
+then
+	plotnps -BGFILL -EPS -F7 -W10 -K < kr > sradr$i.eps
+fi
+done
+
+
+#####
+#	build up a dispersion data set
+#####
+grep SURF96 SRADL.TXT > disp.d
+grep SURF96 SRADR.TXT >> disp.d
+
+#####
+#	use surf96 to compare
+#####
+
+cp ${GREENDIR}/Models/VMODEL.mod  model.mod 
+
+cat > sobs.d << EOF
+  0.00499999989  0.00499999989  0.  0.00499999989  0.
+    0    1    1    1    1    1    1    0    1    0
+model.mod
+disp.d                                                                          
+EOF
+
+
+surf96 1
+srfphv96 -V
+srfphv96 -G
+plotnps -BGFILL -F7 -W10 -EPS -K < SRFPHV96.PLT > phv.eps
+plotnps -BGFILL -F7 -W10 -EPS -K < SRFPHG96.PLT > phg.eps
+surf96 39
+
+#####
+#	create the station list
+#####
+
+cat ALL.DSP |  awk '{print $19}' | sort | uniq > stalist
+
+
+#####
+#       define the mechanism, seismic moment and source depth
+#####
+while read STA
+do
+
+COMP=`grep $STA ALL.DSP | awk '{print $20}' | sort | uniq | tail -1 `
+
+#####
+#	define reference distance
+#####
+DNORM=1000
+MODE=0
+
+#####
+#	Loop over Rayleigh Wave Data
+#####
+case $COMP in
+	BHZ|BHT) CPREF=BH ;;
+	HHZ|HHT) CPREF=HH ;;
+esac
+echo $STA $COMP $CPREF
+
+sdpspc96 -X0 5.0 -XLEN 3.0 -YLEN 5 -PATH ${EIGEN} -R -DIP ${DIP} -RAKE ${RAKE} -STK ${STK} -DIST ${DNORM} -PER ${PER} -HS ${HS} -M ${MODE} -MW ${MW} -O ALL.DSP  -STA  ${STA} -COMP ${CPREF}Z >  junkr
+AMPMAXR=`grep ampmax junkr | awk '{print $5}'`
+#grep ampmax junkr
+#echo $AMPMAXR
+
+
+sdpspc96 -X0 1.0 -XLEN 3.0 -YLEN 5 -PATH ${EIGEN} -L -DIP ${DIP} -RAKE ${RAKE} -STK ${STK} -DIST ${DNORM} -PER ${PER} -HS ${HS} -M ${MODE} -MW ${MW} -O ALL.DSP  -STA  ${STA} -COMP ${CPREF}T > junkl
+AMPMAXL=`grep ampmax junkl | awk '{print $5}'`
+#grep ampmax junkl
+#echo $AMPMAXL
+
+#####
+#	now get the largest amplitude
+#####
+AMPMAX=`echo $AMPMAXR $AMPMAXL | awk '{ if ( $1 > $2 ) print $1 ; if ($2 >= $1) print $2 }'`
+#echo $AMPMAX
+#####
+#	now redo the ploits with this maximum scale value
+#####
+sdpspc96 -X0 5.0 -XLEN 3.0 -YLEN 5 -PATH ${EIGEN} -R -DIP ${DIP} -RAKE ${RAKE} -STK ${STK} -DIST ${DNORM} -PER ${PER} -HS ${HS} -M ${MODE} -MW ${MW} -O ALL.DSP  -STA  ${STA} -COMP ${CPREF}Z -YMAX $AMPMAX >  junkr
+sdpspc96 -X0 1.0 -XLEN 3.0 -YLEN 5 -PATH ${EIGEN} -L -DIP ${DIP} -RAKE ${RAKE} -STK ${STK} -DIST ${DNORM} -PER ${PER} -HS ${HS} -M ${MODE} -MW ${MW} -O ALL.DSP  -STA  ${STA} -COMP ${CPREF}T -YMAX $AMPMAX > junkl
+
+
+
+#####
+#	get the distance and azimuth
+#####
+grep $STA ALL.DSP > k
+cat k | awk '{print $8}' | sort | uniq | head -1 > dist
+cat k | awk '{print $9}' | sort | uniq | head -1 > az
+DIST=`cat dist`
+AZ=`cat az`
+echo ${STA}  ${AZ}   ${DIST} | awk '{printf "%s\t%5.0f\t%5.0f\n", $1, $2, $3}' >> staazdist
+cat SSPCL.PLT SSPCR.PLT | reframe -N1 -O -YL+500 > j
+calplt << EOF
+NEWPEN 
+1
+LEFT
+3.0 6.5 0.20 'Love' 0.0
+LEFT
+7.0 6.5 0.20 'Rayl' 0.0
+LEFT
+1.25 2.0 0.15 '${STA}' 0.0
+LEFT 
+1.25 1.8 0.15 'Az=${AZ}' 0.0
+LEFT
+1.25 1.6 0.15 'Dist=${DIST}' 0.0
+LEFT
+1.25 1.4 0.15 'Norm=${DNORM}' 0.0
+PEND
+EOF
+cat j CALPLT.PLT > ${STA}.plt
+plotnps -BGFILL -K  -F7 -W10 -EPS < ${STA}.plt > ${STA}.eps
+rm CALPLT.cmd
+rm CALPLT.PLT
+rm SSPCL.PLT
+rm SSPCR.PLT
+rm j
+rm  az dist
+rm k
+
+cat > imig << EOF
+	<TD><IMG SRC="${STA}.png" BORDER=1></TD>
+EOF
+case $NFILE in
+	0)
+		cat head >> tab.html
+		cat imig >> tab.html
+		;;
+	1)
+		cat imig >> tab.html
+		cat tail >> tab.html
+		;;
+esac
+NFILE=`expr $NFILE + 1`
+NFILE=`expr $NFILE % 2`
+done < stalist
+
+
+if [ $NFILE -eq 1 ]
+then
+echo '  <TD></TD>' >> tab.html
+cat tail >> tab.html
+fi
+
+
+
+echo "</TABLE>" >> tab.html
+mv tab.html ../HTML.REG
+rm -f head tail
+
+#####
+#	convert to png from eps
+#####
+for i in *.eps
+do
+	B=`basename $i .eps`
+	convert  -trim $i ${B}.png
+done
+
+
+mv *.png ../HTML.REG
+rm -f junkl junkr
+mv staazdist ../HTML.REG

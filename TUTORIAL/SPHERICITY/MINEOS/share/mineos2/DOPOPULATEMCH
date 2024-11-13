@@ -1,0 +1,70 @@
+#!/bin/sh
+
+MYPWD=`pwd`
+if [ ! -d TEMP ]
+then
+	mkdir TEMP
+fi
+#for DEG in 010 020 030 040 050 060 070 080 090 100 110 120 130 140 150 160 170
+for DEG in 030 060 090
+do
+	for DEP in 010 100 700
+	do
+		if [ ! -d TEST.${DEP}.${DEG} ]
+		then
+			mkdir TEST.${DEP}.${DEG}
+		fi
+#		for DEN in "+1" "+0" "-1" "-2" "-3" "-4" "-5" "-F" "-H" "-I"
+		for DEN in "-Z" 
+			do 
+			if [ ! -d TEST.${DEP}.${DEG}/NEW_${DEN} ]
+			then
+				mkdir  TEST.${DEP}.${DEG}/NEW_${DEN}
+			fi
+if [ -f TEST.${DEP}.${DEG}/NEW_${DEN}/*ZSS ]
+then
+			for MECH in DS SS DD
+			do
+				case $MECH in
+					DS) STK=45 ; DIP=90; RAKE=90 ;;
+					SS) STK=22.5 ; DIP=90 ; RAKE=0;;
+					DD) STK=45; DIP=45; RAKE=90 ;;
+				esac
+#####
+#	get the green functions into the temp
+#####
+				cd ${MYPWD}
+				for i in ZSS ZDS ZDD ZEX RSS RDD RDS REX TSS TDS
+				do
+					cp TEST.${DEP}.${DEG}/NEW_${DEN}/*${i} TEMP/D.$i
+				done
+				cd TEMP
+				../DOMCH $STK $DIP $RAKE
+				if [ ! -d ${MYPWD}/TEST.${DEP}.${DEG}/${MECH}.WK ]
+				then
+					mkdir ${MYPWD}/TEST.${DEP}.${DEG}/${MECH}.WK
+				fi
+gsac << EOG
+r D.ZSS.pre
+ch kstnm ${DEP}${DEN} kcmpnm LHZ
+wh
+r D.RSS.pre
+ch kstnm ${DEP}${DEN} kcmpnm LHR
+wh
+r D.TSS.pre
+ch kstnm ${DEP}${DEN} kcmpnm LHT
+wh
+quit
+EOG
+				mv D.ZSS.pre ${MYPWD}/TEST.${DEP}.${DEG}/${MECH}.WK/D.${DEN}.LHZ
+				mv D.TSS.pre ${MYPWD}/TEST.${DEP}.${DEG}/${MECH}.WK/D.${DEN}.LHT
+				mv D.RSS.pre ${MYPWD}/TEST.${DEP}.${DEG}/${MECH}.WK/D.${DEN}.LHR
+				rm *
+				cd ${MYPWD}
+			done
+fi
+	
+	 
+		done
+	done
+done

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+
+cd ..
+tar cf - \
+	MINEOS/DOIT \
+	MINEOS/HTML \
+	MINEOS/mineos-1.0.0.rbh.tar.gz \
+	MINEOS/share/mineos \
+	MINEOS/share/mineos1 \
+	MINEOS/share/mineos2 \
+	| gzip -c > MINEOS.tgz

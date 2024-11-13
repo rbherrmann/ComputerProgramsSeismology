@@ -1,0 +1,92 @@
+#!/bin/sh
+
+#####
+#	clean up
+#####
+rm -f *PLT
+rm -f *egn
+rm -f *dsp 
+rm -f sdisp96*
+rm -f *sac
+rm -f tmp*
+
+
+#####
+#	create the velocity model interactively
+#####
+mkmod96 << EOF
+simple.mod
+Simple Crustal Model
+0
+40 6 3.5 2.7 0 0 0 0 1 1
+0 8 4.7 3.3 0 0 0 0 1 1
+EOF
+
+#####
+#	create the dfile use sprep96 -h for the format
+#####
+cat > dfile << EOF
+2500 0.5 2048 0 8
+2550 0.5 2048 0 8
+2600 0.5 2048 0 8
+2650 0.5 2048 0 8
+2700 0.5 2048 0 8
+2750 0.5 2048 0 8
+2800 0.5 2048 0 8
+2850 0.5 2048 0 8
+EOF
+
+#####
+#	setup multimode surface wave dispersion and synthetics
+#####
+HS=10.0
+HR=0.0
+sprep96 -M simple.mod -d dfile -L -R -NMOD 100 -HS ${HS} -HR ${HR}
+#####
+#	get the dispersion and the eigenfunctions
+#####
+sdisp96
+sregn96
+slegn96
+#####
+#	make the synthetic for the station for a given focal mechanism and then convert to SAC
+#####
+DIP=45
+RAKE=45 
+STK=45
+AZ=45
+BAZ=225
+MW=4.5
+spulse96 -p -V -l 4 -d dfile | \
+	fmech96 -D ${DIP} -R ${RAKE} -S ${STK} -A ${AZ} -ROT -MW ${MW} | \
+	f96tosac -B
+	
+
+
+#####
+#	do interactive multiple filter analysis to get group velocity dispersion
+#####
+
+do_pom B*Z00.sac
+do_pom B*T00.sac
+
+#####
+#	The disperions curves are in the files GRN21T.dsp and GRN21Z.dsp
+#	combine these to create a SURF96 dispersion file
+#####
+
+
+cat rayl.dsp love.dsp > disp.d
+
+#####
+#	get the theoretical dispersion for this model
+#####
+sdpegn96 -R -S -C -D disp.d -XLOG -PER -YMIN 2.5 -YMAX 5.0
+sdpegn96 -L -S -C -D disp.d -XLOG -PER -YMIN 2.5 -YMAX 5.0
+
+#####
+#	Look at the observed and predicted disperion
+#####
+plotxvig < SREGNC.PLT
+plotxvig < SLEGNC.PLT
+

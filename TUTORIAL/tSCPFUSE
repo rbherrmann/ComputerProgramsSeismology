@@ -1,0 +1,7 @@
+#!/bin/sh
+
+
+tar cf - \
+	index.html \
+	SELFNOISE  \
+        | ( cd  /home/rbh/mnwdir/net/eqinfo/home/eq/Earthquake_Center/CPS/TUTORIAL ; tar xvf - )

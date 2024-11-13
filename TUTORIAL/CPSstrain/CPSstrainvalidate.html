@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>CPSstrain Validate</title>
+	<meta name="generator" content="LibreOffice 7.1.1.2 (MacOSX)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2021-06-07T09:59:53.957969000"/>
+	<style type="text/css">
+		pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 }
+	</style>
+<style>
+table, th, td, tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+</style>
+</head>
+<body lang="en-US" bgcolor="#ffffff" dir="ltr">
+<h1>Validation</h1>
+<p>Since the programs represent significant rewrites of existing
+codes, it is necessary to test the codes. The simplest way is to
+compute the strains and rotations numerically and then to compare
+these to the results of the new codes. 
+</p>
+<p>As discussed in the theory section, the strains require the
+following partial derivatives: 
+<img src="CPSstrainvalidate_html_cc2f5110b45a9ca7.gif"/>
+, 
+<img src="CPSstrainvalidate_html_a8ce106927316d75.gif"/>
+ and 
+<img src="CPSstrainvalidate_html_12369c302b690228.gif"/>
+ where the 
+<img src="CPSstrainvalidate_html_88e70a0f1ecf3873.gif"/>
+ is 
+<img src="CPSstrainvalidate_html_6666b537058472d2.gif"/>
+, 
+<img src="CPSstrainvalidate_html_856eeb58c93a11e4.gif"/>
+ or 
+<img src="CPSstrainvalidate_html_4766940c158f1d53.gif"/>
+.  The
+partial with respect to 
+<img src="CPSstrainvalidate_html_d318ff4382aaadfd.gif"/>
+ is computed
+analytically, while the other two can be numerically approximated
+using a centered difference, e.g.,</p>
+<p align="justify">	<img src="CPSstrainvalidate_html_dbcdbe39a0101817.gif"/>
+</p>
+<p align="justify" style="margin-bottom: 0in">and similarly for the
+partial with respect to 
+<img src="CPSstrainvalidate_html_e2c49f904beda85f.gif"/>
+.  One must
+be careful when doing this since the estimate depends on the
+frequency content of the signal and the duration of the source time
+function. In the examples that follow the sampling interval is 0.25s,
+the source pulse duration of 1.0s and the S-wave propagation velocity
+is on the order of 3.5 km/s.   The receiver depth was take to be
+3.0km, which is in layer 2. Also
+<img src="CPSstrainvalidate_html_5ffccb6ca7d7dbe2.gif"/>
+km
+and 
+<img src="CPSstrainvalidate_html_d5d0174ba1cb7015.gif"/>
+ km.</p>
+<h1>Computation</h1>
+<p>The validation code is contained in the file
+<a href="CPSstrain.validate.tgz">CPSstrain.validate.tgz</a>. 
+To run
+the tests, do the following: 
+</p>
+<pre>gunzip -c CPSstrain.validate.tgz | tar xvf -
+cd CPSstrain.validate
+DOALL</pre><p>
+The result of the computations are in the directories
+<i>D_DOSTRAINCMP.dir</i> for a moment tensor source and
+<i>D_DOSTRAINCMPF.dir</i> for a point force. 
+</p>
+<p>The <b>DOALL</b> invokes four scripts:
+<ul>
+<li>DOINITIALIZE: This computes the Green's functions required for the numerical estimation of the partial derivatives.</li>
+<li>DOSTRAINCMP: This runs the new code for a moment tensor source, the numerical partial derivatives and the numerical estimates of the strain.</li>
+<li>DOSTRAINCMPF: This runs the new code for a moment tensor source, the numerical partial derivatives and the numerical estimates of the strain.</li>
+<li>DOCLEANUP: This removes all temporary files and leaves graphics images in the D_DOSTRAINCMP.dir and D_DOSTRAINCMPF.dir.</li>
+</ul>
+</p>
+<p>Note that the scripts <b>DOSTRAINCMP</b> and <b>DOSTRAINCMPF</b> use the program <b>convert</b> from the ImageMagick package to convert the Encapsulated PostScript eps files to PNG images.</p>
+<h1>Results</h1>
+The following set of figures show the velocities and strains at a depth of 43.0 km in the CUS velocity model used. For this presentation, the Z-axis is positive down while the R-axis is positive away from the source.  Each figure is annotated with the particular file and the component or motion. For example,
+<p>
+<pre>
+SW/005000_0100_0030.Uz - Z-component ground velocity in <i>m/s</i> using modal superposition  of new codes
+WK/005000_0100_0030.Uz - Z-component ground velocity in <i>m/s</i> using wavenumber integration of new codes
+SWkm/Uz                - Z-component ground velocity in <i>m/s</i> using modal superposition of original codes
+WKkm/Uz                - Z-component ground velocity in <i>m/s</i> using wavenumber integration  of original codes
+</pre>
+</p>
+<p>
+Thus the leading WK or SW indicate the results of the new codes, while the WKkm or SWkm indicate that the strains were estimated using
+the centered difference numerical differentiation.
+</P>
+<p>In the file annotation, the 
+Err = e<sub>rr</sub>,
+Erf = e<sub>r&phi;</sub>,
+Erz = e<sub>rz</sub>,
+Eff = e<sub>&phi;&phi;</sub>,
+Efz = e<sub>&phi;z</sub>, and
+Ezz = e<sub>zz</sub>.
+</p>
+<table cellpadding="2" cellspacing="2">
+	<tr>
+		<th ><big>Moment tensor source</big> </th>
+		<th ><big>Point force source</big> </th>
+	</tr>
+	<tr>
+		<td ><img src="D_DOSTRAINCMP.dir/U.png"   name="Image1" align="bottom" width="1000" height="723" > </td>
+		<td ><img src="D_DOSTRAINCMPF.dir/UF.png" name="Image2" align="bottom" width="1000" height="723"> </td>
+	</tr>
+	<tr>
+		<td ><img src="D_DOSTRAINCMP.dir/E1.png"   name="Image3" align="bottom" width="1000" height="723" > </td>
+		<td ><img src="D_DOSTRAINCMPF.dir/E1F.png" name="Image4" align="bottom" width="1000" height="723" > </td>
+	</tr>
+	<tr>
+		<td ><img src="D_DOSTRAINCMP.dir/E2.png"   name="Image5" align="bottom" width="1000" height="723" > </td>
+		<td ><img src="D_DOSTRAINCMPF.dir/E2F.png" name="Image6" align="bottom" width="1000" height="723" > </td>
+	</tr>
+</table>
+<h1>Discussion</h1>
+<p>
+The agreements are excellent. The slight differences are as follow:
+<ul>
+<li>As expected the modal superposition cannot describe the signals between P and S.</li>
+<li>The imperfection of the numerical differentiation is quite apparent in the Eff for the point force.</li>
+</ul>
+</p>
+</body>
+</html>

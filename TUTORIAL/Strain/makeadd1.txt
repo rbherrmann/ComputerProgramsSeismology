@@ -1,0 +1,7 @@
+sacsubc.c:
+	cp ${CPS}/SUBS/sacsubc.c .
+
+sacsubc.h:
+	cp ${CPS}/SUBS/sacsubc.h .
+
+sacsubc.o: sacsubc.c sacsubc.h

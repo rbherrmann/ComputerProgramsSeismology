@@ -1,0 +1,73 @@
+
+MINEOS DEMO run example.
+
+This directory contains all necessary information to run a control
+test for MINEOS package. To run the test, follow the instructions
+below.
+
+Step 1. Check that MINEOS binary programs are accessible via the PATH
+        environment variable:
+
+      ...> which minos_bran
+
+Step 2. Start main script RUN_MINEOS.csh (for shell command interpreter)
+        or RUN_MINEOS.sh (sh/bash command interpreter) with command
+
+      ...> ./RUN_MINEOS.csh prem_noocean
+
+      or 
+
+      ...> ./RUN_MINEOS.sh prem_noocean
+
+      RUN_MINEOS scripts runs minos_bran, eigcon, green and syndat
+      MINEOS programs for a computation of the fundamental spheroidal and
+      toroidal modes. The results are stored in test_S and test_T
+      databases (eigenfunctions); in green database (Green functions);
+      and in Syndat (synthetic seismograms).Files prem_noocean_S.
+      prem_noocean_T, eprem_noocean_S and eprem_noocean_T are output
+      of the minos_bran program.
+      Compare results with precomputed ones in DEMO2 directory to be
+      sure that everything works OK. Note that results in DEMO2
+      had been computed on a SUN platform and binary files have
+      BIG_ENDIAN order. 
+
+Step 3. Convert synthetic seismograms to SAC format with command
+
+      ...> cucss2sac Syndat Syndat_SAC
+      
+      SAC waveforms will be placed in the Syndat_SAC directory. If you 
+      don't have sac program, skip this step.
+
+Step 4. Convert synthetic seismograms to ASCII format with command
+
+      ...> cucss2sac -a Syndat Syndat_ASC
+
+      ASCII files will be placed in Syndat_ASC directory. Compare waveforms
+      with waveforms in DEMO2/Syndat_ASC directory.
+
+Step 5. If you have ANTELOPE software you may see the test results
+       (Green functions and synthetic seismograms) directly on a SUN's 
+       platform, for example,
+
+      ...> dbpick Syndat
+      or
+      ...> dbpick grren
+
+      Note that ANTELOPE is always required BIG_ENDIAN waveform data order.
+      So, if test is running on a PC/Linux platform you need to convert 
+      waveforms from LOW_ENDIAN bytes order to BIG_ENDIAN in the following way
+
+      ...> RUN_ENDIAN.csh Syndat
+      ...> RUN_ENDIAN.csh  green
+    
+      or in the case of SHELL environment
+ 
+      ...> RUN_ENDIAN.sh Syndat
+      ...> RUN_ENDIAN.sh  green
+
+Step 6. Convert eigen functions (n=0,l=6,7,8) to ASCII format
+
+      ...> eigen2asc 0 0 6 8 test_S test_S_ASC
+ 
+      Converted ASCII files will be in test_S_ASC dir.
+      Compare with files in DEMO2 dir.

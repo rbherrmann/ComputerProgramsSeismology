@@ -1,0 +1,272 @@
+.ND
+.nr PS 12
+.nr VS 14
+.ps 12
+.vs 14
+.EQ
+delim $$
+gsize 12
+define l| "left |"
+define r| "right |"
+.EN
+.LP
+This document reviews multiple filter analysis, and the adaptation to that processing technique to estimate phase velocities through the cross-correlation of recorded noise.
+.LP
+.B
+Multiple Filter Analysis
+.R
+.LP
+The following discussion of multiple filter analysis follows Herrmann (1973).
+.LP
+Let the dispersed surface wave be represented by the relation
+.EQ  I (1)
+f( t, r) = 1 over { 2 pi } int from { - inf } to { inf } F ( omega , r ) exp ( i omega t )  d omega
+.EN
+where
+.EQ I (2)
+F ( omega , r ) ^=^ A ( omega , r ) exp ( - i k r + phi )
+.EN
+and $ phi $ is the source phase and $ k $ is the wavenumber, which is related to the phase velocity through the definition $ omega = k c $.
+.sp
+The processing starts with the application of a narrow bandpass Gaussian filter about a center frequency $ omega sub 0$ by the filter $ H ( omega - omega sub 0 ) $ where the function $H$ is defined as 
+.EQ I (3)
+H ( omega ) ^=^ left { 
+{ matrix {
+ccol { { exp ( - alpha omega sup 2 / omega sub 0 sup 2 ) } above { 0 } }
+ccol { { | omega | <= omega sub c  } above { | omega | > omega sub c  } }
+}
+}
+.EN
+.LP
+Under the  condition that $ ( alpha / omega sub 0 sup 2 ) sup 2 >> ( r/2 d sup 2 k / d omega sub 0 sup 2  ) sup 2 $, the filtered signal is
+.EQ I (4)
+g(t,r) = 1 over  { 2 pi } A ( omega sub 0 ) omega sub 0 sqrt { pi over alpha } exp [ i ( omega sub 0 t - k sub 0 r + phi  ) ] ^ exp left [ {  - { omega sub 0 sup 2 } over { 4 alpha } ( t - r / U sub 0 ) sup 2 } right ]
+.EN
+
+The last term defines the envelope, which is a maximum at a time corresponding to a group velocity arrival. The group velocity, $U$, is defined as $U = d omega / dk $. This expression indicates that the narrow band-pass filtered signal can be used to estimate the group velocity by using the time of envelope maximum and the spectral amplitude $A$ at $ omega = omega sub 0 $, through the envelope amplitude, e.g.,
+.EQ I (5)
+ A = ( 2 pi / omega sub 0 ) sqrt { ( alpha / pi ) } ~ | g( r/ U sub 0  , r ) |
+.EN
+The phase term can be used to estimate the phase velocity if  the source term in known. 
+The phase at the group velocity arrival, e.g., $ t = r /U sub 0 $, is
+.EQ I (6)
+PHI ^=^ tan sup -1 left [ Im g(r/U sub 0 , r ) / Re g(r/U sub 0 , r ) ] ^=^  r omega sub 0  / U - r  omega sub 0 / c + phi + N 2 pi
+.EN
+The $N 2 pi $  term arises because of the periodicity of the $ tan sup -1 $ function.
+.LP
+The source phase term can be eliminated if a two-station technique is used, e.g., if two stations are used along the same azimuth from the source. In this case a difference in the $ PHI $ for each trace would be interpreted as
+.EQ I
+PHI sub 2 - PHI  sub 1 ^=^ ( r sub 2 - r sub 1 ) omega sub 0 ( 1/U - 1/c ) + (N sub 2 - N sub 1 ) 2 pi
+.EN
+.LP
+.B
+Interstation Green's Functions
+.R
+.LP
+The development here follows Lin et al (2008) who used the results of Snieder (2004). The significant difference between the development in those papers and that used  here is in the definition of the Fourier transform pair. The Computer Programs in Seismology codes use the convention
+.EQ I
+H ( omega ) = int from { - inf } to { inf } h(t) exp ( - i omega t ) dt
+.EN
+and, for the inverse transform,
+.EQ I
+h ( t ) =  1 over { 2 pi } int from { - inf } to { inf } H( omega ) exp ( + i omega t ) dt
+.EN
+With this definition, one can show that the Fourier transform pair for cross-correlation is
+.EQ I
+C sub 12 ( t ) ^=^  int from { - inf } to { inf } x sub 2 ( tau ) x sub 1 ( tau + t ) d tau ~~~ \(<> ~~~  X sub 2 sup * ( omega ) X sub 1 ( omega )
+.EN
+In addition recall that the method of stationary phase can be used to aapproximate an integral
+.EQ  I
+I = int from { - inf } to { inf } g(k) e sup { i f(k) } dk ~ approx ~ sqrt { 2 pi } ^ g( k sub 0 ) e sup { i f ( k sub 0 ) } e sup { +- i pi over 4 }  
+{ 
+l| {{ d sup 2 f } over { d k sup 2 }}
+ r|  sub { k = k sub 0 }    sup { ^  - 1 / 2 } }
+.EN
+where $ k = k sub 0 $ is that value of $k$ that makes $ d f / d k = 0 $
+and the $ +- $ sign is taken according to whether  the sign of $ left ( {{ d sup 2 f } over { d k sup 2 }} right ) $ is $ +- $ is $+-$.
+.PP 
+Since we will focus on surface waves, a review of the point source Green's functions is appropriate. The 3-component displacements for in impulsive source observed at an azimuth $phi$ are
+.EQ I
+u sub z mark ^=^ ( F sub 1 cos phi + F sub 2 sin phi ) ^ ZHF ^+^ F sub 3 ^ ZVF
+.EN
+.EQ I
+u sub r mark ^=^ ( F sub 1 cos phi + F sub 2 sin phi ) ^ RHF ^+^ F sub 3 ^ RVF
+.EN
+.EQ I
+u sub phi mark ^=^ ( F sub 1 sin phi - F sub 2 cos phi ) ^ THF ^+^ F sub 3 
+.EN
+where the forces, $ F sub 1 $, $ F sub 2 $ and $ F sub 3 $, are in the north, east and downward directions, respectively, and $ phi$ is the azimuth from the source to the observation point  measured in a direction east of north.
+.PP
+For fundamental mode surface waves in the far field, the expressions for the functions in this expression are
+.sp 2.0i
+.EQ I 
+ZVF ^=^ 1 over { sqrt { 2 pi }} A sub R U sub z ( h ) U sub z ( z ) 1 over sqrt { k r } e sup { -i ( kr + 5 over 4 pi ) } ^=^ 
+left [ { 1 over { sqrt { 2 pi }} A sub R U sub z ( h ) U sub z ( z ) 1 over sqrt { k r } e sup { - i pi over 2 } } right ] ~ e sup { -i ( kr - pi over 4 ) }
+.EN
+.EQ I
+RVF ^=^ 1 over { sqrt { 2 pi }} A sub R U sub z ( h )  U sub r ( z ) 1 over sqrt { k r } e sup { -i ( k r + 3 pi over 4 ) } ^=^
+left [ {
+1 over { sqrt { 2 pi }} A sub R U sub z ( h )  U sub r ( z ) 1 over sqrt { k r } e sup { - i pi }  
+} right  ]
+~ e sup { -i ( k r - pi over 4 ) }
+.EN
+.EQ I
+ZHF ^=^ 1 over { sqrt { 2 pi }} A sub R U sub r ( h )  U sub z ( z ) 1 over sqrt { k r } e sup { -i ( kr - pi over 4  ) } ^=^
+left [ {
+1 over { sqrt { 2 pi }} A sub R U sub r ( h )  U sub z ( z ) 1 over sqrt { k r }
+} right ]
+~ e sup { -i ( k r - pi over 4 ) }
+.EN
+.EQ I
+RHF ^=^ 1 over { sqrt { 2 pi }} A sub R U sub r ( h )  U sub r ( z ) 1 over sqrt { k r } e sup { -i ( kr + pi over 4  ) } ^=^
+left [ {
+1 over { sqrt { 2 pi }} A sub R U sub r ( h )  U sub r ( z ) 1 over sqrt { k r } ^ e sup { - i pi over 2 }
+} right ]
+~ e sup { -i ( kr  - pi over 4 ) }
+.EN
+.EQ I
+THF ^=^ 1 over { sqrt { 2 pi }} A sub L U sub phi ( h )  U sub phi ( z ) 1 over sqrt { k r } e sup { -i ( k r - 3 pi over 4  ) } ^=^
+left [ {
+~ 1 over { sqrt { 2 pi }} A sub L U sub phi ( h )  U sub phi ( z ) 1 over sqrt { k r }  e sup { i pi over 2 }
+} right ]
+e sup { -i ( kr  - pi over 4 ) }
+
+.EN
+where $ A sub L = 1 / 2 cU I sub 0 $ for the Love wave and $ A sub R = 1/ 2 c U I sub 0 $ for the Rayleigh wave. The eigenfunctions $ U sub z $, $ U sub r $ and $ U sub phi $ are solutions of differential equations for P-SV and SH waves with the boundary conditions of zero stress at $ z = 0 $ and expnentially derease as $ z -> inf $.  For the fundamental mode Rayleign wave, the ellipticity $ U sub r / U sub z $ is positive at $ z = 0 $. Finally $z $ represents the receiver depth and $ h $ the source depth in the halfspace.
+.PP
+The second expression for each Green's functions rearranges the complex part of the solution into a form that will appear latter when considering random souces of scattering. 
+.PP
+Given the back azimuth, $ phi sub b $, from the observation point to the source, the cartesian
+displacements car given by a simple transformation:
+.EQ I
+left [ {
+matrix {
+ccol { { u sub x } above { u sub y } above { u sub z } }
+}
+} right ]
+^=^
+left [ {
+matrix {
+ccol { { - cos phi sub b } above { - sin phi sub b } above { 0 } }
+ccol { { sin phi sub b } above { - cos phi sub b } above { 0 } }
+ccol { { 0 } above { 0 } above { 1 } }
+}
+} right ]
+~
+left [ {
+matrix {
+ccol { { u sub r } above { u sub phi } above { u sub z } }
+}
+} right ]
+.EN
+.LP
+.B 
+Scattering and Coda waves
+.R
+.PP
+To understand the result of cross-correlating the noise recordings at two locations, we follow the exposition by Snieder (2004). The significant difference between our derivation and that of Snieder arises in from the definition of the Fourier transform.  For $R$ and $ k $ positive, $exp ( - i k R ) $ represents a wave propagation in the $ +R$ direction as time increases in our formulation, but as $ exp ( i k R ) $ in that of Snieder (2004).
+.PP
+Consider Figure 1, which is adapted from Snieder (2004). The source of the observed signal is generated at the scattering source. 
+.br
+.PSPIC  FIGURES/Fig_1.eps 3.0i
+.br
+The Fourier transformed vector displacement, in cartesian coordinates) at the two observation points can be written as
+.EQ I
+bold U sub { 1,2 } ^=^ sum from s sum from m bold p sup m ( h sub { 1, 2 }, z sub { 1,2}  , phi sub { 1, 2 } ) ~ 1 over { sqrt { k sub m X sub { 1,2} sup s } } ^e sup { -i ( k sub m X sub {1,2} sup 2 - pi over 4 ) } ^ S sup { (s,m)}
+.EN
+The indices, 1 or 2, refer to the specific observation point, $m$ to the mode (and wave type corresponding to each displacement component, $s$ to the scattering source, $h$ to the souce depth,  $z$ to the receiver depth, and $X$ to the horizontal distance from the source to the receiver. The concept of mode $m$ is generalized to combine the concepts of eigenfunction mode and wavetype.
+.PP
+Snieder (2004) now assumes a distribution of scatterers in the x-y plane that permits replacing the summation over the scatterers to an integral in the $x-y$ plane. If $n$ is the density of scatterers per unit area, then the cross-correlation between the recordings on component $i$ at receiver 1 an component $j$ at receiver two is
+.EQ I
+C sub ij ( t) ^=^ int from { - inf } to { inf }  u sub 1j ( tau ) u sub 2i ( t + tau ) d tau
+.EN
+or
+.EQ I ^ dx ^ dy
+C sub ij ( omega ) ^=^ sum from { m,m' } int n ^ mark p sub i sup m ( h sub 2 , z sub 2 , phi sub 2 ) ^ p sub j sup { m'} * ( h sub 1 , z sub 1 , phi sub 1 ) 
+S sup m ( omega ) S sup { m' } * ( omega )  
+~
+.EN
+.EQ I
+lineup
+cdot 
+{ e sup { -i ( k sub m X sub 2 - k sub {m'} X sub 1 )} } over { sqrt { k sub m k sub { m'} X sub 2 X sub 1 }} ^ dx ^ dy
+.EN
+Now integrate over the $y$-coordinate, using the method of stationary phase. The condition for stationary phase requires the $ y = 0$. The cross-correlation becomes
+.EQ I
+C sub ij ( omega ) ^=^ sum from { m } 
+ int from { - inf } to { inf } sqrt { 2 pi } mark p sub i sup m ( h sub 2 , z sub 2 , phi sub 2 ) ^ p sub j sup { m'} ( h sub 1 , z sub 1 , phi sub 1 ) S sup m ( omega ) S sup { m' } *  ( omega )  
+~
+.EN
+.EQ I
+lineup
+1 over sqrt { k sub m k sub { m'} } 1 over sqrt { | k sub m | R-x | - k sub { m' } | x | | } ~ e sup { -i ( k sub m |R-x| - k sub { m'} |x| - eta pi over 4 ) }
+
+~ dx
+.EN
+where $eta$ is $ +- 1 $ depending on the sign of $ - left ( { k sub m / | R-x | - k sub { m'} / |x| } right ) $, e.g., $ +1 $ for $ x < 0 $ and $ -1 $ for $ x > R $.
+.PP 
+Snieder(2004) now argues that the integral over $ x $ has a non-zero contributions when the exponential is not oscillatory, which occurs only for $ x < 0 $ and for $ x > R $. In addition the $ k sub m $ must equal $ k sub { m ' } $.
+This latter point means that for isotropic or transversely isotropic media, that the only non-zero cross-correlations will be those between $ u sub z $ at receivers 1 and 2, ansd similarly between the $ u sub y $'s and the $ u sub x$'s, which will  the receivers, $ u sub y $'s which will involve Rayleigh-wave motion for the first two and Love for the last. In addition, the gross correlations between the $ u sub z $ and the $ u sub y $ will be non-zero because both will record the Rayleigh wave. In the latter case the  there will be a $ pi over 2 $ phase difference between the $ u sub z sub 1$ - $ u sub z sub 2 $ and the $ u sub z sub 1 $ - $ u sub z sub 2 $ cross-correlations.
+.PP
+As a result of these considerations,
+.EQ I
+C sub ij ( omega ) ^=^  mark sqrt { 2 pi } sum from m left {
+{  { c sub m } over { omega } 1 over { { sqrt k sub m R } } e sup { -i ( k sub m R - pi over 4 ) } }
+int from { - inf } to 0 p sub i sup m ( h sub 2, z sub 2 , 0 ) p sub j sup m * ( h sub 1 , z sub 1 , 0 ) n ^ dx
+.EN
+.EQ I (7)
++^ lineup
+left "" 
+{ { c sub m } over { omega }  1 over { sqrt { k sub m R } } e sup { +i ( k sub m R - pi over 4 ) } 
+int from {  0 } to inf p sub i sup m ( h sub 2, z sub 2 , pi ) p sub j sup m * ( h sub 1 , z sub 1 , pi ) n ^ dx
+} right }
+^ { l| { S sup m ( omega ) } r|  } bar sup 2 
+.EN
+The first term represents signals generated in the region $ x < -0 $ propagating in the positive $x$- direction , while the second represents signals generated in the region $ x > R $ and propagating in the negative $x$-direction.
+.PP
+For cross-correlations between the same components at eah station, the integrands will be real.  Thus the wave propagation
+.PP
+For purposes of relating the signals to the point force Green's functions, we note that the integrand is real for the  cross-correlation of the same 
+components.  This  means that the phase term in (2) is $ pi / 4 $, and thus a phase velocity can be obtained as part of the multiple filter processing.
+.PP
+Thus for cross-correlating the Z components at the two stations, or the E or N components, equation (6) can be rearranged to solve for the phase velocity:
+.EQ I (8)
+c ^=^ { omega sub 0 r } over { - PHI + pi / 4  + omega sub 0  r / U sub 0   + N 2 pi }
+.EN
+Note that this expression differs from Equation (7) of Lin et al (2008) in the sign of the $ pi / 4 $ term. The difference is assumed to be due to the definition of the Fourier transform used.
+.PP
+While discussion the cross-correlation, it is also useful to consider the circumstances under which (8) could be used with synthetics. Specifically can one use the ZVF, RHF and THF Green's functions as surrogrates for the cross-correlation.
+Note that each of these contains a term such $ e sup { i +- pi / 2 } $ in the square brackets on the right. Rather than performing a Hilbert transform on the synthetic, or since the primary interest is in preserving the pahse term, a multiplication by $ -1 / i omega $, which is an integration and a polarity reversal will adjust the phase term from ZVF and RHF.  The THF requires an additional multiplication by $ -1 $ in order to have the phase term agree with the phase term for waves propagating in the $+x$ direction in (7). 
+.PP
+It is simple using the \f2mt\f1 command of \f3gsac\f1 to perform these operation.  The only point to recall is that the \f3spulse96\f1 command to compute a recorded velocities for a step source, the default procedure gives a time history that is equivalent to the ground displacement for an impulsive source. The assertion is easily seen from Fourier transforms.
+.PP
+The specific command sequence is given in the section "Generating the proper synthetic" which mentions the script in EMPIRICAL_GREEN/DIST/EXAMPLE.GRN/DOIT.
+.LP
+.B
+Summary
+.R
+.PP
+This document reviewed multiple filter analysis and shoed how the output can be used to determine phase velocity from inter-station empirical Green's functions. This required a review and adaptation of the paper bu Snieder (2004). Finally a way was determined to use synthetics from point forces get phase velocities.
+
+
+.LP
+.B
+References
+.R
+.LP
+.in 5n
+.ti 0
+Bensen, G. D., M. H. Ritwoller, M. P. Barmin, A. L. Levshin, F. Lin, M. P. Moschetti, N. M. Shapiro and Y. Yang (2007). Processing seismic ambient noise data to obtain reliable broad-band surface wave dispersion measureements, Geophys. J. Int. 169, 1239-1260. doi: 10.1111/j.1365-246X.2007.03374.x
+.sp
+.ti 0
+Herrmann, R. B. (1973). Some aspects of band-pass filtering of surface waves,  Bull. Seism. Soc. Am. 63, 663-671.
+.sp
+.ti 0
+Lin, Fan-Chi and Moschetti, Morgan P. and Ritzwoller, Michael H. (2008). Surface wave tomography of the western United States from ambient seismic noise: {Rayleigh} and Love wave phase velocity maps, Geophys. J. Int. 173, 2810298, doi 10.1111/j.1365-246X.2008.03720.x
+.sp
+.ti 0
+Snieder, R. (2004). Extracting the Green's function from the correlation of coda waves: A derivation based on stationary phase, Physical. Rev E 69, 046610-1,10 
+.sp
+.ti 0
+Wapenaar, K. (2004). Retrieving the elastodynamic Greens function of an arbitrary inhomogeneous medium by cross correlation, Phys. Rev. Lettrs. 93, 254301-1 - 254301-4.
+.in 0

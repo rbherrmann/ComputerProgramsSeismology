@@ -1,0 +1,90 @@
+#!/bin/sh
+export PATH=:../../../bin:$PATH
+#
+# Example of the synthetic seismogram's generation script.
+#
+# Usage: RUN_MINEOS.sh model_name
+# 
+# Available model names for DEMO version:
+# prem_noocean  prem_ocean CPacific NRussia tak135-f
+#
+#=========================================================
+#
+# function creat_orig
+#
+creat_origin() {
+time=`awk '{if(NR == 1){yd=$2-1970;vis=int((yd+1)/4); s=(365*yd+vis+$3-1)*86400.0+($4*60+$5)*60+$6; printf("%17.5f", s);}}' < $1`
+awk 'BEGIN{t='"$time"';}{if(NR == 1) \
+printf("%9.4f %9.4f %9.4f %17.5f %8d %8d %8d %4d %4d %4d %8d %8d %-7.7s %9.4f %-1.1s %7.2f %8d %7.2f %8d %7.2f %8d %-15.15s %-15.14s %8d %-17.17s\n", \
+$7,$8,$9,t,1,-1,$2*1000+$3,-1,-1,-1,-1,-1,"-",-999.0000,"-",-999.0,-1,-999.0,-1, \
+-999.00,-1,"-","PDE & Hvd CMT",-1,-1); \
+}' $1 > $2.origin ;
+}
+
+
+for HS in 010 100 700
+do
+#####
+#	This is a hack - set the start seconds at 1/2 duration to make this 
+#	appear as a zero phase pulse
+#####
+cat > DS_event << EOF
+DSDEP${HS} 1969 365 23 59 56.00 -85.00  000.00  ${HS} 2.0 0.0 1.0E+20  0.0 0.000 0.000  0.707  0.707 0.000 1.0E+20 45.0 90 90 290.0 0 155
+EOF
+#=========================================================
+# 5. Evaluate green functions for given sitechan relation
+echo "Step 5: green functions evaluation ........................."
+if test -f green.wfdisc; then
+ rm -rf green.*
+fi
+time green << EOF
+short
+db_list
+DS_event
+1 260
+8000
+green
+EOF
+cp -p short.site green.site
+cp -p short.sitechan green.sitechan
+# create origin relation for data base green
+../scripts/creat_origin DS_event green
+#============================================================
+# 6. Synthetic data construction
+echo "Step 6: synthetic seismogram construction .................."
+if test -f Syndat.wfdisc; then
+ rm -rf Syndat.*
+fi
+
+OUTNMSS=0
+OUTNMS=1
+OUTNM=2
+MOMENT_TENSOR=0  #moment tensor
+#MOMENT_TENSOR=1  #nodal plane 1
+#MOMENT_TENSOR=2  #nodal plane 2
+time syndat << EOF
+DS_event
+${MOMENT_TENSOR}
+green
+Syndat
+${OUTNMSS}
+EOF
+cp -p short.site Syndat.site
+cp -p short.sitechan Syndat.sitechan
+creat_origin DS_event Syndat
+
+#####
+#	step 5 - make SAC files
+#####
+cucss2sac Syndat DS_Syndat_${HS}
+gsac << EOF
+r DS_Syndat_${HS}/*SAC
+rtr
+taper w 0.005
+triangle width 8.0
+w
+q
+EOF
+
+
+done

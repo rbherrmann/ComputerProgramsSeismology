@@ -1,0 +1,43 @@
+#!/bin/sh
+
+#set -x
+
+if [ $# -ne 5 ]
+then
+	echo Usage:  DOLL STA R AZ EVLA EVLO 
+	exit 0
+fi
+STA=$1
+R=$2
+AZ=$3
+EVLA=$4
+EVLO=$5
+
+#####
+#   test values
+#####
+#R=600
+#AZ=120
+DEGRAD=0.0174532927
+
+CAZ=`echo $AZ $DEGRAD | awk '{print cos ($1*$2) }' `
+SAZ=`echo $AZ $DEGRAD | awk '{print sin ($1*$2) }' `
+CLAT=`echo $EVLA $DEGRAD | awk '{print cos ($1*$2) }' `
+
+STLA=`echo $EVLA $R $CAZ | awk '{print $1 + $3 * $2/111.195 }' `
+STLO=`echo $EVLO $R $SAZ $CLAT | awk '{ print $1 + $3*$2/(111.195*$4) }' `
+
+#echo $EVLA $EVLO $STLA $STLO
+
+#####
+#    this is not perfect
+#    so now we will use these coordinates to obtain the correct
+#    distance and azimuth
+#####
+AAZ=`udelaz -AZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+RR=`udelaz -DIST -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+echo $STA	$RR	$AAZ	$STLA	$STLO	$EVLA	$EVLO
+
+#####
+#   now use these R and AZ for the rest of the script
+#####

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <title>Layer2</title>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body>
+    <h1>Layer2</h1>
+    <p>
+      The purpose of this exercise is to illustrate ray parameter
+      filtering by modifying one line of <i>cseis96.dat</i>.
+      This can be done by using the <b>ed</b> editor within the <b>DOIT</b>
+      script. The previous shell script&nbsp;&nbsp; are now rewritten
+      as
+    </p>
+    <pre>cprep96 -M model.d -d dfile -HS 100 -XS 100 -HR 0 -DOALL  -DOCONV
+ed cseis96.dat &lt;&lt; EOF
+/    1.0000    3.1416   -0.0628   -3.1416   -3.1416    0.0628    3.1416    0.0010/s//    1.0000   -0.6400   -0.0628   -0.8760   -0.0000    0.0628    0.0000    0.0010/
+w
+q
+EOF
+
+cseis96 -R &gt; cseis96.out
+
+cpulse96 -V -p -l 4 -EXF -DELAY 10   | f96tosac -B
+
+cray96 -XMIN -50 -XMAX 250 -ZMIN 0 -ZMAX 150
+</pre>
+    In changing the one line in <i>cseis96.dat</i>, one must be very
+    careful to have the fields in exactly the same column.
+    <p></p>
+    <p>Now consider the following plots
+      <br>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>CRAY96.PLT</center>
+              <br>
+              <img src="CRAY96.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    Compared to the examples in Layer1 and Layer3, it is seen that the
+    number of rays computed are significantly smaller, In addition one
+    can see that the many rays associated with the smaller number have
+    difference angles of incidence at the surface for the P. Examining
+    the lines of <i>cseis96.amp</i> that define the ray,
+    <br>
+    <pre>    1   21  0.19851E+02  0.11161E-01  0.13666E-01  0.31416E+01  0.00000E+00 -0.695931E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.60000E+01
+    1   20  0.18920E+02  0.11418E-01  0.15042E-01  0.31416E+01  0.00000E+00 -0.753825E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.60000E+01
+    1   19  0.18035E+02  0.11503E-01  0.16559E-01  0.31416E+01  0.00000E+00 -0.818587E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.60000E+01
+    3   20  0.24213E+02  0.47507E-02  0.20070E-02  0.31416E+01  0.31416E+01 -0.671891E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    3   19  0.23258E+02  0.48973E-02  0.19507E-02  0.31416E+01  0.31416E+01 -0.735672E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    3   18  0.22361E+02  0.49476E-02  0.18254E-02  0.31416E+01  0.31416E+01 -0.808284E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    4   21  0.33897E+02  0.19992E-01  0.74526E-02 -0.12079E+00 -0.12079E+00 -0.693969E+00    2  0.33000E+01  0.47001E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    4   21  0.33897E+02  0.17993E-01  0.00000E+00  0.00000E+00  0.00000E+00 -0.693969E+00    3  0.33000E+01  0.47001E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    4   20  0.32298E+02  0.16075E-01  0.90385E-02 -0.90041E-01 -0.90041E-01 -0.752353E+00    2  0.33000E+01  0.47001E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    4   20  0.32298E+02  0.19224E-01  0.00000E+00  0.00000E+00  0.00000E+00 -0.752353E+00    3  0.33000E+01  0.47001E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    4   19  0.30790E+02  0.15926E-01  0.95867E-02 -0.49196E-01 -0.49196E-01 -0.817116E+00    2  0.33000E+01  0.47001E+01  0.00000E+00  0.28000E+01  0.35000E+01
+    4   19  0.30790E+02  0.20475E-01  0.00000E+00  0.00000E+00  0.00000E+00 -0.817116E+00    3  0.33000E+01  0.47001E+01  0.00000E+00  0.28000E+01  0.35000E+01
+   19   21  0.46749E+02  0.17467E-03  0.66527E-04  0.62832E+01  0.62832E+01 -0.779337E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.35000E+01
+</pre>
+    <br>
+    look at column 8. This column is the angle in radians with respect
+    to the horizontal. There is a lot of variability. These values would
+    all be the same for a
+    teleseismic P wave.
+    <p></p>
+    <p>
+      The record sections are
+    </p>
+    <p>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>ZEX.PLT</center>
+              <br>
+              <img src="ZEX.png"></td>
+            <td>
+              <center>REX.PLT</center>
+              <br>
+              <img src="REX.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    As expected the choice of a positive values for the ray parameter
+    limits did reduce the number of rays to make the seismograms.
+    However the synthetics do not look much like those from the Layer1
+    discussion.
+    <p></p>
+    <p>
+      The synthetics are the same as those in Layer3 since the ray
+      parameter filtering is the same. The advantage of the approach
+      here is that the file sizes of <i>cseis96.amp</i> and <i>cseis96.trc</i>
+      are smaller. In addition, since there is a search over fewer
+      takeoff angles for rays, <b>cseis96</b> will run much, much
+      faster.
+    </p>
+  </body>
+</html>

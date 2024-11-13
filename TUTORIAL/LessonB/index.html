@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Computer Programs in Seismology - Lesson B</title>
+</head>
+<body bgcolor="#ffffff">
+<h2>Introduction</h2>
+This lesson creates some synthetic seismograms by surface wave model
+superposition. The user is requested to determine the phase velocities
+through the use of the interactive program do_pom. The observed
+dispersion is then compared to the theoretical values from the model.<br>
+<br>
+I
+create the directory <span style="font-weight: bold;">LessonB&nbsp;
+</span><span style="color: rgb(0, 0, 0);">and</span> <span
+ style="color: rgb(0, 0, 0);">place the scripts&nbsp; <span
+ style="text-decoration: underline;"><a href="DOIT">DOIT</a></span>,&nbsp;
+and&nbsp;<a href="DOCLEAN">DOCLEAN </a><span style="font-weight: bold;"></span><span
+ style="font-weight: bold;"> </span>in
+that directory. <br>
+<br>
+For testing everything is in the tarball&nbsp; <a href="LessonB.tgz">LessonB.tgz</a>
+. Unpack this with the command <span style="font-weight: bold;"><span
+ style="font-style: italic;">gunzip -c LessonB.tgz | tar xvf
+-&nbsp;&nbsp;&nbsp; </span></span>This will create the directory
+LessonB and place the file <span style="font-style: italic;"><span
+ style="font-weight: bold;">00README </span></span>and the scripts <span
+ style="font-style: italic;"><span style="font-weight: bold;">DOIT </span></span>and
+<span style="font-style: italic;"><span style="font-weight: bold;">DOCLEAN
+</span></span>in that directory.<br>
+<br>
+<h2>DOIT</h2>
+When you run this script, surface-modal superposition is used to create
+a synthetic seismograms at a distances of 2500-2850&nbsp; km in 50 km
+increments for a source with a
+depth of 10 km and with a faulting model of strike=45, rake=45 and
+dip=45. For this source depth mechanism, the Rayleigh wave signal
+is simple in that the fundamental model spectrum is smooth.<br>
+<br>
+</span><span style="color: rgb(0, 0, 0);"></span>
+<h3>Phase Velocity Analysis<br>
+</h3>
+<span style="color: rgb(0, 0, 0);">After the synthetics are computed
+the program <span style="font-weight: bold;">do_pom </span>is started
+using the command<br>
+</span><span style="color: rgb(0, 0, 0);"></span>
+<pre>	&gt; do_pom B*Z00.sac<br><br></pre>
+to study the Rayleigh wave dispersion. You will see the following
+graphical menu:<br>
+<br>
+<img style="width: 796px; height: 636px;" alt="dopom1.png"
+ src="dopom1.png"><br>
+<br>
+Now clock "SelectALL" and then click "Do POM".<br>
+<br>
+The next
+page sets the processing parameters. Click on the "Nray" button to
+select 250 phase velocities between the Vmin and Vmax values, click on
+the "Shade" to have a color contour display and click on the "Type" to
+select Rayleigh since you are using vertical component traces. I set
+"Length" to 2 to get more frequency domain resolution for the plots.<br>
+&nbsp;<br>
+When
+you are done, click on the "Do POM" button to go to the next page.<br>
+<br>
+<img style="width: 796px; height: 636px;" alt="dopom2.png"
+ src="dopom2.png"><br>
+<br>
+&nbsp;At this point the FORTRAN program <span
+ style="font-weight: bold;">sacpom96</span> is executed to create the
+dispersion information which is the next page displayed.<br>
+<br>
+<img style="width: 796px; height: 636px;" alt="dopomrayl.png"
+ src="dopomrayl.png"><br>
+<br>
+When <span style="font-weight: bold;">sacpom96 </span>is done, you
+will be presented with a graphical menu. Phase velocity analysis
+consists of time shifting signals and stacking the spectra. The maximum
+of the amplitude spectrum will give dispersion values reflecting the
+true values as well as the artifact of spatial and temporal aliasing.
+You use this screen to select the dispersion curve. <br>
+<br>
+Clicking on the "Auto" button will ask you to define the mode, here
+Fundamental. Auto means that clicking on the dispersion window will
+initiate a "rubber band" for selecting the dispersion. A second mouse
+click will select the dispersion values nearest the rubber band
+line.&nbsp; When you are done, click on "Exit" and then select "Yes" to
+save the dispersion values.<br>
+<br>
+If we start using the B*T00.sac traces, we will get Love wave
+dispersion. The graphical results and selected dispersion are shown in
+the next figure.<br>
+<br>
+<br>
+<img style="width: 796px; height: 636px;" alt="dopomleove.png"
+ src="dopomlove.png"><br>
+<br>
+<br>
+<h3>Comparison with Theory</h3>
+The shell script now compares the selected dispersion to the
+theoretical dispersion for the model. This is a very useful exercise
+since we can learn something about the imperfections of the multiple
+filter analysis used to get the group velocities:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr align="center">
+      <td colspan="2" rowspan="1" style="vertical-align: top;">Comparison
+of theoretical and observed phase velocities<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">Love Wave
+Comparison<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;">Rayleigh
+Wave Comparison<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 509px; height: 474px;" alt="slegnc.png" src="slegnc.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 509px; height: 475px;" alt="regenc.png" src="sregnc.png"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+We see that the phase velocities are well determined at all
+periods. <br>
+<br>
+<br>
+<span style="color: rgb(0, 0, 0);">
+<h2>Cleanup</h2>
+After you are done testing these programs, enter <span
+ style="font-weight: bold;">DOCLEAN</span> to clean up the directory.
+You will be left only with the <span style="font-style: italic;">00README,
+DOIT and DOCLEAN</span> files.<br>
+</span><span style="color: rgb(0, 0, 0);"></span>
+<h2>Other Tests</h2>
+Modify the script so that the source depth is 30 km, the faulting
+mechanism has strike 0, dip 90 and rake 0.&nbsp; Then run the script.
+In this case you will notice that the Rayleigh wave signal on the
+vertical and radial components has a spectral hole. See if this affects
+the phase velocity determination.<br>
+<br>
+<br>
+<span style="color: rgb(0, 0, 0);"><br>
+<br>
+</span>
+</body>
+</html>

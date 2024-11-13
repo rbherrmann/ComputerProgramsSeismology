@@ -1,0 +1,514 @@
+#!/bin/sh
+#IDHERE
+REGION="NONE"
+FELTEVID="NONE"
+TITLE=""
+EVID="NONE"
+DATE="2013/05/22"
+TIME="17:19:39"
+LAT="35.299"
+LON="-92.715"
+DEPTH="2.0"
+MAG="3.50"
+FELT="n"
+DIR="20130522171939"
+STATE=" "
+YEAR="2013"
+MO="05"
+DY="22"
+HR="17"
+MN="19"
+SEC="39"
+MSEC="000"
+
+#####
+#       get the current neic phase information
+#####
+HREFEVID="nHREF"
+if [ "${EVID}" != "NONE" ]
+then
+if [ -f neic_${EVID}_p.html ]
+then
+    mv neic_${EVID}_p.html neic_${EVID}_p.html.old
+fi
+wget http://neic.usgs.gov/neis/bulletin/neic_${EVID}_p.html
+HREFEVID="HREF"
+fi
+
+if [ "${FELTEVID}" != "NONE" ]
+then
+HREFFELTEVID="HREF"
+else
+HREFFELTEVID="nHREF"
+fi
+
+
+LOCATION="${DATE} ${TIME} ${LAT} ${LON} ${DEPTH} ${MAG} ${STATE}"
+
+#####
+#       Mechanism information automatically from the waveform inversion
+#####
+cp ../GRD.REG/fmdfit.dat .
+HS=`cat fmdfit.dat | awk '{print $2}' `
+STK=`cat fmdfit.dat | awk '{print $3}' `
+DIP=`cat fmdfit.dat | awk '{print $4}' `
+RAKE=`cat fmdfit.dat | awk '{print $5}' `
+MW=`cat fmdfit.dat | awk '{print $6}' `
+
+COMMENT="The waveform inversion is preferred."
+#####
+#	DO NOT CHANGE BELOW HERE
+#####
+
+#20100124_071451  35.57  -97.28   6.0 3.61 115 85   25 WEB
+#YYYYMMDD_hhmmssfffffffFFFFFFFFffffffFFFFFDDDDdddDDDDD WEB
+echo ${YEAR} ${MO} ${DY} ${HR} ${MN} ${SEC} ${LAT} ${LON} ${HS} ${MW} ${STK} ${DIP} ${RAKE} | awk '{ printf "%4.4d%2.2d%2.2d_%2.2d%2.2d%2.2d%7.2f%8.2f%6.1f%5.2f%4d%3d%5d WEB\n",$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13}' > mechlist.proto
+
+SHWP
+#####
+#       create LPR message using best solution
+#####
+fmlpr "USGS/SLU Moment Tensor Solution" "${YEAR} ${MO} ${DY} ${HR} ${MN} ${SEC} ${MSEC} ${LAT} ${LON} ${DEPTH} ${MAG}" "${STATE}" ${HS} ${MW} ${STK} ${DIP} ${RAKE} sumstaused.txt  sumswavendk.txt  sumwfilter.txt 
+cat >> ${DIR}.msg << EOF
+
+Details of the solution is found at
+
+http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/${DIR}/index.html
+EOF
+
+
+cat > mech.proto << EOF
+<TR>
+	<TD valign=top> ${DATE} </TD> 
+	<TD valign=top> ${TIME} </TD> 
+	<TD valign=top> ${LAT} </TD>
+	<TD valign=top> ${LON} </TD> 
+	<TD valign=top> ${DEPTH} </TD> 
+	<TD valign=top> ${MAG} </TD>
+	<TD valign=top> ${STATE} </TD> 
+	<TD valign=top> ${FELT} </TD>
+	<TD valign=top> <A nHREF=""> </A> </TD>
+	<TD valign=top> <A HREF="${DIR}/index.html">${DIR} Mechanism</A> </TD> 
+</TR>
+EOF
+
+
+#####
+#	create the file index.html from the information at hand
+#####
+
+rm -f index.html
+
+#####
+#	IF it does not exist, create a first motion prototype
+#	That will be edited to add first motion
+#	The file has STATION AZIMUTH DISTANCE
+#####
+if [ -f FIRST ]
+then
+	echo FIRST exists
+else
+	echo creating FIRST prototype
+	cat staazdist | sort -n -k 3 > FIRST
+fi
+
+
+cat > index.html << EOF
+<HTML>
+<TITLE>${TITLE} </TITLE>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H2>Location</H2>
+<P>
+${LOCATION}
+<H2>Arrival Times (from USGS)</H2>
+<P>
+<A ${HREFEVID}="neic_${EVID}_p.html">Arrival time list</A>
+<H2>Felt Map</H2>
+<P>
+<A ${HREFFELTEVID}="http://earthquake.usgs.gov/eqcenter/dyfi/events/${FELTEVID}/us/index.html">USGS Felt map for this earthquake</A>
+<P>
+<A HREF="http://earthquake.usgs.gov/eqcenter/dyfi/index.html">USGS Felt reports main page </A>
+<H2>Focal Mechanism</H2>
+<P>
+<TABLE>
+        <TR><TD><PRE>
+EOF
+cat ${DIR}.msg >> index.html
+cat >> index.html << EOF
+        </PRE></TD></TR>
+</TABLE>
+<P>
+<H3>Preferred Solution</H3>
+The preferred solution from an analysis of the surface-wave spectral amplitude radiation pattern, waveform inversion and first motion observations is
+<P>
+<PRE>
+      STK = ${STK}
+      DIP = ${DIP}
+     RAKE = ${RAKE}
+       MW = ${MW}
+       HS = ${HS}
+</PRE>
+<P>
+EOF
+echo ${COMMENT} >> index.html
+echo "<P>" >> index.html
+
+
+#####
+#	moment tensor comparison
+#####
+
+cat >> index.html << EOF
+<H2>Moment Tensor Comparison </H2>
+<P>
+The following compares this source inversion to others
+<TABLE>
+<TR>
+<TD><CENTER><B>SLU</B></CENTER></TD>
+EOF
+
+for MT in USGSMT CMT GCMT UCB SCAL AEIC PNSN USGSW USGSCMT SLUFM UNR
+do
+case ${MT} in
+	USGSMT) mtsol="usgsmt" ;;
+	USGSW) mtsol="usgsw" ;;
+	USGSCMT) mtsol="usgscmt" ;;
+	SLUFM) mtsol="slufm" ;;
+	CMT) mtsol="cmt" ;;
+	GCMT) mtsol="gcmt" ;;
+	UCB) mtsol="ucb" ;;
+	UNR) mtsol="unr" ;;
+	SCAL) mtsol="scal" ;;
+	AEIC) mtsol="aeic" ;;
+	PNSN) mtsol="pnsn" ;;
+esac
+
+#####
+#	see if there is a USGS solution
+#####
+if [ -f ../MT.OTHER/${mtsol} ]
+then
+cat >> index.html << EOF
+<TD><CENTER><B>${MT}</B></CENTER></TD>
+EOF
+fi
+
+done
+
+#####
+# this is the second pass two pass - first pass defined title columns
+#	second pass fills in with beach balls
+#
+#####
+
+cat >> index.html << EOF
+</TR>
+<TR>
+	<TD VALIGN=top ><PRE>
+EOF
+#####
+#	put the SLU solution in
+#####
+cat *.msg >> index.html
+cat >> index.html << EOF
+	</PRE></TD>
+EOF
+
+#####
+#	now cycle through other solutions in the same order
+#####
+
+for MT in USGSMT CMT GCMT UCB SCAL AEIC PNSN USGSW USGSCMT SLUFM UNR
+do
+case ${MT} in
+	USGSMT) mtsol="usgsmt" ;;
+	USGSW) mtsol="usgsw" ;;
+	USGSCMT) mtsol="usgscmt" ;;
+	SLUFM) mtsol="slufm" ;;
+	CMT) mtsol="cmt" ;;
+	GCMT) mtsol="gcmt" ;;
+	UCB) mtsol="ucb" ;;
+	UNR) mtsol="unr" ;;
+	SCAL) mtsol="scal" ;;
+	AEIC) mtsol="aeic" ;;
+	PNSN) mtsol="pnsn" ;;
+esac
+
+if [ -f ../MT.OTHER/${mtsol} ]
+then
+cat >> index.html << EOF
+	<TD VALIGN=top ><PRE>
+EOF
+cat ../MT.OTHER/${mtsol} >> index.html
+cat >> index.html << EOF
+        </PRE></TD>
+EOF
+fi
+
+done
+
+#####
+#	complete the table
+#####
+cat >> index.html << EOF
+</TR>
+</TABLE>
+EOF
+
+#####
+#	end moment tensor comparison
+#####
+
+
+if [ -f tgrd.html ]
+then
+cat tgrd.html >> index.html
+fi
+
+if [ -f tab.html ]
+then
+#####
+#	put in the nodal plane information
+#####
+cat >> index.html << EOF
+<H3>Surface-Wave Focal Mechanism</H3>
+<P>
+The following figure shows the stations used in the grid search for the best focal mechanism to fit the surface-wave spectral amplitudes of the Love and Rayleigh waves.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="na.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used to obtain focal mechanism from surface-wave spectral amplitudes</CENTER>
+        </TD>
+</TR>
+</TABLE>
+<P>
+The surface-wave determined focal mechanism is shown here.
+
+<PRE>
+EOF
+cat FMTP.out >> index.html
+
+cat >> index.html << EOF
+</PRE>
+<TABLE>
+<TR>
+	<TD><IMG SRC="fmplot.png"></TD>
+	<TD> </TD>
+</TR>
+</TABLE>
+EOF
+cat >> index.html << EOF
+</UL>
+<H3>First motion data</H3>
+<P>
+The P-wave first motion data for focal mechanism studies are as follow:
+<PRE>
+Sta Az    Dist   First motion
+EOF
+cat FIRST  >> index.html
+cat >> index.html << EOF
+</PRE>
+<H3>Surface-wave analysis</H3>
+<P>
+Surface wave analysis was performed using codes from 
+<A HREF="/eqc/eqccps.html"><I>Computer Programs in Seismology</I></A>, specifically the
+multiple filter analysis program <I>do_mft</I> and the surface-wave
+radiation pattern search  program <I>srfgrd96</I>.
+<H4>Data preparation</H4>
+<P>
+Digital data were collected, instrument response removed and traces converted
+to Z, R an T components. Multiple filter analysis was applied to the Z and T traces to obtain the Rayleigh- and Love-wave spectral amplitudes, respectively.
+These were input to the search program which examined all depths between 1 and 25 km
+and all possible mechanisms.  
+<BR>
+<TABLE>
+<TR>
+	<TD>
+	<IMG SRC="fmdfit.png" NAME="Depth sensitivity" ALIGN="LEFT">
+	</TD>
+</TR>
+<TR>
+	<TD>
+	<CENTER>Best mechanism fit as a function of depth. The preferred depth is given above. Lower hemisphere projection</CENTER>
+	</TD>
+</TR>
+</TABLE>
+<BR>
+<TABLE>
+<TR>
+	<TD>
+	<IMG SRC="fm.png" NAME="Pressure -Tension Axis trends (lower hemisphere)" ALIGN="LEFT">
+	</TD>
+</TR>
+<TR>
+	<TD>
+Pressure-tension axis trends. Since the surface-wave spectra search does not distinguish between P and T axes and since there is a 180 ambiguity in strike, all possible P and T axes are plotted. First motion data and waveforms will be used to select the preferred mechanism. The purpose of this plot is to provide an idea of the
+possible range of solutions. The P and T-axes for all mechanisms with goodness of fit greater than 0.9 FITMAX (above) are plotted here.
+	</TD>
+</TR>
+</TABLE>
+<BR>
+<TABLE>
+<BR>
+<TABLE>
+<TR>
+	<TD>
+	<IMG SRC="fmmfit.png" NAME="Focal mechanism sensitivity at the preferred depth," ALIGN="LEFT">
+	</TD>
+</TR>
+<TR>
+	<TD>
+	Focal mechanism sensitivity at the preferred depth. The red color indicates a very good fit to the Love and Rayleigh wave radiation patterns. 
+Each solution is plotted as a vector at a given value of strike and dip with the angle of the vector representing the rake angle, measured, with respect to the upward vertical (N) in the figure. Because of the symmetry of the spectral amplitude rediation patterns, only strikes from 0-180 degrees are sampled.
+	</TD>
+</TR>
+</TABLE>
+<H4>Love-wave radiation patterns</H4>
+<P>
+<UL>
+EOF
+
+for i in 01 02 03 04 05 06 07 08 09 10
+do
+if [ -s sradl${i}.png ]
+then
+echo '<LI><A HREF="'sradl${i}.png'">Love-wave radiation patterns. </A>' >> index.html
+fi
+done
+
+cat  >> index.html << EOF
+</UL>
+<H4>Rayleigh-wave radiation patterns</H4>
+<UL>
+EOF
+
+for i in 01 02 03 04 05 06 07 08 09 10
+do
+if [ -s sradr${i}.png ]
+then
+echo '<LI><A HREF="'sradr${i}.png'">Rayleigh-wave radiation patterns. </A>' >> index.html
+fi
+done
+
+cat >> index.html << EOF
+</UL>
+<H3>Broadband station  distribution </H3>
+<P>
+The distribution of broadband stations with azimuth and distance is
+<BR>
+<A HREF="staazdist.txt">Listing of broadband stations used</A>
+EOF
+rm -f staazdist.txt
+echo Sta Az   Dist >> staazdist.txt
+cat staazdist | sort -n -k 3 >> staazdist.txt
+cat >> index.html << EOF
+<BR>
+<H3>Waveform comparison for this mechanism</H3>
+<P>
+Since the analysis of the surface-wave radiation patterns uses only spectral
+amplitudes and because the surfave-wave radiation patterns have a 180 degree symmetry, each surface-wave solution consists of four possible focal mechanisms corresponding to the interchange of the P- and T-axes and a roation of the mechanism by 180 degrees. To select one mechanism, P-wave first motion can be used. This was not possible in this case because all the P-wave first motions were
+emergent ( a feature of the P-wave wave takeoff angle, the station location and the mechanism). The other way to select among the mechanisms is to compute
+forward synthetics and compare the observed and predicted waveforms.
+<P>
+The fits to the waveforms with the given mechanism are show below:
+<P>
+<TABLE>
+<TR>
+<TD>
+<IMG SRC="cmp1.png" NAME="Waveform Comparison" ALIGN="LEFT" BORDER=1 >
+</TD>
+</TR>
+</TABLE>
+<P>
+This figure shows the fit to the three components of motion (Z - vertical, R-radial and T - transverse). For each station and component, the 
+observed traces is shown in red and the model predicted trace in blue. The traces represent filtered ground velocity in units of meters/sec (the peak value is printed adjacent to each trace; each pair of traces to plotted to the same scale to emphasize the difference in levels). Both synthetic and observed traces have been filtered using the SAC commands:
+EOF
+cat filter >> index.html
+cat >> index.html << EOF
+<TABLE>
+<TR>
+<TD>
+<IMG SRC="phv.png" NAME="Comparison of observed group velocities to model predictions" ALIGN="LEFT" BORDER=1 >
+</TD>
+</TR>
+</TABLE>
+<TABLE>
+<TR>
+<TD>
+<IMG SRC="phg.png" NAME="Comparison of observed anelastic attenuation coeffocients to model predictions" ALIGN="LEFT" BORDER=1 >
+</TD>
+</TR>
+</TABLE>
+<P>
+EOF
+fi
+
+cat >> index.html << EOF
+<P>
+<H2>Discussion</H2>
+<P>
+<H2>Acknowledgements</H2>
+<P>
+EOF
+
+if [ -f tab.html ]
+then
+cat  >> index.html << EOF
+<h2>Appendix A</h2>
+<BR>
+<A HREF="bigtab.html">Spectra fit plots to each station </A>
+EOF
+
+cat > bigtab.html << EOF
+<HTML>
+<TITLE>${TITLE} </TITLE>
+<HEAD>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<p>
+The figures below show the observed spectral amplitudes (units of cm-sec) at each station and the
+theoretical predictions as a function of period for the mechanism given above. The  earth model listed below
+was used to define the Green's functions. For each station, the Love and Rayleigh wave spectral amplitudes are plotted with the same scaling so that one can get a sense fo the effects of the effects of the focal mechanism and depth on the excitation of each.
+EOF
+cat tab.html >> bigtab.html
+cat >> bigtab.html << EOF
+</BODY>
+</HTML>
+EOF
+
+fi
+
+cat >> index.html << EOF
+<H2>Velocity Model</H2>
+<P>
+The CUS model used for the waveform synthetic seismograms and for the surface wave eigenfunctions and dispersion is as follows:
+<PRE>
+EOF
+
+cat ${GREENDIR}/Models/CUS.mod >> index.html
+cat >> index.html << EOF
+</PRE>
+EOF
+
+cat >> index.html << EOF
+<h2>Quality Control </h2>
+<P>
+Here we tabulate the reasons for not using certain digital data sets
+<P>
+EOF
+cat QUALITY >> index.html
+DATE=`date`
+cat >> index.html << EOF
+
+<center><i>Last Changed ${DATE}</i></center>
+
+</body>
+</html>
+EOF

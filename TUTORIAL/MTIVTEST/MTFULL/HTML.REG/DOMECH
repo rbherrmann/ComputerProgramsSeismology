@@ -1,0 +1,325 @@
+#!/bin/sh
+
+# DOMECH $LAT $LON $MW $STK $DIP $RAKE $HS $LATMIN $LATMAX $LONMIN $LONMAX
+LAT=$1
+LON=$2
+MW=$3
+STK=$4
+DIP=$5
+RAKE=$6
+HS=$7
+LATMIN=$8
+LATMAX=$9
+LONMIN=${10}
+LONMAX=${11}
+SCALELAT=`echo $LATMIN $LATMAX | awk '{print (1-0.9)*$1 + 0.9*$2}' `
+SCALELON=`echo $LONMIN $LONMAX | awk '{print (1-0.2)*$1 + 0.2*$2}' `
+SCALELEN=20
+
+
+#####
+#       define the color palete for elevation
+#       MIN_ELV R G B MAX_ELEV R G B
+#       (from Chuck Ammon)
+#####
+cat > map.cpt << EOF
+-1000   100     200     255     -500    100     200     255
+-500    150     225     255     0       150     225     255
+0       100     150     100     30      100     150     100
+30      125     175     125     60      125     175     125
+60      150     200     150     122     150     200     150
+122     175     225     175     183     175     225     175
+183     200     255     200     244     200     255     200
+244     212     255     212     305     212     255     212
+305     255     255     225     457     255     255     225
+457     255     225     175     610     255     225     175
+610     255     225     125     702     255     225     125
+702     255     175     75      914     255     175     75
+914     200     150     50      1219    200     150     50
+1219    175     125     50      1450    175     125     50
+1450    150     100     50      1700    150     100     50
+1700    150     125     100     1981    150     125     100
+1981    125     125     125     2134    125     125     125
+2134    150     150     150     2438    150     150     150
+2438    175     175     175     2743    175     175     175
+2743    200     200     200     3048    200     200     200
+3048    233     233     233     9000    233     233     233
+B       100     200     255
+F       100     200     255
+EOF
+
+cat > graytopo.cpt << EOF
+ -1000   176   176   176  -500   176   176   176
+  -500   205   205   205     0   205   205   205
+     0   129   129   129    30   129   129   129
+    30   154   154   154    60   154   154   154
+    60   179   179   179   122   179   179   179
+   122   204   204   204   183   204   204   204
+   183   232   232   232   244   232   232   232
+   244   237   237   237   305   237   237   237
+   305   251   251   251   457   251   251   251
+   457   228   228   228   610   228   228   228
+   610   222   222   222   702   222   222   222
+   702   187   187   187   914   187   187   187
+   914   153   153   153  1219   153   153   153
+  1219   131   131   131  1450   131   131   131
+  1450   109   109   109  1700   109   109   109
+  1700   129   129   129  1981   129   129   129
+  1981   124   124   124  2134   124   124   124
+  2134   149   149   149  2438   149   149   149
+  2438   174   174   174  2743   174   174   174
+  2743   199   199   199  3048   199   199   199
+  3048   232   232   232  9000   232   232   232
+B       150     150     150
+F       150     150     150
+EOF
+
+cat > graytopo.cpt << EOF
+ -1000   150   150   150  -500   150   150   150
+  -500   157   157   157     0   157   157   157
+     0   165   165   165    30   165   165   165
+    30   165   165   165    60   165   165   165
+    60   165   165   165   122   165   165   165
+   122   166   166   166   183   166   166   166
+   183   167   167   167   244   167   167   167
+   244   168   168   168   305   168   168   168
+   305   169   169   169   457   169   169   169
+   457   171   171   171   610   171   171   171
+   610   174   174   174   702   174   174   174
+   702   175   175   175   914   175   175   175
+   914   178   178   178  1219   178   178   178
+  1219   183   183   183  1450   183   183   183
+  1450   186   186   186  1700   186   186   186
+  1700   190   190   190  1981   190   190   190
+  1981   194   194   194  2134   194   194   194
+  2134   197   197   197  2438   197   197   197
+  2438   201   201   201  2743   201   201   201
+  2743   206   206   206  3048   206   206   206
+  3048   210   210   210  9000   210   210   210
+B       150     150     150
+F       150     150     150
+EOF
+
+cat > graytopo.cpt << EOF
+ -1000   180   180   180  -500   180   180   180
+  -500   185   185   185     0   185   185   185
+     0   190   190   190    30   190   190   190
+    30   191   191   191    60   191   191   191
+    60   191   191   191   122   191   191   191
+   122   192   192   192   183   192   192   192
+   183   192   192   192   244   192   192   192
+   244   193   193   193   305   193   193   193
+   305   193   193   193   457   193   193   193
+   457   195   195   195   610   195   195   195
+   610   197   197   197   702   197   197   197
+   702   198   198   198   914   198   198   198
+   914   200   200   200  1219   200   200   200
+  1219   203   203   203  1450   203   203   203
+  1450   206   206   206  1700   206   206   206
+  1700   208   208   208  1981   208   208   208
+  1981   211   211   211  2134   211   211   211
+  2134   213   213   213  2438   213   213   213
+  2438   216   216   216  2743   216   216   216
+  2743   220   220   220  3048   220   220   220
+  3048   223   223   223  9000   223   223   223
+B       150     150     150
+F       150     150     150
+EOF
+
+
+#####
+#    set GMT defaults
+#####
+# for GMT4
+gmtset BASEMAP_TYPE FANCY OUTPUT_DEGREE_FORMAT -D PLOT_DEGREE_FORMAT ddd.xx MEASURE_UNIT cm  PAPER_MEDIA ledger+
+
+#####
+#    Define the default name of the PostScript output
+#####
+FNAME="contextmech.eps"
+
+
+#####
+#    Define map bounds: LONMIN/LON<AX/LATMIN/LATMAX 
+#####
+
+#####
+#    Define raster for topography:  
+#####
+GRDRAS="1"
+GRDRAS="22"
+
+#####
+#    Define Mercalli projection: Center_lon/Center_Lat/Plot_Width   
+#####
+#LATLON1="-120/-50/20/55"
+#LATLON="-103/-75/25/50"
+#LATLON="-99.5/34.5/-95.0/37.5r"
+#PROJ="L-95.75/30/30/50/15c"
+LATLON1="${LONMIN}/${LATMIN}/${LONMAX}/${LATMAX}r"
+LATLON="${LONMIN}/${LATMIN}/${LONMAX}/${LATMAX}r"
+PROJ="L${LONMIN}/${LATMIN}/${LATMIN}/${LATMAX}/15c"
+
+
+#####
+#    Define Coastline resolution: one of fhilc 
+#    (f)ull, (h)igh, (i)ntermediate, (l)ow, and (c)rude)
+#  . The resolution drops off by 80% between data sets.
+#####
+RESCOAST="f"
+
+#####
+#    Define Ticmark interval 
+#####
+#TICS="a0.2g0/a0.2g0WSNe"
+TICS=`echo $LAT | awk '{ if ( $1 > 55.)  printf "a1.0g0/a1.0g0WSNe" ; else printf "a0.2g0/a0.2g0WSNe"}' `
+
+#####
+#    Define epicenter symbol and size  
+#####
+EPISYM="C0.1"
+EPICOLOR="255/0/0"
+
+#####
+#    Define station symbol and size  
+#####
+STASYM="c0.15"
+STACOLOR="255/0/0"
+
+#####
+#    Define boundaries for pscoast 
+#    1 = National boundaries 
+#    2 = State boundaries within the Americas 
+#    3 = Marine boundaries 
+#    a = All boundaries (1-3) pscoast 
+#####
+BDRYS="a"
+
+#####
+#    Define resolution for output of grdsample 
+#####
+RESOUT="0.1m"
+#####
+#   the following prepares a topo map which may not be appropriate at this scale
+#####
+#
+#grdraster ${GRDRAS}  -R${LATLON1} -Gcmap.grd -V
+#grdsample cmap.grd -Gmap.grd -I${RESOUT} -R${LATLON1} -V
+#grdgradient map.grd -A315 -GMA.grd -Nt -V
+#grd2cpt map.grd -Cgraytopo.cpt > graytopo.cpt1
+#grdimage -P map.grd -X1.5i -Y1.5i -J${PROJ} -R${LATLON} -Cgraytopo.cpt1 -K -IMA.grd  -V > ${FNAME}
+#pscoast -P -W  -J${PROJ} -R${LATLON} -B${TICS} -O  -K  -N${BDRYS} -D${RESCOAST} -A2500   -V  -I1 -Lf${SCALELON}/${SCALELAT}/${SCALELAT}/${SCALELEN}k+l >> ${FNAME}
+#####
+#   the following just does the basemap
+#####
+pscoast -P -W  -J${PROJ} -R${LATLON} -B${TICS}   -K  -N${BDRYS} -D${RESCOAST} -A2500   -V  -I1 -Lf${SCALELON}/${SCALELAT}/${SCALELAT}/${SCALELEN}k+l > ${FNAME}
+
+
+#####
+#    PLOT EPICENTER LOCATIONS
+#####
+#cat nnaepic.d | awk '{print $3, $4}' | \
+#cat PDE.d | awk '{ print $6, $7}' > jjk
+#cat jjk | \
+#psxy -P -J${PROJ} -R${LATLON} -O -: -S${EPISYM} -W0.8 -G${EPICOLOR} -V -K   >> ${FNAME}
+
+
+#####
+#    PLOT FOCAL MECHANISMS
+#####
+#'19620202_064334'    36.37    -89.51    7.5    '4.23' 350     84     145 JGR79
+# 1,2:   longitude, latitude of event (-: option interchanges order)
+#       3:     depth of event in kilometers
+#       4,5,6: strike, dip and rake in degrees
+#       7:     magnitude
+#       8,9:   longitude,  latitude  at  which  to place beach ball. Entries in
+#              these columns are necessary with the -C  option.  Using  0,0  in
+#              columns 8 and 9 will plot the beach ball at the longtiude, lati‐
+#              tude given in columns 1 and 2. The -:  option  will  interchange
+#              the order of columns (1,2) and (8,9).
+#       10:    Text string to appear above the beach ball (optional).
+
+psmeca mech.dat -P -J${PROJ} -R${LATLON} -O -:  -G0/0/255 -V -Sa0.25i -K  >> ${FNAME} 
+psmeca mechevt.dat -P -J${PROJ} -R${LATLON} -O -:  -G255/0/0 -V -Sa0.25i -K   >> ${FNAME} 
+
+
+B=`basename ${FNAME} .eps`
+convert -trim ${FNAME} -background white -alpha remove -alpha off ${B}.png
+
+######
+#     Cleanup
+######
+rm -f map.grd cmap.grd MA.grd map.cpt graytopo.cpt graytopo.cpt1
+
+################
+#    plot the regime for compressive stress
+#####
+
+gfortran regime.f  -o regime
+
+cat mechdat  | awk '{print $1, $2, $3, $4, $5, $6}' | regime > lunk
+
+#####
+#   add the current event to the list
+#####
+#39.90 -104.70 3.0 130 35 -90 4.84 39.90 -104.70 19670809
+#LAT=$1
+#LON=$2
+#MW=$3
+#STK=$4
+#DIP=$5
+#RAKE=$6
+#HS=$7
+echo $LAT $LON $HS $STK $DIP $RAKE  | regime >> lunk
+
+grep Regime lunk | grep -v XX > t
+rm -f red green blue
+#####
+#       to plot the we will separate by the color combinations of the first and second part of the vector
+#####
+#       FIRST RED NF NS
+#####
+grep NF t  |  awk '{print $3, $4, $6, 0.4i}' >> red
+grep NS t  |  awk '{print $3, $4, $6, 0.4i}' >> red
+#####
+#       FIRST GREEN SS
+#####
+grep SS t  |  awk '{print $3, $4, $6, 0.4i}' >> green
+#####
+#       FIRST BLUE TS TF
+#####
+grep TS t  |  awk '{print $3, $4, $6, 0.4i}' >> blue
+grep TF t  |  awk '{print $3, $4, $6, 0.4i}' >> blue
+#####
+#       SECOND RED NF
+#####
+grep NF t  |  awk '{print $3, $4, $6 +180, 0.4i}' >> red
+#####
+#       SECOND GREEN SS NS
+#####
+grep SS t  |  awk '{print $3, $4, $6 +180, 0.4i}' >> green
+grep NS t  |  awk '{print $3, $4, $6 +180, 0.4i}' >> green
+grep TS t  |  awk '{print $3, $4, $6 +180, 0.4i}' >> green
+#####
+#       SECOND BLUE TF 
+#####
+grep TF t  |  awk '{print $3, $4, $6+180, 0.4i}' >> blue
+
+
+pscoast -X20c -P -W  -J${PROJ} -R${LATLON} -B${TICS} -O   -K  -N${BDRYS} -D${RESCOAST} -A2500   -V  -I1 -Lf${SCALELON}/${SCALELAT}/${SCALELAT}/${SCALELEN}k+l >> ${FNAME}
+psxy -P -J${PROJ} -R${LATLON} -O -: -SV0.10c/0.0c/0.0c -W0.8 -G255/0/0 -V  -K < red >> ${FNAME}
+psxy -P -J${PROJ} -R${LATLON} -O -: -SV0.10c/0.0c/0.0c -W0.8 -G0/255/0 -V  -K < green >> ${FNAME}
+psxy -P -J${PROJ} -R${LATLON} -O -: -SV0.10c/0.0c/0.0c -W0.8 -G0/0/255 -V     < blue >> ${FNAME}
+
+B=`basename ${FNAME} .eps`
+convert -trim ${FNAME} -background white -alpha remove -alpha off ${B}.png
+
+
+
+
+
+
+#####
+#    clean up
+#####
+     rm -f blue green red mech.dat regime lunk mechevt.dat mechdat t

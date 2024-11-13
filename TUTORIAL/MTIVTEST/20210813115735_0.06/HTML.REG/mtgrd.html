@@ -1,0 +1,149 @@
+<hr>
+<H3>Grid Search Full Moment Tensor Inversion using wvfmtgrd96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtgrdmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program  H(km) Mxx(dyne-cm)   Myy        Mxy        Mxz        Myz        Mzz       Mw      Fit
+WVFMTGRD96    1.0 -0.937E+22 -0.925E+22 -0.350E+21 -0.134E+21  0.159E+21 -0.113E+23  3.9928  0.4641
+WVFMTGRD96    2.0 -0.102E+23 -0.955E+22 -0.520E+21 -0.145E+22  0.507E+22 -0.217E+23  4.1194  0.4822
+WVFMTGRD96    3.0 -0.895E+22 -0.852E+22 -0.733E+21 -0.149E+22  0.349E+22 -0.209E+23  4.0972  0.4998
+WVFMTGRD96    4.0 -0.837E+22 -0.775E+22 -0.632E+21 -0.109E+22  0.333E+22 -0.193E+23  4.0740  0.5074
+WVFMTGRD96    5.0 -0.485E+22 -0.480E+22  0.111E+21 -0.137E+22  0.331E+22 -0.183E+23  4.0359  0.5101
+WVFMTGRD96    6.0 -0.491E+22 -0.414E+22 -0.553E+21 -0.744E+21  0.168E+22 -0.184E+23  4.0294  0.5070
+WVFMTGRD96    7.0 -0.182E+22 -0.279E+22  0.103E+21 -0.109E+22  0.198E+22 -0.167E+23  3.9923  0.5003
+WVFMTGRD96    8.0  0.834E+21  0.418E+20 -0.163E+21 -0.111E+22  0.201E+22 -0.149E+23  3.9551  0.4898
+WVFMTGRD96    9.0  0.193E+22  0.988E+21  0.486E+20 -0.129E+22  0.190E+22 -0.140E+23  3.9412  0.4745
+WVFMTGRD96   10.0  0.213E+22  0.109E+22  0.534E+20 -0.142E+22  0.209E+22 -0.154E+23  3.9685  0.4540
+WVFMTGRD96   11.0  0.385E+22  0.280E+22  0.539E+20 -0.143E+22  0.211E+22 -0.138E+23  3.9515  0.4342
+WVFMTGRD96   12.0  0.529E+22  0.440E+22 -0.184E+21 -0.124E+22  0.226E+22 -0.124E+23  3.9428  0.4133
+WVFMTGRD96   13.0  0.677E+22  0.570E+22 -0.277E+20 -0.853E+21  0.165E+22 -0.115E+23  3.9448  0.3917
+WVFMTGRD96   14.0  0.722E+22  0.657E+22  0.511E+21 -0.112E+22  0.182E+22 -0.107E+23  3.9469  0.3710
+WVFMTGRD96   15.0  0.728E+22  0.804E+22  0.138E+21  0.279E+21  0.158E+22 -0.101E+23  3.9507  0.3500
+WVFMTGRD96   16.0  0.800E+22  0.898E+22  0.413E+21  0.561E+21  0.154E+22 -0.947E+22  3.9597  0.3310
+WVFMTGRD96   17.0  0.834E+22  0.859E+22  0.663E+21  0.186E+22  0.536E+21 -0.941E+22  3.9599  0.3137
+WVFMTGRD96   18.0  0.896E+22  0.921E+22  0.676E+21  0.189E+22  0.547E+21 -0.914E+22  3.9699  0.2984
+WVFMTGRD96   19.0  0.958E+22  0.983E+22  0.694E+21  0.194E+22  0.561E+21 -0.900E+22  3.9813  0.2833
+WVFMTGRD96   20.0  0.902E+22  0.930E+22  0.743E+21  0.208E+22  0.600E+21 -0.109E+23  3.9903  0.2673
+WVFMTGRD96   21.0  0.100E+23  0.103E+23  0.756E+21  0.212E+22  0.612E+21 -0.102E+23  4.0025  0.2556
+WVFMTGRD96   22.0  0.107E+23  0.110E+23  0.768E+21  0.215E+22  0.621E+21 -0.984E+22  4.0120  0.2439
+WVFMTGRD96   23.0  0.111E+23  0.106E+23  0.707E+21  0.157E+22  0.110E+22 -0.101E+23  4.0137  0.2325
+WVFMTGRD96   24.0  0.107E+23  0.112E+23  0.747E+21  0.213E+22  0.823E+21 -0.102E+23  4.0168  0.2210
+WVFMTGRD96   25.0  0.108E+23  0.993E+22  0.455E+21 -0.196E+22  0.465E+22 -0.909E+22  4.0141  0.2096
+WVFMTGRD96   26.0  0.110E+23  0.101E+23  0.462E+21 -0.200E+22  0.473E+22 -0.923E+22  4.0187  0.2015
+WVFMTGRD96   27.0  0.118E+23  0.114E+23  0.831E+21 -0.131E+22  0.402E+22 -0.943E+22  4.0321  0.1936
+WVFMTGRD96   28.0  0.126E+23  0.122E+23  0.845E+21 -0.133E+22  0.409E+22 -0.902E+22  4.0429  0.1859
+WVFMTGRD96   29.0  0.111E+23  0.999E+22  0.976E+21 -0.148E+22  0.517E+22 -0.101E+23  4.0283  0.1787
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTGRD96    5.0 -0.485E+22 -0.480E+22  0.111E+21 -0.137E+22  0.331E+22 -0.183E+23  4.0359  0.5101
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTGRDinfo.txt"> MTGRDinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRD.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtgrdfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtgrddelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+

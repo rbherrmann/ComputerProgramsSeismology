@@ -1,0 +1,24 @@
+ PROGRAM TERMINATION
+  NUMBER OF RECEIVER DEPTHS  111 EXCEEDS DIMENSION   100                         
+  0.1953125E-01  0.2500000E+00
+        512         1       257
+ ieqex=            2  ALL GREEN
+   10
+  TOP  OF MODEL IS FREE SURFACE  
+  BASE OF MODEL IS HALFSPACE WITH PROPERTIES OF BOTTOM LAYER
+ Sa.mod
+ LAYER             H      P-VEL     S-VEL   DENSITY  
+     1          4.000     6.000     3.500     2.700
+     2          4.000     6.000     0.010     2.700
+     3          7.000     6.000     3.500     2.700
+     4         26.000     6.000     3.500     2.700
+     5          0.000     8.000     4.700     3.300
+ Working model
+        d         a         b         rho      1/qa      1/qb       bsh    1/qbsh
+      4.000     6.000     3.500     2.700  0.000000  0.000000     3.500     2.700
+      4.000     6.000     0.010     2.700  0.000000  0.000000     0.010     2.700
+      7.000     6.000     3.500     2.700  0.000000  0.000000     3.500     2.700
+     26.000     6.000     3.500     2.700  0.000000  0.000000     3.500     2.700
+                8.000     4.700     3.300  0.000000  0.000000     4.700     3.300
+ 
+XLENG=  0.1278000E+04 XFAC=  0.4000000E+01

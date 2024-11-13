@@ -1,0 +1,115 @@
+<html>
+<head><title>Spall modeling</title></head>
+<body bgcolor="#FFFFFF">
+<h2>Introduction</h2>
+For a long while there was a question as to whether the surface spall resulting from a bried explosion
+would significantly affect the teleseismic signature of P and surface waves from the process. In 1983, Day et al.
+proposed a surface force function for the spall. Later Day and McLaughlin (1991), showed the equivalence of the
+surface force to an horizontal crack at depth opening in the vertical direction. If the Fourier transform of the
+vertical force at the surface is 
+<pre> Mg S(omega)</pre>
+then the moment tensor source for the crack at depth HS is
+<pre>
+# 
+# Equation (16) of Day and McLaughlin(1991) has
+# 
+#                             |  A   0   0  |
+#             Mg   VP^2       |             |
+# M(omega) = ---------------- |  0   A   0  |  S(omega)
+#             HS (i omega)^2  |             |
+#                             |  0   0   B  |
+#                             
+#
+# where A = lambda/(lambda + 2 mu ) = ( Vp^2 - 2 Vs^2 )/ Vp^2
+</pre>
+The source time function for the force is a combination of Dirac delta and Heaviside functions.
+In this implementation we use the <b>gsac</b> <i>fg PAR2 tau </i> command to create the double integral of this function
+as
+<blockquote>
+      <blockquote>
+         t H(t) + (t-T) H(t - T) - t<sup>2</sup> H(t) - (t -T)<sup>2</sup> H(t - T)
+      </blockquote>
+</blockquote>
+this is  convolved with the moment tensor synthetics and its second derivative is comvolved with the force synthetics.
+
+
+<h2>Processing scripts</h2>
+The processing script is in the file <a href="spall.tgz"> spall.tgz</a> .  After downloading this, do the following operation
+<br>
+<pre>
+gunzip -c spall.tgz | tar xvf - 
+</pre>
+After unpacking you will see the following files:
+<pre>
+DOIT           - this calls the other scripts
+DOITREGIONAL   - this computes the response for a force at the
+                 free surface, and opening cracks at depths of
+                 0.1, 0.2, 0.3 and 0.4 km
+DOD2           - The DOD2, DOD2a and DOD4 make the plots
+DOD2a
+DOD4
+EPSTOPNGWHITE  - This script uses ImageMagick to make the PNG file
+                 with a white backgroun
+</pre>
+<h2>Results </h2>
+To keep things simple, all source depths are in the first layer of the CUS model. The Green's functions
+are converted to Z component records using the <b>gsac</b> <i>mt</i> command with the following source
+parameters:
+<pre>
+Source   Depth(km)  Excitation
+Force      0      F3  = Mg = 9.80E+11 dyne
+Crack     0.1     MXX = 8.130e+18 dyne-cm MYY = 8.130e+18 dyne-cm MZZ = 2.450e+19 dyne-cm
+          0.2     MXX = 4.065e+18 dyne-cm MYY = 4.065e+18 dyne-cm MZZ = 1.225e+19 dyne-cm
+          0.3     MXX = 2.710e+18 dyne-cm MYY = 2.710e+18 dyne-cm MZZ = 8.167e+18 dyne-cm 
+          0.4     MXX = 2.032e+18 dyne-cm MYY = 2.032e+18 dyne-cm MZZ = 6.125e+18 dyne-cm
+</pre>
+<P>
+The first set of figures comapres the synthetics at a distance of 10 km. The P and S waves agree in amplitude, but the
+Rayleigh wave does not. This is because the Day an McLaughlin (1991) derivation used just the first term of a Taylor series
+expansion with depth, and the Rayleigh wae is very sensitive to depth.
+<br>
+<table>
+<tr>
+<td>
+<img src="P001.png">
+<br>
+Comparison of the surface force and buried opening crack synthetics. Note the body waves are modeled very well
+</td>
+
+<td>
+<img src="P002.png">
+<br>
+Comparison of the surface force and buried opening crack synthetics at an epicentral distance of 10 km  after
+low-pass filtering at 0.1 Hz. Note the body waves are modeled very well and the surface wave agreement is
+much better,
+</td>
+</tr>
+</table>
+<P>
+The next figure presents the synthetics at a regional distance of of 200 km. The traces are plotted with the same scale
+as a function of source depth. There is very good agreement
+<br>
+<table>
+<tr>
+<td>
+<img src="FigD4.png">
+<br>
+Comparison of the surface force and buried opening crack synthetics at a distance of 200 km. Note the much better agreement
+because the Q oin the model has remoed many of the high frequencies.
+</td>
+</tr>
+</table>
+<P>
+
+<h2>References</h2>
+<ul>
+<li>
+Day, S M. and N. Rimer and J. J. Cherry (1983). Surface waves from underground explostions with spall: Analysis of elastic and nonlinear source models,
+<i>Bull. Seism. Soc. Am. </i><b>73</b> 247-264.
+</li>
+<li>Day, S. M. and K. L. McLaughlin (1991). Seismic source representations for spall,
+<i>Bull. Seism. Soc. Am. </i><b>81</b> 191-201.
+</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+rm -f *.PLT *.eps
+rm -fr 0???
+rm -fr *CTL
+rm -f hspec96.grn
+rm -f hudsonrec.mod hudsonsrc.mod file96

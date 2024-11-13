@@ -1,0 +1,239 @@
+#!/bin/bash
+
+#####
+#    create a noise data set by generating synthetic
+#    motions from randomly distributed point forces
+#    applied at the surface
+#    
+#    To reflect real data we create individual segments
+#    define the power spectra and finally the ratio tp get H/V
+#
+#    This script is designed for high frequency
+#    motions for local site studies
+#####
+
+#####
+#    Velocity model
+#####
+VMOD="Models/soilm2.mod"
+#####
+#    for surface wave synthetics
+#####
+NMODE=100
+
+#####
+#    noise sources:  These occur in the region
+#    -XMAX <= x <= XMAX
+#    -YMAX <= y <= YMAX
+#    except about a region DMIN about the receiver
+#####
+DELTA=0.01	# sample intrval in seconds
+
+DMIN=0.005	# exclude sources within DMIN km of receiver
+XMAX=1.000	# define source region 
+YMAX=1.000
+
+#####
+#    define the receiver coordinate
+#    XR,YR
+#####
+XR=0.0
+YR=0.0
+
+#####
+TMAX=900	# The sac file will 0 to TMAX seconds long
+#
+NSRC=10000	# number of random sources
+		# these will occur at intervals of TMAX/NSRC seconds
+
+
+################### do not change after here #####################
+
+function getvmodextreme () {
+#####
+#    examine the velocity model to determine the
+#    minimum and maximum shear velocities which
+#    will be used for the noise sampling
+#    
+#   the following are returned globally:
+#   VMIN - minimum S velocity in the model
+#   VMAX - maximum S velocity in the model
+#####
+tail -n +13 ${VMOD} > mod.tmp
+VMIN=`cat mod.tmp | awk 'BEGIN{VMIN=100000}{ if ( $3 > 0 && $3 < VMIN ) VMIN=$3 }END{print VMIN}'`
+VMAX=`cat mod.tmp | awk 'BEGIN{VMAX=0}{ if ( $3 > 0 && $3 > VMAX ) VMAX=$3 }END{print VMAX}'`
+}
+
+function getsrc()
+{
+#####
+#    get random coordinates in the region 
+#    -XMAX <= x <= XMAX
+#    -YMAX <= y <= YMAX
+#
+#   the following are returned globally:
+#   (XS,YS) - source coordinates in km
+#   (EVAL,EVLO) - sourc coordinate in geocentrc coordinates
+#           - for simplicity the receivers are assumed to be
+#           - near (0,0) so that te conversion from km to degree
+#           - does is essentially cartesian
+#####
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+XS=`echo $RVAL $XMAX | awk '{print $2*(2.*$1/32767. -1.) }' `
+RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+YS=`echo $RVAL $YMAX | awk '{print $2*(2.*$1/32767. -1.) }' `
+EVLA=`echo $YS | awk '{print $1/111.195}' `
+EVLO=`echo $XS | awk '{print $1/111.195}' `
+}
+
+function getforce()
+{
+#####
+#    get the components for the force to be applied at the surface
+#    the following are returned globally:
+#    FN - force component in north direction
+#    FE - force component in east  direction
+#    FD - force component in down  direction
+#   
+#####
+	RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+	FN=`echo $RVAL | awk '{print 2.*$1/32767. -1.}' `
+	RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+	FE=`echo $RVAL | awk '{print 2.*$1/32767. -1.}' `
+	RVAL=`echo $RANDOM $RANDOM | awk '{ print ( $1 * $2 ) % 32767}'  `
+	FD=`echo $RVAL | awk '{print 2.*$1/32767. -1.}' `
+}
+
+##### everything below here does the synthetic of the noise #####
+
+#####
+#    clean up previouse run
+#####
+rm -f ??????.stk
+
+#####
+#    get the extreme values of the S velocity from the model
+#####
+getvmodextreme
+echo VMIN=$VMIN VMAX=$VMAX
+
+#####
+#    first generate the eigenfunctions so that the
+#    synthetics can be made
+#    The time window must be long enough to encompass the
+#    arrivals at the fastest and slowest velocities
+#####
+NPT=`echo $XMAX $YMAX $VMIN $VMAX $DELTA | awk \
+	'{ DIST=sqrt($1*$1 + $2*$2) ; TWIN=(DIST/$3 ) ; print int(TWIN/$5)}' `
+DIST=`echo $XMAX $YMAX | awk '{print sqrt($1*$1 + $2*$2)}' `
+echo DIST $DIST XMAX $XMAX YMAX $YMAX
+cat > ddfile << EOF
+${DIST} ${DELTA} ${NPT} 0.0 0.0
+EOF
+sprep96  -M ${VMOD} -HS 0 -HR 0 -L -R -NMOD ${NMODE} -d ddfile
+sdisp96
+sregn96
+slegn96
+FNYQ=`echo $DELTA | awk '{print 0.5/$1}' `
+
+#####
+#    make plot of the dispersion of the form
+#    LC RC
+#    LU RU
+#####
+rm -fr S?EGN?.PLT
+rm -f DISP.PLT
+sdpegn96 -L -C  -XLIN -YLIN -X0 2.0 -Y0 8 -XLEN 6 -YLEN 6 -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+sdpegn96 -L -U  -XLIN -YLIN -X0 2.0 -Y0 1 -XLEN 6 -YLEN 6 -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+sdpegn96 -R -C  -XLIN -YLIN -X0 9.5 -Y0 8 -XLEN 6 -YLEN 6 -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+sdpegn96 -R -U  -XLIN -YLIN -X0 9.5 -Y0 1 -XLEN 6 -YLEN 6 -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+cat S?EGN?.PLT > DISP.PLT
+
+sdpegn96 -R -E  -XLIN -YLIN -X0 2.0 -Y0 1 -XLEN 6 -YLEN 6 -YMIN -10 -YMAX 10 -XMIN 0.0 -XMAX 10
+sdpegn96 -R -Ac  -XLIN -YLOG -X0 9.5 -Y0 1 -XLEN 6 -YLEN 6 
+sdpegn96 -L -Ac  -XLIN -YLOG -X0 17.0 -Y0 1 -XLEN 6 -YLEN 6
+cat SREGNE.PLT SREGNAC.PLT SLEGNAC.PLT > ELL.PLT
+
+
+#####
+#    now make the synthetics
+#    for each subsource
+#        get source coordinates
+#        get force orientation
+#        make synthetic
+#        use gsac to apply the force
+#        open the synthetic using cut o 0 o TMAX
+#        save
+#    then stack the subsources
+#####
+count=1
+while [ $count -lt ${NSRC} ]
+do
+	SRC=`echo $count | awk '{printf "%6.6d", $1}' `
+	getsrc
+#	echo $EVLA $EVLO $XS $YS
+	getforce
+#	echo $FN $FE $FD
+	DIST=`echo $XS $YS $XR $YR | awk '{ DX=$1-$3; DY=$2-$4;print sqrt(DX*DX + DY*DY)}'`
+	#####
+	#   Y = north
+	#   X = east
+	#####
+	AZ=`echo $XS $YS $XR $YR | awk '{DX=$3-$1;DY=$4-$2;print atan2(DX,DY)*180/3.1514927 }' `
+	BAZ=`echo $XR $YR $XS $YS| awk '{DX=$3-$1;DY=$4-$2;print atan2(DX,DY)*180/3.1514927 }' `
+	TSHIFT=`echo $SRC $NSRC $TMAX | awk '{WIN=$3/$2; print ($1 -1.) *  WIN}'`
+	######
+	# check to see that DIST > DMIN
+	#####
+	ANS=`echo $DIST $DMIN | awk '{ if ( $1 >= $2 ) print "YES" ; else print "NO" }' `
+        if [ $ANS = "YES" ]
+	then
+
+cat > dfile << EOF
+${DIST} ${DELTA} ${NPT} 0.0 0.0
+EOF
+	#####
+	#   clean up from previous run
+	#####
+	rm -f *.[ZRT][DSEHV][[DSXF]
+	spulse96 -V -p -l 2 -d dfile -EXF | f96tosac -G
+	F=`ls *.ZVF`
+	B=`basename $F .ZVF`
+
+gsac << EOF
+mt to ZNE AZ ${AZ} BAZ ${BAZ} FN $FN FE $FE FD $FD FILE $B
+shift F ${TSHIFT}
+w
+q
+EOF
+	mv T.Z ${SRC}.Z
+	mv T.N ${SRC}.N
+	mv T.E ${SRC}.E
+	count=`expr $count + 1 `
+	fi
+done
+
+#####
+#    make the final stack
+#####
+gsac << EOF
+cut o o ${TMAX}
+r ??????.E
+stack relative
+ch kcmpnm E
+w E.stk
+
+r ??????.N
+stack relative
+ch kcmpnm N
+w N.stk
+
+r ??????.Z
+stack relative
+ch kcmpnm Z
+w Z.stk
+
+q
+EOF
+
+

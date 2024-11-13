@@ -1,0 +1,147 @@
+<HTML>
+<HEAD>
+	<TITLE>Diff CPS/evalresp.3.2.40 vs IRIS_DISTRIBUTION/evalresp.3.2.40</TITLE>
+</HEAD>
+<BODY>
+<H2>evalresp</H2>
+<P>This detailes the differences between the IRIS distribution of <B>evalresp</B> and the changes made for inclusion in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+The reason for the change is for compatibility of the code under MacOS-X. The configure identifies the existence of the malloc.h include, except that it is actually in /usr/include/malloc/malloc.h instead of the expected /usr/include/malloc.h.  Note that the malloc.h is being deprecated and its definition is in /usr/include/stdlib.h.
+The CPS distribution ensures that the #include <stdlib.h> is in the routines where ther is an #include <malloc.h>
+<P>
+The other significant change is to handle a large number of coefficients in the FIR filter used in the CMG5-TD accelerometers.
+<P>
+<B>diff alloc_fctns.c ../evalresp-3.2.40.slu/alloc_fctns.c</B>
+<P>
+<PRE>
+7,9c7,11
+< #ifdef HAVE_MALLOC_H
+< #include <malloc.h>
+< #endif
+---
+> /* REMOVED R B Herrmann November 17, 2007 
+> 	#ifdef HAVE_MALLOC_H
+> 	#include <malloc.h>
+> 	#endif
+> */
+</PRE>
+<P>
+<B>diff parse_fctns.c ../evalresp-3.2.40.slu/parse_fctns.c</B>
+</P>
+<PRE>
+14,16c14,19
+< #ifdef HAVE_MALLOC_H
+< #include <malloc.h>
+< #endif
+---
+> /* REMOVED R B Herrmann November 17, 2007
+>         #ifdef HAVE_MALLOC_H
+>         #include <malloc.h>
+>         #endif
+> */
+> 
+338a342,349
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+>   static int prev_seq_number;
+>   /* END EJH CHANGE */
+383a395,409
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>  
+>      TEST the sequencing
+>   */
+> /*
+> 
+> fprintf(stderr, "curr_seq_no = %d stage_ptr->sequence_no = %d\n", curr_seq_no, stage_ptr->sequence_no);
+> fprintf(stderr, "prev_seq_number = %d\n", prev_seq_number);
+> */
+>   /* END EJH CHANGE */
+> 
+385a412,420
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+> if ( curr_seq_no == prev_seq_number )
+>       ;
+> else
+386a422
+>   /* END EJH CHANGE */
+388a425,433
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+> if ( curr_seq_no == prev_seq_number )
+>       ;
+> else
+389a435
+>   /* END EJH CHANGE */
+437a484,492
+>   /* Change Eric J. Haug SLU May, 2008 to handle continuation for
+>      FIRST with a large number of coefficients. Basically we need to get past
+>      the tendency of some SEED writers to put the following phase in the
+>      RESP file "No Abbreviation Referenced" for Response in units lookup and
+>      Response out units lookup
+>   */
+>   prev_seq_number = curr_seq_no;
+>   /* END EJH CHANGE */
+> 
+1377c1432
+<   if(0 != strncmp(end_t, "No Ending Time", 14)) {  /* Bad bug fixed 06/26/08 */
+---
+> if(0 != strncmp(end_t, "No Ending Time", 14)) {  /* Bad bug fixed 06/26/08 */
+1444c1499
+<       testTime = in_epoch(datime, this_channel->beg_t, this_channel->end_t);  
+---
+>       testTime = in_epoch(datime, this_channel->beg_t, this_channel->end_t);
+</PRE>
+<P>
+<B>diff regexp.c ../evalresp-3.2.40.slu/regexp.c</B>
+</P>
+<PRE>
+35,37c35,40
+< #ifdef HAVE_MALLOC_H
+< #include <malloc.h>          /* added 8/28/2001 -- [ET] */
+< #endif
+---
+> /* REMOVED R B Herrmann November 17, 2007
+>         #ifdef HAVE_MALLOC_H
+>         #include <malloc.h>
+>         #endif
+> */
+> #include <stdlib.h>
+</PRE>
+<P>
+<B>diff string_fctns.c ../evalresp-3.2.40.slu/string_fctns.c</B>
+</P>
+<PRE>
+29,31c29,34
+< #ifdef HAVE_MALLOC_H
+< #include <malloc.h>
+< #endif
+---
+> /* REMOVED R B Herrmann November 17, 2007
+>          #ifdef HAVE_MALLOC_H
+>          #include <malloc.h>
+>          #endif
+> */
+> 
+</PRE>
+
+<CENTER>Last changed December 4, 2009</CENTER>
+</BODY>
+</HTML>
+

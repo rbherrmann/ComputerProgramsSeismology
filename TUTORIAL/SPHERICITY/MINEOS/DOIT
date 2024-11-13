@@ -1,0 +1,34 @@
+#!/bin/sh
+
+MYPWD=`pwd`
+#####
+#	unpack the tar ball
+####
+echo Unpacking the tar ball
+gunzip -c mineos-1.0.0.rbh.tar.gz | tar xvf -
+#####
+#	create directory structure
+#####
+echo creating the directory structure
+mkdir bin
+mkdir share
+mkdir share/mineos
+#####
+#	compile the programs
+#####
+echo Compile the mineos codes
+cd mineos-1.0.0.rbh
+./configure
+make all
+#####
+#	install the programs
+#####
+echo installing the programs
+cp -p  cucss2sac eigcon eigen2asc endi green minos_bran simpledit syndat minos_bran ${MYPWD}/bin
+make clean
+
+
+#####
+#	return to the top level
+#####
+

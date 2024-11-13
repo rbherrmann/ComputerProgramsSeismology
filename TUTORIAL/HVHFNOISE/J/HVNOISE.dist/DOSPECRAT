@@ -1,0 +1,73 @@
+#!/bin/sh
+
+#####
+#    the original time series is 900 sec long
+#    or 90000 points with 100 Hz sampling.
+#    The Nyquist frequency is 50 Hz.
+#
+#    Here we will grab 50 second windows,
+#    taper w 0.5
+#    fft
+#    writesp and then read to output as CSV
+#####
+
+DWIN=50
+WMIN=0
+WID=0
+
+rm -f cmdfil
+for WMIN in 0 50 100 150 200 250 300 350 400 450 500 550 600 650 700 750 800 850
+do
+WMAX=`echo $WMIN $DWIN | awk '{print $1 + $2}'`
+WID=`echo $WID | awk '{printf "%3.3d", $1}' `
+gsac << EOF
+cut o $WMIN o $WMAX
+r E.stk N.stk Z.stk
+rtr
+taper w 0.5
+fft
+writesp
+mv E.stk.am E.am.${WID}
+mv N.stk.am N.am.${WID}
+mv Z.stk.am Z.am.${WID}
+r E.am.${WID} N.am.${WID} Z.am.${WID}
+smooth h 11 p 2
+w prepend sm.
+outcsv
+mv f001.csv sm.ENZ.am.${WID}.csv
+
+q
+EOF
+#####
+#    now compute the H/V using geometric mean of E and N for H
+tail -n +1 sm.ENZ.am.${WID}.csv > j.tmp
+cat j.tmp | awk 'BEGIN{FS=","}{ if ( $3 > 0 && $1 < 10.0) print $1, sqrt($2*$2 + $3*$3)/$4 }' > ${WID}.xy
+cat >> cmdfil << EOF
+'${WID}.xy'  2 0.01 'NO'
+EOF
+WID=`echo $WID | awk '{print $1 + 1}' `
+done
+
+#####
+#    now form the average of the ration
+#####
+rm -f avg.xyval
+while read FREQ R
+do
+	grep ${FREQ} ???.xy | sed 's/^.*://' | awk 'BEGIN{N=0;SUM=0}{N++;SUM+=$2}END{print $1, SUM/N}' >> avg.xyval
+done < 000.xy
+
+#####
+#    use genplt to make the plot
+#####
+cat > lcmdfil << EOF
+'avg.xyval' 4 0.05 'NO' 0.01 'Average'
+EOF
+
+genplt -XMIN 0 -XMAX 10.0 -YMIN 0 -YMAX 40 -TX 'Frequency (Hz)' -TY 'H/V ratio' -XLIN -YLIN -C cmdfil -L lcmdfil -LPOS 'TR'
+mv GENPLT.PLT HVratio.PLT
+plotnps -F7 -W10 -EPS -K -BGFILL < HVratio.PLT > HVratio.eps
+#####
+#     use ImageMagick convert to make the png file
+#####
+convert -trim HVratio.eps HVratio.png

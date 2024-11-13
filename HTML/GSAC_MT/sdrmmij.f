@@ -1,0 +1,174 @@
+        real stk, dip, rake, mw, xmom
+        real m(3,3)
+        call gcmdln(stk,dip,rake,mw)
+        xmom = 10.0**(16.1 + 1.5*mw)
+        call tensor(stk,dip,rake,xmom,m)
+        write(6,*)'STK  ',stk
+        write(6,*)'DIP  ',dip
+        write(6,*)'RAKE ',rake
+        write(6,*)'MW   ',mw
+        write(6,*)'MXX  ', m(1,1)
+        write(6,*)'MXY  ', m(1,2)
+        write(6,*)'MXZ  ', m(1,3)
+        write(6,*)'MYY  ', m(2,2)
+        write(6,*)'MYZ  ', m(2,3)
+        write(6,*)'MZZ  ', m(3,3)
+        end
+
+        subroutine tensor(stk,dip,rake,xmom,m)
+c-----
+c       calculate moment tensor for a double couple mechanism
+c-----
+c       stk - R*4   - strike, measured clockwise from north
+c                 when looking down, e.g., east = 90
+c       dip - R*4   - dip, measured from horizontal when looking
+c                 in direction of strike, fault dips down to right
+c                 0 <= dip <= 90
+c       rake    - R*4   - rake. Measured from horizontal with respect
+c                 to strike. If -180 < rake <= 180 is taken as
+c                 the convention, then a negative rake, implies 
+c                 that the P-wave first motion in the center of the
+c                 focal sphere is negative (e.g., dilatation)
+c       xmom    - R*4   - moment value
+c       m(3,3)  - R*4   - moment tensor
+c-----
+        integer LOT
+        parameter (LOT=6)
+        real*4 stk, dip, rake, xmom, m(3,3)
+            degrad=0.0174532925
+            tol = 1.0e-7
+            dp = degrad*dip
+            st = degrad*stk
+            sl = degrad*rake
+            sind=sin(dp)
+            cosd=cos(dp)
+            sinr=sin(sl)
+            cosr=cos(sl)
+            sins=sin(st)
+            coss=cos(st)
+            sin2d=sin(2.*dp)
+            cos2d=cos(2.*dp)
+            sin2s=sin(2.*st)
+            cos2s=cos(2.*st)
+            m(1,1)=(-sind*cosr*sin2s-sin2d*sinr*sins*sins)*xmom
+            m(2,2)=(sind*cosr*sin2s-sin2d*sinr*coss*coss)*xmom
+            m(3,3)=(sin2d*sinr)*xmom
+            m(1,2)=(sind*cosr*cos2s+0.5*sin2d*sinr*sin2s)*xmom
+            m(1,3)=(-cosd*cosr*coss-cos2d*sinr*sins)*xmom
+            m(2,3)=(-cosd*cosr*sins+cos2d*sinr*coss)*xmom
+            m(2,1) = m(1,2)
+            m(3,1) = m(1,3)
+            m(3,2) = m(2,3)
+c-----
+c       clean up small values
+c-----
+        xmax=-1.0e+37
+        do 4 i=1,3
+            do 5 j=1,3
+                if(abs(m(i,j)).gt.xmax)xmax = abs(m(i,j))
+    5       continue
+    4   continue
+        thresh = tol * xmax
+        do 6 i=1,3
+            do 7 j=1,3
+                if(abs(m(i,j)).lt.thresh) m(i,j) = 0.0
+    7       continue
+    6   continue
+
+c-----
+c       write out the information
+c-----
+        return
+        end
+
+        subroutine gcmdln(stk,dip,rake,mw)
+        real stk, dip, rake, mw
+        integer mnmarg
+        character name*40
+        integer i
+
+        nmarg = mnmarg()
+        i = 0
+        stk=0
+        dip=0
+        rake=0
+        mw = 0
+ 1000 continue
+      i = i + 1
+      if(i.gt.nmarg)go to 9000
+      call mgtarg(i,name)
+      if(name(1:2) .eq. '-S')then
+             i=i+1
+             call mgtarg(i,name)
+             read(name,'(bn,f10.0)')stk
+      else if(name(1:2) .eq. '-D')then
+              i=i+1
+              call mgtarg(i,name)
+              read(name,'(bn,f10.0)')dip
+      else if(name(1:2) .eq. '-R')then
+              i=i+1
+              call mgtarg(i,name)
+              read(name,'(bn,f10.0)')rake
+      else if(name(1:2) .eq. '-M')then
+              i=i+1
+              call mgtarg(i,name)
+              read(name,'(bn,f10.0)')mw
+      endif
+
+
+      go to 1000
+ 9000 continue
+      return
+      end
+
+        subroutine mgtarg(i,name)
+c---------------------------------------------------------------------c
+c                                                                     c
+c      COMPUTER PROGRAMS IN SEISMOLOGY                                c
+c      VOLUME V                                                       c
+c                                                                     c
+c      SUBROUTINE: MGTARG                                             c
+c                                                                     c
+c      COPYRIGHT 1996 R. B. Herrmann                                  c
+c                                                                     c
+c      Department of Earth and Atmospheric Sciences                   c
+c      Saint Louis University                                         c
+c      221 North Grand Boulevard                                      c
+c      St. Louis, Missouri 63103                                      c
+c      U. S. A.                                                       c
+c                                                                     c
+c---------------------------------------------------------------------c
+c-----
+c       return the i'th command line argument
+c
+c       This version works on SUN, IBM RS6000
+c-----
+        implicit none
+        integer i
+        character name*(*)
+            call getarg(i,name)
+        return
+        end
+        function mnmarg()
+c---------------------------------------------------------------------c
+c                                                                     c
+c      COMPUTER PROGRAMS IN SEISMOLOGY                                c
+c      VOLUME V                                                       c
+c                                                                     c
+c      SUBROUTINE: MNMARG                                             c
+c                                                                     c
+c      COPYRIGHT 1996 R. B. Herrmann                                  c
+c                                                                     c
+c      Department of Earth and Atmospheric Sciences                   c
+c      Saint Louis University                                         c
+c      221 North Grand Boulevard                                      c
+c      St. Louis, Missouri 63103                                      c
+c      U. S. A.                                                       c
+c                                                                     c
+c---------------------------------------------------------------------c
+        implicit none
+        integer iargc
+        integer mnmarg
+            mnmarg = iargc()
+        return
+        end

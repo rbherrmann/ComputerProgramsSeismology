@@ -1,0 +1,2378 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: (atend)
+%%Orientation: Landscape
+%%Creator: plotnps
+%%DocumentNeededResources: (atend)
+%%Pages: (atend)
+%%PageOrder: Ascend
+%%EndComments
+%%BeginProlog
+/ShowEqui 	% HEIGHT NCHAR STRING ShowEqui
+	{
+		% stack is HEIGHT NCHAR STRING
+		dup
+		% stack is HEIGHT NCHAR STRING STRING 
+		stringwidth pop exch
+		% stack is HEIGHT NCHAR XWIDTH STRING
+		4 1 roll
+		% stack is STRING HEIGHT NCHAR XWIDTH
+		exch div   
+		% stack is STRING HEIGHT EXTRA_PER_CHARACTER
+		sub
+		% stack is STRING EXTRAX
+		exch  0 exch  ashow
+	}
+	def
+/plaid {		
+		unit /xmin exch def 	
+		unit /dx exch def 	
+		unit /xmax exch def	
+		unit /ymin exch def 	
+		unit /dy exch def 	
+		unit /ymax exch def	
+		/strn exch def	
+	
+		xmin dx xmax 			% loop over x	
+			{ ymin dy ymax 		% loop over y	
+				{ exch dup 3 2 roll dx dy 4 2 roll	
+					maskit   	
+				} for 	
+				pop 	
+			} for	
+} def	
+	
+	
+/maskit {	
+		1 setgray	
+		gsave	
+		4 copy	
+		translate	
+		scale	
+		6 6 	
+		false	
+		[6 0 0 6 0 0]	
+		strn	
+		imagemask	
+		% return to initial position	
+		4 2 roll	
+		1 exch div exch  1 exch div exch  	
+		scale	
+		neg exch neg exch 	
+		translate	
+		grestore	
+} def	
+/unit { 0.072 mul } def 
+/m { unit exch unit exch moveto } def 
+/n { unit exch unit exch rlineto } def 
+/l { unit exch unit exch lineto } def 
+/sn { stroke newpath } def
+/cgf { closepath gsave  0 setgray fill grestore stroke } def
+1 setlinecap 2 setlinejoin newpath
+%%EndPrologue
+%%Page: 1 1
+%%BeginPageSetup
+%%EndPageSetup
+0 0 m 11000 0 l 11000 8500 l 0 8500 l closepath clip
+newpath
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+827 3937 m
+0 2 n
+-2 3 n
+-2 1 n
+-3 1 n
+-3 -1 n
+-3 -1 n
+-1 -3 n
+-1 -2 n
+1 -3 n
+1 -3 n
+3 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+820 3937 m
+4 unit setlinewidth
+984 0 n
+stroke
+newpath
+1738 3969 m
+66 -32 n
+stroke
+newpath
+1738 3904 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1853 3937 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1952 3902 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+1319 3444 m
+0 3 n
+-2 3 n
+-2 1 n
+-3 1 n
+-3 -1 n
+-2 -1 n
+-2 -3 n
+-1 -3 n
+1 -2 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+1312 3444 m
+4 unit setlinewidth
+0 985 n
+stroke
+newpath
+1279 4363 m
+33 66 n
+stroke
+newpath
+1345 4363 m
+-33 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1253 4478 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1351 4443 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+971 3589 m
+0 2 n
+-2 3 n
+-2 1 n
+-3 1 n
+-3 -1 n
+-2 -1 n
+-2 -3 n
+0 -2 n
+0 -3 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+964 3589 m
+4 unit setlinewidth
+696 695 n
+stroke
+newpath
+1590 4261 m
+70 23 n
+stroke
+newpath
+1637 4215 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1660 4334 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1758 4250 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+1440 3937 m
+-2 11 n
+-7 9 n
+-9 7 n
+-12 2 n
+-11 -2 n
+-10 -7 n
+-6 -9 n
+-2 -11 n
+2 -12 n
+6 -9 n
+10 -7 n
+11 -2 n
+12 2 n
+9 7 n
+7 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+1410 3937 m
+19 unit setlinewidth
+197 0 n
+stroke
+newpath
+1541 3969 m
+66 -32 n
+stroke
+newpath
+1541 3904 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+1243 3937 m
+-2 11 n
+-7 9 n
+-9 7 n
+-12 2 n
+-11 -2 n
+-9 -7 n
+-7 -9 n
+-2 -11 n
+2 -12 n
+7 -9 n
+9 -7 n
+11 -2 n
+12 2 n
+9 7 n
+7 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+1213 3937 m
+19 unit setlinewidth
+-196 0 n
+stroke
+newpath
+1082 3904 m
+-65 33 n
+stroke
+newpath
+1082 3969 m
+-65 -32 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+885 4363 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1013 4314 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (11) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2139 3937 m
+0 2 n
+-2 3 n
+-2 1 n
+-3 1 n
+-3 -1 n
+-2 -1 n
+-2 -3 n
+0 -2 n
+0 -3 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2132 3937 m
+4 unit setlinewidth
+984 0 n
+stroke
+newpath
+3051 3969 m
+65 -32 n
+stroke
+newpath
+3051 3904 m
+65 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3166 3937 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3264 3902 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2632 3444 m
+-1 3 n
+-2 3 n
+-2 1 n
+-3 1 n
+-3 -1 n
+-2 -1 n
+-2 -3 n
+0 -3 n
+0 -2 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2624 3444 m
+4 unit setlinewidth
+0 985 n
+stroke
+newpath
+2591 4363 m
+33 66 n
+stroke
+newpath
+2657 4363 m
+-33 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2565 4478 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2664 4443 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2284 3589 m
+-1 2 n
+-2 3 n
+-2 1 n
+-3 1 n
+-3 -1 n
+-2 -1 n
+-2 -3 n
+0 -2 n
+0 -3 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2276 3589 m
+4 unit setlinewidth
+696 695 n
+stroke
+newpath
+2903 4261 m
+69 23 n
+stroke
+newpath
+2949 4215 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2972 4334 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3071 4250 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+2752 4035 m
+-2 11 n
+-7 10 n
+-9 6 n
+-11 2 n
+-12 -2 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -11 n
+7 -10 n
+9 -6 n
+12 -3 n
+11 3 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+2723 4035 m
+19 unit setlinewidth
+196 0 n
+stroke
+newpath
+2854 4068 m
+65 -33 n
+stroke
+newpath
+2854 4002 m
+65 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+2555 3838 m
+-2 11 n
+-6 10 n
+-10 6 n
+-11 3 n
+-12 -3 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -11 n
+7 -10 n
+9 -6 n
+12 -2 n
+11 2 n
+10 6 n
+6 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+2526 3838 m
+19 unit setlinewidth
+-197 0 n
+stroke
+newpath
+2395 3805 m
+-66 33 n
+stroke
+newpath
+2395 3871 m
+-66 -33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2198 4363 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2326 4314 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (12) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3452 3937 m
+-1 2 n
+-1 3 n
+-3 1 n
+-3 1 n
+-2 -1 n
+-3 -1 n
+-1 -3 n
+-1 -2 n
+1 -3 n
+1 -3 n
+3 -1 n
+2 -1 n
+3 1 n
+3 1 n
+1 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3444 3937 m
+4 unit setlinewidth
+985 0 n
+stroke
+newpath
+4363 3969 m
+66 -32 n
+stroke
+newpath
+4363 3904 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4478 3937 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4576 3902 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3944 3444 m
+-1 3 n
+-1 3 n
+-3 1 n
+-2 1 n
+-3 -1 n
+-3 -1 n
+-1 -3 n
+-1 -3 n
+1 -2 n
+1 -3 n
+3 -1 n
+3 -1 n
+2 1 n
+3 1 n
+1 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3937 3444 m
+4 unit setlinewidth
+0 985 n
+stroke
+newpath
+3904 4363 m
+33 66 n
+stroke
+newpath
+3969 4363 m
+-32 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3877 4478 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3976 4443 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3596 3589 m
+-1 2 n
+-1 3 n
+-3 1 n
+-2 1 n
+-3 -1 n
+-3 -1 n
+-1 -3 n
+-1 -2 n
+1 -3 n
+1 -3 n
+3 -1 n
+3 -1 n
+2 1 n
+3 1 n
+1 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3589 3589 m
+4 unit setlinewidth
+695 695 n
+stroke
+newpath
+4215 4261 m
+69 23 n
+stroke
+newpath
+4261 4215 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4284 4334 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4383 4250 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3966 4035 m
+-2 11 n
+-7 10 n
+-9 6 n
+-11 2 n
+-12 -2 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -11 n
+7 -10 n
+9 -6 n
+12 -3 n
+11 3 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+3937 4035 m
+19 unit setlinewidth
+196 0 n
+stroke
+newpath
+4068 4068 m
+65 -33 n
+stroke
+newpath
+4068 4002 m
+65 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3966 3838 m
+-2 11 n
+-7 10 n
+-9 6 n
+-11 3 n
+-12 -3 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -11 n
+7 -10 n
+9 -6 n
+12 -2 n
+11 2 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+3937 3838 m
+19 unit setlinewidth
+-197 0 n
+stroke
+newpath
+3805 3805 m
+-65 33 n
+stroke
+newpath
+3805 3871 m
+-65 -33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3510 4363 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3638 4314 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (13) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+827 2624 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 1 n
+-3 -1 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+820 2624 m
+4 unit setlinewidth
+984 0 n
+stroke
+newpath
+1738 2657 m
+66 -33 n
+stroke
+newpath
+1738 2591 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1853 2624 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1952 2590 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+1319 2132 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+-1 -3 n
+1 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+1312 2132 m
+4 unit setlinewidth
+0 984 n
+stroke
+newpath
+1279 3051 m
+33 65 n
+stroke
+newpath
+1345 3051 m
+-33 65 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1253 3166 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1351 3131 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+971 2276 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 1 n
+-3 -1 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+964 2276 m
+4 unit setlinewidth
+696 696 n
+stroke
+newpath
+1590 2949 m
+70 23 n
+stroke
+newpath
+1637 2903 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1660 3021 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1758 2938 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+1440 2624 m
+-2 11 n
+-7 10 n
+-9 6 n
+-12 3 n
+-11 -3 n
+-10 -6 n
+-6 -10 n
+-2 -11 n
+2 -11 n
+6 -10 n
+10 -6 n
+11 -2 n
+12 2 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+1410 2624 m
+19 unit setlinewidth
+139 139 n
+stroke
+newpath
+1480 2740 m
+69 23 n
+stroke
+newpath
+1526 2694 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+1243 2624 m
+-2 11 n
+-7 10 n
+-9 6 n
+-12 3 n
+-11 -3 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -11 n
+7 -10 n
+9 -6 n
+11 -2 n
+12 2 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+1213 2624 m
+19 unit setlinewidth
+-139 -139 n
+stroke
+newpath
+1144 2508 m
+-70 -23 n
+stroke
+newpath
+1097 2555 m
+-23 -70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+885 3051 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1013 3001 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (21) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2139 2624 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 1 n
+-3 -1 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2132 2624 m
+4 unit setlinewidth
+984 0 n
+stroke
+newpath
+3051 2657 m
+65 -33 n
+stroke
+newpath
+3051 2591 m
+65 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3166 2624 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3264 2590 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2632 2132 m
+-1 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2624 2132 m
+4 unit setlinewidth
+0 984 n
+stroke
+newpath
+2591 3051 m
+33 65 n
+stroke
+newpath
+2657 3051 m
+-33 65 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2565 3166 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2664 3131 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2284 2276 m
+-1 3 n
+-2 2 n
+-2 2 n
+-3 1 n
+-3 -1 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2276 2276 m
+4 unit setlinewidth
+696 696 n
+stroke
+newpath
+2903 2949 m
+69 23 n
+stroke
+newpath
+2949 2903 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2972 3021 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3071 2938 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+2752 2723 m
+-2 11 n
+-7 9 n
+-9 7 n
+-11 2 n
+-12 -2 n
+-9 -7 n
+-7 -9 n
+-2 -11 n
+2 -12 n
+7 -9 n
+9 -7 n
+12 -2 n
+11 2 n
+9 7 n
+7 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+2723 2723 m
+19 unit setlinewidth
+139 139 n
+stroke
+newpath
+2792 2839 m
+70 23 n
+stroke
+newpath
+2839 2792 m
+23 70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+2555 2526 m
+-2 11 n
+-6 10 n
+-10 6 n
+-11 2 n
+-12 -2 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -12 n
+7 -9 n
+9 -7 n
+12 -2 n
+11 2 n
+10 7 n
+6 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+2526 2526 m
+19 unit setlinewidth
+-139 -139 n
+stroke
+newpath
+2456 2410 m
+-69 -23 n
+stroke
+newpath
+2410 2456 m
+-23 -69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2198 3051 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2326 3001 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (22) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3452 2624 m
+-1 3 n
+-1 2 n
+-3 2 n
+-3 1 n
+-2 -1 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+2 0 n
+3 0 n
+3 2 n
+1 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3444 2624 m
+4 unit setlinewidth
+985 0 n
+stroke
+newpath
+4363 2657 m
+66 -33 n
+stroke
+newpath
+4363 2591 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4478 2624 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4576 2590 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3944 2132 m
+-1 3 n
+-1 2 n
+-3 2 n
+-2 0 n
+-3 0 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+3 0 n
+2 0 n
+3 2 n
+1 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3937 2132 m
+4 unit setlinewidth
+0 984 n
+stroke
+newpath
+3904 3051 m
+33 65 n
+stroke
+newpath
+3969 3051 m
+-32 65 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3877 3166 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3976 3131 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3596 2276 m
+-1 3 n
+-1 2 n
+-3 2 n
+-2 1 n
+-3 -1 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+3 0 n
+2 0 n
+3 2 n
+1 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3589 2276 m
+4 unit setlinewidth
+695 696 n
+stroke
+newpath
+4215 2949 m
+69 23 n
+stroke
+newpath
+4261 2903 m
+23 69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4284 3021 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4383 2938 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3966 2723 m
+-2 11 n
+-7 9 n
+-9 7 n
+-11 2 n
+-12 -2 n
+-9 -7 n
+-7 -9 n
+-2 -11 n
+2 -12 n
+7 -9 n
+9 -7 n
+12 -2 n
+11 2 n
+9 7 n
+7 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+3937 2723 m
+19 unit setlinewidth
+139 139 n
+stroke
+newpath
+4006 2839 m
+70 23 n
+stroke
+newpath
+4052 2792 m
+24 70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3966 2526 m
+-2 11 n
+-7 10 n
+-9 6 n
+-11 2 n
+-12 -2 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -12 n
+7 -9 n
+9 -7 n
+12 -2 n
+11 2 n
+9 7 n
+7 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+3937 2526 m
+19 unit setlinewidth
+-140 -139 n
+stroke
+newpath
+3867 2410 m
+-70 -23 n
+stroke
+newpath
+3821 2456 m
+-24 -69 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3510 3051 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3638 3001 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (23) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+827 1312 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+3 -1 n
+3 1 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+820 1312 m
+4 unit setlinewidth
+984 0 n
+stroke
+newpath
+1738 1345 m
+66 -33 n
+stroke
+newpath
+1738 1279 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1853 1312 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1952 1277 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+1319 820 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+-1 -3 n
+1 -3 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+1312 820 m
+4 unit setlinewidth
+0 984 n
+stroke
+newpath
+1279 1738 m
+33 66 n
+stroke
+newpath
+1345 1738 m
+-33 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1253 1853 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1351 1819 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+971 964 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+964 964 m
+4 unit setlinewidth
+696 696 n
+stroke
+newpath
+1590 1637 m
+70 23 n
+stroke
+newpath
+1637 1590 m
+23 70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1660 1709 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1758 1625 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+1440 1312 m
+-2 11 n
+-7 10 n
+-9 6 n
+-12 2 n
+-11 -2 n
+-10 -6 n
+-6 -10 n
+-2 -11 n
+2 -11 n
+6 -10 n
+10 -6 n
+11 -3 n
+12 3 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+1410 1312 m
+19 unit setlinewidth
+0 197 n
+stroke
+newpath
+1377 1443 m
+33 66 n
+stroke
+newpath
+1443 1443 m
+-33 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+1243 1312 m
+-2 11 n
+-7 10 n
+-9 6 n
+-12 2 n
+-11 -2 n
+-9 -6 n
+-7 -10 n
+-2 -11 n
+2 -11 n
+7 -10 n
+9 -6 n
+11 -3 n
+12 3 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+1213 1312 m
+19 unit setlinewidth
+0 -197 n
+stroke
+newpath
+1246 1181 m
+-33 -66 n
+stroke
+newpath
+1181 1181 m
+32 -66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+885 1738 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+1013 1689 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (31) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2139 1312 m
+0 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 -1 n
+3 1 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2132 1312 m
+4 unit setlinewidth
+984 0 n
+stroke
+newpath
+3051 1345 m
+65 -33 n
+stroke
+newpath
+3051 1279 m
+65 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3166 1312 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3264 1277 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2632 820 m
+-1 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -3 n
+2 -1 n
+3 -1 n
+3 1 n
+2 1 n
+2 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2624 820 m
+4 unit setlinewidth
+0 984 n
+stroke
+newpath
+2591 1738 m
+33 66 n
+stroke
+newpath
+2657 1738 m
+-33 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2565 1853 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2664 1819 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+2284 964 m
+-1 3 n
+-2 2 n
+-2 2 n
+-3 0 n
+-3 0 n
+-2 -2 n
+-2 -2 n
+0 -3 n
+0 -3 n
+2 -2 n
+2 -2 n
+3 0 n
+3 0 n
+2 2 n
+2 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+2276 964 m
+4 unit setlinewidth
+696 696 n
+stroke
+newpath
+2903 1637 m
+69 23 n
+stroke
+newpath
+2949 1590 m
+23 70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2972 1709 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3071 1625 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+2752 1410 m
+-2 12 n
+-7 9 n
+-9 7 n
+-11 2 n
+-12 -2 n
+-9 -7 n
+-7 -9 n
+-2 -12 n
+2 -11 n
+7 -10 n
+9 -6 n
+12 -2 n
+11 2 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+2723 1410 m
+19 unit setlinewidth
+0 197 n
+stroke
+newpath
+2690 1541 m
+33 66 n
+stroke
+newpath
+2755 1541 m
+-32 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+2555 1213 m
+-2 12 n
+-6 9 n
+-10 7 n
+-11 2 n
+-12 -2 n
+-9 -7 n
+-7 -9 n
+-2 -12 n
+2 -11 n
+7 -9 n
+9 -7 n
+12 -2 n
+11 2 n
+10 7 n
+6 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+2526 1213 m
+19 unit setlinewidth
+0 -196 n
+stroke
+newpath
+2559 1082 m
+-33 -65 n
+stroke
+newpath
+2493 1082 m
+33 -65 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2198 1738 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+2326 1689 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (32) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3452 1312 m
+-1 3 n
+-1 2 n
+-3 2 n
+-3 0 n
+-2 0 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+2 -1 n
+3 1 n
+3 2 n
+1 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3444 1312 m
+4 unit setlinewidth
+985 0 n
+stroke
+newpath
+4363 1345 m
+66 -33 n
+stroke
+newpath
+4363 1279 m
+66 33 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4478 1312 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4576 1277 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (1) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3944 820 m
+-1 3 n
+-1 2 n
+-3 2 n
+-2 0 n
+-3 0 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -3 n
+3 -1 n
+3 -1 n
+2 1 n
+3 1 n
+1 3 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3937 820 m
+4 unit setlinewidth
+0 984 n
+stroke
+newpath
+3904 1738 m
+33 66 n
+stroke
+newpath
+3969 1738 m
+-32 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3877 1853 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3976 1819 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (3) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.173 0.173 0.173 setrgbcolor
+newpath
+3596 964 m
+-1 3 n
+-1 2 n
+-3 2 n
+-2 0 n
+-3 0 n
+-3 -2 n
+-1 -2 n
+-1 -3 n
+1 -3 n
+1 -2 n
+3 -2 n
+3 0 n
+2 0 n
+3 2 n
+1 2 n
+closepath
+0.173 0.173 0.173 setrgbcolor
+fill 
+newpath
+3589 964 m
+4 unit setlinewidth
+695 696 n
+stroke
+newpath
+4215 1637 m
+69 23 n
+stroke
+newpath
+4261 1590 m
+23 70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4284 1709 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (x) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+4383 1625 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 1 (2) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3966 1410 m
+-2 12 n
+-7 9 n
+-9 7 n
+-11 2 n
+-12 -2 n
+-9 -7 n
+-7 -9 n
+-2 -12 n
+2 -11 n
+7 -10 n
+9 -6 n
+12 -2 n
+11 2 n
+9 6 n
+7 10 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+3937 1410 m
+19 unit setlinewidth
+0 197 n
+stroke
+newpath
+3904 1541 m
+33 66 n
+stroke
+newpath
+3969 1541 m
+-32 66 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3966 1213 m
+-2 12 n
+-7 9 n
+-9 7 n
+-11 2 n
+-12 -2 n
+-9 -7 n
+-7 -9 n
+-2 -12 n
+2 -11 n
+7 -9 n
+9 -7 n
+12 -2 n
+11 2 n
+9 7 n
+7 9 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+newpath
+3937 1213 m
+19 unit setlinewidth
+0 -196 n
+stroke
+newpath
+3969 1082 m
+-32 -65 n
+stroke
+newpath
+3904 1082 m
+33 -65 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3510 1738 m
+0 rotate
+/Times-Bold findfont
+10.584001 scalefont setfont
+7.056000 1 (M) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+0.000 0.000 0.000 setrgbcolor
+3638 1689 m
+0 rotate
+/Times-Bold findfont
+7.344000 scalefont setfont
+4.896000 2 (33) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+showpage
+%%Trailer
+%%Pages: 1
+%%DocumentNeededResources: font /Times-Bold
+%%BoundingBox: 58 58 333 327
+%%EOF

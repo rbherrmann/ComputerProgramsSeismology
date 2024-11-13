@@ -1,0 +1,20 @@
+#!/bin/sh
+
+
+
+rm -f FIRST
+rm -f junk
+for i in ../DAT.REG/*Z ../DAT.REG/NOUSE/*Z
+do
+if [ -f $i ]
+then
+echo $i
+KSTNM=`saclhdr -KSTNM ${i}`
+KA=`saclhdr -KA ${i}`
+AZ=`saclhdr -AZ ${i}`
+DIST=`saclhdr -DIST ${i}`
+echo $KSTNM $AZ $DIST $KA | awk '{printf "%-8s %4.0f %4.0f %s\n",$1,$2,$3,$4}' >> junk
+fi
+done
+cat junk | sort -n -k 3 | grep -v 12345 > FIRST
+rm junk

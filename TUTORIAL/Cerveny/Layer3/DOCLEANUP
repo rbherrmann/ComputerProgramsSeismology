@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm *.sac *.PLT *.eps decon.out numerator denominator observed predicted

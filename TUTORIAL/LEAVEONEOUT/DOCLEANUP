@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -f elocate.sum elocate.txt fmplot.tmp orgerr.tmp origin.tmp VEL.MOD assoc.tmp
+rm -fr RESULT TEMP

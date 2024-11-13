@@ -1,0 +1,41 @@
+#!/bin/sh
+rm -f *.gif
+
+for HS in 0100 1000 6000
+do
+for SRC in DS DD EX SS
+do
+for CMP in Z 
+do
+for GCARC in 50
+do
+case $GCARC in
+	30) DIST=033 ;;
+	40) DIST=044 ;;
+	50) DIST=055 ;;
+	60) DIST=066 ;;
+	70) DIST=077 ;;
+	80) DIST=088 ;;
+	90) DIST=100 ;;
+esac
+
+gsac << EOF
+cut a -10 a 200
+fileid name
+r  ${HS}/${DIST}*.${CMP}${SRC}  w${HS}/${DIST}*.${CMP}${SRC}
+color rainbow
+bg plt
+ylim all
+p 
+plotgif -K -C16 < P001.PLT > ${GCARC}.${HS}.${CMP}${SRC}.gif
+lp c 0.05 n 2
+int
+p overlay on 
+plotgif -K -C16 < P002.PLT > lp${GCARC}.${HS}.${CMP}${SRC}.gif
+quit
+EOF
+done
+done
+done
+done
+

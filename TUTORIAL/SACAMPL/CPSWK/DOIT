@@ -1,0 +1,47 @@
+#!/bin/sh
+
+#####
+#    make synthetics at different distances
+#    and then plot the soil/hard rock spectra ratios
+#####
+
+#####
+#   clean up
+#####
+rm -f *.png *.PLT
+rm -f ?SSrock_?? ?SSsoil_?? 
+rm -f ?SSrock.am ?SSsoil.am
+rm -f hspec96.???
+rm -f ?SSsoil_rock 
+rm -f KAMP.sac.am
+
+for R in 01 02 03  10 20
+do
+	DODIST $R
+done
+
+#####
+#    make plots of the synthetics
+#####
+gsac << EOF
+r RSS????_??
+sort up dist
+color list red blue
+fileid list fname dist concat on format folon
+xlim b b 6
+bg plt
+p
+mv P001.PLT RSS.PLT
+r TSS????_??
+sort
+p
+mv P002.PLT TSS.PLT
+r ZSS????_??
+sort
+p
+mv P003.PLT ZSS.PLT
+q
+EOF
+DOPLTPNG ?SS.PLT
+
+DOPLTPNG Ratio_??.PLT

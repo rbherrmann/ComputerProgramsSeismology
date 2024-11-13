@@ -1,0 +1,6 @@
+This directory makes synthetics for rays leaving the lower hemisphere
+of the focal sphere
+
+It then uses fmplot and gsac to convert the Z R T to Radial Longitudinal and Transverse Synthetics  - the USER4 is used for the ray parameter and USER5 for the takeoff angle in degrees
+
+Everything is then plotted using a modification of the DOPLTTEL scripts

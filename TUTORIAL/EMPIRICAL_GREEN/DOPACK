@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ..
+tar cf - EMPIRICAL_GREEN/DIST | gzip -c > EMPIRICAL_GREEN/Dist.tgz
+

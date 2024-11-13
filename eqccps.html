@@ -1,0 +1,416 @@
+<html>
+  <head>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body style="background-color:#FFFFFF">
+            <h1 class="headline">Computer Programs in Seismology</h1>
+<p>
+               <b><span style="color: rgb(255, 0, 0);">Last updated May 12, 2023</span></b>
+</p>
+            <h2>Introduction </h2>
+            <p>
+              With the installation of a PDP 11/70 minicomputer in 1981
+              for use in seismic network analysis, a persistent effort
+              was made
+              to use that tool for research. Because of the uniqueness
+              of a dedicated minicimputer for research at that time as
+              well as a desire to do something for the world
+              wide seismological community, a set of documented computer
+              programs emerged. The
+              programs developed actually reflect research interests of
+              the
+              department as well as a desire to look at data in the
+              manner of other
+              investigators. In doing so, the hope is that these tools
+              will permit
+              research to progress rapidly.
+            </p>
+            <p>This programming effort led to the development of
+              COMPUTER PROGRAMS IN SEISMOLOGY which continues to be
+              distributed.
+              The package contains
+              its own graphics package, and is relatively easy to
+              install.
+            </p>
+            <ul>
+              <li>Version 2.0 emphasized the development of algorithms.
+              </li>
+              <li>Version 3.0 (NEW) emphasizes ease of use. <font
+                  color="#ff0000">Version 3.30</font> is the latest
+                release. </li>
+            </ul>
+            <h2>Computer Programs in Seismology</h2>
+            <p>
+              These programs focus on the understanding and
+              interpretation of seismic
+              wave propagation in the crust and upper mantle of the
+              Earth. Synthetic
+              seismograph code is provided for sources and receivers at
+              arbitrary
+              positions in the plane layered media. Programs are
+              provided for
+              determination of crustal structure through the inversion
+              of
+              surface-wave dispersion and teleseismic P-wave receiver
+              functions.
+              Inversion of broadband recordings of regional earthquakes
+              for source
+              depth, focal mechanism and seismic moment is also
+              provided. Finally, a
+              new tool, <span style="font-weight: bold;">gsac</span>,
+              is provided to
+              permit interactive and script based manipulation of
+              seismic traces. The
+              entire package is well integrated in that the same Earth
+              velocity
+              model, waveform and graphics formats are used by all
+              programs. A
+              complete interactive graphics package is also provided.</p>
+            <p>
+              Since this package of programs continues to develop and be
+              refined&nbsp; to keep current with increasing volumes of
+              digital
+              might wish to&nbsp; return to this page every few months.<br>
+            </p>
+            <ul>
+              <li>Current Version 3.30 is dated <b>November 8, 2022</b>
+                (NP330.Nov-08-2022.tgz )</li>
+              <li><a href="/eqc/eqc_cps/cps_programs.txt"><span
+                    style="font-weight: bold; color: rgb(0,0,255);">
+                    Simple description of programs in package as of May
+                    8, 2016</span></a> Read this to determine of the
+                programs will be of interest to you.</li>
+              <li><a href="/eqc/eqc_cps/CPS/CPS33.html"><span
+                    style="font-weight: bold; color: rgb(0,0,255);">
+                    Description of Version 3.30</span></a></li>
+              <li><a href="/eqc/eqc_cps/CPS/CPS330.html"><span
+                    style="font-weight: bold; color: rgb(0,0,255);"> PDF
+                    Documentation </span></a>. View this to
+                determine if the package has what you desire. This is
+                also available in the package.<font color="#ff0000">Updated
+                  August 31, 2021</font></li>
+              <li><a href="/eqc/eqc_cps/CPS/cpslisc.html"><span
+                    style="font-weight: bold; color: rgb(0,0,255);">
+                    Download UNIX/LINUX/MacOS-X or WIN32(CYGWIN) Sources</span></a>
+              </li>
+              <li><a href="/eqc/eqc_cps/cpsbug.html"><span style="font-weight: bold; color: rgb(0,0,255);">UPDATES</span> </a>. <span style="color: rgb(255, 0, 0);">(Last changed June 9, 2022)</span>
+                A description of
+                modifications and&nbsp; dates so that you can maintain a
+                current
+                version of the package.</li>
+              <li><a href="/eqc/eqc_cps/TUTORIAL"><span
+                    style="font-weight: bold; color: rgb(0,0,255);">TUTORIAL
+with
+                    data sets </span></a>. <span style="color:
+                  rgb(255, 0, 0);">(Last changed June 8, 2021)</span>
+                Tutorials on the use of Computer Programs in Seismology
+                with
+                data sets. <br>
+              </li>
+              <li><a href="/eqc/eqc_cps/Questions"><span
+                    style="font-weight: bold; color: rgb(0,0,255);">User
+                    Questions and Answers </span></a>. <span
+                  style="color: rgb(255, 0, 0);">(Last changed June 9,
+              <li><a href="/eqc/eqc_cps/workshop.html"><span
+                    style="font-weight: bold; color: rgb(0,0,255);">Workshop
+                    notes on the use of Computer Programs in Seismology</span></a>
+              </li>
+            </ul>
+            <ul>
+            </ul>
+            <h2>Citation </h2>
+            <p>
+              The reference to this set of codes is as follows:
+            </p>
+            <p>
+              Herrmann, R. B. (2013) Computer programs in seismology: An
+              evolving tool for instruction and research, <i>Seism.
+                Res. Lettr.</i> <b>84</b>, 1081-1088,
+              doi:10.1785/0220110096
+            </p>
+            <h2>Platforms </h2>
+            <p>
+              The present code requires the use of the gcc/gfortran
+              compilers that are available for all platforms.
+              Interactive graphics requires X11 graphics.</p>
+            <p><font color="#ff0000">PC Versions</font>
+              Currently support for PC's running windows requires the
+              CYGWIN
+              environment (<a href="http://www.cygwin.com">http://www.cygwin.com</a>).
+The
+              source codes and installation
+              procedure are the same
+              as for the UNIX/LINUX/OSX versions. <b>NOTE: This has not
+                been tested for a long time</b>
+            </p>
+            <p><font color="#ff0000">UNIX/LINUX/OSX Versions</font>
+              Source codes and install scripts are available. C and
+              FORTRAN compilers
+              are required - gcc and gfortran are available for free.
+              Programs are
+              distributed as gzip'd tar files (<i>.tgz</i>).
+              Documentation in
+              PostScript is provided. <b>NOTE: I have only recently
+                tested using LINUX Mint which should be similar to
+                Ubuntu</b>.
+            </p>
+            <p>
+            </p>
+            <h3>Ubuntu Linux and Mint</h3>
+            You can use the program download page, or open a terminal
+            window and enter the following commands:
+            <p>
+            </p>
+            <pre>   sudo apt-get install make
+   sudo apt-get install gcc
+   sudo apt-get install gfortran
+   sudo apt-get install xorg-dev
+   sudo apt-get install libncurses5-dev
+   sudo apt-get install gawk
+</pre>
+            <p>
+              The following programs are useful:
+            </p>
+            <p>
+            </p>
+            <pre>   sudo apt-get install gv
+   sudo apt-get install ImageMagick
+</pre>
+            <p>
+First beware of ImageMAgick 7.1.1-8. See the discussion below under MacOS.
+              Note that there may be permission problems in creating PNG
+              files from EPS files with ImageMagick. To be able do this,
+            </p>
+            <pre>   As superuser,  edit /etc/ImageMagick-6/policy.xml 
+   
+   e.g., sudo vi /etc/ImageMagick-6/policy.xml 
+   or sudo xed /etc/ImageMagick-6/policy.xml
+          
+   Change  the lines
+   
+   &lt;policy domain="coder" rights="none" pattern="PS" /&gt;
+   &lt;policy domain="coder" rights="none" pattern="EPS" /&gt;
+   &lt;policy domain="coder" rights="none" pattern="PDF" /&gt;
+   &lt;policy domain="coder" rights="none" pattern="XPS" /&gt;
+          
+   to this:
+          
+   &lt;policy domain="coder" rights="read|write" pattern="PS" /&gt;
+   &lt;policy domain="coder" rights="read|write" pattern="EPS" /&gt;
+   &lt;policy domain="coder" rights="read|write" pattern="PDF" /&gt;
+   &lt;policy domain="coder" rights="read|write" pattern="XPS" /&gt;
+</pre>
+            <p>
+            </p>
+            <h3>RHEL 6.3 Linux, CENTOS (perhaps Fedora)</h3>
+            You can use the Add/Remove Softare tab, or open a terminal
+            window and enter the following commands:
+            <p>
+            </p>
+            <pre>   yum install gfortran
+   yum install libX11-devel
+   yum install ncurses-devel
+</pre>
+            <p>
+              the following programs are useful:
+            </p>
+            <p>
+            </p>
+            <pre>   yum install gv
+   yum install ImageMagick
+</pre>
+            <p>
+            </p>
+            <h3>OpenSUSE 13.1</h3>
+            Applications -&gt; SystemLizard Button -&gt; Computer -&gt;
+            Install/Remove Softares
+            , or invoke /sbin/YaST2 directly
+            <p>
+            </p>
+            <pre>   gcc
+   gcc-fortran
+   xorg-x11-devel
+   ncurses-devel
+   ImageMagick
+   gv
+   java
+   make
+   perl
+</pre>
+            <p></p>
+            <h3>LINUX distribution under VirtualBox</h3>
+            <p>This document shows how to install VirtualBox on your
+              Windows, Mac or Linux system, and then install a version
+              of LINUX with required compilers, and finally Computer
+              Programs in Seismology.
+              <a href="/eqc/eqc_cps/CPS_VirtualBoxInstall.pdf">CPS_VirtualBoxInstall.pdf</a>.
+              The advantage of this approach is that the computer disk
+              does not have to be partitioned in the presence of a
+              Windows operating system, and that all compilers are
+              easily obtained.
+            </p>
+            <h3>MacOS </h3>
+            <p>
+              <b><i> These notes apply to the installation on April 23,
+                  2023 under the latest MacOS Version Ventura
+                  13.2.1.&nbsp; The test machine was a MacBook Air with
+                  the M2 Apple Silicon chip.<br>
+                  <br>
+                </i></b></p>
+            <b><i> </i></b>
+            <p></p>
+            <ol>
+              <li>Determine the version of the operating system: Top
+                menu bar AppleLogo -&gt; About This Mac will give the
+                version, e.g., OSX Version 13.2.1It also gives
+                processor. </li>
+              <li>Install <b>xcode</b> on your Mac, since you will need
+                command line tools. Click on AppStore and then search
+                for Xcode. You will need your password to download from
+                the Apple Store.<br>
+                When Xcode in installed, the Icon in AppStore will now
+                exhibit <br>
+              </li>
+              <ol>
+                <li>"Open", so open it and <br>
+                </li>
+                <li>Agree (password again).
+                </li>
+              </ol>
+              <li>Install <b>Xquartz</b> to get X11 graphic support.
+                You can get this at <a href="http://www.xquartz.org">
+                  http://www.xquartz.org/ </a>. This will also set up
+                the links required to compile X11 programs. When the
+                download is complete,</li>
+              <ol>
+                <li>Install</li>
+                <li>Open</li>
+                <li>Agree (enter password)</li>
+                <li>Install</li>
+              </ol>
+            </ol>
+            <blockquote>Next we need the compilers and other software.
+              We will get these using both homebrew and macports<br>
+            </blockquote>
+            <ol start="4">
+              <li>Install <b>MacPorts</b> <a
+                  href="http://www.macports.org/install.php">http://www.macports.org/install.php</a>.
+                Select the version for your operating system, e.g. if
+                running Ventura 13.2.1, <i>macOS Ventura v13</i><br>
+                Clicking on the install will place a package in your
+                downloads. Just click, icons will appear, and then click
+                on the MacPorts...pkg icon. Answer the questions and
+                enter your password.
+                <br>
+                MacPorts gives libraries and LINUX like tools that will
+                be useful for productivity. I have <b>bzip2</b>, <b>gawk</b>,
+                <b>ghostscript</b>, <b>gv</b>, <b>ImageMagick</b>, <b>ncurses</b>,
+                <b>xfig</b> and <b>xv</b> among others:
+                <pre>
+sudo port install gv
+sudo port install xv
+sudo port install ImageMagick
+              </li>
+<li>Install homegrew <a href="brew.sh">brew.sh</a>. The web page gives a command for ionstalling <b>homebrew</b>. As of April 27, 2023, this command is
+<pre>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+</pre>
+Now install the following packages:
+<pre>
+brew install wget
+brew install gcc
+brew install xfig
+brew install gawk
+brew install ghostscript
+brew install ffmpeg
+brew install gmt
+brew install graphicsmagick
+brew install --cask mactex
+</pre>
+<p>
+<i>
+The reason for downloading from the two sources is that a program may be missing from one but is  in the other. The other, less obvious reason, is that distribution may not work as desired. For example, I use the ImageMagick <b>convert</b>  program to convert the Computer Programs in Seismology (CPS) EPS files to PNG for display on the web. The CPS program <b>plotnps -EPS</b> determines the boundingbox, but places it at the end, by placing the line <b>%%BoundingBox: (atend)</b> at the top of the EPS file and then placing at the second last line, for example  <b>%%BoundingBox: 47 45 585 321</b>. I found that the Imagemagick 7.1.1-8 downloaded from homebrew did not recognize this but that the ImageMagick  6.9.11-60 downloaded from MacPorts did recognize this. The effect was that the 7.1.1-8 version yielded  a cropped image, which was not desired.  Note: homebrew does have a link to download a Version 6 of ImageMagick.</i>
+</p>
+<p>
+<i>Not all packages are required to compile CPS. I have selected the items in order to be productive: </i>
+</p>
+<ul>
+<li><b>wget</b> - an easy way to download files from a webserver. Similar to <b>curl</b>.</li>
+<li><b>gcc</b> - MacOS links the <b>gcc</b> command to the <b>clang</b> compiler. I need FORTRAN. The download of the true <b>gcc</b> provides the <b>gfortran</b>.</li>
+<li><b>gmt</b> - I use this for maps. This requires <b>graphicsmagick</b>, <b>ghostscript</b> and reccommends <b>ffmpeg</b>.</li>
+<li><b>gv</b> - A PostScript view what I prefer to Preview ont he Mac and to evince on LINUX.</li>
+<li><b>xv</b> - a older viewer that displays PNG and other formats. For perusing a large numebr of files, it is very efficient.</li>
+<li><b>xfig</b> - An older code useful for creating drawings.</li>
+<li><b>ImageMagick</b> - A graphics manipulation package. I primarily use the <b>convert</b> command fto convert EPS to PNG, e.g., 
+<pre>
+convert -trim t.eps -background white -alpha remove -alpha off t.png
+</pre>
+</li>
+<li><b>mactex</b> - provides the command line <b>latex</b> tool for creating documents.</li>
+<li><b>ghostscript</b> - provides the <b>gs</b> command and is required by <b>ImageMagick</b> and <b>graphicsmagick</b></li>
+</ul>
+<p>
+<i>All of these instalations will create an entry in the .zprofile in the login directory to point to the location of these executables</i></p>
+</li>
+<li>
+Carefully enter the following command to point to the downloaded <b>gcc</b> instead of to the one installed. If the installed compiler is not Version 12, then <i>ls /opt/homebrew/bin</i> to see what has been installed.
+<pre>
+sudo ln -s /opt/homebrew/bin/gcc-12 /opt/homebrew/bin/gcc
+</pre>
+You could also have installed the compiler using MacPorts. You may have to do something like
+                  <pre>
+cd /usr/local/bin<br>sudo ln -s  /opt/local/bin/gcc-mp-11 gcc<br>sudo ln -s  /opt/local/bin/gfortran-mp-11 gfortran
+</pre>
+                  <p> <font color="#ff0000">( the mp-11 means MacPosts
+                      gcc6 was installed. This how MacPorts keeps
+                      distinguishes the different versions)</font>
+                  </p>
+</ul>
+</li>
+<li> Define the correct PATH so that the shell can find
+                the sources. Carefully edit the .zprofile 
+                n your login directory to add lines at
+                the end such as
+                <pre>OPATH=$PATH
+PATH=:.:$HOME/bin:$HOME/PROGRAMS.330/bin:$OPATH <font color="#ff0000"> 
+     (This assumes that you installed CPS in your login directory)</font>
+</pre>
+              </li>
+<li>You are now ready to compile CPS. If PROGRAMS.330 is in your login directory, then
+<pre>
+cd PROGRAMS.330
+./Setup OSX40
+./C 2&gt;&1 C.txt
+</pre>
+The file <i>C.txt</i> provides a record fo the compile. To test the compile resutls, do
+<pre>
+ls bin/* | wc
+</pre>
+If you do not see on the order of 150 programs, then examine the <i>C.txt</i> to determine what failed. This is the file to send to the Email address below if there are problems.
+            </ol>
+            <h2>Support</h2>
+            to the package, please Email <a
+              href="mailto:herrmarb@slu.edu"> herrmarb@slu.edu</a>.
+            <p></p>
+            <p></p>
+            <p>You can find more information about the Center,
+              seismology, and many other
+              earthquake-related topics by visiting the Center's <a
+                href="/eqc/eqc.html" target="_blank">homepage</a>,
+              or by contacting <a href="mailto:herrmarb@slu.edu">Dr.
+                Robert
+                Herrmann</a>.</p>
+    <p>
+    </p>
+    <center>Last changed 27 April 2023
+      <p></p>
+    </center>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Computer Programs in Seismology - Lesson A</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8593200">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<H2>Introduction</H2>
+<P>This lesson creates some synthetic seismograms by surface wave
+model superposition. The user is request to determine the group
+velocities through the use of the interactive program do_mft. The
+observed dispersion is then inverted to determine the velocity new
+velocity model which is then compared to the original model. <BR><BR>I
+create the directory <B>LessonA&nbsp; </B><FONT COLOR="#000000">and</FONT>
+<FONT COLOR="#000000">place the scripts&nbsp; </FONT><A HREF="DOIT"><FONT COLOR="#000000"><U>DOIT</U></FONT></A><FONT COLOR="#000000">,&nbsp;
+and&nbsp;<A HREF="DOCLEAN">DOCLEAN </A>in that directory. <BR><BR>For
+testing everything is in the tarball&nbsp; <A HREF="LessonA.tgz">LessonA.tgz</A>
+. Unpack this with the command </FONT><FONT COLOR="#000000"><I><B>gunzip
+-c LessonA.tgz | tar xvf -&nbsp;&nbsp;&nbsp; </B></I></FONT><FONT COLOR="#000000">This
+will create the directory LessonA and place the file </FONT><FONT COLOR="#000000"><I><B>00README
+</B></I></FONT><FONT COLOR="#000000">and the scripts </FONT><FONT COLOR="#000000"><I><B>DOIT
+</B></I></FONT><FONT COLOR="#000000">and </FONT><FONT COLOR="#000000"><I><B>DOCLEAN
+</B></I></FONT><FONT COLOR="#000000">in that directory.</FONT></P>
+<H2><FONT COLOR="#000000">DOIT</FONT></H2>
+<P><FONT COLOR="#000000">When you run this script, surface-modal
+superposition is used to create a synthetic seismogram at a distance
+of 2500 km for a source with a depth of 10 km and with a faulting
+model of strike=45, rake=45 and dip=45. For this source depth and
+mechanism, the Rayleigh wave signal is simple in that the fundamental
+model spectrum is smooth.</FONT></P>
+<H3>Group Velocity Analysis</H3>
+<P><FONT COLOR="#000000">After the synthetics are computed the
+program <B>do_mft </B>is started using the command</FONT></P>
+<PRE STYLE="margin-bottom: 0.2in">        &gt; do_mft *.sac
+You will see the following graphical menu:</PRE><P>
+<IMG SRC="domft1.png" NAME="graphics1" ALT="domtf1.png" ALIGN=BOTTOM WIDTH=796 HEIGHT=636 BORDER=0><BR><BR>Now
+first select the vertical trace, B00101Z00.sac. Since this is the
+vertical, you will determine the Rayleigh wave group velocity. The
+next page tells you a lot about the trace and requires you to define
+the units.&nbsp; Click on &quot;Units&quot; and select cm/s from the
+menu.&nbsp; When you are done, click on the &quot;Do MFT&quot; button
+to go to the next page.<BR><BR><IMG SRC="domft2.png" NAME="graphics2" ALT="domft2.png" ALIGN=BOTTOM WIDTH=796 HEIGHT=636 BORDER=0><BR><BR>On
+this page click on the &quot;Type&quot; button to define &quot;Rayleigh&quot;&nbsp;
+You can also change the filter parameter &quot;Alpha&quot; or the
+plotting parameters with the other buttons. When you are done, click
+on the &quot;Do MFT&quot; button.&nbsp; At this point the FORTRAN
+program <B>sacmft96</B> is executed to create the dispersion
+information.<BR><IMG SRC="domft3.png" NAME="graphics3" ALT="domft3.png" ALIGN=BOTTOM WIDTH=796 HEIGHT=636 BORDER=0><BR><BR>When
+<B>sacmft96 </B>is done, you will be presented with a graphical menu.
+Group velocity analysis consists of narrow bandpass filtering the
+trace, and then finding the ten largest values of the envelope. The
+objective of this page is to permit you to visually edit those values
+to define the dispersion curve.<BR><BR>Clicking on the &quot;Auto&quot;
+button will ask you to define the mode, here Fundamental. Auto means
+that clicking on the dispersion window will initiate a &quot;rubber
+band&quot; for selecting the dispersion. A second mouse click will
+select the dispersion values nearest the rubber band line.&nbsp; When
+you are done, click on &quot;Exit&quot; and then select &quot;Yes&quot;
+to save the dispersion values.<BR><BR><IMG SRC="raylmft.png" NAME="graphics4" ALT="raylmt.png" ALIGN=BOTTOM WIDTH=796 HEIGHT=636 BORDER=0><BR><BR>Now
+process the radial component and the transverse component,
+remembering to denote the dispersion on the transverse component as
+&quot;Love&quot;. Here is the Love wave dispersion selected. Note
+that I also clicked on &quot;Mode&quot; and then continued selecting
+values to define the first higher mode dispersion.<BR><IMG SRC="lovemft.png" NAME="graphics5" ALT="lovemft.png" ALIGN=BOTTOM WIDTH=796 HEIGHT=636 BORDER=0></P>
+<H3>Comparison with Theory</H3>
+<P>The shell script now compares the selected dispersion to the
+theoretical dispersion for the model. This is a very useful exercise
+since we can learn something about the imperfections of the multiple
+filter analysis used to get the group velocities:</P>
+<TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD COLSPAN=2>
+			<P ALIGN=CENTER>Comparison of theoretical and observed group
+			velocities</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P ALIGN=CENTER>Love Wave Comparison</P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER>Rayleigh Wave Comparison</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P ALIGN=CENTER><IMG SRC="slegnu.png" NAME="graphics6" ALT="slegnu.png" ALIGN=BOTTOM WIDTH=509 HEIGHT=474 BORDER=0></P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><IMG SRC="sregnu.png" NAME="graphics7" ALT="regenu.png" ALIGN=BOTTOM WIDTH=509 HEIGHT=475 BORDER=0></P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR>We see that the group velocities are well determined at
+shorter periods, but that there are problems with the Rayleigh wave
+dispersion at longer periods. This may be a problem in the
+synthetics, or a problem in the choice of the filter parameter
+&quot;Alpha&quot; used, here a value of 50.</P>
+<H3>Structure Inversion</H3>
+<P>The dispersion data are now used to invert for a velocity
+structure. To emphasize the lack of uniqueness in the surface-wave
+inversion, the initial model is a layered halfspace. This unbiased
+upper mantle model is used since we expect crustal velocities to be
+lower. A smoothing operator in the inversion will preclude the
+determination of a sharp Moho. If we had started with a constant
+velocity model with crustal velocities, then the inversion would lead
+to an unrealistically low velocity zone in the mantle, because of the
+limited surface-wave resolution at those depths.<BR><BR>The
+surface-wave inversion is run iteratively until the solution has
+converged sufficiently (sufficiently is an imprecise term, but it is
+the user's choice as to the meaning of a good fit). The starting
+model (blue) and inverted model (red) are indicated as well as the
+observed and theoretical dispersion. This is a good least squares fit
+since.<BR><BR><IMG SRC="srfphv96.png" NAME="graphics8" ALT="srfphv96.png" ALIGN=BOTTOM WIDTH=680 HEIGHT=345 BORDER=0><BR><BR>We
+can also plot the resolution kernels for the inversion. Except for
+the deepest depths, the model is resolved, although the kernels
+suggest that the layering was too thin because the kernels are wider
+than the layer thicknesses.</P>
+<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><IMG SRC="srfphr96.png" NAME="graphics9" ALT="srfphr96.png" ALIGN=BOTTOM WIDTH=694 HEIGHT=539 BORDER=0></PRE><P>
+<BR>After the inversion is completed, we have several velocity model
+files available: <I>simple.mod </I>- the true model used to create
+the synthetics and <I>modl.out </I>- the output of the inversion.&nbsp;
+I can compare these models using the command</P>
+<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in">shwmod96 -LEG -K -1 simple.mod modl.out</PRE><P>
+which creates the graphics file <I>SHWMOD96.PLT . </I>I convert this
+to encapsulated PostScript and Portable Network Graphics using the
+commands</P>
+<PRE STYLE="margin-left: 0.42in">plotnps -F7 -W10 -EPS -K &lt; SHWMOD96.PLT &gt; shwmod96.eps
+convert -trim shwmod96.eps shwmod96.png</PRE><P>
+Here the program <B>convert </B>is part of the ImageMagick package on
+LINUX/CYGWIN.&nbsp; You will see that our dispersion define the upper
+crust well, but the dispersion data were not able to define the sharp
+Moho discontinuity of the true model because of limited resolution
+and also the model smoothing used for the inversion.<BR><BR><IMG SRC="shwmod96.png" NAME="graphics10" ALT="shwmod96.png" ALIGN=BOTTOM WIDTH=577 HEIGHT=464 BORDER=0></P>
+<H2><FONT COLOR="#000000">Cleanup</FONT></H2>
+<P><FONT COLOR="#000000">After you are done testing these programs,
+enter <B>DOCLEAN</B> to clean up the directory. You will be left only
+with the <I>00README, DOIT and DOCLEAN</I> files.</FONT></P>
+<H2>Other Tests</H2>
+<P>Modify the script so that the source depth is 30 km, the faulting
+mechanism has strike 9, dip 90 and rake 0.&nbsp; Then run the script.
+In this case you will notice that the Rayleigh wave signal on the
+vertical and radial components has a spectral hole. This lack of a
+smooth spectrum makes the dispersion hard to follow near the period
+of the spectral. You can experiment when running <B>do_mft </B>by
+changing the filter parameter <I><B>alpha </B></I>- a smaller value
+provides more timing resolution at the expense of frequency
+resolution.<BR><BR>You might also start the inversion program with
+another model, instead of the uniform halfspace used here.<BR><BR><BR>
+</P>
+</BODY>
+</HTML>

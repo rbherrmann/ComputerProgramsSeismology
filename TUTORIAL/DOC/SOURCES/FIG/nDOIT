@@ -1,0 +1,88 @@
+#/bin/sh
+
+#####
+##  cleanup
+#####
+rm -fr *.000500100.[ZRTP]??
+
+#####
+##  make a simple whospace model
+######
+
+cat > who.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+ 10.0000  6.4000  3.7000  2.8200 0.149E-02 0.336E-02 0.00  0.00  1.00  1.00 
+EOF
+
+cat > dfile << EOF
+5.0 0.025 1024 0 0
+EOF
+
+hprep96 -M who.mod -ALL -HR 0 -HS 10 -d dfile
+hwhole96
+#hspec96
+hpulse96 -p -V -l 2 | f96tosac -G
+#####
+#   same as
+#   hpulse96 -t -V -l 2 | f96tosac -G
+#####
+
+#####
+# save these impulse like Green functions
+# these have a pulse width of 4 dt = 0.20 sec
+######
+gsac << EOF
+r 0*.[ZRT]??
+w prepend GRN.
+q
+EOF
+
+#####
+##   now make some with a total width of 8.0 sec
+#####
+
+gsac << EOF
+r 0*.[ZRT]??
+triangle width 8.0
+w prepend OBS.
+q
+EOF
+
+
+#####
+##  now use Ligorria and Ammon iterative decon
+# to get the source time function
+# 
+#
+
+saciterd -FN OBS.000500100.ZEX -FD GRN.000500100.ZEX -ALP 5 -N 500 -POS
+
+#####
+# plot them up
+#
+gsac << EOF
+r GRN.000500100.ZEX  OBS.000500100.ZEX decon.out
+lh b e o
+fileid name
+bg plt
+p
+q
+EOF
+plotnps -F7 -W10 -EPS -K < P001.PLT > P001.eps
+
+# convert to png using ImageMagick convert
+
+convert -trim P001.eps P001.png
+
+

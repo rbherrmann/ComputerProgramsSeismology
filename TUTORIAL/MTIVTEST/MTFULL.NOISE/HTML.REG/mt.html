@@ -1,0 +1,125 @@
+<hr>
+<H3>Full Moment Tensor Inversion using wvfmt96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmt96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program H(km)                    Mw                           Fit                              Mxx(dyne-cm)    Myy           Mxy            Mxz            Myz            Mzz       
+WVFMT961    1.0  287.   74.  -91.   4.13     0.738 0.706E-07     0.777     0.859 0.501E-07  49.5 -0.9648727E+22 -0.1043994E+23  0.3791273E+21  0.8709165E+22  0.2647632E+22 -0.2072908E+23
+WVFMT961    2.0  288.   65.  -91.   4.07     0.730 0.717E-07     0.768     0.854 0.512E-07  62.1 -0.8203923E+22 -0.9216135E+22  0.4693378E+21  0.4098097E+22  0.1252676E+22 -0.1804119E+23
+WVFMT961    3.0  288.   61.  -91.   4.05     0.716 0.736E-07     0.752     0.846 0.530E-07  63.5 -0.7292881E+22 -0.8569915E+22  0.5201738E+21  0.2953076E+22  0.8604069E+21 -0.1696994E+23
+WVFMT961    4.0  288.   59.  -91.   4.03     0.698 0.759E-07     0.732     0.835 0.551E-07  66.1 -0.6660663E+22 -0.7919485E+22  0.4884035E+21  0.2457086E+22  0.7006596E+21 -0.1618529E+23
+WVFMT961    5.0  289.   58.  -91.   4.01     0.678 0.784E-07     0.710     0.824 0.573E-07  73.0 -0.6236708E+22 -0.7158415E+22  0.4048755E+21  0.2173720E+22  0.6237521E+21 -0.1555500E+23
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMT961    1.0  287.   74.  -91.   4.13     0.738 0.706E-07     0.777     0.859 0.501E-07  49.5 -0.9648727E+22 -0.1043994E+23  0.3791273E+21  0.8709165E+22  0.2647632E+22 -0.2072908E+23
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTinfo.txt"> MTinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MT.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+

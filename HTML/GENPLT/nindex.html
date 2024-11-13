@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Computer Programs in Seismology - GENPLT</title>
+</head>
+<body>
+<h2>Introduction</h2>
+A number of general plotting programs have been written using the
+CALPLOT library of Computer Programs in Seismology.<br>
+While useful, programs such at <span style="font-weight: bold;">xyplt2</span>
+are not easy to use. The program <span style="font-weight: bold;">genplt</span>
+has a simpler syntax since it does not attempt to be a general purpose
+plotting package. It can be used together with the program <span
+ style="font-weight: bold;">calplt </span>to make useful figures.<br>
+<br>
+<h2>Command syntax</h2>
+Entering <span style="font-weight: bold;">genplt -h </span>provides
+the on-line help that describes the use of the program:<br>
+<br>
+<div style="margin-left: 40px;">
+<pre><br></pre>
+</div>
+<div style="margin-left: 40px;">
+<pre> USAGE:genplt -XMIN xmin -XMAX xmax -YMIN ymin -YMAX ymax -X0 x0 -Y0 y0 -NOBOX -XLIN _XLOG _YLIN YLOG -XLOG -XLIN -YLOG -YLIN  -C cmdfil -A acmdfil -? -h
+ -XMIN xmin (default 0.0)  minimum value of X-Axis
+ -XMAX xmax (default    )  maximum value of X-Axis
+ -YMIN ymin (default 0.0)  minimum value of Y-Axis
+ -YMAX ymax (default 0.0)  maximum value of Y-Axis
+ -X0 x0     (default 2.0)  lower left corner of plot
+ -Y0 y0     (default 1.0)  bottom left corner of plot
+ -XLEN xlen (default 6.0)  length of X-Axis
+ -YLEN ylen (default 6.0)  length of Y-Axis
+ -NOBOX     (default false) do not plot axes
+ -XLIN      (default linear) X axis is linear
+ -XLOG      (default linear) X axis is logarithmic
+ -YLIN      (default linear) Y axis is linear
+ -YLOG      (default linear) Y axis is logarithmic
+ -C cmdfil  
+    cmdfil consists of one xy-pair file per line as
+       File Kolor Width Psymb     
+     File: file name of x-y pairs to be plotted
+         with the File and Psymb enclosed in single quotes
+     Kolor: (integer)1=black,1000=red,1050=green,1100=blue
+         0=white or any CALPLOT color
+     Width: width of line/or symbol border in inches
+     Psymb: - a quoted 2 character entry for  the following 
+            SQ - square
+            TR - triangle
+            HX - heaxgon
+            DI - diamond
+            CI - circle
+            NO - no symbol - plot a line
+ -A acmdfil  
+    acmdfil consists of one xy-pair file per line as
+       File Kolor Width Psymb Size    
+     File: file name of x-y pairs to be plotted
+         with the File and Psymb enclosed in single quotes
+     Kolor: (integer)1=black,1000=red,1050=green,1100=blue
+         0=white or any CALPLOT color
+     Width: width of line/or symbol border in inches
+     Psymb: - a quoted 2 character entry for the following 
+            SQ - square
+            TR - triangle
+            HX - heaxgon
+            DI - diamond
+            CI - circle
+            NO - no symbol - plot a line
+     Size: - Symbol size 
+ -TX title-x (default none) Must be enclosed in quotes
+ -TY title-y (default none) Must be enclosed in quotes
+ -?         (default false) online help
+ -h         (default false) online help</pre>
+</div>
+<div style="margin-left: 40px;"><br>
+</div>
+<p>
+The program currently permits a total of 100 files to be plotted with each file consisting or 1000 x-y pairs.
+<P>
+An example of the use of this program together 
+ is given  <a
+ href="DONEW">DONEW</a>:
+<br>
+<pre>genplt -C cmdfil -A acmdfil -TX 'X-axis (m)' -TY 'Y-axis (km)' -XMIN 0 -XMAX 10 -YMIN 0 -YMAX 10</pre>
+
+<br>
+where the file <i>cmdfil</i> has the entries:
+<br>
+<pre>
+'03.xy' 1 0.05 'NO'
+'01.xy' 2 0.00 'SQ'
+</pre>
+<p>and
+the file <i>acmdfil</i> has the entry:
+<br>
+<pre>
+'02.xy' 1060 0.02 'CI' 0.10
+</pre>
+<br>
+Note that the purpose of the punctuation ' marks for the command
+invocation permits passing of spaces in the title to the program.<br>
+The purpose of the ' marks in the list of plotting commands contained
+in the file <span style="font-style: italic;">cmdfil</span> and  <span style="font-style: italic;">acmdfil</span> is to
+delimit strings since <span style="font-weight: bold;">genplt</span>
+is a FORTRAN program that used list directed IO.<br>
+<br>
+The data given in the files <span style="font-style: italic;">01.xy</span>,
+<span style="font-style: italic;">02.xy</span>
+  and <span
+ style="font-style: italic;">03.xy </span>consist of one x-y pair
+per line, e.g., <span style="font-style: italic;">02.xy contains</span> is <br>
+<div style="margin-left: 40px;">
+<pre>
+10 10
+9 9
+8 7
+7 8
+6 6
+</pre>
+
+</div>
+The plot space limits defined by the <span style="font-style: italic;">-XMIN
+xmin</span> <span style="font-style: italic;">-XMAX xmax</span> <span
+ style="font-style: italic;">-YMIN ymin</span> <span
+ style="font-style: italic;">-YMAX ymax</span> command arguments are
+used to set a clipping region so that no data points are plotted
+outside the plot window. At present the <b>plotnps</b> program features a rounded line termination which extends beyond the plot window. This is a problem with <b>plotnps</b> and not <b>genplt</b>./<br>
+<h2>Output</h2>
+The output of the program is a CALPLOT file with the name <span
+ style="font-style: italic;">GENPLT.PLT. </span>&nbsp;The contents of
+this file can be converted to EPS using the command:<br>
+<br>
+<div style="margin-left: 40px;">plotnps -F7 -W10 -EPS -K &lt;
+GENPLT.PLT &gt; genplt.eps<br>
+</div>
+<br>
+A sample image that results appears as follows:<br>
+<br>
+<br>
+<img src="ngenplt.png" alt="ngenplt.png">
+<p>Note the linewidth of the straight line, and the different border widths on the symbols.</p> Although the brder width of the square symbol was set to 0.0 in <i>cmdfil</i>, this value is overridden by the <i>-W10</i> argument used by <b>plotnps</b> when the figure was made.
+<center><i>Last changed February 8, 2012</i></center>
+</body>
+</html>

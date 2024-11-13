@@ -1,0 +1,14 @@
+This directory contains ASCII text files of 
+waveform based moment tensor solutions from different networks.
+
+If a file with a specific name exists in this directory, it will be posted on the solution page by the scropt DOHTML
+
+At present the file names supported are
+
+usgsmt	- USGS Moment tensor
+cmt	- CMT solution
+gcmt	- GCMT solution which is the current name for CMT
+ucb	- Berkeley solution
+scal	- Southern California
+
+

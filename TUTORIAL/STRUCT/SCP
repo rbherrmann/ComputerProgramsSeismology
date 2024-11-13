@@ -1,0 +1,5 @@
+#!/bin/sh
+
+
+
+scp -pr $* rbh@mnw.eas.slu.edu:/net/eqinfo/home/eq/Earthquake_Center/CPS/TUTORIAL/RFTN

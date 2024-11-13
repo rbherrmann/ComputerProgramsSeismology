@@ -1,0 +1,41 @@
+#!/bin/sh
+
+#for DEG in 010 020 030 040 050 060 070 080 090 100 110 120 130 140 150 160 170
+for DEG in 030 060 090
+do
+case $DEG in
+	010) DIST=011 ;;
+	020) DIST=022 ;;
+	030) DIST=033 ;;
+	040) DIST=044 ;;
+	050) DIST=055 ;;
+	060) DIST=066 ;;
+	070) DIST=077 ;;
+	080) DIST=088 ;;
+	090) DIST=100 ;;
+	100) DIST=111 ;;
+	110) DIST=122 ;;
+	120) DIST=133 ;;
+	130) DIST=144 ;;
+	140) DIST=155 ;;
+	150) DIST=166 ;;
+	160) DIST=177 ;;
+	170) DIST=188 ;;
+esac
+for DEP in 010 100 700
+do
+if [ ! -d TEST.${DEP}.${DEG} ]
+then
+	mkdir TEST.${DEP}.${DEG}
+fi
+#for DEN in "+1" "+0" "-1" "-2" "-3" "-4" "-5" "-F" "-H" "-I"
+for DEN in "-Z"
+do 
+if [ ! -d TEST.${DEP}.${DEG}/NEW_${DEN} ]
+then
+	mkdir  TEST.${DEP}.${DEG}/NEW_${DEN}
+fi
+cp AK135${DEN}/${DEP}0/${DIST}* TEST.${DEP}.${DEG}/NEW_${DEN}
+done
+done
+done

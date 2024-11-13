@@ -1,0 +1,52 @@
+#!/bin/sh
+
+FL=0.707
+FH=1.414
+
+
+for CMP in TSS RSS ZSS ZDD RDD
+do
+for MOD in HAM CUS R41 S42 S43
+do
+rm -fr TMP
+mkdir TMP
+
+rm -f ${MOD}.${CMP}.val
+cd ${MOD}.REG; gsac > /dev/null << EOF
+r *.${CMP}
+cd ../TMP
+hp c ${FL} n 2
+lp c ${FH} n 2
+w
+q
+EOF
+cd ..
+
+for j in TMP/*.${CMP}
+do
+saclhdr -NL -DIST -DEPMAX $j >> ${MOD}.${CMP}.val
+done
+done
+
+#####
+#    get the max
+#####
+
+AMAX=`cat *.${CMP}.val| awk '{printf "%15.10f\n", 2* $2}' | sort -n | tail -1`
+AMIN=`echo $AMAX | awk '{printf "%15.10f\n", $1 * 0.01}' `
+echo $CMP $AMAX $AMIN
+
+cat > cmdfil << EOF
+'HAM.${CMP}.val' 1 0.01 'CI' 0.04 'HAM'
+'CUS.${CMP}.val' 1000 0.01 'CI' 0.04 'CUS'
+'R41.${CMP}.val' 1025 0.01 'CI' 0.04 'R41'
+'S42.${CMP}.val' 1050 0.01 'CI' 0.04 'S42'
+'S43.${CMP}.val' 1075 0.01 'CI' 0.04 'S43'
+EOF
+
+genplt -XMIN 100 -XMAX 1000 -YMAX $AMAX -YMIN $AMIN -XLOG -YLOG -L cmdfil -TX 'distance (km)' -TY 'Filtered Velocity'  -LPOS 'BL'
+mv GENPLT.PLT ${CMP}.PLT
+
+done
+
+

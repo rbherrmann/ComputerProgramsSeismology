@@ -1,0 +1,79 @@
+gm #!/bin/sh
+set -x
+
+Y0=11
+YT=`echo $Y0 | gawk '{print $1 - 0.5 }'`
+rm -f CMP1.plt
+calplt << EOF
+NEWPEN
+1
+CENTER
+1.25 ${YT} 0.2 'Z' 0.0
+CENTER
+3.50 ${YT} 0.2 'R' 0.0
+CENTER
+5.75 ${YT} 0.2 'T' 0.0
+PEND
+EOF
+cat CALPLT.PLT > CMP1.plt
+rm -f CALPLT.PLT CALPLT.cmd
+
+#####
+#	make up the list of stations
+#####
+rm -f dlist
+
+for i in *[ZRT].obs
+do
+KSTNM=`saclhdr -KSTNM $i`
+DIST=`saclhdr -DIST $i`
+echo $DIST $KSTNM >> dlist
+done
+cat dlist | sort -n | uniq | awk '{print $2}' > sdlist
+edlist=`tail -1 sdlist`
+rm -f ssdlist
+
+for STA in `cat sdlist`
+do
+Y0=`echo $Y0 | gawk '{print $1 - 1.0 }'`
+
+case $STA in
+$edlist)
+pltsac -TSCB -K -1 -DOAMP  -XLEN 2.0 -X0 0.25 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}Z.[op]??  
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -TSCB -K -1 -DOAMP  -XLEN 2.0 -X0 2.50 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}R.[op]?? 
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -TSCB -K -1 -DOAMP  -XLEN 2.0 -X0 4.75 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}T.[op]??
+cat PLTSAC.PLT >> CMP1.plt
+	;;
+*)
+pltsac -K -1 -DOAMP  -XLEN 2.0 -X0 0.25 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}Z.[op]?? 
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -K -1 -DOAMP  -XLEN 2.0 -X0 2.50 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}R.[op]?? 
+cat PLTSAC.PLT >> CMP1.plt
+pltsac -K -1 -DOAMP  -XLEN 2.0 -X0 4.75 -Y0 ${Y0} -ABS -YLEN 1.0 ${STA}T.[op]??
+cat PLTSAC.PLT >> CMP1.plt
+	;;
+esac
+calplt << EOF
+NEWPEN
+1
+LEFT 
+7.00 ${Y0} 0.12 '${STA}' 0.0
+PEND
+EOF
+cat CALPLT.PLT >> CMP1.plt
+
+
+
+done
+plotnps -BGFILL -K -EPS -F7 -W10 < CMP1.plt > cmp1.eps
+convert  -trim cmp1.eps cmp1.png
+mv cmp1.png ../HTML.REG
+
+cp tfilter ../HTML.REG/filter
+
+
+rm CALPLT.cmd
+rm CALPLT.PLT
+rm PLTSAC.PLT

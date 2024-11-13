@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#####
+#	demonstrate the use of the -I inversion in EPS
+#####
+plotnps -F7 -W10 -EPS -K -S0.5 < GRAYSC.PLT > t.eps
+gm convert -trim t.eps graysc.png
+
+plotnps -F7 -W10 -EPS -K -S0.5 -I < GRAYSC.PLT > t.eps
+gm convert -trim t.eps grayscinv.png
+
+rm -f t.eps

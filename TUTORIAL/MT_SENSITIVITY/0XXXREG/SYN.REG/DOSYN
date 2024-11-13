@@ -1,0 +1,47 @@
+#!/bin/sh
+
+
+
+#####
+#	NOTE THE DEPTH MUST BE PLACE IN THE SPECIAL GREEN FUNCTION FORM
+#	e.g., 0010 = 1 km, 0200 = 20 km
+#####
+#SRFGRD96   11.0  140.   60.   25. 0.922 0.950   4.81   4.81 0.8733 UTAHPECH.SW1
+
+HS=0110
+STK=140
+DIP=60
+RAKE=25
+MW=4.81
+FIT=0.8733
+DEP=011
+
+
+
+
+rm -f *.pre *.obs
+
+
+
+DOSTA ${HS} > /dev/null 2>&1
+
+wvfmch96 -S ${STK} -D ${DIP}  -R  ${RAKE}  -MW  ${MW} << EOF
+ww
+mchout
+EOF
+
+fmplot -D ${DIP} -R ${RAKE} -S ${STK} -P -FMPLMN
+mv FMPLOT.PLT P.plt
+fmplot -D ${DIP} -R ${RAKE} -S ${STK} -SH -FMPLMN
+mv FMPLOT.PLT SH.plt
+echo -D ${DIP} -R ${RAKE} -S ${STK} 
+
+
+
+for GRN in ZDD RDD ZDS RDS TDS ZSS RSS TSS ZEX REX 
+do
+	rm *.${GRN}
+done
+
+
+

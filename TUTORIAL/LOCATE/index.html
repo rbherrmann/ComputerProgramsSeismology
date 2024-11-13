@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Computer Programs in Seismology Tutorial Locate</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials -SW Inversion
+      Kernels</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h2>Introduction</h2>
+    <p>This tutorial shows how to locate the epicenter of a seismic
+      event using <b>gsac</b>, <b>sac2eloc</b> and
+      <b>elocate</b>.
+    </p>
+    <h2>Data preparation</h2>
+    <p>The file <a href="event.tgz">event.tgz</a> contains the Sac
+      waveform files used in this tutorial. Unpack the files
+      with the command
+      <br>
+    </p>
+    <pre>gunzip -c event.tgz | tar xvf -
+</pre>
+    <br>
+    This will create the subdirectory <i>DAT</i> which contains the
+    waveform files. You can check to see that the files have the station
+    coordinates properly installed with the command
+    <br>
+    <pre>gsac
+GSAC&gt; rh *
+GSAC&gt; lh stla stlo stel
+GSAC&gt; q
+</pre>
+    <br>
+    Note that the <b>gsac</b> invokes the code and that the <i>GSAC&gt;</i>
+    are the interactive prompts of the program.
+    <p></p>
+    <h2>Arrival picking using gsac</h2>
+    <p>
+      <b>gsac</b> is used to pick the arrival times which are then saved
+      in the header of each sac file. One can use the <i>plotpk</i> or
+      the shorthand <i>ppk</i> to enter the interactive mode and then
+      use 'P' or 'S' commands to time a phase. While this is can be
+      done, <b>gsac</b> has a GUI to make picking easier. One enters
+      the command <i>ppk REG</i> to pick arrivals for local and
+      regional events or <i>ppk TEL</i> for teleseisms. The GUI permits
+      the use to set arrival weights, polarities, and phase name. The
+      example here uses the GUI.
+    </p>
+    <p>
+    </p>
+    <pre>cd DAT
+gsac
+GSAC&gt; r *
+GSAC&gt; ppk regional
+   ...      <font color="#ff0000">[the GUI appears]</font>
+   ...      [when done picking, save the picks in the header of each sac file]
+GSAC&gt; wh
+GSAC&gt; q
+</pre>
+    <p></p>
+    <p>
+      For the data set the following shows the commands and interactive
+      session:
+      <br>
+    </p>
+    <pre>cd DAT
+gsac
+GSAC&gt; r *
+GSAC&gt; rtr
+GSAC&gt; hp c 1 n 2
+GSAC&gt; lp c 3 n 2  <font color="#ff0000"> [For regional events this is a good frequency band for picking]</font>
+GSAC&gt; qdp 10       <font color="#ff0000">[To make the display faster, only display every 10th point.</font>
+                    <font color="#ff0000">This is permissible since we just did a low pass ]</font>
+GSAC&gt; ppk perplot 3 regional
+                   <font color="#ff0000">[Use the regional picking GUI and display three traces at</font> 
+                    <font color="#ff0000">a time since the stations have 3 components of motion]</font>
+</pre>
+    <br>
+    The result of this sequence is the window
+    <br>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td><img witgh="800" src="Fig01.png" height="660"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The cursor is an arrow outside of the traces and a crosshair within
+    the trace subwindows.
+    To reposition the trace use the <b>gsac</b> <i>ppk</i> options
+    [GSAC&gt; help ppk].
+    The "x x" will permit a selection of part of the trace, the "*" "."
+    or the mouse wheel will change the amplitude of the trace, and a "+"
+    or "-" will center the trace on the cursor point and zoom in or out,
+    respectively. The first traces, e.g., for station PB01, do not seem
+    to have a strong S. After entering "x" and moving the cursor and
+    entering the second "x" and using the mouse wheel on the Z
+    component, we get Figure 2:
+    <br>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td><img witgh="800" src="Fig02.png" height="660"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    Now the P arrival is obvious. To pick the arrival click on the "P"
+    button, move the cursor to the trace and click on the aligned
+    arrival. The "i" and "e" buttons appear - select "i" is this is a
+    sharp arrival and "e" if it is emergent. This choice affects the
+    arrival weight. After this select the polarity. "C" for a strong
+    compression, usually up/positive on the vertical, "+" for a weak
+    compression, "D" for a strong dilatation/down, "-" for a weak down,
+    and "X" for an indeterminate first motions. The pick is now
+    displayed. If you do not like it, hit the "Undo" button.
+    <br>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td><img witgh="800" src="Fig03.png" height="660"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    If you are finished with this trace, enter "n" to go to the next
+    trace. If you
+    want to back up to a previous trace, enter "b". For the next trace I
+    picked the S on the HH1 channel and zoomed in on the P arrival on
+    the HHZ trace and then increased the amplitude to see the small
+    initial downward motions.
+    <br>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td><img witgh="800" src="Fig04.png" height="660"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    When you are done picking "q" from the interactive picking, or after
+    looking a all traces, you will be returned tot he command prompt.
+    Here you will save the picks using the "wh" / "writeheader" command.
+    Do not use the "w" / "write" command since the original traces will
+    be overwritten by the filtered traces that you used.
+    <br>
+    <pre>GSAC&gt; wh
+GSAC&gt; q
+</pre>
+    <h2>sac2eloc</h2>
+    <p>To locate the event, we need to place the arrival picks and other
+      information into the file <i>elocate.dat</i>.</p>
+    <p>To avoid cluttering the directory containing the sac files, we
+      will work in the directory above. thus enter the command
+      <br>
+    </p>
+    <pre>sac2eloc DAT/*SAC  [since the sac files ended as .SAC]
+</pre>
+    <br>
+    The result is the file <a href="elocate.dat">elocate.dat</a>.
+    <br>
+    <h2>elocate</h2>
+    <p>This program is described in Chapter 5of the&nbsp; <b>gsac</b>
+      tutorial that is the file <i>cps330g.pdf</i> in the directory <i>PROGRAMS.330/DOC/GSAC.pdf</i>
+      of the source distribution. <br>
+    </p>
+    <p><b>elocate</b> has some built in velocity models but Chapter 5
+      discusses the format of the <i>VEL.MOD</i> file so that a user
+      defined velocity model can be used.
+    </p>
+    <p>Since <b>elocate</b> is discussed in <i>cps330g.pdf</i>, the
+      following will show the commands used to locate the event.
+      The processing will be in the <i>batch</i>, e.g., non-interactive
+      mode. The user is encouraged to run the program interactively to
+      appreciate how the choice of the velocity model and initial source
+      depth can affect the solution, since event location is a
+      non-linear&nbsp; problem.
+    </p>
+    <p>If you first execute <b>elocate</b> you will be presented with
+      the velocity models in the file <i>VEL.MOD</i>. The WUS model is
+      identified as "7". So a batch run using the WUS model would be
+      <br>
+    </p>
+    <pre>elocate -VELMOD             [Creates the file VEL.MOD in the directory.]
+elocate -M 7 -D 10 -BATCH &gt; elocate.txt   
+                            <font color="#ff0000">[Use model 7, an initial depth of 10 km and batch (automatic run.}</font>
+</pre>
+    <br>
+    <p></p>
+    <p>The output of this run is in the file <a href="elocate.txt">
+        elocate.txt</a>. The first part of this file shows the data
+      which includes the station, weight, arrival time,. phase and
+      polarity, and station latitude, longitude and elevation [Note: <b>elocate</b>
+      does not use elevation corrections]. The results of the iterations
+      is next which gives latitude, longitude, depth, origin time, and
+      RMS error. Obviously there is some observation that causes a big
+      residual. After the maximum number of iterations is achieved or
+      the solution converges, the fit to each phase is given. Here the P
+      arrival at PB17 has a large residual, and that trace should be
+      reexamined. Note that this was weighted 0.00 in the inversion
+      because of the large residual. The final part, reproduced here is
+      the solution:
+      <br>
+    </p>
+    <pre> Error Ellipse  X=   1.7949 km  Y= 2.7735 km  Theta = 348.0448 deg (azimuth of X axis)
+
+ RMS Error        :               1.694              sec
+ Travel_Time_Table:          WUS     
+ Latitude         :             31.5325 +-    0.0166 N         1.8476 km
+ Longitude        :           -104.1199 +-    0.0290 E         2.7387 km
+ Depth            :               12.90 +-      2.68 km
+ Epoch Time       :      1727337407.380 +-      0.62 sec
+ Event Time       :  20240926075647.380 +-      0.62 sec
+ Event (OCAL)     :  2024 09 26 07 56 47 380
+ HYPO71 Quality   :                  DB
+ Gap              :                 130              deg
+ 
+    ch evla    31.5325 evlo  -104.1199 evdp      12.90
+    ch ocal   2024 09 26 07 56 47 380
+ 
+    ch o gmt   2024 270  07 56 47 380
+</pre>
+    <br>
+    The last three line are <b>gsac</b> commands if you wish to place
+    the location information in the sac files, e.g.,
+    <br>
+    <pre>gsac
+GSAC&gt; rh *SAC
+GSAC&gt;   ch evla    31.5325 evlo  -104.1199 evdp      12.90
+GSAC&gt;   ch ocal   2024 09 26 07 56 47 380
+GSAC&gt; wh
+GSAC&gt; q
+</pre>
+    If the <i>CMPINC</i> and <i>CMPAZ</i> fields are set in the
+    header, you are ready to rotate the three component traces to make
+    Z, R and T traces.
+    <p></p>
+    <p>
+      Several output files are created: fmplot.tmp, assoc.tmp,
+      origin.tmp. orger.tmp and elocate.sum. They contain information
+      from the elocate.txt listing. The <i>fmplot.tmp</i> can be use
+      with the program <b>fmplot</b> to plot the first motions. In this
+      example, there is
+      a proposed focal mechanism (solid curves) that is compared to the
+      observations. The commands are
+      <br>
+    </p>
+    <pre>#!/bin/sh
+
+elocate -VELMOD
+elocate -M 7 -BATCH -D 10 &gt; elocate.txt
+
+# compare the first motion to this solution
+STK=320
+DIP=40
+RAKE=-80
+
+fmplot -S $STK -D $DIP -R $RAKE -F fmplot.tmp -tp
+plotnps -BGFILL -F7 -W10 -EPS -K &lt; FMPLOT.PLT &gt; t.eps
+# Use ImageMagick to convert EPS to PNG
+convert -trim t.eps slufm.png
+</pre>
+    <br>
+    The result is ithe file <i>slufm.png<br>
+      <br>
+    </i>
+    <table>
+      <tbody>
+        <tr>
+          <td><img src="slufm.png"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The fit is not good, mostly because the initial P amplitudes read
+    were very small. The <b>elocate</b> solution gives the azimuth to
+    the station and also the takeoff angle of the P way to the station.
+    This angle is measured from the downward vertical. If the depth
+    changes, or if a different model is used, the takeoff angle will
+    change.
+    <p>
+    </p>
+    <h2>Discussion</h2>
+    <p>
+      I sometimes use <b>elocate</b> in the processing of regional
+      moment tensors which the time shift between the observed and
+      predicted waveforms indicates a mislocation. I also run this code
+      then the moment tensor is not what was expected given its
+      location. In this case I compare the moment tensor nodal planes
+      and P (pressure) and T (tension) axes to P-wave first motions.
+      Given perfect data sets and the correct regional velocity model,
+      the moment tensor mechanism and depth should agree with observed
+      p-wave first motions and hypocenter. This is the ideal validation
+      of a solution.<br>
+    </p>
+    <p>If you have an independent solution, with the event coordinates
+      set in the SAC file headers, the traces can be rotated. Further
+      theoretical arrival times for a model can be entered into the
+      header given the distance and source depth in the header. Often I
+      find that the S arrival is sharper on the T (transverse
+      component), and thus read it from that component.<br>
+    </p>
+  </body>
+</html>

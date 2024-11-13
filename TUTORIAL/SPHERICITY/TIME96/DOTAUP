@@ -1,0 +1,10 @@
+#!/bin/sh
+
+
+if [ $# -eq 0 ]
+then
+	echo DOTAUP GCARC DEPTH
+	exit
+fi
+
+taup_time -H $2 -deg $1 -ph "P,p,S,s,pP,sP" -mod "ak135"

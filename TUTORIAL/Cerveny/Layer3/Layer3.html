@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <title>Layer3</title>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body>
+    <h1>Layer3</h1>
+    <p>
+      the purpose of this is to show how ray parameter filtering is
+      applied using <b>cpusle96</b> and then to discuss the
+      implication.
+    </p>
+    <p>
+      Everything is run as in the Layer1 example, except that the there
+      are additional options applied to <b>cpulse96</b>, e.g.,
+      <br>
+    </p>
+    <pre>cpulse96 -V -p -l 4 -EXF -DELAY 10 -PMIN 0.08 -PMAX 0.10  | f96tosac -B
+</pre>
+    <br>
+    <p></p>
+    <p>Now consider the following plots
+      <br>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>CRAY96.PLT</center>
+              <br>
+              <img src="CRAY96.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    Note that since the input to <b>cseis96</b> did not change, the
+    same rays were computed.
+    <p></p>
+    <p>
+      There are two significant differences compared to the Layer1
+      example. This can be seen in the record sections
+    </p>
+    <p>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>ZEX.PLT</center>
+              <br>
+              <img src="ZEX.png"></td>
+            <td>
+              <center>REX.PLT</center>
+              <br>
+              <img src="REX.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    As expected the choice of a positive values for the ray parameter
+    limits did filter reduce the number of rays to make the seismograms.
+    However the synthetics do not look much like those from the Layer1
+    discussion. By examining the output file <i>cseis96.amp</i>, one
+    sees that many different ray parameters make up the synthetic at 200
+    km, but only a few of these are in the desired range.
+    <p></p>
+    <p>
+      This emphasizes the need to better approximate an indicent plane
+      wave.
+    </p>
+    <h1>Plane wave</h1>
+    <p>To investigate both the ray parameter filtering and also the
+      improvement of the plane-wave approximation,
+      the source position was changed to be deeper and also farther away
+      from the array to give the desired
+      ray parameters. The command sequence is now
+      <br>
+    </p>
+    <pre>cprep96 -M model.d -d dfile -HS 2000 -XS -2000 -HR 0 -DOALL  -DOCONV
+cseis96 -R &gt; cseis96.out
+cpulse96 -V -p -l 4 -EXF -DELAY 10 -PMIN 0.08 -PMAX 0.10  | f96tosac -B
+cray96 -XMIN -2100 -XMAX 250 -ZMIN 0 -ZMAX 2100
+</pre>
+    <br>
+    The command line for <b>cprep96</b> has repositioned the source.
+    The command line for
+    <b>cpulse</b> applies the phase velocity filter. Finally the plot
+    limits for<b>cray96</b> are changed because of the new source
+    position.
+    <p></p>
+    <p>
+      The plots are
+      <br>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>CRAY96.PLT</center>
+              <br>
+              <img src="CRAY96_3.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    and
+    <br>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>ZEX.PLT</center>
+              <br>
+              <img src="ZEX_3.png"></td>
+            <td>
+              <center>REX.PLT</center>
+              <br>
+              <img src="REX_3.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    <p></p>
+    <p>It is interesting now that arrivals of all of the receivers are
+      similar. They only differ because of the moveout of the incoming
+      signal across the array. Since the first time sample is <i>delay</i>
+      seconds before the first arrival,
+      an overlay of all traces relative to their beginning would show
+      little difference [GSAC: plot relative overlay on].
+    </p>
+    <h1>Summary</h1>
+    <p>
+      This exercise has shown ray parameter filtering and also the need
+      for a deep source to model plane waves.
+      The horizontal position of that source is determined by trial and
+      error.
+    </p>
+  </body>
+</html>

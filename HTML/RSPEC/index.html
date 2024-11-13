@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title> Generalized reflection and transmission matrices</title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h2>Theory</h2>
+    The development of the solution of the wave propagation problem
+    using the Generalized Reflection/Transmission matrices&nbsp; is
+    given in <a href="Reflection.pdf"> Reflection.pdf</a>. The notation
+    follows the author's Seismic Wave in Layered Media text. The reason
+    for this effort was the need to test wave propagation in a model
+    consisting of and ice layer&nbsp; overlying water which in&nbsp;
+    turn sat on top of an elastic solid. Given current seismological
+    monitoring in&nbsp; the Arctic&nbsp; and Antarctic it was necessary
+    to overcome limitations in the <b>hspec96 </b>and <b>hspec96p</b><i>
+    </i>wavenumber integration codes.&nbsp; The other case of interest
+    is wave propagation in the Earth that includes the effect of the
+    outer core when modeling reflections at the core-mantle
+    boundary.&nbsp; When generating Green's functions for body-wave
+    moment tensor inversion, the current codes were used and the S-wave
+    velocity in the outer core was set to a small non-zero value.<br>
+    <br>
+    <br>
+    In its current form the <b>rspec96 and </b>rspec96p compute all
+    Green's functions, including the stress field in a fluid when the
+    shear velocity at the receiver depth is zero. Depending on the
+    source, the PDD, PDS, PSS, PEX, PVF and PHF <br>
+    <br>
+    Thus one objective of implementing the Generalized
+    Reflection/Transmission method is to test the limitations on the
+    assumption that a small non-zero S-velocity can be for a
+    fluid.&nbsp; The <b>rspec96&nbsp;</b> permits one to&nbsp; compute
+    the response of a medium consisting of a sequence of
+    solid/liquid/solid/liquid, etc., layering even though such a general
+    model would be unstable. Practically, the most extreme model that I
+    can conceive of is atmosphere/ice/water/solid/outer core.&nbsp; <br>
+    <br>
+    <br>
+    <b><br>
+    </b>
+    <h2>Summary of tests</h2>
+    <p>The tests demonstrate that the <b>rspec96</b><b> </b>gives the
+      same results as the <b>hspec96</b><b> </b>code for the following
+      media:&nbsp; all liquid layers, all solid layers, a sequence of
+      liquid layers above solid layers and a sequence of solid layers
+      above liquid ones.&nbsp; <br>
+    </p>
+    <p>To test the more difficult solid/liquid/solid problem, <b>rspec96</b>&nbsp;&nbsp;
+      is run with the solid/liquid/solid model and&nbsp; <b>hspec96</b>&nbsp;&nbsp;
+      is run with the liquid layer approximated as one with the same
+      P-velocity but with a small, but non-zero S-velocity.&nbsp; It is
+      found that the Z component Green's functions, e.g., ZDD, ZDS, ZSS,
+      ZEX, ZVF and ZHF, are identical throughout the medium.
+      Surprisingly the radial Green's functions, RDD, RDS, RSS, REX,
+      RVF, and RHF agree in the solid layers and also in many of the
+      liquid layers if the very slow S-wave arrival moves away from the
+      initial signal.&nbsp; Because the S-wave velocity is so slow in
+      the approximate medium, the <b>hspec96 </b>results differ from
+      those from <b>rspec96</b> only near the solid-liquid boundary.</p>
+    <p>As a result it seems that <b>hspec96 </b>and <b>hspec96p</b>
+      could be further modified by doing the following:<br>
+    </p>
+    <blockquote>a) if the medium is fluid/solid/fluid or
+      solid/fluid/solid, etc., set the S-wave velocity for the fluid to
+      be very small. Then<br>
+      b) run the code but also apply filter for a receiver in fluid
+      of&nbsp; -RPUP -RPDN to filter out the S-wave in the pseudo-fluid.<br>
+    </blockquote>
+    Admittedly this is a hack, but could useful. <br>
+    <h2>Test cases</h2>
+The test cases exercise the boundary conditions that there is a free surface at the top and a halfspece at the bottom. There are the default conditions of <b>hprep96</b>, e.g, <i>-TF -BH</i>.
+<h3>Download and install</h3>
+To run the test cases, do the following:
+<ul>
+<li>Download <a href="RSPEC.tgz"> RSPEC.tgz</a></li>
+<li>Unpack with the commands
+<pre>
+gunzip -c RSPEC.tgz | tar xf - 
+cd RSPEC
+ls
+</pre>
+You will see the directories S, T, SW, WS, and W. In each directory there is a shell script named <i>DOFINAL</I>. Execute those.
+</li>
+</ul>
+<p>The codes <b>rspec96</b> and <b>rspec96p </b>were tested with
+      isotropic and completely fluid models. The results agreed with
+      those of <b>hspec96 </b>and <b>hspec96p</b>. The critical test
+      is a model consisting of a solid - fluid - solid layer
+      sequence.&nbsp; 
+<h3>W - Model is a fluid</h3>
+This model is as follows:
+<pre>
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  0.0000  3.3000 0 0 0 0 1 1
+</pre>
+For this model only the ZEX, REX and PEX Green's functions are created.
+The source is at a depth of 20 km and the receiver depths vary from the surface to 30 km.
+The <b>rspec96</b> and <b>hspec96</b>  Green's functions are plotted in red and blue, respectively. The plots are a true amplitude plot, meaning that the relative amplitudes between rceiver depths is preserved.
+Click on the links to see the comparison.
+<ul>
+<li><a href="W/ZEX.png"> ZEX.png</a></li>
+<li><a href="W/REX.png"> REX.png</a></li>
+<li><a href="W/PEX.png"> PEX.png</a></li>
+</ul>
+<p>
+The display shows only subtle differences between the results of the two methods.
+<h3>S - Model is a solid</h3>
+This model is as follows:
+<pre>
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1
+</pre>
+For this model  the ZDD, RDD, ZDS, RDS, TDS, ZSS, RSS, TSS, ZEX, REX, ZVF, RVF, ZHT, RHF and THF Green's functions are created.
+The source is at a depth of 20 km and the receiver depths vary from the surface to 30 km.
+The <b>rspec96</b> and <b>hspec96</b>  Green's functions are plotted in red and blue, respectively. The plots are a true amplitude plot, meaning that the relative amplitudes between rceiver depths is preserved.
+Click on the links to see the comparison.
+<ul>
+<li><a href="S/ZDD.png"> ZDD.png</a></li>
+<li><a href="S/RDD.png"> RDD.png</a></li>
+<li><a href="S/ZDS.png"> ZDS.png</a></li>
+<li><a href="S/RDS.png"> RDS.png</a></li>
+<li><a href="S/TDS.png"> TDS.png</a></li>
+<li><a href="S/ZSS.png"> ZSS.png</a></li>
+<li><a href="S/RSS.png"> RSS.png</a></li>
+<li><a href="S/TSS.png"> TSS.png</a></li>
+<li><a href="S/ZEX.png"> ZEX.png</a></li>
+<li><a href="S/REX.png"> REX.png</a></li>
+<li><a href="S/ZVF.png"> ZVF.png</a></li>
+<li><a href="S/RVF.png"> RVF.png</a></li>
+<li><a href="S/ZHF.png"> ZHF.png</a></li>
+<li><a href="S/RHF.png"> RHF.png</a></li>
+<li><a href="S/THF.png"> THF.png</a></li>
+</ul>
+<p>
+The display shows only subtle differences between the results of the two methods.
+<h3>SW - Upper 8 km is a solid and the rest of the model is a fluid</h3>
+This model is as follows:
+<pre>
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  0.0000  3.3000 0 0 0 0 1 1
+</pre>
+For this model only the ZEX, REX and PEX Green's functions are created since the
+source is in the fluid. The PEX Green's function is created only for the receiver in the fluid.
+The source is at a depth of 20 km and the receiver depths vary from the surface to 30 km.
+The <b>rspec96</b> and <b>hspec96</b>  Green's functions are plotted in red and blue, respectively. The plots are a true amplitude plot, meaning that the relative amplitudes between rceiver depths is preserved.
+Click on the links to see the comparison.
+<ul>
+<li><a href="SW/ZEX.png"> ZEX.png</a></li>
+<li><a href="SW/REX.png"> REX.png</a></li>
+<li><a href="SW/PEX.png"> PEX.png</a></li>
+</ul>
+<p>
+The display shows only subtle differences between the results of the two methods.
+<h3>WS - Upper 8 km is a fluid and the rest of the model is a solid</h3>
+This model is as follows:
+<pre>
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1
+</pre>
+For this model  the ZDD, RDD, ZDS, RDS, TDS, ZSS, RSS, TSS, ZEX, REX, ZVF, RVF, ZHT, RHF,  THF, PDD, PDS, PSS, PEX, PVF and PHF Green's functions are created.
+The source is at a depth of 20 km and the receiver depths vary from the surface to 30 km.
+The <b>rspec96</b> and <b>hspec96</b>  Green's functions are plotted in red and blue, respectively. The plots are a true amplitude plot, meaning that the relative amplitudes between rceiver depths is preserved.
+Click on the links to see the comparison.
+<ul>
+<li><a href="WS/ZDD.png"> ZDD.png</a></li>
+<li><a href="WS/RDD.png"> RDD.png</a></li>
+<li><a href="WS/ZDS.png"> ZDS.png</a></li>
+<li><a href="WS/RDS.png"> RDS.png</a></li>
+<li><a href="WS/TDS.png"> TDS.png</a></li>
+<li><a href="WS/ZSS.png"> ZSS.png</a></li>
+<li><a href="WS/RSS.png"> RSS.png</a></li>
+<li><a href="WS/TSS.png"> TSS.png</a></li>
+<li><a href="WS/ZEX.png"> ZEX.png</a></li>
+<li><a href="WS/REX.png"> REX.png</a></li>
+<li><a href="WS/ZVF.png"> ZVF.png</a></li>
+<li><a href="WS/RVF.png"> RVF.png</a></li>
+<li><a href="WS/ZHF.png"> ZHF.png</a></li>
+<li><a href="WS/RHF.png"> RHF.png</a></li>
+<li><a href="WS/THF.png"> THF.png</a></li>
+<li><a href="WS/PEX.png"> PEX.png</a></li>
+<li><a href="WS/PDD.png"> PDD.png</a></li>
+<li><a href="WS/PDD.png"> PDD.png</a></li>
+<li><a href="WS/PSS.png"> PSS.png</a></li>
+<li><a href="WS/PVF.png"> PVF.png</a></li>
+<li><a href="WS/PHF.png"> PHF.png</a></li>
+</ul>
+<p>
+The display shows only subtle differences between the results of the two methods.
+Note that the P?? are not computed at a receiver depth of 8 km since the code computes the response on the solid side of tat boundary, e.g., at 8+ km.
+<h3>T - solid/fluid/solid model</h3>
+Although the <b>hspec96 </b>and <b>hspec96p </b>codes
+      cannot handle such a model, it was instructive to run those codes
+      with a near-zero S-wave velocity. The models considered are shown
+      below. The difference between the models is highlighted in<font
+        color="#ff0000"> red.</font>&nbsp; The S.mod was used with <b>rspec96</b>
+      while Sa.mod and Sb.mod were used with <b>hspec96</b>.<br>
+    </p>
+    <table width="100%" cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td valign="top" bgcolor="#ffff66" align="center"><b>S.mod</b><br>
+          </td>
+          <td valign="top" bgcolor="#ffff66" align="center"><b>Sa.mod</b><br>
+          </td>
+          <td valign="top" bgcolor="#ffff66" align="center"><b>Sb.mod</b><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            <pre>MODEL.01<br>CUS Model with Q from simple gamma values<br>ISOTROPIC<br>KGS<br>FLAT EARTH<br>1-D<br>CONSTANT VELOCITY<br>LINE08<br>LINE09<br>LINE10<br>LINE11<br>  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC) QP QS ETAP ETAS FREFP FREFS<br>  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br>  4.0000  6.0000  <font color="#ff0000"><b>0.0000</b></font>  2.7000 0 0 0 0 1 1<br>  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br> 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br>   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1<br></pre>
+          </td>
+          <td valign="top">
+            <pre>MODEL.01<br>CUS Model with Q from simple gamma values<br>ISOTROPIC<br>KGS<br>FLAT EARTH<br>1-D<br>CONSTANT VELOCITY<br>LINE08<br>LINE09<br>LINE10<br>LINE11<br>  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC) QP QS ETAP ETAS FREFP FREFS<br>  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br>  4.0000  6.0000  <font color="#ff0000"><b>0.0100</b></font>  2.7000 0 0 0 0 1 1<br>  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br> 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br>   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1<br></pre>
+          </td>
+          <td valign="top">
+            <pre>MODEL.01<br>CUS Model with Q from simple gamma values<br>ISOTROPIC<br>KGS<br>FLAT EARTH<br>1-D<br>CONSTANT VELOCITY<br>LINE08<br>LINE09<br>LINE10<br>LINE11<br>  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC) QP QS ETAP ETAS FREFP FREFS<br>  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br>  4.0000  6.0000  <b><font color="#ff0000">0.0050</font> </b> 2.7000 0 0 0 0 1 1<br>  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br> 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1<br>   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1<br></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>The next figure plots the Shear velocities of these models. Since
+      the S-velocities in the second layer are very small, their
+      differences are not seen in the figure.<br>
+    </p>
+    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+      <tbody>
+        <tr>
+          <td valign="top"><img src="SHWMOD96.png" alt="SHWMOD96.png"
+              width="480" height="465"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>To compare results of the different codes, the computations make
+      using a single ray parameter with <b>hspec96p</b> or <b>rspec96p</b>
+      are the fastest, but for waveform modeling the complete synthetics
+      computed using <b>hspec96</b> or <b>rspec96</b> must be
+      computed. There is not too much difference in the execution times
+      of these codes. &nbsp;&nbsp; <br>
+    </p>
+For these models  the ZDD, RDD, ZDS, RDS, TDS, ZSS, RSS, TSS, ZEX, REX, ZVF, RVF, ZHT, RHF,  THF, PDD, PDS, PSS, PEX, PVF and PHF Green's functions are created.
+The source is at a depth of 20 km and the receiver depths vary from the surface to 30 km.
+The <b>rspec96</b> and <b>hspec96</b>  Green's functions are plotted in red and blue, respectively. The plots are a true amplitude plot, meaning that the relative amplitudes between rceiver depths is preserved.
+<p>
+For this comparison the <b>S.mod</b> is used with <b>rspec96</b> and <b>Sa.mod</b> with <b>hspec96</b>. 
+<h4>Receiver depth sections 0 - 30 km</h4>
+<p>In the trace comparisons the only real differences are in the R?? components. For example look at the REX Grens/ function at 5 and 7 km at late times. These would be a problem is a shorter time window were used because of the periodicity of the FFT used. Note that these later arrivals are about 100 sec after the first P arrival.
+<p>
+Click on the links to see the comparison. Note the P?? are componented only for the <b>rspec96</b/> since the <b>Sa.mod</b> is a solid model even though the S velocity is very small.
+<ul>
+<li><a href="T/ZDD.png"> ZDD.png</a></li>
+<li><a href="T/RDD.png"> RDD.png</a></li>
+<li><a href="T/ZDS.png"> ZDS.png</a></li>
+<li><a href="T/RDS.png"> RDS.png</a></li>
+<li><a href="T/TDS.png"> TDS.png</a></li>
+<li><a href="T/ZSS.png"> ZSS.png</a></li>
+<li><a href="T/RSS.png"> RSS.png</a></li>
+<li><a href="T/TSS.png"> TSS.png</a></li>
+<li><a href="T/ZEX.png"> ZEX.png</a></li>
+<li><a href="T/REX.png"> REX.png</a></li>
+<li><a href="T/ZVF.png"> ZVF.png</a></li>
+<li><a href="T/RVF.png"> RVF.png</a></li>
+<li><a href="T/ZHF.png"> ZHF.png</a></li>
+<li><a href="T/RHF.png"> RHF.png</a></li>
+<li><a href="T/THF.png"> THF.png</a></li>
+<li><a href="T/PEX.png"> PEX.png</a></li>
+<li><a href="T/PDD.png"> PDD.png</a></li>
+<li><a href="T/PDS.png"> PDS.png</a></li>
+<li><a href="T/PSS.png"> PSS.png</a></li>
+<li><a href="T/PVF.png"> PVF.png</a></li>
+<li><a href="T/PHF.png"> PHF.png</a></li>
+</ul>
+<p>
+<h4>Receiver depth sections 3.5 - 8.5 km</h4>
+<p>
+These plot focus on the arrivals in the water layer. Remembering that the color blue is used for  the <b>hspec96</b> synthetics. A set of arrivals is genereated at the sharp velocity boundary at 4 and 8 km. The moveout indicates that these are the S-wave propagating at 0.01 km/sec. In genereal the initial part of the traces agree very well. It is only at location near the boundary that these arrivals interfer with the expected motion.
+<p>
+One cannot make the S velocity too small to simulate a fluid when using <b>hspec96</b> if the computations are done in single precision. 
+<p>
+The other conclusion is that the Z?? displacements in the fluid comapre well. Although the <b>hspec96</b> will not give the P?? in the fluid, the displacements in the overlying solid are correctly computed. This one could use <b>hspec96</b> for the ice/water/solid problem.
+<p>
+Click on the links to see the comparison.
+<ul>
+<li><a href="T/aZDD.png"> ZDD.png</a></li>
+<li><a href="T/aRDD.png"> RDD.png</a></li>
+<li><a href="T/aZDS.png"> ZDS.png</a></li>
+<li><a href="T/aRDS.png"> RDS.png</a></li>
+<li><a href="T/aTDS.png"> TDS.png</a></li>
+<li><a href="T/aZSS.png"> ZSS.png</a></li>
+<li><a href="T/aRSS.png"> RSS.png</a></li>
+<li><a href="T/aTSS.png"> TSS.png</a></li>
+<li><a href="T/aZEX.png"> ZEX.png</a></li>
+<li><a href="T/aREX.png"> REX.png</a></li>
+<li><a href="T/aZVF.png"> ZVF.png</a></li>
+<li><a href="T/aRVF.png"> RVF.png</a></li>
+<li><a href="T/aZHF.png"> ZHF.png</a></li>
+<li><a href="T/aRHF.png"> RHF.png</a></li>
+<li><a href="T/aTHF.png"> THF.png</a></li>
+<li><a href="T/aPEX.png"> PEX.png</a></li>
+<li><a href="T/aPDD.png"> PDD.png</a></li>
+<li><a href="T/aPDS.png"> PDS.png</a></li>
+<li><a href="T/aPSS.png"> PSS.png</a></li>
+<li><a href="T/aPVF.png"> PVF.png</a></li>
+<li><a href="T/aPHF.png"> PHF.png</a></li>
+</ul>
+<p>
+    <p>One subtle difference in the implementation occurs when the
+      source or receiver depth is at the solid/liquid boundary, e.g., at
+      a depth of 4.0 or 8.0 km in&nbsp; the S.mod above. 
+      Actually in the code, the decision is whether the
+      observation point is at the bottom of the layer above or at the
+      top of the layer below. One could follow the code, but one could
+      also experiment&nbsp; by computing synthetics at just above and
+      below the boundary and then comparing those to the synthetics
+      computed at the boundary,&nbsp; This distinction is pertinent
+      since the vertical displacement and stress are continuous across a
+      fluid/solid boundary, but the radial displacement is not.<br>
+    </p>
+    <p>I mention this because of the use of OBS platforms. Thus to make
+      synthetics for the particle velocities, I would perform the
+      computations at a depth of about 1 meter or so below the
+      ocean/solid boundary. To get the pressure field, I would run the
+      codes for a receiver in the fluid at a height of about 1 meter
+      above the boundary.<br>
+    </p>
+    </p>
+    <p><br>
+    </p>
+  </body>
+</html>

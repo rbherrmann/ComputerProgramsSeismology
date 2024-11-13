@@ -1,0 +1,92 @@
+
+SELFNOISE
+|-- 00README
+|-- ANMO.TEST
+|   |-- 20100808.16065.seed
+|   |-- CPLOTLHZ2010.220.PLT.png
+|   |-- DOCROSS
+|   |-- PLOTLHZ20101.220.PLT.png
+|   |-- PLOTLHZ20102.220.PLT.png
+|   `-- pdf_E2010.220_S2010.220_cBHZ_l10_nIU_sANMO.png
+|-- FPSD
+|   |-- TESTPSD
+|   |   |-- ANMO.BHZ.GSN.AMP
+|   |   |-- DOITALQASC
+|   |   |-- DOITALQBIN
+|   |   |-- PLOTALQ
+|   |   |-- PLOTALQ.eps
+|   |   |-- anmbz_01.asac
+|   |   |-- anmbz_01.cmp
+|   |   |-- anmbz_01.sac
+|   |   |-- anmbz_02.asac
+|   |   |-- anmbz_02.cmp
+|   |   |-- anmbz_02.sac
+|   |   |-- anmbz_03.asac
+|   |   |-- anmbz_03.cmp
+|   |   |-- anmbz_03.sac
+|   |   |-- anmbz_04.asac
+|   |   |-- anmbz_04.cmp
+|   |   |-- anmbz_04.sac
+|   |   |-- anmbz_05.asac
+|   |   |-- anmbz_05.cmp
+|   |   |-- anmbz_05.sac
+|   |   |-- anmbz_06.asac
+|   |   |-- anmbz_06.cmp
+|   |   |-- anmbz_06.sac
+|   |   |-- anmbz_07.asac
+|   |   |-- anmbz_07.cmp
+|   |   |-- anmbz_07.sac
+|   |   |-- anmbz_08.asac
+|   |   |-- anmbz_08.cmp
+|   |   |-- anmbz_08.sac
+|   |   |-- anmbz_09.asac
+|   |   |-- anmbz_09.cmp
+|   |   |-- anmbz_09.sac
+|   |   |-- anmbz_10.asac
+|   |   |-- anmbz_10.cmp
+|   |   |-- anmbz_10.sac
+|   |   |-- anmbz_11.cmp
+|   |   |-- anmbz_12.cmp
+|   |   |-- bjunk.alq
+|   |   |-- junk.alq
+|   |   |-- nhnm.acc
+|   |   `-- nlnm.acc
+|   |-- bin
+|   |-- nhnm.acc
+|   |-- nlnm.acc
+|   `-- src
+|       |-- Makefile
+|       |-- coher.f
+|       |-- cutper.f
+|       |-- dmean.f
+|       |-- four.f
+|       |-- genplt.f
+|       |-- grphsubf.f
+|       |-- gttamp.f
+|       |-- hann.f
+|       |-- lgstr.f
+|       |-- mchdep.f
+|       |-- mgtarg.f
+|       |-- mnmarg.f
+|       |-- npow2.f
+|       |-- psd.f
+|       |-- sacfilt.f
+|       |-- sacsubf.f
+|       `-- xyplt2.f
+|-- KMI.TEST
+|   |-- 20100727.8919.seed
+|   |-- CPLOTLHE2010.027.PLT.png
+|   |-- CPLOTLHN2010.027.PLT.png
+|   |-- CPLOTLHZ2010.027.PLT.png
+|   |-- CPLOTLHZ2010.027.png
+|   |-- DOCROSS
+|   |-- PLOTLHE20101.027.PLT.png
+|   |-- PLOTLHE20102.027.PLT.png
+|   |-- PLOTLHN20101.027.PLT.png
+|   |-- PLOTLHN20102.027.PLT.png
+|   |-- PLOTLHZ20101.027.PLT.png
+|   |-- PLOTLHZ20101.027.png
+|   |-- PLOTLHZ20102.027.PLT.png
+|   |-- PLOTLHZ20102.027.png
+
+

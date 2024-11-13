@@ -1,0 +1,56 @@
+* CHANNEL(NSCL)TAZ54A BHN
+* NETWORK      TA
+* STATION      Z54A 
+* COMPONENT    BHN
+* LOCATION       
+* CREATED      2012/08/28 14:42:04.02
+* EFFECTIVE    2012-04-12 00:00:00.0
+* ENDDATE      2037-12-31 23:59:59.0
+* PARSE FLAGS 0x0 
+* INPUT UNIT   NM
+* OUTPUT UNIT  COUNT
+* DESCRIPTION  Sparta, GA, USA
+* RATE (HZ)    40.0
+* OWNER        USArray Transportable Array
+* COORD(NEIC)  TA Z54A:  33.2362  -82.8417  134.0
+* COORD(SEED)  TA Z54A:  33.2362  -82.8417  134.0
+* ORIENTATION  TA Z54A  -- BHN:     0.0   0.0    0.0
+* LAT-SEED     33.2362
+* LONG-SEED    -82.8417
+* ELEV-SEED    134.0
+* DEPTH        0.0
+* DIP          0.0
+* AZIMUTH      0.0
+* INSTRMNTTYPE Streckeisen STS-2 G3/Quanterra 330 Linear Phase Co
+* INSTRMNTCMNT Sparta, GA, USA^USArray Transportable Array^^
+* INSTRMNTGAIN 1.4953E03
+* INSTRMNTUNIT V
+* SENS-SEED    6.2719E08
+* SENS-CALC    6.2719E08
+* A0-SEED      3.4846E17
+* A0-CALC      3.4846E17
+* SEEDFLAGS    G
+* ****
+CONSTANT              2.1855E+17
+ZEROS   7
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+        -4.6310E+02   4.3050E+02
+        -4.6310E+02  -4.3050E+02
+        -1.7660E+02   0.0000E+00
+        -1.5150E+01   0.0000E+00
+POLES  11
+        -1.3300E+04   0.0000E+00
+        -1.0530E+04   1.0050E+04
+        -1.0530E+04  -1.0050E+04
+        -5.2030E+02   0.0000E+00
+        -3.7480E+02   0.0000E+00
+        -9.7340E+01   4.0070E+02
+        -9.7340E+01  -4.0070E+02
+        -1.5640E+01   0.0000E+00
+        -3.7000E-02   3.7000E-02
+        -3.7000E-02  -3.7000E-02
+        -2.5510E+02   0.0000E+00
+* <EOE>
+* <EOR>

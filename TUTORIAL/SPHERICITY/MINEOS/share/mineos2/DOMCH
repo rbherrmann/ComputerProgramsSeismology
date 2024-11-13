@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cat > ww << EOF
+1 'D.ZSS' 'D' 0
+2 'D.RSS' 'D' 0
+3 'D.TSS' 'D' 0
+EOF
+
+STK=$1
+DIP=$2
+RAKE=$3
+MW=2.63
+
+wvfmch96 -S ${STK} -D ${DIP}  -R  ${RAKE}  -MW  ${MW} << EOF
+ww
+mchout
+EOF
+

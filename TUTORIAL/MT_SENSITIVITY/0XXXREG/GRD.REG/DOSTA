@@ -1,0 +1,226 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+then
+	echo Usage: DOSTA DEPTH
+	exit 0;
+fi
+HS=$1
+
+#####
+#	Station prep file for regional events
+#	This script prepares the waveforms and Greens functions for the
+#	inversion program and also creates some HTML for the documentation
+#
+#	SYNTAX:
+#
+#	DOSTA  DEPTH  
+#		where DEPTH is of the form 0100 for depth of 10.0 km
+#		DEPTH is the name of the directory for that depth
+#
+#	Internal parameters to be changed:
+#	
+#	GREEN  - This string points to the directory of Green's functions
+#		as a function of depth.  This is set up my the master script
+#	CUTL  CUTH - These define the time window of the signal with respect
+#		to the P pick
+#		Default -10 150
+#	FHIGHPASS  FLOWPASS, NPOLE, PASS - These define the frequency band
+#		for fitting ground velocity
+#		Default: 0.02 0.10 3 1
+#	MICROSEISMREJECT - "YES" to force the microseism reject
+#		MFL, MFH, MNPOLE - bands for the microseism rejection
+#		Default: "NO"   Note the "" are required
+#			0.12 0.25 4 2
+#	DREF - Distance for weighting of waveforms, which is of the simple form
+#		dist/DREF for dist < DREF 
+#		DREF/dist for dist >= DREF
+#		Default: 100
+#####
+#####
+#	define the weighting reference distance
+#####
+DREF=100
+
+#####
+#	define the path to the Green's Function Directory
+#####
+GREEN=${GREENDIR}/GMODEL
+
+#####
+#	define CUT LIMITS  - there are with respect to the P pick
+#####
+	CUTL=-10
+	CUTH=280
+#####
+#	define filter bands
+#####
+	FHIGHPASS=0.02
+	FLOWPASS=0.10
+	NPOLE=3
+	PASS=1
+#####
+#	define the use of the microseism filter
+#	MICROSEISMREJECT="NO" or "YES"
+#####
+MFL=0.12
+MFH=0.25
+MNPOLE=4
+MICROSEISMREJECT="NO"
+if [ ${MICROSEISMREJECT} = "NO" ]
+then
+	DOMICRO="#"
+else
+	DOMICRO=""
+fi
+
+#########################################################################
+#	DO NOT CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING                #
+#########################################################################
+#####
+#	initialize by removing the control file for the inversion program
+#####
+	rm -f ww
+#####
+#	begin processing
+#####
+
+echo '<PRE>' > tfilter
+echo hp c $FHIGHPASS n $NPOLE >> tfilter
+echo lp c $FLOWPASS n $NPOLE >> tfilter
+if [ "${MICROSEISMREJECT}" = "YES" ]
+then
+	echo br c ${MFL} ${MFH}  n ${MNPOLE} p 2 >> tfilter
+fi
+echo '</PRE>' >> tfilter
+
+#####
+#	awk program for assigning distance weights
+#####
+cat > dwt << FOE
+{ Dist = \$3 ;
+if (Dist < 200)                printf "1.0" ;
+if (Dist >= 200 && Dist < 300) printf "1.0" ;
+if (Dist >= 300 && Dist < 500) printf "0.25" ;
+if (Dist >= 500              ) printf "0.10" ;
+}
+FOE
+#####
+#	create a list of unique distances - distince is in 3rd column
+#####
+
+for TRACE in ../DAT.REG/*[ZRT]
+do
+
+#####
+#	get information from trace header
+#####
+	KSTNM=`saclhdr -KSTNM ${TRACE}`
+	KCMPNM=`saclhdr -KCMPNM ${TRACE}`
+	DELTA=`saclhdr -DELTA ${TRACE}`
+	DIST=`saclhdr -DIST ${TRACE}`
+#####
+#	define the components
+#####
+	case ${KCMPNM} in
+		BHZ|HHZ|HNZ) COMP=1 ; NAM=Z;;
+		BHR|HHR|HNR) COMP=2 ; NAM=R;;
+		BHT|HHT|HNT) COMP=3 ; NAM=T;;
+		*) break;;
+	esac
+	echo PROCESSING $TRACE $KSTNM $KCMPNM $DELTA $DIST $COMP $NAM
+#####
+#	search over source depth These depths are the subdirectory
+#	names in the Green's Function Directory
+#####
+cat > awkprog << FOE
+# This works under gawk - on Solaris try nawk
+BEGIN { MDIF = 10000.0 }
+{DIF = $DIST - \$1 ;
+if( DIF < 0 ) DIF = - DIF ;
+if(DIF < MDIF) { MDIF = DIF ; Dfile = \$7 ; Rate = \$2 ; Dist = \$1 }
+}
+END { print Dfile , Rate, Dist }
+FOE
+
+	cat ${GREEN}/${HS}/W.CTL | \
+		awk -f awkprog > j
+	rm awkprog
+#####
+#	define the distance dependent weight
+#####
+	WT=`echo $DIST $DREF | awk '{ if ( $1 <$2 ) print $1/$2 ; else print $2/$1 }' `
+#####
+#	copy the Green's function files here
+#	and rename
+#####
+	for DFILE in `awk '{print $1}' < j `
+	do
+		echo Copying and Renaming $DFILE for this distance ${DIST}
+		for GRN in ZDD RDD ZDS RDS TDS ZSS RSS TSS ZEX REX 
+		do
+			cp ${GREEN}/${HS}/${DFILE}.${GRN} ${KSTNM}.${GRN}
+#####
+#	cut and filter Green
+#####
+gsac > /dev/null << FOE
+cuterr fillz
+cut a ${CUTL}  a ${CUTH}
+r ${KSTNM}.${GRN}  
+rtr
+hp c  ${FHIGHPASS} np ${NPOLE} p ${PASS}
+lp c  ${FLOWPASS} np ${NPOLE} p ${PASS}
+${DOMICRO}br c ${MFL} ${MFH} n ${MNPOLE} p 2
+w ${KSTNM}.${GRN}  
+FOE
+#hp c ${FHIGHPASS} np ${NPOLE} p ${PASS}
+#lp c ${FLOWPASS} np ${NPOLE} p ${PASS}
+
+		done
+#####
+#	define the
+#####
+		echo ${COMP} \'${KSTNM}${NAM}\' \'${KSTNM}\' ${WT} >> ww
+#####
+#	cut and filter observed
+#####
+gsac > /dev/null << FOE
+cuterr fillz
+cut a ${CUTL}  a ${CUTH}
+r ${TRACE}
+rtr
+hp c  ${FHIGHPASS} np ${NPOLE} p ${PASS}
+lp c  ${FLOWPASS} np ${NPOLE} p ${PASS}
+${DOMICRO}br c ${MFL} ${MFH} n ${MNPOLE} p 2
+w ${KSTNM}${NAM}
+FOE
+#hp c ${FHIGHPASS} np ${NPOLE} p ${PASS}
+#lp c ${FLOWPASS} np ${NPOLE} p ${PASS}
+
+	done
+#####
+#	Ensure the sample rate the observed = sample rete Green
+#	Here ASSUME THAT OBSERVED RATE >= GREEN RATE
+#####
+#####
+#	get the Green sampling interval - this only works if the division is OK
+#	and the ratio <=5 (sac limitation) 
+#####
+GDELTA=`saclhdr -DELTA ${KSTNM}.ZSS`
+
+gsac > /dev/null << EOF
+r ${KSTNM}${NAM}
+interpolate DELTA $GDELTA
+w ${KSTNM}${NAM}
+quit
+EOF
+
+#####
+#	clean up
+#####
+	rm -f j
+
+	
+
+	
+done

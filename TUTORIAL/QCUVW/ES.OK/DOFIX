@@ -1,0 +1,36 @@
+#!/bin/sh
+
+gsac << EOF
+
+rh GOOD/COBIRD_HHE00.sac
+ch cmpinc 54.7 cmpaz 90
+wh
+rh GOOD/COBIRD_HHN00.sac
+ch cmpinc 54.7 cmpaz 330
+wh
+rh GOOD/COBIRD_HHZ00.sac
+ch cmpinc 54.7 cmpaz 210
+wh
+rh GOOD/COHODGEHHE00.sac
+ch cmpinc 54.7 cmpaz 90
+wh
+rh GOOD/COHODGEHHN00.sac
+ch cmpinc 54.7 cmpaz 330
+wh
+rh GOOD/COHODGEHHZ00.sac
+ch cmpinc 54.7 cmpaz 210
+wh
+rh GOOD/COPAULIHHE00.sac
+ch cmpinc 54.7 cmpaz 90
+wh
+rh GOOD/COPAULIHHN00.sac
+ch cmpinc 54.7 cmpaz 330
+wh
+rh GOOD/COPAULIHHZ00.sac
+ch cmpinc 54.7 cmpaz 210
+wh
+q
+EOF
+
+
+

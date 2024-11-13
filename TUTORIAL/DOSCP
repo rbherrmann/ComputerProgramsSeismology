@@ -1,0 +1,5 @@
+#!/bin/sh
+
+TARGET=rbh@wiggles.eas.slu.edu:/net/eqinfo/seis/web/eqc/eqc_cps
+
+scp -pr $* ${TARGET}/TUTORIAL

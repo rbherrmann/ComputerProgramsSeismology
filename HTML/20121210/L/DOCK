@@ -1,0 +1,14 @@
+#!/bin/sh
+
+surf96 39
+surf96 32 100000
+surf96 37 10 1 2 6
+srfphv96 -V
+srfphv96 -G
+surf96 1 28 modl.out
+plotnps -EPS -F7 -W10 -K -BGFILL < SRFPHG96.PLT > t.eps ; convert -trim t.eps srfg.png
+plotnps -EPS -F7 -W10 -K -BGFILL < SRFPHV96.PLT > t.eps ; convert -trim t.eps srfv.png
+
+surf96 39
+rm t.eps SRFPH*.PLT
+

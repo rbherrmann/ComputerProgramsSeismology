@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm -fr E1E1 N1N1 Z1Z1 POS? STACK? CORR sdisp* slegn* sregn* dfile TMP Summary
+rm -f E1E2* Z1Z2* N1N2* PHV96* MFT96* 
+rm -fr phv96* mft96*
+rm -f map.*

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Compliance</title>
+    <meta name="generator" content="LibreOffice 7.1.8.1 (MacOSX)">
+    <meta name="created" content="2023-03-21T05:20:54.950142000">
+    <meta name="changed" content="2023-03-21T09:07:02.326182000">
+    <style type="text/css">
+		@page { size: 8.5in 11in; margin: 0.79in }
+		p { margin-bottom: 0.1in; line-height: 115%; background: transparent }
+		h2 { margin-top: 0.14in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
+		h2.western { font-family: "Liberation Sans", sans-serif; font-size: 16pt; font-weight: bold }
+		h2.cjk { font-family: "PingFang SC"; font-size: 16pt; font-weight: bold }
+		h2.ctl { font-family: "Arial Unicode MS"; font-size: 16pt; font-weight: bold }
+	</style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body dir="ltr" vlink="#800000" lang="en-US" link="#000080">
+    <h2 class="western">
+      Output of tcompliance.saito</h2>
+    <p>The result of running the test script DOLAND is essentially this:
+    </p>
+    <p>
+    </p>
+    <pre> Freq  (hz)   :   9.99999978E-03
+ c     (m/s)  :   1.00000000    
+ seafloor     : F
+ Model        :HOMO3.5.mod
+ Model name: HOMO3.5.mod
+ LAYER              H     P-VEL     S-VEL   DENSITY  
+     1      0.1000E-02  6.000      3.500      2.500    <big><font color="#ff0000">These are from the given velocity model</font></big>
+     2      0.1000E-02  6.000      3.500      2.500    
+     3      0.1000E-02  6.000      3.500      2.500    
+     4      0.1000E-02  6.000      3.500      2.500    
+     5      0.1000E-02  6.000      3.500      2.500    
+     6      0.1000E-02  6.000      3.500      2.500    
+     7      0.1000E-02  6.000      3.500      2.500    
+     8      0.1000E-02  6.000      3.500      2.500    
+     9      0.1000E-02  6.000      3.500      2.500    
+    ...............................................
+    34      0.1000E-01  6.000      3.500      2.500    
+    35      0.1000E-01  6.000      3.500      2.500    
+    36      0.1000E-01  6.000      3.500      2.500    
+ COMPZ    :   3.9386949257647075E-010                  <b><font color="#ff0000">This is the ratio of Uz (positive down) to Pressure at surface</font></b>
+ TILT     :   6.1432600164909040E-008
+ZZ    I   Z(mid)(m)        Ka         Kb          Kr        Kkappa       Kmu         Krho
+XX    I   Z(mid)(m)        Ka         Kb          Kr        Kkappa       Kmu         Krho
+ZZ    1     0.50000    -0.24366     0.08215    -0.08074    -0.06656    -0.01430     0.00000   <font color="#ff0000"><b>Recall that this is experimental code. The ZZ</b></font>
+XX    1     0.50000    -0.24366     0.08215    -0.08074    -0.06655    -0.01420     0.00001   <b><font color="#ff0000">rows compute all kernels by numerical differentiation.</font></b>
+ZZ    2     1.50000    -0.21486     0.06819    -0.07333    -0.05868    -0.01474     0.00000   
+XX    2     1.50000    -0.21486     0.06819    -0.07333    -0.05869    -0.01465     0.00001   <font color="#ff0000"><b>The rows marked XX compute the Ka, Kb and Kr by</b></font>
+ZZ    3     2.50000    -0.18945     0.05250    -0.06835    -0.05180    -0.01679     0.00000   <b><font color="#ff0000">numerical differentiation but the Kkappa, Kmu and</font></b>
+XX    3     2.50000    -0.18945     0.05250    -0.06835    -0.05175    -0.01673     0.00012   <font color="#ff0000"><b>Krho kernels are derived from the first two using </b></font>
+...........................................................................................   <font color="#ff0000"><b>the relation from Tanimoto and Wang (2019).</b></font>
+ZZ   35   115.00000     0.00000    -0.00003    -0.00001    -0.00000    -0.00001     0.00000
+XX   35   115.00000     0.00000    -0.00003    -0.00001     0.00000    -0.00001    -0.00000   <b><font color="#cc0000">To access only the XX results, do a</font></b>
+ZZ   36   125.00000     0.00000    -0.00001    -0.00001    -0.00000    -0.00001     0.00000        <font color="#ff0000"><b>grep XX Land.txt</b></font>
+XX   36   125.00000     0.00000    -0.00001    -0.00001     0.00000    -0.00001    -0.00000
+</pre>
+    <p></p>
+    <p>The output of the ocean-bottom computation from the script DOSEA
+      is similar. The only difference is in the header information. The
+      phase velocity is computed as a funciton of the water depth abd
+      frequency.
+      Since the phase velocities are much greater than those use for the
+      solid-atmosphere problem, the kernels are significant to greater
+      depths.
+      In addition, the model applies to the material in the seafloor and
+      does not have an initial fluid layer.
+      The </p>
+    <pre> Freq  (hz)   :   9.99999978E-03
+ c     (m/s)  :   92.3199005    
+ seafloor     : T<br> g   (m/s^2)  :   9.80000019    <br> depth   (m)  :   1000.00000
+ Model name: HOMOSEA3.5.mod
+ LAYER              H     P-VEL     S-VEL   DENSITY  
+     1      0.1000      6.000      3.500      2.500    
+     2      0.1000      6.000      3.500      2.500    
+     3      0.1000      6.000      3.500      2.500    
+     4      0.1000      6.000      3.500      2.500    
+     5      0.1000      6.000      3.500      2.500    
+     6      0.1000      6.000      3.500      2.500    
+    ...............................................
+    69      0.1000      6.000      3.500      2.500    
+    70      0.1000      6.000      3.500      2.500    
+    71      0.1000      6.000      3.500      2.500    
+    72      0.1000      6.000      3.500      2.500    
+ COMPZ    :   3.6381283763375905E-008
+ COMPR    :   1.2383965852791334E-008
+ZZ    I   Z(mid)(m)        Ka         Kb          Kr        Kkappa       Kmu         Krho
+XX    I   Z(mid)(m)        Ka         Kb          Kr        Kkappa       Kmu         Krho
+ZZ    1    50.00000    -0.00263     0.00088    -0.00087    -0.00072    -0.00015     0.00000
+XX    1    50.00000    -0.00263     0.00088    -0.00087    -0.00072    -0.00015     0.00000
+ZZ    2   150.00000    -0.00229     0.00072    -0.00079    -0.00063    -0.00016     0.00000
+XX    2   150.00000    -0.00229     0.00072    -0.00079    -0.00063    -0.00016     0.00000
+ZZ    3   250.00000    -0.00200     0.00053    -0.00073    -0.00055    -0.00019     0.00000
+...........................................................................................
+ZZ   71  7050.00000    -0.00000    -0.00002    -0.00001    -0.00000    -0.00001     0.00000
+XX   71  7050.00000    -0.00000    -0.00002    -0.00001    -0.00000    -0.00001    -0.00000
+ZZ   72  7150.00000    -0.00001    -0.00010    -0.00005    -0.00001    -0.00005    -0.00000
+XX   72  7150.00000    -0.00001    -0.00010    -0.00005    -0.00000    -0.00005     0.00000
+
+
+</pre>
+  </body>
+</html>

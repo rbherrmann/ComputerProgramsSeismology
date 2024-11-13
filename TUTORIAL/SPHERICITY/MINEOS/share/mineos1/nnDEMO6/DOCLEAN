@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -fr 12.out 17.out disp.d etak* test*eigen* sobs.d tak*
+rm -f disp.out

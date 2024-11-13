@@ -1,0 +1,115 @@
+
+#!/bin/sh
+
+#####
+#   investigate RFTN for different thicknesses of low velocity surface material
+#####
+
+#####
+#     definitions for the RFTN
+#####
+RAYP=0.07
+DT=0.05
+NPTS=1024
+
+#####
+#    compute the modified models
+#####
+for H in 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+do
+
+#####
+#    modified halfsapce
+#####
+
+cat > HALF.${H} << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+EOF
+
+echo ${H} 1.8 0.41 1.83 0 0 0 0 1 1 >> HALF.${H} 
+
+ 
+cat >> HALF.${H} << EOF
+40.0000  6.1000  3.5200  2.7300 0.160E-02 0.363E-02 0.00  0.00  1.00  1.00 
+EOF
+
+cp HALF.${H} SCM.${H}
+echo  5.0000  8.1500  4.7000  3.3640 0.194E-02 0.431E-02 0.00  0.00  1.00  1.00  >> SCM.${H}
+
+done
+
+#####
+#   now compute the RFTNs
+#####
+for H in 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+do
+	for ALP in 1.0 2.5 5.0
+	do
+		hrftn96 -M HALF.${H} -D 10.0 -RAYP ${RAYP} -NPTS ${NPTS} -DT ${DT} -2 -ALP ${ALP}
+                mv hrftn96.sac R.HALF.${H}.${ALP}
+		hrftn96 -M SCM.${H} -D 10.0 -RAYP ${RAYP} -NPTS ${NPTS} -DT ${DT} -2 -ALP ${ALP}
+                mv hrftn96.sac R.SCM.${H}.${ALP}
+		#####
+		# annotate the RFTN with the layer thickness
+		#####
+		gsac << EOF
+rh R.HALF.${H}.${ALP} R.SCM.${H}.${ALP}
+ch user2 ${H}
+wh
+q
+EOF
+	done
+done
+
+#####
+# plot
+#####
+gsac << EOF
+fileid name
+bg plt
+ylim all
+r R.HALF*1.0
+p
+r R.HALF*.2.5
+p
+r R.HALF*.5.0
+p
+r R.SCM.*.1.0
+p
+r R.SCM.*.2.5
+p
+r R.SCM.*.5.0
+p
+r R.HALF.*.1.0 R.SCM.*.1.0
+color list red red red red red red red red red red red blue blue blue blue blue blue blue blue blue blue blue blue
+prs user2 sa 0.0 title 'Sediment thickness (km)' reverse
+r R.HALF.*.2.5 R.SCM.*.2.5
+color list red red red red red red red red red red red blue blue blue blue blue blue blue blue blue blue blue blue
+prs user2 sa 0.0 title 'Sediment thickness (km)' reverse
+r R.HALF.*.5.0 R.SCM.*.5.0
+color list red red red red red red red red red red red blue blue blue blue blue blue blue blue blue blue blue blue
+prs user2 sa 0.0 title 'Sediment thickness (km)' reverse
+q
+
+EOF
+
+for i in *.PLT
+do
+	B=`basename $i .PLT`
+	plotnps -F7 -W10 -EPS -K -BGFILL < $i > t.eps
+	convert -trim t.eps ${B}.png
+	rm t.eps
+done
+
+rm -f R.HALF.* R.SCM.* SCM.??? HALF.??? *.CTL *.PLT

@@ -1,0 +1,127 @@
+<HTML>
+<HEAD><TITLE>CPS - Hudson96 - S test</TITLE></HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H2>Revisions</H2>
+<P>
+Changed March 19, 2009 because of corections to the source code. Specifically there were numericla problems with the receiver crust response to incident teleseismic S wave because of numerical instabilities in the formulation which were corrected through the use of a compound matrix. In addition, the <B>hudson96</B> code uses a modified routine to get the first arrival time, one that estimates the causality shift of the T* operator. For this reason the <B>hudson96</B> synthetics are slightly early compared to the complete <B>hspec96</B> synthetics.
+<H2>Introduction</H2>
+<P>
+The purpose of this exercise is to evaluate the usefulness of the program <B>hudson96</B> for the prediction of the teleseismic S-wave.  One problem is that multiples, such as SS, are not considered, In addition the complexity of the P-SV conversions, means that the Z and R traces cannot be modeled as well as the T trace, which consists of only SH waves.
+<H2>Scripts</H2>
+<P>
+<H2>Conclusions</H2>
+<P>
+The SH synthetics are adequate to 75 degrees. At larget distances the <B>hudson96</B> synthetics are incorrect since the first arrival time is really that of <I>SKS</I> and not <I>S</I>. Because of this the amplitudes are not correct since the geometrical spreading used for the telesiesmic S arrivals in that of <I>SKS</I> and not <I>S</I>.  Fixing this qould require a modification of the routine <I>fstarr</I> in the program.  However, even if the time is corrected in the synthesis, the synthetics may not be useful because of ignoring the <I>ScS</I> arrival.
+<P>
+The transverse component, SH, synthetics comapre very well, since there are not extra arrivals due to the P-SV conversion.
+<H2>Comparison</H2>
+<P>
+The comparisons here are for the SS component only, just to reduce the numebr of images. Two focal depths are considered, 10 and 100 km.
+<H3>Comparison at 10 km depth</H3>
+<P>
+<TABLE>
+<TR>
+	<TD>Arc Distance</TD>
+	<TD>ZSS</TD>
+	<TD>RSS</TD>
+	<TD>TSS</TD>
+</TR>
+<TR>
+	<TD>30</TD>
+	<TD><IMG SRC="30.0100.ZSS.gif" ALT="30.0100.ZSS.gif"></TD>
+	<TD><IMG SRC="30.0100.RSS.gif" ALT="30.0100.RSS.gif"></TD>
+	<TD><IMG SRC="30.0100.TSS.gif" ALT="30.0100.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>60</TD>
+	<TD><IMG SRC="60.0100.ZSS.gif" ALT="60.0100.ZSS.gif"></TD>
+	<TD><IMG SRC="60.0100.RSS.gif" ALT="60.0100.RSS.gif"></TD>
+	<TD><IMG SRC="60.0100.TSS.gif" ALT="60.0100.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>65</TD>
+	<TD><IMG SRC="65.0100.ZSS.gif" ALT="65.0100.ZSS.gif"></TD>
+	<TD><IMG SRC="65.0100.RSS.gif" ALT="65.0100.RSS.gif"></TD>
+	<TD><IMG SRC="65.0100.TSS.gif" ALT="65.0100.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>70</TD>
+	<TD><IMG SRC="70.0100.ZSS.gif" ALT="70.0100.ZSS.gif"></TD>
+	<TD><IMG SRC="70.0100.RSS.gif" ALT="70.0100.RSS.gif"></TD>
+	<TD><IMG SRC="70.0100.TSS.gif" ALT="70.0100.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>75</TD>
+	<TD><IMG SRC="75.0100.ZSS.gif" ALT="75.0100.ZSS.gif"></TD>
+	<TD><IMG SRC="75.0100.RSS.gif" ALT="75.0100.RSS.gif"></TD>
+	<TD><IMG SRC="75.0100.TSS.gif" ALT="75.0100.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>80</TD>
+	<TD><IMG SRC="80.0100.ZSS.gif" ALT="80.0100.ZSS.gif"></TD>
+	<TD><IMG SRC="80.0100.RSS.gif" ALT="80.0100.RSS.gif"></TD>
+	<TD><IMG SRC="80.0100.TSS.gif" ALT="80.0100.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>85</TD>
+	<TD><IMG SRC="85.0100.ZSS.gif" ALT="85.0100.ZSS.gif"</TD>
+	<TD><IMG SRC="85.0100.RSS.gif" ALT="85.0100.RSS.gif"</TD>
+	<TD><IMG SRC="85.0100.TSS.gif" ALT="85.0100.TSS.gif"</TD>
+</TR>
+</TABLE>
+<H3>Comparison at 100 km depth</H3>
+<P>
+<TABLE>
+<TR>
+	<TD>Arc Distance</TD>
+	<TD>ZSS</TD>
+	<TD>RSS</TD>
+	<TD>TSS</TD>
+</TR>
+<TR>
+	<TD>30</TD>
+	<TD><IMG SRC="30.1000.ZSS.gif" ALT="30.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="30.1000.RSS.gif" ALT="30.1000.RSS.gif"></TD>
+	<TD><IMG SRC="30.1000.TSS.gif" ALT="30.1000.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>60</TD>
+	<TD><IMG SRC="60.1000.ZSS.gif" ALT="60.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="60.1000.RSS.gif" ALT="60.1000.RSS.gif"></TD>
+	<TD><IMG SRC="60.1000.TSS.gif" ALT="60.1000.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>65</TD>
+	<TD><IMG SRC="65.1000.ZSS.gif" ALT="65.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="65.1000.RSS.gif" ALT="65.1000.RSS.gif"></TD>
+	<TD><IMG SRC="65.1000.TSS.gif" ALT="65.1000.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>70</TD>
+	<TD><IMG SRC="70.1000.ZSS.gif" ALT="70.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="70.1000.RSS.gif" ALT="70.1000.RSS.gif"></TD>
+	<TD><IMG SRC="70.1000.TSS.gif" ALT="70.1000.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>75</TD>
+	<TD><IMG SRC="75.1000.ZSS.gif" ALT="75.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="75.1000.RSS.gif" ALT="75.1000.RSS.gif"></TD>
+	<TD><IMG SRC="75.1000.TSS.gif" ALT="75.1000.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>80</TD>
+	<TD><IMG SRC="80.1000.ZSS.gif" ALT="80.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="80.1000.RSS.gif" ALT="80.1000.RSS.gif"></TD>
+	<TD><IMG SRC="80.1000.TSS.gif" ALT="80.1000.TSS.gif"></TD>
+</TR>
+<TR>
+	<TD>85</TD>
+	<TD><IMG SRC="85.1000.ZSS.gif" ALT="85.1000.ZSS.gif"></TD>
+	<TD><IMG SRC="85.1000.RSS.gif" ALT="85.1000.RSS.gif"></TD>
+	<TD><IMG SRC="85.1000.TSS.gif" ALT="85.1000.TSS.gif"></TD>
+</TR>
+</TABLE>
+
+<CENTER><I>Last changed March 19, 2009</I></CENTER>
+</BODY>
+</HTML>

@@ -1,0 +1,18 @@
+#!/bin/sh
+set -x
+
+#####
+#	change the name of the FORTRAN compiler if it is not g77, e.g.,
+#	it cound be gfortran
+#####
+
+#FCMP=g77
+FCMP=gfortran
+
+${FCMP} conv.f
+a.out < ak135-f
+rm a.out
+
+${FCMP} convsphavg.f
+a.out < ak135-f.sphavg
+rm a.out

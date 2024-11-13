@@ -1,0 +1,44 @@
+#!/bin/sh
+rm -f *.gif
+
+#for HS in 0100 0400 1000 6000
+#for HS in   0100 0400 1000 2000 3000 4000 5000 6000 
+for HS in 0100
+do
+for SRC in SS
+do
+for CMP in Z 
+do
+#for GCARC in 30 40 50 60 70 80 90
+for GCARC in 30 40 50 60 70 80 90 
+do
+case $GCARC in
+	30) DIST=033 ;;
+	40) DIST=044 ;;
+	50) DIST=055 ;;
+	60) DIST=066 ;;
+	70) DIST=077 ;;
+	80) DIST=088 ;;
+	90) DIST=100 ;;
+esac
+
+gsac << EOF
+cut a -10 a 200
+fileid name
+r  /home/rbh//PROGRAMS.310t/HUDSON/TEST/${HS}/${DIST}*.${CMP}${SRC} ${GREENDIR}/AK135.TEL/${HS}/${DIST}*.${CMP}${SRC}
+subf master 1
+w  diff zero
+r  ${GREENDIR}/AK135.TEL/${HS}/${DIST}*.${CMP}${SRC} /home/rbh/PROGRAMS.310t/HUDSON/TEST/${HS}/${DIST}*.${CMP}${SRC} diff
+color list black blue red
+bg plt
+ylim all
+p 
+plotgif -K -C16 < P001.PLT > ${GCARC}.${HS}.${CMP}${SRC}.gif
+quit
+EOF
+done
+done
+done
+done
+
+rm -f diff zero

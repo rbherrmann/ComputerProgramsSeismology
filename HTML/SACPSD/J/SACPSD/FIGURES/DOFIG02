@@ -1,0 +1,7 @@
+#!/bin/sh
+
+sacpsd -f NMSLM__BHZ__.SAC -r AMP.NM.SLM..BHZ
+plotnps -F7 -W10 -EPS -K < SACPSD.PLT > j.eps
+gm convert -trim j.eps Fig02.png
+rm j.eps SACPSD.PLT
+

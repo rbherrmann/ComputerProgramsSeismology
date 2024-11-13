@@ -1,0 +1,7 @@
+strainspulse96: strainspulse96.o sacsubf.o $(SSUBS) f96subf.o lgstr.o $(GETMOD) $(MCHDEP) $(MCHCMD)
+	$(FCMP) strainspulse96.o sacsubf.o $(SSUBS) f96subf.o lgstr.o $(GETMOD) $(MCHDEP) $(MCHCMD) -o strainspulse96
+	mv strainspulse96 $(DEST)
+
+srotate96: srotate96.o sacsubc.o
+	${CCMP} -o srotate96 srotate96.o sacsubc.o -lm
+	mv srotate96 $(DEST)

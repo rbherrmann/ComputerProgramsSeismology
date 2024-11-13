@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+  <title>Mineos - CPS comparison</title>
+</head>
+<body>
+<h2>Mineos - CPS Earth flattening comparison</h2>
+The purpose of this presentation is to compare mineos normal mode
+synthetics to the Computer Program in Seismology codes that use an
+Earth flattening approximation to construct synthetics<br>
+<br>
+<h3>Installing Mineos</h3>
+Mineos is obtained from the Computational Infrastructure of Geodynamics
+web site: <a
+ href="http://geodynamics.org/cig/software/packages/seismo/mineos/">(mineos
+download)</a>. One line of the distribution code was modified to permit
+compilation using the gfortran compiler.&nbsp; The <span
+ style="font-style: italic;">unofficial</span> distribution, with the
+source code fix in <span style="font-style: italic;">minos_bran.f</span>
+is given in the tar-ball <a
+ href="ftp://ftp.eas.slu.edu/pub/rbh/MINEOS/MINEOS.tgz">MINEOS.tgz</a>.
+To
+install mineos and the scripts used for testing th CPS codes, do the
+following:<br>
+<br>
+<div style="margin-left: 40px;">cd (Directory where you want this
+installed)<br>
+gunzip -c MINEOS.tgz | tar xvf -<br>
+cd MINEOS<br>
+./DOIT<br>
+</div>
+<pre><br></pre>
+You will now have compiled the programs, which are placed in the newly
+created bin directory.<br>
+You will find PDF documentation of the package in the file <span
+ style="font-style: italic;">mineos-1.0.0.rbh/doc/mineos.pdf .<br>
+<span style="font-style: italic;"></span></span>You will also find an
+abreviated&nbsp;
+DEMO package in <span style="font-style: italic;">mineos-1.0.0.rbh/DEMO/DEMO.tar.gz.
+<br>
+<br>
+</span><span style="font-style: italic;"><span
+ style="font-style: italic;"></span></span>
+<h4>Modifications to the distribution:</h4>
+&nbsp;&nbsp;&nbsp; mineos-1.0.0.rbh/utils:<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; Changed the cucss2sac.h&nbsp; sac
+header fields from<span style="font-style: italic;"> long </span>to <span
+ style="font-style: italic;">int</span>.&nbsp; This was done in <span
+ style="font-style: italic;">typedef struct sac </span>and in the <span
+ style="font-style: italic;">SAC_HD *read_sac </span>prototype.
+<span style="font-weight: bold;">Why</span>?&nbsp; This definition of
+the SAC header is a dreg from 16 bit
+processors.&nbsp; Using the <span style="font-style: italic;">long&nbsp;</span>
+will be invalid for a 64 bit machine unless the -w32 compiler flag is
+used. Note I did not correct the incorrect time stamp, e.g., try a time
+1 second before January 1, 1970.&nbsp; I also did not correct for the
+fact that DEPMAX and DEPMIN are not based on data but on the first two
+samples of the time series!<br>
+<br>
+&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;"> mineos-1.0.0.rbh</span>:<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;<span
+ style="font-style: italic; font-weight: bold;"> minos_bran.f</span>&nbsp;
+would
+not pass the gfortran compiler. The reason is<br>
+<div style="margin-left: 80px;">the instance of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension
+x(20),det(20),qx(3,20),wrk(60),wt(*),ichar(4)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data tol/1.d-9/,itmax/15/,ichar/' s','
+t',' s',' c'/<br>
+<br>
+which was changed to<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension
+x(20),det(20),qx(3,20),wrk(60),wt(*),kchar(4)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*2 kchar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data tol/1.d-9/,itmax/15/,kchar/' s','
+t',' s',' c'/<br>
+<br>
+BECAUSE:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. ichar is a reserved
+function in FORTRAN90<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. ichar was not defined as
+a character string. This part of the code is really FORTRAN66!<br>
+</div>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <span
+ style="font-weight: bold; font-style: italic;">syndat.f</span> did not
+have the
+required read to define the output field. I added (in caps with
+neighboring lines)<br>
+<br>
+<div style="margin-left: 120px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+read(*,'(a256)') dbout<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) dbout(1:lnblnk(dbout))<br>
+c-----<br>
+c&nbsp;&nbsp;&nbsp;&nbsp; CORRECTION RBH<br>
+c-----<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: rgb(255, 0, 0);">WRITE(*,*)
+'Enter output units: 0 [nm/s/s] 1 [nm/s] 2 [nm]'</span><br
+ style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+READ(*,*)idout</span><br>
+c<br>
+c&nbsp;&nbsp;&nbsp; read source and moment<br>
+c<br>
+</div>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Note also that&nbsp; the source code does not agree with the
+documentation.&nbsp; The source code wants the following input:<br>
+<br>
+<div style="margin-left: 120px;">&nbsp;&nbsp;&nbsp; &nbsp; write(*,*)
+'============== Program syndat =================='<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) 'enter input CMT file name:'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(*,'(a256)') fname1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) fname1(1:lnblnk(fname1))<br>
+c.... setup tensor type: moment/Mo,nodal2/Mo,nodal2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) 'enter tensor type: 0 -
+moment, ',<br>
+&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;&nbsp;&nbsp;&nbsp; '1 - nodal plane 1,
+2 - nodal plane 2'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(*,*) itptens<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) itptens<br>
+c.... i/o database name<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) 'enter input dbname'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(*,'(a256)') dbin<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) dbin(1:lnblnk(dbin))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) 'enter output dbname'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(*,'(a256)') dbout<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,*) dbout(1:lnblnk(dbout))<br>
+c-----<br>
+c&nbsp;&nbsp;&nbsp;&nbsp; CORRECTION RBH<br>
+c-----<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(*,*) 'Enter output units: 0
+[nm/s/s] 1 [nm/s] 2 [nm]'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; READ(*,*)idout<br>
+</div>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+The manual says<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; cmt_event&nbsp; -
+TRUE<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+in_dbname&nbsp;&nbsp;&nbsp;&nbsp; These two are reversed from the
+source code<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; plane<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; out_dbname&nbsp;
+TRUE<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+datatype&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TRUE<br>
+<span style="font-style: italic;"><br>
+</span><span style="font-style: italic;"></span>
+<h4>Simple Mineos Run</h4>
+<br>
+The first example:<br>
+<br>
+<div style="margin-left: 40px;"><span style="font-family: mon;">cd
+share/mineos/nDEMO5<br>
+DOIT<br>
+<br>
+</span></div>
+The DOIT script runs a variant of the RUN_MINEOS.sh, called DOEGN,
+which get the free oscillation frequencies and eigenfunctions for my
+version of AK135-f. Only the spheroidal and toroidal modes are
+computed. The Radial mode is not computed.&nbsp; The script DOIT<br>
+<pre>#!/bin/sh<br><br>#####<br>#       compute the free oscillation frequencies and the eigenfunctions<br>#####<br>DOEGN tak135-f<br>#####<br>#       now compute the synthetics for a specific moment tensor that represents<br>#       the following cases<br>#<br>#       Source  STK     DIP     RAKE Mw [M0(dyne-cm)] Src-Rec Az<br>#       DS      45      90      90   2.6 [1.0E+20]       0<br>#       SS      22.5    90       0   2.6 [1.0E+20]       0<br>#       DD      45      45      90   2.6 [1.0E+20]       0<br>#       EX      Center of expansion  2.6 [1.0E+20]       0<br>#####<br>DOSYNSS<br>DOSYNDS<br>DOSYNDD<br>DOSYNEX<br><br></pre>
+Then computes SAC files for the given mechanism, moment and station
+azimuth. The output of the MINEOS package are ground acceleration in
+units of <span style="font-style: italic;">nm/s/s</span>. To be able
+to comapre them to the Compute Program in Seismology synthetics, we
+must integrate and then convert to other units. This will be done later
+by the script DOPOPULATEMIN.<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; The script creates synthetic ground
+accelerations for each source for distances of 10 to 170 degrees for
+source depths of 10, 100 and 700 km.<br>
+The synthetics are in the directories with names, such as SS_Syndat_700
+for the SS source and 700 km source depth. The output of the <span
+ style="font-weight: bold;">gsac </span>command to plot the LHT
+synthetics for the SS source for a 10 km depth are<br>
+<br>
+<pre>gsac &lt;&lt; EOF<br>r SS_Syndat_010/*LHT.SAC<br>bg plt<br>prs gcarc<br>plotnps -F7 -W10 -EPS -K &lt; PRS001.PLT &gt; prs001.eps<br>quit<br>EOF<br><br></pre>
+is<br>
+<div style="text-align: center;"><img
+ style="width: 656px; height: 485px;" alt="LHT synthetic"
+ src="prs001.png"><br>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div style="margin-left: 40px;"><span style="font-family: mon;"></span></div>
+</body>
+</html>

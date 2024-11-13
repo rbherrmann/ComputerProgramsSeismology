@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd ..
+tar cf - SPHERICITY/index.html \
+	SPHERICITY/AK135 \
+	SPHERICITY/Dispersion \
+	SPHERICITY/NORMAL_MODE \
+	SPHERICITY/MINEOS/HTML \
+	SPHERICITY/TIME96 \
+	SPHERICITY/TTIME96 \
+	| gzip -c > ~/t.tgz

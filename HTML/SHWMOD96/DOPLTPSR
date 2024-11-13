@@ -1,0 +1,116 @@
+#!/bin/sh
+
+#####
+#    clean up
+#####
+rm *.eps *.PLT
+
+#####
+#    you may wish to change the dimensions of the plot here
+#    and the position of the identification lables that
+#    are defined later in this script
+#####
+
+#####
+#    plot Vp Vs and Density for one model
+#    on one figure
+#####
+
+#####
+#   set plot parameters
+#####
+MODELNAME="nnCIA.mod"
+XLEN=6.0
+YLEN=6.0
+ZMAX=50.0
+VMIN=1.0
+VMAX=9.0
+X0=2.0
+Y0=1.0
+WIDTH=0.03
+
+RED=2
+BLUE=4
+BLACK=1
+
+
+for TYPE in P S D
+do
+	case $TYPE in
+		P) COLOR=${RED} ;;
+		S) COLOR=${BLUE} ;;
+		D) COLOR=${BLACK} ;;
+	esac
+	shwmod96 -X0 ${X0} -Y0 ${Y0} -XLEN ${XLEN} -YLEN ${YLEN}  -VMIN ${VMIN} -VMAX ${VMAX} -ZMIN 0.0  -ZMAX ${ZMAX} -${TYPE} -K ${COLOR} -W ${WIDTH} -M ${MODELNAME}
+	#####
+	#    now use reframe to crop the X-axis title
+	#    later we will use calplt to add this information
+	#####
+	cat SHWMOD96.PLT | reframe -N1 -O -YH+7200   > ${TYPE}.PLT
+	rm SHWMOD96.PLT
+done
+
+#####
+#    combine all three onto one plot
+#####
+cat ?.PLT > ALL.PLT
+
+
+#####
+#    put in a color key using calplt
+#####
+
+set -x
+SIZE=0.1
+YPOS=`echo $Y0 $YLEN | awk '{print $1 + 0.9*$2}'`
+YPOSL=`echo $YPOS $SIZE | awk '{print $1 - 0.5*$2}' `
+XLL=`    echo $X0 $XLEN | awk '{print $1 +  0.70*$2}' `
+XLH=`    echo $X0 $XLEN | awk '{print $1 +  0.75*$2}' `
+XLEGEND=`echo $X0 $XLEN | awk '{print $1 +  0.77*$2}' `
+DY=`echo ${SIZE} | awk '{print 1.5*$1}' `
+for TYPE in P S D
+do
+	case $TYPE in
+		P) COLOR=${RED}   ;STRING="Vp (km/s)";;
+		S) COLOR=${BLUE}  ;STRING="Vs (km/s)";;
+		D) COLOR=${BLACK} ;STRING="Rho (gm/cm^3)";;
+	esac
+
+calplt << EOF
+NEWPEN
+${COLOR}
+GWIDTH
+${WIDTH}
+LINE
+${XLL} ${YPOS} ${XLH} ${YPOS} 
+GWIDTH
+0.00
+NEWPEN
+1
+LEFT
+${XLEGEND} ${YPOSL} ${SIZE} "${STRING}" 0.0
+PEND
+EOF
+cat CALPLT.PLT >> ALL.PLT
+rm CALPLT.PLT CALPLT.cmd
+
+#####
+#    change the YPOS
+#####
+YPOS=`echo $YPOS ${DY} | awk '{print $1 - $2}' `
+YPOSL=`echo $YPOS $SIZE | awk '{print $1 - 0.5*$2}' `
+
+done
+
+#####
+#    make the EPS and PNG (using ImageMagick)
+#####
+plotnps  -F7 -W15 -EPS -K < ALL.PLT > ALL.eps
+convert -trim ALL.eps -background white -alpha remove -alpha off ALL.png
+rm ALL.eps
+
+
+
+
+
+

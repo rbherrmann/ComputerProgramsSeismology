@@ -1,0 +1,156 @@
+#!/bin/sh
+
+#####
+#   clean up
+#####
+rm -f *.am
+rm -f *soil *rock *soil_rock
+
+ANGLE=10
+VSBASE=3.5
+
+cat > soil.mod << EOF
+MODEL.01
+Soil model with Q overlying a halfspace
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+  0.0100  1.5     0.3     2.0         0.05   0.10   0    0      1       1
+  0.0100  1.5     0.6     2.0         0.03   0.06   0    0      1       1
+  0.0200  1.6     0.8     2.0         0.025  0.05   0    0      1       1
+  0.0200  3.0     1.5     2.2         0.01   0.02   0    0      1       1
+  0.1000  5.0     2.5     2.5         0.005  0.01   0    0      1       1
+  0.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+EOF
+
+cat > rock.mod << EOF
+MODEL.01
+Rock halfspace
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+ 20.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+EOF
+
+
+#####
+#    calculate the quarter-wavelength response
+#####
+sacampl -M soil.mod -S -A ${ANGLE} -TXT > sacamp.out
+
+#####
+#    compute the RAYP parameter for use with hprep96p
+#####
+RAYP=`echo $ANGLE $VSBASE | awk '{print sin(3.1415927*$1/180.0)/$2}' `
+
+######
+#     Compute the plane wave response for only S going upward from the source
+#     The DT=0.02 gives a Nyquest frequency  of 25 Hz, which is OK
+#        since we are only interested up to 20 Hz and the source will have
+#        a spectral zero at 25 Hz, so no division by zero
+#####
+cat > dfile << EOF
+100.0 0.02  250 0 0
+EOF
+#####
+#    Soil computationt
+#####
+hprep96p -d dfile -M soil.mod -EQEX -PMIN $RAYP -PMAX $RAYP -DP $RAYP -HS 5 -TRUE
+hspec96p -SSUP
+hpulse96 -V -p -l 1 | f96tosac -B
+mv *ZSS.sac ZSSsoil
+mv *TSS.sac TSSsoil
+mv *RSS.sac RSSsoil
+gsac << EOF
+r *SSsoil
+fft
+writesp am
+q
+EOF
+rm -f B*sac
+
+
+#####
+#    rock computation
+#####
+hprep96p -d dfile -M rock.mod -EQEX -PMIN $RAYP -PMAX $RAYP -DP $RAYP -HS 5 -TRUE
+hspec96p -SSUP
+hpulse96 -V -p -l 1 | f96tosac -B
+mv *ZSS.sac ZSSrock
+mv *TSS.sac TSSrock
+mv *RSS.sac RSSrock
+gsac << EOF
+r *SSrock
+fft
+writesp am
+q
+EOF
+rm -f B*sac
+
+#####
+#    at this time we have two surface motions
+#    lets carefully get the ratio of soil to rock. Howver
+#    we will not go up to 25 Hz since the source pulse has a spectreal zero there
+#
+#    The gsac DIVF command selects one trace in the list read in to use
+#    as the denominator. Hwere trace 0 is soil, trace 1 is rock, and
+#    the DIVF gives soil/rick and rock/rock  The second is saves as the file
+#    11 and then not used
+#####
+gsac << EOF
+cut b b 20
+r ZSSsoil.am ZSSrock.am
+divf master 1
+w ZSSsoil_rock 11
+
+r TSSsoil.am TSSrock.am
+divf master 1
+w TSSsoil_rock 11
+
+r RSSsoil.am RSSrock.am
+divf master 1
+w RSSsoil_rock 11
+q
+EOF
+rm -f 11
+
+#####
+#    Use gsac to plot the various ratios and the quarter wanveleght result
+#    After the read one coule use the SMOOTH HALFWIDTH N command to apply 
+#    a 2n+1 point smoother
+#
+#    We will make two plots - the first with a linear amplitude scale 
+#    and the second with a logarithmic, but only after we add a small
+#    number to prevent taking the logarithm of zero
+#####
+gsac << EOF
+cut b b 20
+r KAMP.sac.am ZSSsoil_rock RSSsoil_rock TSSsoil_rock
+color list black red blue cyan
+fileid list fname 
+bg plt
+p overlay on
+add 1.0e-6
+log
+p
+q
+EOF
+DOPLTPNG P001.PLT ; mv P001.png  PWlin_${ANGLE}.png
+DOPLTPNG P002.PLT ; mv P002.png  PWlog_${ANGLE}.png
+
+echo $RAYP | awk '{print $1 , 1/$1}' 
+

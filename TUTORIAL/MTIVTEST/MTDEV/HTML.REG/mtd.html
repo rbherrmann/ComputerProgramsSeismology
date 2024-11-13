@@ -1,0 +1,125 @@
+<hr>
+<H3>Deviatoric Moment Tensor Inversion using wvfmtd96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtdmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program H(km)                    Mw                           Fit                              Mxx(dyne-cm)    Myy           Mxy            Mxz            Myz            Mzz       
+WVFMTD961    1.0  288.   74.  -91.   3.97     1.000 0.149E-12     1.000     1.000 0.122E-12  54.5  0.4100000E+22  0.3600000E+22  0.3000000E+21  0.8799999E+22  0.2800000E+22 -0.7700000E+22
+WVFMTD961    2.0  288.   63.  -90.   3.96     0.883 0.414E-07     0.880     0.940 0.328E-07  81.1  0.5528087E+22  0.5157296E+22  0.1251728E+21  0.5651742E+22  0.1812803E+22 -0.1068538E+23
+WVFMTD961    3.0  283.   65.  -85.   3.92     0.652 0.716E-07     0.646     0.807 0.567E-07  76.7  0.4819658E+22  0.3980780E+22 -0.2619202E+21  0.5315867E+22  0.1969454E+22 -0.8800438E+22
+WVFMTD961    4.0  279.   80.  -82.   3.75     0.421 0.924E-07     0.412     0.649 0.730E-07  17.1  0.1680883E+22  0.2709224E+21 -0.4996762E+21  0.4866174E+22  0.9940252E+21 -0.1951805E+22
+WVFMTD961    5.0  129.   64.   79.   3.77     0.315 0.100E-06     0.309     0.561 0.790E-07  71.8 -0.2044563E+22 -0.3110087E+22 -0.5299188E+21  0.3137644E+22  0.1174915E+22  0.5154650E+22
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTD961    1.0  288.   74.  -91.   3.97     1.000 0.149E-12     1.000     1.000 0.122E-12  54.5  0.4100000E+22  0.3600000E+22  0.3000000E+21  0.8799999E+22  0.2800000E+22 -0.7700000E+22
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtdinfo</b> is given in the text file 
+<a href="MTDinfo.txt"> MTDinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTD.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtdfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTDcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtddelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+

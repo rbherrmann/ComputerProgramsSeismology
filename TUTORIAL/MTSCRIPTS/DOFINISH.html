@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <style type="text/css">
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;text-align: left; }
+        </style>
+    <style>
+table, th, td,  tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+</style>
+    <title>Moment Tensor Inversion Scripts - DOFINISH</title>
+  </head>
+  <body link="#0000EE" vlink="#551A8B" text="#000000" bgcolor="#ffffff"
+    alink="#EE0000">
+    <h2>Introduction</h2>
+<p>
+The DOWS, DOWSF and DOGEOFON scripts set up the directory structure for an event, but do not then automatically download and process waveforms. Instead after the data structure is created, am executable shell script name DOFINISH is created. This script is then executed
+manually. One reason for this is to be able to manually tailor the script. This capability is very important when using DOGEOFON.
+</p>
+<h2>Example DOFINISH created by DOWS</h2>
+<p>
+This is used to access data directly from IRIS</p>
+    <h3>Discussion of script</h3>
+<p>
+The script is given below. It is will commented. The only difference between this version and that for GMT Versions 5 and up is that DOSO
+LUTION is replaced by DOSOLUTION5.
+</p>
+<pre>
+#!/bin/sh
+
+#####
+#	set up the event variables
+#####
+YEAR="2022"
+MO="05"
+DY="17"
+HR="08"
+MN="07"
+SEC="34"
+MSEC="000"
+LAT="48.295  "
+LON=" -121.869"
+DEP="3.6"
+MAG=" 3.6"
+REG="WUS"
+NEIC="NONE"
+FELTID="NONE"
+STATE="Washington"
+
+if [ "WUS" = "EU" ]
+then
+DEG=20
+DURATION=600
+else
+DEG=6.0
+DURATION=300
+fi
+
+
+export MYPWD="/Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA"
+
+#####
+#	deconvolve the instrument response, rotate, decimate, do qc
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20220517080734/20220517080734
+#####
+#     get the data
+#####
+mkdir Orig
+cd Orig
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+CCORD=`echo ${LAT} ${LON} ${DEG} | awk '{printf "%f:%f:%f",$1,$2,$3}' `
+FetchData  -N '*' -S '*' -C 'BH*,HH*' -radius ${CCORD}  -s ${START}  -e ${END} -o BH.mseed -m BH.metadata -rd . 
+mseed2sac -f 3 BH.mseed -m BH.metadata
+mv *SAC RESP* ../Sac
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20220517080734/20220517080734
+#####
+#	deconvolve the instrument response
+#####
+IDOEVT
+#####
+#	rotate to Z R T and ensure that hte signal amplitudes are
+#       greater than 1.0e-10
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20220517080734/20220517080734
+IDOROT
+#####
+#	decimate for the surface wave analysis
+#####
+IDODEC
+(cd ../ML.REG;DOML)&
+#####
+#	select waveforms according to distance for waveform inversion
+#####
+IDODIST
+#####
+#	perform QC for waveform inversion
+#####
+IDOQC
+
+
+
+#####
+#	do the inversion
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA
+./DOSOLUTION "${YEAR}" "${MO}" "${DY}" "${HR}" "${MN}" "${SEC}" "${MSEC}" "${LAT}" "${LON}" "${DEP}" "${MAG}" "${REG}" "${NEIC}" "${FELTID}" "${STATE}" "${MYPWD}" 
+
+
+
+
+</pre>
+<h2>Example DOFINISH created by DOWSF</h2>
+<p>
+This is used to access data directly from IRIS but accesses cooperating data centers, e.g., IRIS, NCEDC, SCEC and others. Note that it does not access all waveforms stored at GEOFON, and thus fo events in Europe, the DOGEOFON should be used.</p>
+    <h3>Discussion of script</h3>
+<p>
+The script is given below. It is will commented. The only difference between this version and that for GMT Versions 5 and up is that DOSO
+LUTION is replaced by DOSOLUTION5.
+</p>
+<pre>
+#!/bin/sh
+
+#####
+#	set up the event variables
+#####
+YEAR="2022"
+MO="05"
+DY="17"
+HR="08"
+MN="07"
+SEC="34"
+MSEC="000"
+LAT="48.295  "
+LON=" -121.869"
+DEP="3.6"
+MAG=" 3.6"
+REG="WUS"
+NEIC="NONE"
+FELTID="NONE"
+STATE="Washington"
+
+if [ "WUS" = "EU" ]
+then
+DEG=20
+DURATION=600
+else
+DEG=6.0
+DURATION=300
+fi
+
+
+export MYPWD="/Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA"
+
+#####
+#	deconvolve the instrument response, rotate, decimate, do qc
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20220517080734/20220517080734
+#####
+#     get the data
+#####
+mkdir Orig
+cd Orig
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+CCORD=`echo ${LAT} ${LON} ${DEG} | awk '{printf "%f:%f:%f",$1,$2,$3}' `
+FetchData -F  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius ${CCORD}  -s ${START}  -e ${END} -o BH.mseed -m BH.metadata -X BH.metaxml 
+for i in *BH.mseed
+do
+	B=`basename $i "-BH.mseed"`
+	java -jar ~/bin/stationxml-seed-converter-2.1.0.jar --input ${B}-BH.metaxml --output ${B}-BH.dataless
+	( cd ../Sac
+	rdseed -f ../Orig/${B}-BH.mseed -g ../Orig/${B}-BH.dataless -R -d -o 1
+	)
+done
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20220517080734/20220517080734
+#####
+#	deconvolve the instrument response
+#####
+IDOEVT
+#####
+#	rotate to Z R T and ensure that hte signal amplitudes are
+#       greater than 1.0e-10
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20220517080734/20220517080734
+IDOROT
+#####
+#	decimate for the surface wave analysis
+#####
+IDODEC
+#####
+#	select waveforms according to distance for waveform inversion
+#####
+IDODIST
+#####
+#	perform QC for waveform inversion
+#####
+IDOQC
+
+
+
+#####
+#	do the inversion
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA
+./DOSOLUTION "${YEAR}" "${MO}" "${DY}" "${HR}" "${MN}" "${SEC}" "${MSEC}" "${LAT}" "${LON}" "${DEP}" "${MAG}" "${REG}" "${NEIC}" "${FELTID}" "${STATE}" "${MYPWD}" 
+
+
+
+
+</pre>
+<h2>Example DOFINISH created by DOGEOFON</h2>
+<p>
+The DOGEOFON script is used to access data from GEOFON. It creates the directory structure and the script DOFINISH
+    <h3>Discussion of script</h3>
+<p>
+The script is given below. It is will commented. The only difference between this version and that for GMT Versions 5 and up is that DOSOLUTION is replaced by DOSOLUTION5.
+</p>
+<p>The DOGEOFON <i>fdsnws_fetch</i> permits access to waveforms stored at GEOFON (<a href="https://geofon.gfz-potsdam.de/software/fdsnws_fetch/">https://geofon.gfz-potsdam.de/software/fdsnws_fetch/</a>). This script creates a subdirectory in the YYYYMMDDHHMMSS/YYYMMDDHHMMSS directory and then places a script named <i>doit</i> there. This script is then hand edited to indicate the specific networks from which waveforms are requested.  This is a necessary step since the <i>fdsnws_fetch</i> does not permit a search of data as a function of a desired distance range, which is a very useful option of the USGS query and the IRIS FetchData.  This means that the time for download will be long since many unwanted waveforms are downloaded. 
+</p><p>
+After the <i>doit</i> is created, it is manually edited and then executed. Then one manually executed the sequence IDOEVT, IDOROT, IDODIST, IDOQC, cd ../GRD.REG; DOGRD;DODELAY;DOPLTSAC or DOPLTSAC5, DOCLEANUP;cd ../HTML.REG;DOHTML
+<p>
+<pre>
+#!/bin/sh
+
+#####
+#	set up the event variables
+#####
+YEAR="2022"
+MO="04"
+DY="24"
+HR="04"
+MN="27"
+SEC="55"
+MSEC="000"
+LAT="43.05  "
+LON=" 18.15"
+DEP="19.0"
+MAG=" 4.8"
+REG="WUS"
+NEIC="NONE"
+FELTID="NONE"
+STATE="Bosnia-Herzegovina"
+
+if [ "WUS" = "EU" ]
+then
+DEG=20
+DURATION=600
+else
+DEG=6.0
+DURATION=300
+fi
+
+
+export MYPWD="/Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.EU"
+
+#####
+#	deconvolve the instrument response, rotate, decimate, do qc
+#####
+cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.EU/20220424042755/20220424042755
+#####
+#     get the data
+#####
+mkdir Orig
+cd Orig
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+cat > doit << EOG
+#!/bin/sh
+set -x
+for NET in AC BS BW CH CR FR GE GR HL HT HU II IU MN OE OX PL RO SJ SX TH SL SK CZ
+do
+#fdsnws_fetch -N \${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}  -y station -q format=text -q level=channel -q latitude="${LAT}" -q longitude="${LON}" -q maxradius="${DEG}" -v -o \${NET}.station.txt 
+fdsnws_fetch -N \${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}    -v -o \${NET}.data.mseed
+fdsnws_fetch -N \${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END} -y station -q level=response    -v -o \${NET}.station.xml
+#####
+#    convert station xml to dataless
+#####
+
+java -jar ~/bin/stationxml-seed-converter-2.1.0.jar --input \${NET}.station.xml --output \${NET}.dataless
+(cd ../Sac
+rdseed -f ../Orig/\${NET}.data.mseed -g ../Orig/\${NET}.dataless -p -o -d 1
+)
+
+done
+EOG
+# NOW MANUALLY cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.EU/20220424042755/20220424042755/Orig
+# and then edit the doit and sh./doit
+#RBH The following commands are run manually 
+#RBH cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.EU/20220424042755/20220424042755
+#RBH #####
+#RBH #	deconvolve the instrument response
+#RBH #####
+#RBH IDOEVT
+#RBH #####
+#RBH #	rotate to Z R T and ensure that hte signal amplitudes are
+#RBH #       greater than 1.0e-10
+#RBH #####
+#RBH cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.EU/20220424042755/20220424042755
+#RBH IDOROT
+#RBH #####
+#RBH #	decimate for the surface wave analysis
+#RBH #####
+#RBH IDODEC
+#RBH #####
+#RBH #	select waveforms according to distance for waveform inversion
+#RBH #####
+#RBH IDODIST
+#RBH #####
+#RBH #	perform QC for waveform inversion
+#RBH #####
+#RBH IDOQC
+#RBH 
+#RBH 
+#RBH 
+#RBH #####
+#RBH #	do the inversion
+#RBH #####
+#RBH cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.EU
+#RBH ./DOSOLUTION "${YEAR}" "${MO}" "${DY}" "${HR}" "${MN}" "${SEC}" "${MSEC}" "${LAT}" "${LON}" "${DEP}" "${MAG}" "${REG}" "${NEIC}" "${FELTID}" "${STATE}" "${MYPWD}" 
+#RBH 
+#RBH 
+#RBH 
+#RBH 
+</pre>
+</p>
+    <p align="center">Last changed May 21, 2022<br>
+    </p>
+  </body>
+</html>

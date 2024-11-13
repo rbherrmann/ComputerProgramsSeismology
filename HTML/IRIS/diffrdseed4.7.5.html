@@ -1,0 +1,346 @@
+<HTML>
+<HEAD>
+	<TITLE>Diff CPS/rdseed4.7.5 vs IRIS_DISTRIBUTION/rdseed4.7.5</TITLE>
+</HEAD>
+<BODY>
+<H2>rdseed4.7.5</H2>
+<P>This detailes the differences between the IRIS distribution of <B>rdseed4.7.5</B> the changes made for inclusion in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+<PRE>
+diff CPS/rdseed4.7.5/FILE  IRIS/rdseed/FILE
+--------------------------------------------------------------------------------
+cmp: ../rdseed/GETOPT.CYGWIN/getopt-1.0.3: No such file or directory
+--------------------------------------------------------------------------------
+Ah/makefile ../rdseed/Ah/makefile
+0a1
+> CC=gcc
+--------------------------------------------------------------------------------
+Decoders/makefile ../rdseed/Decoders/makefile
+0a1
+> CC=gcc
+--------------------------------------------------------------------------------
+Decoders/process_data.c ../rdseed/Decoders/process_data.c
+906c906
+< 		Strupr(decode);	    /* make all upper case comparisons */
+---
+> 		strupr(decode);	    /* make all upper case comparisons */
+--------------------------------------------------------------------------------
+Decoders/process_event_requests.c ../rdseed/Decoders/process_event_requests.c
+41,42c41,42
+< 		Strupr(start_phase_point[i].name);
+< 		if (i < end_phase_count) Strupr(end_phase_point[i].name);
+---
+> 		strupr(start_phase_point[i].name);
+> 		if (i < end_phase_count) strupr(end_phase_point[i].name);
+175c175
+< 			strncpy(cbuf, type72->phasename, 30); cbuf[30] = '\0'; Strupr(cbuf);
+---
+> 			strncpy(cbuf, type72->phasename, 30); cbuf[30] = '\0'; strupr(cbuf);
+185c185
+< 					strncpy(cbuf, tmp72->phasename, 30); cbuf[30] = '\0'; Strupr(cbuf);
+---
+> 					strncpy(cbuf, tmp72->phasename, 30); cbuf[30] = '\0'; strupr(cbuf);
+--------------------------------------------------------------------------------
+Include/rdseed.h ../rdseed/Include/rdseed.h
+397,401d396
+< /* Begin Change R B Herrmann November 24, 2007 */
+< void Strupr(char *string);
+< char *alloc_linklist_element (size_t size, char *caller);
+< /* End   Change R B Herrmann November 24, 2007 */
+< 
+--------------------------------------------------------------------------------
+Include/sac.h ../rdseed/Include/sac.h
+113,152c113,152
+< 	int	nzyear;		/*  F zero time of file, yr  */
+< 	int	nzjday;		/*  F zero time of file, day */
+< 	int	nzhour;		/*  F zero time of file, hr  */
+< 	int	nzmin;		/*  F zero time of file, min */
+< 	int	nzsec;		/*  F zero time of file, sec */
+< 	int	nzmsec;		/*  F zero time of file, msec*/
+< 	int	internal4;	/*    internal use           */
+< 	int	internal5;	/*    internal use           */
+< 	int	internal6;	/*    internal use           */
+< 	int	npts;		/* RF number of samples      */
+< 	int	internal7;	/*    internal use           */
+< 	int	internal8;	/*    internal use           */
+< 	int	unused13;	/*    reserved for future use*/
+< 	int	unused14;	/*    reserved for future use*/
+< 	int	unused15;	/*    reserved for future use*/
+< 	int	iftype;		/* RA type of file          */
+< 	int	idep;		/*    type of amplitude      */
+< 	int	iztype;		/*    zero time equivalence  */
+< 	int	unused16;	/*    reserved for future use*/
+< 	int	iinst;		/*    recording instrument   */
+< 	int	istreg;		/*    stn geographic region  */
+< 	int	ievreg;		/*    event geographic region*/
+< 	int	ievtyp;		/*    event type             */
+< 	int	iqual;		/*    quality of data        */
+< 	int	isynth;		/*    synthetic data flag    */
+< 	int	unused17;	/*    reserved for future use*/
+< 	int	unused18;	/*    reserved for future use*/
+< 	int	unused19;	/*    reserved for future use*/
+< 	int	unused20;	/*    reserved for future use*/
+< 	int	unused21;	/*    reserved for future use*/
+< 	int	unused22;	/*    reserved for future use*/
+< 	int	unused23;	/*    reserved for future use*/
+< 	int	unused24;	/*    reserved for future use*/
+< 	int	unused25;	/*    reserved for future use*/
+< 	int	unused26;	/*    reserved for future use*/
+< 	int	leven;		/* RA data-evenly-spaced flag*/
+< 	int	lpspol;		/*    station polarity flag  */
+< 	int	lovrok;		/*    overwrite permission   */
+< 	int	lcalda;		/*    calc distance, azimuth */
+< 	int	unused27;	/*    reserved for future use*/
+---
+> 	long	nzyear;		/*  F zero time of file, yr  */
+> 	long	nzjday;		/*  F zero time of file, day */
+> 	long	nzhour;		/*  F zero time of file, hr  */
+> 	long	nzmin;		/*  F zero time of file, min */
+> 	long	nzsec;		/*  F zero time of file, sec */
+> 	long	nzmsec;		/*  F zero time of file, msec*/
+> 	long	internal4;	/*    internal use           */
+> 	long	internal5;	/*    internal use           */
+> 	long	internal6;	/*    internal use           */
+> 	long	npts;		/* RF number of samples      */
+> 	long	internal7;	/*    internal use           */
+> 	long	internal8;	/*    internal use           */
+> 	long	unused13;	/*    reserved for future use*/
+> 	long	unused14;	/*    reserved for future use*/
+> 	long	unused15;	/*    reserved for future use*/
+> 	long	iftype;		/* RA type of file          */
+> 	long	idep;		/*    type of amplitude      */
+> 	long	iztype;		/*    zero time equivalence  */
+> 	long	unused16;	/*    reserved for future use*/
+> 	long	iinst;		/*    recording instrument   */
+> 	long	istreg;		/*    stn geographic region  */
+> 	long	ievreg;		/*    event geographic region*/
+> 	long	ievtyp;		/*    event type             */
+> 	long	iqual;		/*    quality of data        */
+> 	long	isynth;		/*    synthetic data flag    */
+> 	long	unused17;	/*    reserved for future use*/
+> 	long	unused18;	/*    reserved for future use*/
+> 	long	unused19;	/*    reserved for future use*/
+> 	long	unused20;	/*    reserved for future use*/
+> 	long	unused21;	/*    reserved for future use*/
+> 	long	unused22;	/*    reserved for future use*/
+> 	long	unused23;	/*    reserved for future use*/
+> 	long	unused24;	/*    reserved for future use*/
+> 	long	unused25;	/*    reserved for future use*/
+> 	long	unused26;	/*    reserved for future use*/
+> 	long	leven;		/* RA data-evenly-spaced flag*/
+> 	long	lpspol;		/*    station polarity flag  */
+> 	long	lovrok;		/*    overwrite permission   */
+> 	long	lcalda;		/*    calc distance, azimuth */
+> 	long	unused27;	/*    reserved for future use*/
+--------------------------------------------------------------------------------
+Main/ah_resp.c ../rdseed/Main/ah_resp.c
+639c639
+< 			Strupr(t_34->description);
+---
+> 			strupr(t_34->description);
+--------------------------------------------------------------------------------
+Main/output_css.c ../rdseed/Main/output_css.c
+184c184
+< 				Strupr(temp);
+---
+> 				strupr(temp);
+--------------------------------------------------------------------------------
+Main/output_resp.c ../rdseed/Main/output_resp.c
+98d97
+< 
+104,123d102
+< /* ADDITION R B HERRMANN November 16, 2007
+< 	to provide more information the dataless SEED about the stations
+< */
+< fprintf(stderr,"%3s %5s %2s %3s %s %s %10.6f %11.6f %7.1f %5.1f %5.1f %10.4g %s  \n",current_station->network_code ? current_station->network_code : "**",
+< current_station->station,
+< (strlen(current_channel->location) != 0 ) ?  current_channel->location : "**",
+< current_channel->channel,
+< current_channel->start,
+< (current_channel->end != NULL) ?  current_channel->end : "2999,000,00:00:00.0000",
+< current_channel->latitude,
+< current_channel->longitude,
+< current_channel->elevation,
+< current_channel->dip,
+< current_channel->azimuth,
+< current_channel->samplerate,
+< outfile_name);
+< 
+< /* END ADDITION R B HERRMANN November 16, 2007
+< */
+< 
+--------------------------------------------------------------------------------
+Main/output_sac.c ../rdseed/Main/output_sac.c
+1094,1096d1093
+< /* CHANGE R B HERRMANN NOVEMBER 16, 2007 
+< 	IF one does a rdseed followed by a rdseed the SAC file is appended
+< 	sac will not be able touse this file
+1098,1101d1094
+< */
+< 	fptr = fopen(fname, "w");
+< /* END CHANGE R B HERRMANN NOVEMBER 16, 2007 
+< */
+1153,1176d1145
+<        /* RBH 13 SEP 2007 */
+<         fprintf(fptr,"* ****\n");
+<         fprintf(fptr,"* NETWORK   (KNETWK): %s\n",
+<                 current_station->network_code? current_station->network_code: "");
+<         fprintf(fptr,"* STATION   (KSTNM ): %s\n",current_station->station);
+<         fprintf(fptr,"* COMPONENT (KCMPNM): %s\n",current_channel->channel);
+<         fprintf(fptr,"* LOCATION  (KHOLE ): %s\n",
+<                 current_channel->location?  current_channel->location:"");
+<         fprintf(fptr,"* START             : %22s\n",current_channel->start);
+<         fprintf(fptr,"* END               : %22s\n",
+<                 current_channel->end? current_channel->end: "No Ending Time");
+<         fprintf(fptr,"* INPUT UNIT        : METER\n");
+<         fprintf(fptr,"* OUTPUT UNIT       : COUNT\n");
+<         fprintf(fptr,"* LATITUDE  (DEG)   : %10.5f\n",current_channel->latitude);
+<         fprintf(fptr,"* LONGITUDE (DEG)   : %10.5f\n",current_channel->longitude);
+<         fprintf(fptr,"* ELEVATION (M)     : %10.5f\n",current_channel->elevation);
+<         fprintf(fptr,"* DEPTH     (M)     : %10.5f\n",current_channel->local_depth);
+<         fprintf(fptr,"* DIP       (DEG)   : %10.5f\n",current_channel->dip);
+<         fprintf(fptr,"* AZIMUTH   (DEG)   : %10.5f\n",current_channel->azimuth);
+<         fprintf(fptr,"* INSTRUMENT COMMENT: %s\n",current_channel->inst_comment);
+<         fprintf(fptr,"* CHANNEL_FLAG      : %s\n",current_channel->channel_flag);
+<         fprintf(fptr,"* ****\n");
+<         /* RBH 13 SEP 2007 */
+< 
+--------------------------------------------------------------------------------
+Main/rdseed.c ../rdseed/Main/rdseed.c
+2248c2248
+<                         Strupr(location_point[location_count]);
+---
+>                         strupr(location_point[location_count]);
+2658c2658
+< 		Strupr(station_point[i]);
+---
+> 		strupr(station_point[i]);
+2702c2702
+< 		Strupr(channel_point[i]);
+---
+> 		strupr(channel_point[i]);
+2859c2859
+< /* SEED reader     |               Strupr              |    main program */
+---
+> /* SEED reader     |               strupr              |    main program */
+2862c2862
+< void Strupr(string)
+---
+> strupr(string)
+--------------------------------------------------------------------------------
+Main/summary.c ../rdseed/Main/summary.c
+650c650
+< 		Strupr(stn_ptr->ts_head->chn_list);
+---
+> 		strupr(stn_ptr->ts_head->chn_list);
+1209,1210c1209,1210
+< 	Strupr(chn_list);
+< 	Strupr(channel);
+---
+> 	strupr(chn_list);
+> 	strupr(channel);
+1241,1242c1241,1242
+<         Strupr(l);
+<         Strupr(location);
+---
+>         strupr(l);
+>         strupr(location);
+--------------------------------------------------------------------------------
+Man/rdseed.1 ../rdseed/Man/rdseed.1
+38,44d37
+< .B \-C STN
+< .br
+< .B \-C CHN
+< .br
+< .B \-C STN CHN
+< Output station/channel comments.
+< .TP
+59a53,55
+> .B \-R
+> retrieve all response information in a "evalresp" compatible format.
+> .TP
+68,70d63
+< Used together with the 
+< .B \-d
+< flag. The combination \f2-d -o 1\f1 gives SAC binary output files for waveforms.
+81,83d73
+< .B \-E
+< Output filename includes endtime, e.g., 2002.169.17.31.08.0480_2002.169.18.00.39.2480.IU.WCI..BHE.D.SAC instead of the default 2002.169.17.31.08.0480.IU.WCI..BHE.D.SAC for the \f2-d -o 1\f1 requested output.
+< .TP
+97,110d86
+< .TP
+< .B \-k
+< Strip records with zero samples.
+< .B \-d
+< flag.
+< .TP
+< .B \-p
+< Output response in SAC pole-zero format
+< .TP
+< .B \-R
+< retrieve all response information in a "evalresp" compatible format.
+< .TP
+< .B \-u
+< show command line usage for "rdseed"
+610,611d585
+< .br
+< Modified R B Herrmann, November 24, 2007
+--------------------------------------------------------------------------------
+Utilities/allocation_error.c ../rdseed/Utilities/allocation_error.c
+30,32d29
+< /* Begin R B Herrmann november 24 2007 */
+< #include <stdlib.h>
+< /* End   R B Herrmann november 24 2007 */
+--------------------------------------------------------------------------------
+Utilities/alloc_linklist_element.c ../rdseed/Utilities/alloc_linklist_element.c
+73,76d72
+< /* Begin R B Herrmann November 24, 2007 */
+< #include <stdlib.h>
+< #include <string.h>
+< /* End R B Herrmann november 24, 2007 */
+--------------------------------------------------------------------------------
+Utilities/get_date.c ../rdseed/Utilities/get_date.c
+14,16d13
+< /* BEGIN R B Herrmann November 24,2007 
+< */
+< #include <time.h>
+18d14
+< /* END   R B Herrmann November 24,2007 */
+--------------------------------------------------------------------------------
+Utilities/log_errors.c ../rdseed/Utilities/log_errors.c
+90,93d89
+< void stderr_to_file(char *fmt, va_list ap);
+< 
+< 
+< 
+124,125c120,122
+< void stderr_to_file(char *fmt, va_list ap)
+< {
+---
+> void stderr_to_file(fmt, ap)
+> char *fmt;
+> char *ap;
+127a125
+> {
+128a127
+> 	
+129a129
+> 
+130a131
+> 
+132a134
+> 
+133a136
+>  
+134a138
+> 
+135a140
+> 
+138a144,145
+> 	return;
+> 
+</PRE>
+<CENTER>Last changed November 25, 2007</CENTER>
+</BODY>
+</HTML>
+

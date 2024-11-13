@@ -1,0 +1,5 @@
+#!/bin/sh
+
+tar cf - 20060510024256 | gzip -c > rftn.tgz
+
+scp -pr $* rbh@mnw.eas.slu.edu:/net/eqinfo/home/eq/Earthquake_Center/CPS/TUTORIAL/RFTN

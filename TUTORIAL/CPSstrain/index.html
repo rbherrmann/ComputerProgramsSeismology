@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>CPSstrain</title>
+<style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF">
+<h1>Introduction</h1>
+<p>
+During the past decade, there have been many papers describing observations with new instrumentation. The include Distributed Acoustic Sensors (DAS) which consists of strain estimates using fiber optic deployments, rotational sensors and dilatometers. Scientific papers discuss the instrumentation and the interpretation of the signals.
+</p>
+<p>
+This tutorial describes the modification of the Computer Programs in Seismology (CPS) codes for making synthetics in 1-D media using wavenumber integration and modal superposition. The result of this effort are several new programs, 
+<b>hspec96strain</b>,
+<b>tspec96strain</b>,
+<b>hpulse96strain</b>,
+<b>spulse96strain</b>
+and
+<b>srotate96</b>
+that are now part of the CPS package.
+</p>
+<p>
+This tutorial discusses the implementation, validation and use of these new codes.
+<h1>Theory</h1>
+<p>
+The creation of Green's functions using modal superposition  and wavenumber integration and an extension to compute stress and strain is summarized` in <a href="strain.pdf?"> strain.pdf</a>.
+</p>
+<h1><a href="CPSstrainvalidate.html">Validation</a></h1>
+<p>This link discusses the validation tests applied to the new codes. this was done by comparison the strains by numerically differentiating the displacement wavefield to the output of the new codes.</p>
+<h1><a href="CPSstraincodes.html">Codes</a></h1>
+<p>This link shows the procedure for using the new codes as well as  the command line syntax,</p>
+
+<h1><a href="CPSstrainexamples.html">Example</a></h1>
+<h1>Units </h1>
+<p>
+Synthetic seismogram code runs on the basis of numerical values given for the model. The code has no sense of physical units. <b>strainspulse96</b> is tailored to the use of KM, KM/S and GM/CM<sup>3</sup> for depth, velocity and density. The epicentral distances, and source/receiver depths are also assumed to be KM.  Internally the code corrects everything to MKS units, e.g.,
+M, KG/M<sup>3</sup>, S units so that the strain and stress are correctly computed. On
+output the units are
+<pre>
+Uz, Ur, Ut      -D flag     displacement in meters
+                -V flag     velocity     in meters/s
+                -A flag     acceleration in meters/s/s
+Err ... Ezz     -STRAIN     dimensionless (meter/meter)
+Srr ... Szz     -STRESS     stress       in Pa
+Wrf ..  Wfz     -ROTATE     rotation      (meter/meter)
+</pre>
+</p>
+<center>Last changed June 8, 2021</center>
+</body>
+</html>

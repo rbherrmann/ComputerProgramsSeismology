@@ -1,0 +1,276 @@
+<H2>Forward Synthetic</H2>
+<P>
+All observed and Greens function waveforms are corrected to instrument response to ground velocity in meters/sec for the passband of 0.004 - 5 Hz. The traces were then lowpass filtered at 0.25 Hz and interpolated to a sample rate of 1 second. 
+<P>
+The moment tensor solution used  has the parameters:
+<PRE>
+HS=37
+STK=133
+DIP=51
+RAKE=-85
+MW=6.8 
+
+The Green's function closest to the desired depth was
+DEP=0370 , where (DEP/10) is the computed depth.
+</PRE>
+The cut windows attempt to include the P, pP, sP, pS, S and sS arrivals. However, one must be very careful about the fact that PP may be included in some distance ranges.
+<P>
+The waveforms are then 
+bandpass filtered by the application of the following high- and low-pass stages (an optional microseism filter):
+<PRE>
+hp c 0.0083 2
+lp c 0.0250 2
+int
+br c 0.12 0.25 n 4 p 2
+</PRE>
+The traces were next integrated to ground displacement in meters.
+Finally the observed data are interpolated to have the same sampling at the Green's functions.
+<BR>
+<I>NOTE: this was done for speed. The proper sequence is to read traces, filter and then cut - gsac will be modified to introduce a command CUTWR to define the cut upon a write.</I>
+<P>
+The following filter ranges are used according to the moment magnitude Mw:
+<PRE>
+   FILTER_BAND   1/FH(s)  1/FL(s)
+       1           60     12      Mw < 6.4
+       2          100     20      6.4 < Mw <= 6.9
+       3          120     40      Mw > 6.9
+</PRE>
+<P>
+The map displays the distribution of stations used for this source inversion.
+<TABLE>
+<TR><TD>
+<BR>
+<IMG SRC="wmap.png">
+<BR>Location of the earthquake (yellow star) and great circle path from the epicenter to each station (red) [created using GMT (Wessel, P., and W. H. F. Smith, New version of Generic Mapping Tools released, <I>EOS Trans. AGU, 76</I> 329, 1995.)]<BR>
+</TD></TR>
+</TABLE>
+<P>
+<H3>Detailed Waveform Comparison </H3>
+<TABLE>
+<TR><TD><B>P-wave Z component</B></TD></TR>
+<TR><TD>
+<IMG SRC="wcmp1.png">
+</TD></TR>
+<TR><TD>
+Observed (red) and predicted seismograms (blue) ordered by increasing epicentral distance. Each pair of traces is annotated with the wave type and a station identifier (station, network, and channel id's), epicentral distance in degrees, source-to-station azimuth in degrees. Each seismogram pair is plotted with the same scale and the peak amplitudes in meters are shown above to the left of each trace. The optimal time shift between the observed first arrival and the predicted first arrival (in seconds) is shown above the prediction on the right. Red circles flag seismograms with amplitude misfits of a factor of 2 or more. 
+</TD></TR>
+<TR><TD><B>SH-wave T component</B></TD></TR>
+<TR><TD>
+<IMG SRC="wshtcmp1.png">
+</TD></TR>
+<TR><TD>
+Observed (red) and predicted seismograms (blue) ordered by increasing epicentral distance. Each pair of traces is annotated with the wave type and a station identifier (station, network, and channel id's), epicentral distance in degrees, source-to-station azimuth in degrees. Each seismogram pair is plotted with the same scale and the peak amplitudes in meters are shown above to the left of each trace. The optimal time shift between the observed first arrival and the predicted first arrival (in seconds) is shown above the prediction on the right. Red circles flag seismograms with amplitude misfits of a factor of 2 or more. 
+</TD></TR>
+<TR><TD><B>SV-wave R component</B></TD></TR>
+<TR><TD>
+<IMG SRC="wsvrcmp1.png">
+</TD></TR>
+<TR><TD>
+Observed (red) and predicted seismograms (blue) ordered by increasing epicentral distance. Each pair of traces is annotated with the wave type and a station identifier (station, network, and channel id's), epicentral distance in degrees, source-to-station azimuth in degrees. Each seismogram pair is plotted with the same scale and the peak amplitudes in meters are shown above to the left of each trace. The optimal time shift between the observed first arrival and the predicted first arrival (in seconds) is shown above the prediction on the right. Red circles flag seismograms with amplitude misfits of a factor of 2 or more. 
+</TD></TR>
+</TABLE>
+<H3>Waveforms used</H3>
+The following waveforms are used for the plot above. Note that the naming convention used by the generating program does not distinguish between LH, BH and HH channels. One can change the DOPZSTA, DOSHTSTA and DOSVRSTA scripts to preserve the component names.
+<P>
+AAKII00BHR
+AAKII00BHT
+AAKII00BHZ
+ABPOII00BHR
+ABPOII00BHT
+ABPOII00BHZ
+ABPOII10BHR
+ABPOII10BHT
+ABPOII10BHZ
+ADKIU00BHR
+ADKIU00BHT
+ADKIU00BHZ
+AFIIU00BHR
+AFIIU00BHT
+AFIIU00BHZ
+AFIIU10BHR
+AFIIU10BHT
+AFIIU10BHZ
+ARUII00BHR
+ARUII00BHT
+ARUII00BHZ
+BILLIU00BHR
+BILLIU00BHT
+BILLIU00BHZ
+BRVKII00BHR
+BRVKII00BHT
+BRVKII00BHZ
+CASYIU00BHR
+CASYIU00BHT
+CASYIU00BHZ
+CASYIU10BHR
+CASYIU10BHT
+CASYIU10BHZ
+COLAIU00BHR
+COLAIU00BHT
+COLAIU00BHZ
+COLAIU10BHR
+COLAIU10BHT
+COLAIU10BHZ
+CTAOIU00BHR
+CTAOIU00BHT
+CTAOIU00BHZ
+DGARII00BHR
+DGARII00BHT
+DGARII00BHZ
+DGARII10BHR
+DGARII10BHT
+DGARII10BHZ
+FUNAIU10BHR
+FUNAIU10BHT
+FUNAIU10BHZ
+FURIIU00BHR
+FURIIU00BHT
+FURIIU00BHZ
+FURIIU10BHR
+FURIIU10BHT
+FURIIU10BHZ
+GRFOIUBHR
+GRFOIUBHT
+GRFOIUBHZ
+JOHNIU00BHR
+JOHNIU00BHT
+JOHNIU00BHZ
+JOHNIU01BHR
+JOHNIU01BHT
+JOHNIU01BHZ
+JOHNIU10BHR
+JOHNIU10BHT
+JOHNIU10BHZ
+KBLIUBHR
+KBLIUBHT
+KBLIUBHZ
+KBSIU00BHR
+KBSIU00BHT
+KBSIU00BHZ
+KBSIU10BHZ
+KDAKII00BHR
+KDAKII00BHT
+KDAKII00BHZ
+KDAKII10BHR
+KDAKII10BHT
+KDAKII10BHZ
+KEVIU00BHR
+KEVIU00BHT
+KEVIU00BHZ
+KEVIU10BHR
+KEVIU10BHT
+KEVIU10BHZ
+KIEVIU00BHR
+KIEVIU00BHT
+KIEVIU00BHZ
+KIPIU00BHR
+KIPIU00BHT
+KIPIU00BHZ
+KIPIU10BHR
+KIPIU10BHT
+KIPIU10BHZ
+KIVII00BHR
+KIVII00BHT
+KIVII00BHZ
+KMBOIU00BHR
+KMBOIU00BHT
+KMBOIU00BHZ
+KNTNIU00BHR
+KNTNIU00BHT
+KNTNIU00BHZ
+KONOIU00BHR
+KONOIU00BHT
+KONOIU00BHZ
+KONOIU10BHR
+KONOIU10BHT
+KONOIU10BHZ
+KURKII00BHR
+KURKII00BHT
+KURKII00BHZ
+KWAJII10BHR
+KWAJII10BHT
+KWAJII10BHZ
+KWAJII10BLZ
+MBARII00BHR
+MBARII00BHT
+MBARII00BHZ
+MBARII10BHR
+MBARII10BHT
+MBARII10BHZ
+MBARII10BLZ
+MBWAIU00BHR
+MBWAIU00BHT
+MBWAIU00BHZ
+MBWAIU10BHR
+MBWAIU10BHT
+MBWAIU10BHZ
+MIDWIU00BHR
+MIDWIU00BHT
+MIDWIU00BHZ
+NWAOIU00BHR
+NWAOIU00BHT
+NWAOIU00BHZ
+OBNII00BHR
+OBNII00BHT
+OBNII00BHZ
+PALKII00BHR
+PALKII00BHT
+PALKII00BHZ
+PALKII10BHR
+PALKII10BHT
+PALKII10BHZ
+PALKII10BLZ
+PETIU00BHR
+PETIU00BHT
+PETIU00BHZ
+POHAIU00BHR
+POHAIU00BHT
+POHAIU00BHZ
+POHAIU10BHR
+POHAIU10BHT
+POHAIU10BHZ
+RAOIU00BHZ
+SBAIU00BHR
+SBAIU00BHT
+SBAIU00BHZ
+SNZOIU00BHR
+SNZOIU00BHT
+SNZOIU00BHZ
+SNZOIU10BHR
+SNZOIU10BHT
+SNZOIU10BHZ
+TARAIU00BHZ
+TIXIIU00BHR
+TIXIIU00BHT
+TIXIIU00BHZ
+TLYII00BHR
+TLYII00BHT
+TLYII00BHZ
+ULNIU00BHR
+ULNIU00BHT
+ULNIU00BHZ
+WAKEIU00BHR
+WAKEIU00BHT
+WAKEIU00BHZ
+WAKEIU10BHR
+WAKEIU10BHT
+WAKEIU10BHZ
+WRABII00BHR
+WRABII00BHT
+WRABII00BHZ
+WRABII10BHR
+WRABII10BHT
+WRABII10BHZ
+XMASIU00BHR
+XMASIU00BHT
+XMASIU00BHZ
+XMASIU10BHR
+XMASIU10BHT
+XMASIU10BHZ
+YAKIU00BHR
+YAKIU00BHT
+YAKIU00BHZ
+YSSIU00BHR
+YSSIU00BHT
+YSSIU00BHZ
+<P>

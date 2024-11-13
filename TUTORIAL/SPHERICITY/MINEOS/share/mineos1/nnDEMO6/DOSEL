@@ -1,0 +1,158 @@
+#!/bin/sh
+
+#####
+#	define the FORTRAN compiler
+#####
+FCMP=gfortran
+#FCMP=g77
+#####
+#	search the output of mineos to obtain the dispersion
+#       for the fundamental and first two higher modes
+#####
+
+grep '    0 t  ' tak135-f_T > L0
+grep '    1 t  ' tak135-f_T > L1
+grep '    2 t  ' tak135-f_T > L2
+grep '    3 t  ' tak135-f_T > L3
+grep '    0 s  ' tak135-f_S > R0
+grep '    1 s  ' tak135-f_S > R1
+grep '    2 s  ' tak135-f_S > R2
+grep '    3 s  ' tak135-f_S > R3
+
+#head L1
+#    1 t    1    33.22121        1.244856        803.3056        2.609006        99999.90      -0.3191767E-08
+
+#####
+#	run a program to output just those periods nearest to
+#       predefined values
+#####
+
+cat > sel.f << EOF
+	integer NL
+	parameter (NL=10000)
+	real arr(NL)
+	integer NPER
+	parameter (NPER=21)
+	real per(NPER)
+        integer n, l
+	real*8 c, f, t, u, q, fl
+	character s*1
+        integer nsv(NL), lsv(NL)
+	real*8 csv(NL), fsv(NL), tsv(NL), usv(NL), qsv(NL), flsv(NL)
+	character*1 ssv(NL)
+        data per/500.0,400.0, 350.0, 300.0, 250.0, 200.0, 
+     1    175., 150., 125., 100.,  
+     1    90., 80., 70., 60., 50., 40., 30., 25., 20., 15., 10./
+	j = 0
+ 1000	continue
+		read(5,1,end=2000)n,s,l,c,f,t,u,q,fl
+Cin
+C    0 s    2    4.953790       0.3093785        3232.286        6.391286        568.9395      -0.9828517E-08
+C    0 s   16    5.953540       2.4539840         407.501        4.419733        311.7730      -0.2533846E-07
+Cout
+C    0 s   16    5.953540       2.4539840         407.501        4.419733        311.7730      -0.2533846E-07
+C123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
+    1   format(i5,1x,a1,1x,i4,f12.6,f16.7,f16.3,f16.6,f16.4,e20.7)
+		j=j+1
+		nsv(j) = n
+		lsv(j) = l
+		ssv(j) = s
+		csv(j) = c
+		fsv(j) = f
+		tsv(j) = t
+		usv(j) = u
+		qsv(j) = q
+		flsv(j) = fl
+	go to 1000
+ 2000	continue
+	np = j
+c-----
+c	now find the arr closest to the per
+c-----
+	do i=1,NPER
+		amx = 1.0e+38
+		do j=1,np
+			if(abs(tsv(j) - per(i)).lt.amx)then
+				amx = abs(tsv(j) - per(i))
+                                jval = j
+			endif
+		enddo
+		write(6,1)nsv(jval),ssv(jval),lsv(jval),csv(jval),fsv(jval),
+     1              tsv(jval),usv(jval),qsv(jval),flsv(jval)
+	enddo
+	end
+EOF
+${FCMP} sel.f
+
+a.out < L0 > sL0.per
+a.out < L1 > sL1.per
+a.out < L2 > sL2.per
+a.out < L3 > sL3.per
+a.out < R0 > sR0.per
+a.out < R1 > sR1.per
+a.out < R2 > sR2.per
+a.out < R3 > sR3.per
+
+#####
+#	make the big data set
+#####
+
+
+cat sL0.per sL1.per sL2.per sL3.per > oL.per
+cat sR0.per sR1.per sR2.per sR3.per > oR.per
+
+#####
+# n      l    c      f(mHz)      T       U         Q
+# 1 t   14 9.059311 3.281525 304.7364 6.221155  99999.90     
+#    format for surf96
+#    create an entry for C U and G, being careful to 
+#    convert between spatial and temporal Q
+#    Free oscillation Q is temporal, surfasce wave is spatial
+#
+#    gamma = omega/2 U temporal Q  (Aki and Richards 2002  (7.93/7.94)
+#####
+cat oR.per | awk '{printf "SURF96 R C X %s %s %s 0.0010\nSURF96 R U X %s %s %s 0.0010\nSURF96 R G X %s %s %12.5e 1.00000e-08\n",$1,$6,$4,$1,$6,$7,$1,$6,3.1415927/($8*$7*$6) }' > disp.d
+cat oL.per | awk '{printf "SURF96 L C X %s %s %s 0.0010\nSURF96 L U X %s %s %s 0.0010\nSURF96 L G X %s %s %12.5e 1.00000e-08\n",$1,$6,$4,$1,$6,$7,$1,$6,3.1415927/($8*$7*$6) }' >> disp.d
+
+cat > sobs.d << EOF
+  4.9999999E-04  4.9999999E-04   0.000000      4.9999999E-04   0.000000    
+    1    4    4    4    4    4    4    0    1    0
+nntak135sph.mod
+disp.d                                                                          
+EOF
+#####
+#	now run the forward predictions using surf96 which provides the
+#       group velocity with Q
+#####
+surf96 39
+surf96 1
+surf96 17 > 17.txt
+surf96 12 > 12.txt
+surf96 27 disp.out
+srfphv96
+srfphv96 -G
+#####
+#	clean up
+#####
+surf96 39
+
+#####
+#	convert the graphics to PNG for the web page
+#####
+for i in SRFPH*PLT
+do
+B=`basename $i .PLT `
+plotnps -F7 -W10 -EPS -K < $i > $B.eps
+convert -trim $B.eps $B.png
+mv $B.png ../HTML.SW/qDEMO6$B.png
+done
+
+
+cp 12.txt 17.txt ../HTML.SW
+
+
+rm -f *.per R? L?
+rm -f a.out
+rm -f sel.f
+
+rm -f SRFPHG96.PLT SRFPHV96.PLT SRFPHG96.eps SRFPHV96.eps

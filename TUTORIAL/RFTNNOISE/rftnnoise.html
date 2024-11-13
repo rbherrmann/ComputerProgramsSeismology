@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Effect of ground noise on RFTN's</title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h2>Introduction</h2>
+    <p>The incentive for this tutorial arose when a student asked about
+      the error in a receiver function. The teleseismic P-wave receiver
+      function is a filter which converts the vertical component of the
+      P wave to the radial component. Typically this filter is defined
+      as that which converts the observed P-wave on the vertical
+      component to a low-pass filtered P-wave on the radial component.
+      This low pass operation is usually defined in terms of a Gaussian
+      function <br>
+    </p>
+    <blockquote>H(f) = exp [ -&nbsp;
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo
+              stretchy="false">(</mo><mi>&#960;</mi><mi>f</mi><mo>/</mo><mi>&#945;</mi><msup><mo
+                stretchy="false">)</mo><mn>2 </mn></msup></mrow><annotation
+            encoding="TeX">( \pi f / \alpha ) ^2</annotation></semantics></math>
+      ]<br>
+    </blockquote>
+    If the filter determined from the data confidently predicts the
+    low-pass filtered radial component, and if the filter satisfies
+    elementary elastic wave theory, then the resultant receiver function
+    can be used constrain Earth structure near the seismograph station.<br>
+    <br>
+    The purpose of this tutorial is to use the codes of Computer
+    Programs in Seismology to synthesize an observed teleseismic P-wave
+    signal, to add a realistic ground noise, and then to compare the
+    receiver functions based on noisy data to that based on noise free
+    data.<br>
+    <p> </p>
+    <p> </p>
+    <h2>Download and installation</h2>
+    <p>This exercise is contained in the gzip'd tar file <a
+        href="RFTNNOISE.tgz">RFTNNOISE.tgz </a><br>
+      After downloading execute the following commands: </p>
+    <pre>          gunzip -c RFTNNOISE.tgz | tar xf -
+          cd RFTNNOISE.dist/src
+          make all
+          cd ..
+</pre>
+    This procedure creates the directory structure:<br>
+    <pre>          RFTNNOISE.dist/
+          RFTNNOISE.dist/DOCLEANUP              <font color="#ff0000">Script to clean up temporary files</font>
+          RFTNNOISE.dist/DOIT			<font color="#ff0000">Simulation script</font>
+          RFTNNOISE.dist/DOPLOT                 <font color="#ff0000">Script to create PNG graphics</font>
+          RFTNNOISE.dist/Models/                <font color="#ff0000">Directory having models for making synthetics</font>
+          RFTNNOISE.dist/src/
+          RFTNNOISE.dist/src/Makefile
+          RFTNNOISE.dist/src/noisemodel.h
+          RFTNNOISE.dist/src/sacnoise.c
+          RFTNNOISE.dist/src/sacsubc.c
+          RFTNNOISE.dist/src/sacsubc.h
+          RFTNNOISE.dist/Models/CUS.mod  
+          RFTNNOISE.dist/Models/tak135sph.mod
+</pre>
+    As a result of the <i>make all </i>the executable <b>sacnoise</b>
+    is created in the <i>src</i> directory.<br>
+    <h2>DOIT</h2>
+    <p><b>DOIT&nbsp; </b>is the driving script for the simulations. It
+      is <b>bash </b>shell script with all controls at the top of the
+      file. To keep the code manageable, the <b>bash </b><i>functions
+      </i>are used. These appear first in the file. The logic of the
+      simulation is incorporated in these lines:<br>
+    </p>
+    <blockquote>
+      <pre>############################################################################
+#    main processing
+############################################################################
+
+#####
+#   clean up from previous runs
+#####
+cleanup         
+#####
+#    initialize the random number sequence
+#####
+init
+#####           
+#    make the teleseism signal
+#    and then get the receiver function from the noisefree signal
+#####           
+maketeleseism   
+dorftnnonoise   
+#####           
+#    add noise to the Z and R components for the teleseismic P wave
+#    and compute receiver functions
+#####
+SIM=00
+while read SURD                 
+do                              
+        SIM=`echo $SIM | awk '{printf "%3.3d", $1 + 1 }' `
+        domakenoise
+        dorftnnoise
+done &lt; surd.tmp 
+#####
+#     now stack the noisy P signals to see if they are improved
+#     stack the RFTNs from the noisy signal
+#####   
+dostack 
+</pre>
+    </blockquote>
+    The comments indicate what each function does. <i>init() </i>creates&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <i>NSIM </i>random numbers between 0 and 9999 in the file <i>surd.tmp</i>,
+    with one entry per line. <i>maketeleseism </i>uses <b>hudson96 </b>to
+
+
+
+
+
+
+
+
+
+
+
+
+
+    make the teleseismic P wave signal on the Z and R components. The
+    amplitude of the synthetic depends on Mw and on a source duration
+    which is a function of Mw.&nbsp; <i>dorftnnonoise </i>creates the
+    receiver functions for&nbsp;<math
+      xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>&#945;</mi><mo>=</mo></mrow><annotation
+          encoding="TeX">\alpha = </annotation></semantics></math>0.5,
+    1.0 and 2.5.<br>
+    <br>
+    Next for each of the simulations. <i>domakenoise</i>
+    &nbsp;&nbsp;&nbsp; creates the noise for the Z and R components. The
+    <i>PVAL </i>, which is&nbsp;<math
+      xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;=</mo><mi>P</mi><mi>V</mi><mi>A</mi><mi>L</mi><mo>&lt;=</mo><mn>1</mn></mrow><annotation
+          encoding="TeX">0 &lt;= PVAL &lt;= 1 </annotation></semantics></math>,<br>
+    indicates the level of gound noise with the lower limit of 0
+    corresponding to the NLNM (New Low Noise Model) and &nbsp; the upper
+    limit of 1 corresponding to the NHNM (New High Noise Model). There
+    are three options to the creation of the noise. For <i>NOISE=0 </i>the
+
+
+
+
+
+
+
+
+
+
+
+
+
+    noise sequences for the Z and R are derived from different random
+    number surds. For <i>NOISE=1</i> the noise for the R component is
+    the same as that on the vertical. For <i>NOISE=2 </i>the noise on
+    the R component is the negative of that on the vertical component.
+    Finally for <i>NOISE=3</i> the noise on the R component is the
+    Hilbert transform of that on the vertical. The last 3 options
+    simulate&nbsp; P-wave, SV-wave and Rayleigh wave noise, respectively
+    when comparing the Z and R components.&nbsp; Finally the noise for
+    each component is added to the teleseismic signal for that
+    component, and the receiver functions are estimated.<br>
+    <h2>Simulations</h2>
+    <p>Figure 1 gives the ground velocity (m/s) for an Mw=6.0 soruce at
+      a depth of 20 km at a distance of 40 degrees from the receiver.
+      The receiver is at an azimuth of 45 degrees from the source. The
+      fault plane parameters are strike= 80, dip = 80 and rake = 10. In
+      this figure <i>T.Z</i> is the vertical component motion and <i>T.R
+
+
+
+
+
+
+
+
+
+      </i>is the radial motion, <i>1.0.sac.1354</i> is the ground noise
+      in m/s that is used with the he Z component, and <i>2.0.sac.1354
+      </i>is the ground noise for the radial component. For this
+      simulation <i>NOISE=1</i> so that the noise on the two components
+      is the same. <br>
+      <table>
+        <tbody>
+          <tr>
+            <td><img src="FIGS/T.COH.P001.png"><br>
+              <center>Fig. 1. Teleseismic signal and noise</center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <p> Figure 2 shows the simulated noisy Z and R waveforms for each of
+      the of the nine noise sequences and for the four choices of the <i>NOISE</i>
+      parameter.
+      <table>
+        <tbody>
+          <tr>
+            <td>Simulation</td>
+            <td>Z component</td>
+            <td>R component</td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=0<br>
+                R and Z noise are independent</valign="middle"></td>
+            <td><img src="FIGS/T.NOCOH.P003.png"></td>
+            <td><img src="FIGS/T.NOCOH.P004.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=1<br>
+                R noise is Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.COH.P003.png"></td>
+            <td><img src="FIGS/T.COH.P004.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=2<br>
+                R noise is negative of Z noise&#8776;</valign="middle"></td>
+            <td><img src="FIGS/T.REV.P003.png"></td>
+            <td><img src="FIGS/T.REV.P004.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=3<br>
+                R noise is Hilbert transform of Z noise&#8776;</valign="middle"></td>
+            <td><img src="FIGS/T.HILB.P003.png"></td>
+            <td><img src="FIGS/T.HILB.P004.png"></td>
+          </tr>
+          <tr>
+            <th colspan="3">
+              <center>Fig. 2. Simulated noisy signals</center>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      To see how stacking might improve the signals, we can just stack
+      the individual traces. The results are shown in Figure 3. This
+      stacking procedure is normally not done with real data, but could
+      be done.
+      <table>
+        <tbody>
+          <tr>
+            <td>Simulation</td>
+            <td>Normalized stack</td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=0<br>
+                R and Z noise are independent</valign="middle"></td>
+            <td><img src="FIGS/T.NOCOH.P002.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=1<br>
+                R noise is Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.COH.P002.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=2<br>
+                R noise is negative of Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.REV.P002.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=3<br>
+                R noise is Hilbert transform of Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.HILB.P002.png"></td>
+          </tr>
+          <tr>
+            <th colspan="2">
+              <center>Fig. 3. Stacked teleseismic signals</center>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
+    </p>
+    <p> The next exercise is to compute the receiver functions using the
+      iterative deconvolution program <b>saciterd</b> of Ligorria and
+      Ammon. These are shown in Figure 4 for the three values of
+      <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>&#945;</mi><mo>=</mo></mrow><annotation
+            encoding="TeX">\alpha = 2.5</annotation></semantics></math>.
+    </p>
+    <p>
+      <table>
+        <tbody>
+          <tr>
+            <td>Simulation</td>
+            <td>&#945; = 0.5</td>
+            <td>&#945; = 1.0</td>
+            <td>&#945; =2.5 </td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=0<br>
+                R and Z noise are independent</valign="middle"></td>
+            <td><img src="FIGS/T.NOCOH.P005.png"></td>
+            <td><img src="FIGS/T.NOCOH.P006.png"></td>
+            <td><img src="FIGS/T.NOCOH.P007.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=1<br>
+                R noise is Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.COH.P005.png"></td>
+            <td><img src="FIGS/T.COH.P006.png"></td>
+            <td><img src="FIGS/T.COH.P007.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=2<br>
+                R noise is negative of Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.REV.P005.png"></td>
+            <td><img src="FIGS/T.REV.P006.png"></td>
+            <td><img src="FIGS/T.REV.P007.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=3<br>
+                R noise is Hilbert transform of Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.HILB.P005.png"></td>
+            <td><img src="FIGS/T.HILB.P006.png"></td>
+            <td><img src="FIGS/T.HILB.P007.png"></td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <center>Fig. 4. Receiver functions for each of the noisy
+                observations for the three &#945; values.</center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <p>Finally we compare normalized stacked receiver functions to the
+      those of the noise-free signals in Figure 5. </p>
+    <p>
+      <table>
+        <tbody>
+          <tr>
+            <td>Simulation</td>
+            <td>&#945; = 0.5</td>
+            <td>&#945; = 1.0</td>
+            <td>&#945; =2.5 </td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=0<br>
+                R and Z noise are independent</valign="middle"></td>
+            <td><img src="FIGS/T.NOCOH.P008.png"></td>
+            <td><img src="FIGS/T.NOCOH.P009.png"></td>
+            <td><img src="FIGS/T.NOCOH.P010.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=1<br>
+                R noise is Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.COH.P008.png"></td>
+            <td><img src="FIGS/T.COH.P009.png"></td>
+            <td><img src="FIGS/T.COH.P010.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=2<br>
+                R noise is negative of Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.REV.P008.png"></td>
+            <td><img src="FIGS/T.REV.P009.png"></td>
+            <td><img src="FIGS/T.REV.P010.png"></td>
+          </tr>
+          <tr>
+            <td><valign="middle">NOISE=3<br>
+                R noise is Hilbert transform of Z noise</valign="middle"></td>
+            <td><img src="FIGS/T.HILB.P008.png"></td>
+            <td><img src="FIGS/T.HILB.P009.png"></td>
+            <td><img src="FIGS/T.HILB.P010.png"></td>
+          </tr>
+          <tr>
+            <th colspan="4">
+              <center>Fig. 5. Comparison of the normalized stacked
+                receiver functions (blue) to the noise-free receiver
+                function (red) for the observations for the three &#945;
+                values. </center>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <h2> Discussion</h2>
+    <p>Several objectives of this exercise have been met. First an
+      example is provided of how to add realistic noise to synthetics
+      and then to processess thos synthetics. In this case we focus on
+      teleseismic P-wave receiver functions. <br>
+    </p>
+    <p>Figure 4 shows that noise can affect the determinationof the
+      receiver function. The effect is strongest for &#945; = 0.5 and less
+      noticable for &#945; = 2.5. So waht use the lower value. Well other
+      simulations of the effect of deep sediments at the reciever
+      indicate that these are not as storng for the lower value of &#945;.
+      One way of thinking about this is that the smaller alpha
+      emphasizes the lower frequencies,&nbsp; for which the Earth starts
+      to look mmore like a halfspace.<br>
+    </p>
+    <p>We slao see that the effect of the noise in the inividual
+      receiver functions of Figure 4 and on the stacks of Figure 5 are
+      not so bad if the nosie is the same on the vertical and radial
+      components or if the two noises are holber transforms of each
+      other. Ammon (199X) showed the the First bump of the receiver
+      function descroibes the conversion of incident P on the vertical
+      to the radial, while later features refpresent the effect of the
+      conversion of the S wave on the vertical to that on the radial.
+      For NOISE=1, he motion is P-wave motion.&nbsp; For NOISE=3 the
+      motion may be Rayleigh like. Now with real data, the direction of
+      plane wave nosie is no know, and even though it may be due to a
+      P-wave, if it is incident from a direction other than the back
+      azimuth, then there will be some of the NOISE=2 in the data.&nbsp;
+      <br>
+    </p>
+    <p>Although the amplitudes are sensitive to the noise, the timing of
+      major pahses is not as sensitive.<br>
+    </p>
+    <p>I would expect that the results would be worse, if the PVAL is a
+      more reasonable value, such as 0.2 for an Mw=6.&nbsp; This
+      simulation reflects real expeience, in that one needs a lot of
+      large earthquake eata to make a good receiver function.<br>
+    </p>
+    <p><br>
+    </p>
+    <br>
+    <div align="center">Last changed December 16, 2017 </div>
+  </body>
+</html>

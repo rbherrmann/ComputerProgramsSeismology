@@ -1,0 +1,44 @@
+#!/bin/sh
+
+#####
+#	use awk to pattern search the ALL.DSP.nopp file to 
+#	create files for coordinate3s and station names for GMT
+#####
+
+#####
+#	na.latlon format
+#37.742500 128.889297
+#
+#	na.txt format
+#37.690399 128.674194 10 0. 4 TR @%1%DGY @%%
+#####
+
+FILE=../NEW2.REG/ALL.DSP
+
+cat ${FILE} | \
+	awk '{printf "%8.4f %9.4f\n", $13, $14}' | \
+	sort | \
+	uniq > na.latlon
+
+cat ${FILE} | \
+	awk '{printf "%8.4f %9.4f 10 0. 4 TR @%%1%%%s@%%%%\n", $13, $14, $19}' | \
+	sort | \
+	uniq > na.txt
+
+cat ${FILE} | \
+	awk '{printf "%8.4f %9.4f\n", $11, $12}' | \
+	sort | \
+	uniq > evt.coord
+
+
+#####
+#	use GMT to make the map
+#####
+na.gmt
+rm -f na.png
+#####
+#	use imagMagick to make png
+#####
+convert -trim na.eps na.png 
+mv na.png ../HTML.REG
+

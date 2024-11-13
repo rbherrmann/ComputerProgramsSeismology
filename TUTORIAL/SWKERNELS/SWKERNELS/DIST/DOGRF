@@ -1,0 +1,5 @@
+#!/bin/sh
+
+groff -ms -te  -P-pletter surf.ms > surf.ps
+ps2pdf -sPAPERSIZE=letter surf.ps
+

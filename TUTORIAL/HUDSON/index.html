@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Computer Programs in Seismology Tutorials</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8413900">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<H2>Introduction</H2>
+<P>This is a discussion of the use of the program <B>hudson96 </B>which
+was created from pieces of <B>hrftn96,</B> <B>hspec96p,</B> and
+<B>time96</B> in March, 2008.<BR><BR>The program on the direct
+teleseismic P or S arrival through the use of a stationary phase
+approximation for the ray parameter connecting the direct arrival
+from the source to the receiver. The interesting feature of this
+approach is the use of propagator matrices for the source and
+receiver crusts, so that the depth phases are automatically included
+as well as the details of the source and receiver crustal models.&nbsp;
+The program is self contained in that the travel time, T* and
+geometrical spreading are computed within the program.&nbsp; A
+tutorial on the use of the program is on the tutorial page.<BR><BR><BR>
+</P>
+<P STYLE="margin-left: 0.42in; margin-bottom: 0in">Hudson, J. A.
+(1969). A quantitative evaluation of seismic signals at teleseismic
+distances - II. Body waves and surface waves from an extended source,
+<I>Geophys. J. Roy. astr. Soc. </I><B>18</B>, 353-370.</P>
+<P><BR><BR>
+</P>
+<H2>Usage</H2>
+<P>The syntax of the program is given by the command <B>hudson96 -h </B>:</P>
+<PRE> USAGE: hudson96 [-TEL modeltel] [-SRC modelsrc] [-REC modlrec]  [ -HS hs ] [ -O offset ] [-P] [-S]  [-GCARC gcarc] [-DT dt] [-NPTS npts]  [-NOSRC] [-NOREC] [-NOTEL] [-?] [-h]
+ -TEL modeltel (default none) Earth velocity model
+ -SRC modelsrc (default modeltel) Velocity model for source
+ -REC modelrec (default modeltel) Velocity model for receiver
+ -HS hs        (default 10 km) Source depth
+ -GCARC gcarc  (default 30 degrees) Arc distance
+ -NPTS npts    (default 1024) Number of points in time series
+ -DT dt        (default 0.05 sec) Sampling interval
+ -O  offset    (default 10.0 sec) Time offset before signal
+                    wrap-around, but output only npts
+ -P            (default true)  make P synthetic
+ -S            (default false)  make S synthetic
+ -NOSRC        (default false) Turn off source input
+ -NOREC        (default false) Turn off receiver part
+ -NOTEL        (default false) Turn off teleseism  geometrical
+                      spreading and attenuation
+ -?            Display this usage message
+ -h            Display this usage message
+ The program creates the file hspec96.grn for hpulse96.
+ The program creates the files hudsonsrc.mod and hudsonrec.mod,
+ which are the complete models (model96 format) used for the src and rec regions from the surface to interior.
+ these can be plotted using shwmod96.</PRE><P>
+This program creates a file <I>hspec96.grn </I>which is used by
+<B>hpulse96 </B>to create a <I>file96 </I>time series file.</P>
+<H2>Test Runs</H2>
+<P>The tar-ball containing the scripts for the test runs is&nbsp;
+<A HREF="hudson.tgz">hudson.tgz</A></P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="TESTDEPTH/index.html"><FONT SIZE=4><B>Source
+	Depth Record Section for Earthquakes</B></FONT></A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="TESTEXP/index.html"><FONT SIZE=4><B>Source
+	Depth Record Section for a Shallow Explosion</B></FONT></A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="TESTEMB/index.html"><FONT SIZE=4><B>Effect
+	of Shallow Sediment Structure on Observed Teleseismic Waveforms</B></FONT></A>
+		</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="TESTAK135/index.html"><FONT SIZE=4><B>Comparison
+	with Complete Teleseismic Synthetics</B></FONT></A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="TESTW/index.html"><FONT SIZE=4><B>Effect
+	of Water Layer on Teleseismic P-wave Motions</B></FONT></A></P>
+	<LI><P><A HREF="TESTS/index.html"><FONT SIZE=4><B>Teleseismic S-wave
+	comparison  (Modified 19 MAR 2009)</B></FONT></A>
+	</P>
+</UL>
+<P><BR><BR>
+</P>
+</BODY>
+</HTML>

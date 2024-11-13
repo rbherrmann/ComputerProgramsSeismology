@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Computer Programs in Seismology - GENPLT</title>
+</head>
+<body>
+<h2>Introduction</h2>
+A number of general plotting programs have been written using the
+CALPLOT library of Computer Programs in Seismology.<br>
+While useful, programs such at <span style="font-weight: bold;">xyplt2</span>
+are not easy to use. The program <span style="font-weight: bold;">genplt</span>
+has a simpler syntax since it does not attempt to be a general purpose
+plotting package. It can be used together with the program <span
+ style="font-weight: bold;">calplt </span>to make useful figures.<br>
+<br>
+<h2>Command syntax</h2>
+Entering <span style="font-weight: bold;">genplt -h </span>provides
+the on-line help that describes the use of the program:<br>
+<br>
+<div style="margin-left: 40px;">
+<pre><br></pre>
+</div>
+<div style="margin-left: 40px;">
+<pre> USAGE:genplt -XMIN xmin -XMAX xmax -YMIN ymin -YMAX ymax -X0 x0 -Y0 y0 -NOBOX -XLIN _XLOG _YLIN YLOG -XLOG -XLIN -YLOG -YLIN  -C cmdfil -? -h<br> -XMIN xmin (default 0.0)  minimum value of X-Axis<br> -XMAX xmax (default    )  maximum value of X-Axis<br> -YMIN ymin (default 0.0)  minimum value of Y-Axis<br> -YMAX ymax (default 0.0)  maximum value of Y-Axis<br> -X0 x0     (default 2.0)  lower left corner of plot<br> -Y0 y0     (default 1.0)  bottom left corner of plot<br> -XLEN xlen (default 6.0)  length of X-Axis<br> -YLEN ylen (default 6.0)  length of Y-Axis<br> -NOBOX     (default false) do not plot axes<br> -XLIN      (default linear) X axis is linear<br> -XLOG      (default linear) X axis is logarithmic<br> -YLIN      (default linear) Y axis is linear<br> -YLOG      (default linear) Y axis is logarithmic<br> -C cmdfil  (required).<br>   cmdfil consists of one xy-pair file per line as<br>     File Kolor Width Psymb     <br>   File file name of x-y pairs to be plotted<br>  with the File and Psymb enclosed in single quotes<br>   Kolor (integer)1=BLACK,1000=red,1050=green,1100=blue 0=white<br>   Width width of line in inches<br>   Psymb - a 2 character entry with the following meaning<br>            SQ - square<br>            TR - triangle<br>            HX - heaxgon<br>            DI - diamond<br>            CI - circle<br>            NO - no symbol - plot a line<br>  There can be multiple -D File Kolor Width Psymb entries<br> -?         (default false) online help<br> -h         (default false) online help</pre>
+</div>
+<div style="margin-left: 40px;"><br>
+</div>
+An example of the use of this program together with <span
+ style="font-weight: bold;">calplt</span> is given in the guide for <a
+ href="../WVFDLY96/index.html">wvfdly96</a>:
+<br>
+<pre>genplt -XMIN 0 -XMAX 360 -YMIN -30 -YMAX 30 -YLEN 2 -XLEN 6 -C cmdfil -Y0 2.0  -TX 'Azimuth' -TY 'Offset (km )'
+</pre>
+<br>
+where the file <i>cmdfil</i> has entries of the form:
+<br>
+<pre>'Z.dist' 2 0.01 'SQ'
+'R.dist' 2 0.01 'CI'
+'T.dist' 1 0.01 'TR'
+'cosoff.dat' 1 0.01 'NO'</pre>
+<br>
+Note that the purpose of the punctuation ' marks for the command
+invocation permits passing of spaces in the title to the program.<br>
+The purpose of the ' marks in the list of plotting commands contained
+in the file <span style="font-style: italic;">cmdfil</span> is to
+delimit strings since <span style="font-weight: bold;">genplt</span>
+is a FORTRAN program that used list directed IO.<br>
+<br>
+The data given in the files <span style="font-style: italic;">Z.dat</span>,
+<span style="font-style: italic;">R.dat</span>, <span
+ style="font-style: italic;">T.dat</span> and <span
+ style="font-style: italic;">cosoff.dat </span>consist of one x-y pair
+per line:<br>
+<br>
+<div style="margin-left: 40px;">
+<pre>264.163 3.25 <br>229.928 -0.5 <br>358.622 6 <br>79.4119 1 <br>262.385 3 <br>243.455 1.5 <br><br></pre>
+</div>
+The plot space limits defined by the <span style="font-style: italic;">-XMIN
+xmin</span> <span style="font-style: italic;">-XMAX xmax</span> <span
+ style="font-style: italic;">-YMIN ymin</span> <span
+ style="font-style: italic;">-YMAX ymax</span> command arguments are
+used to set a clipping region so that no data points are plotted
+outside the plot window,<br>
+<h2>Output</h2>
+The output of the program is a CALPLOT file with the name <span
+ style="font-style: italic;">GENPLT.PLT. </span>&nbsp;The contents of
+this file can be converted to EPS using the command:<br>
+<br>
+<div style="margin-left: 40px;">plotnps -F7 -W10 -EPS -K &lt;
+GENPLT.PLT &gt; genplt.eps<br>
+</div>
+<br>
+A sample image that results appears as follows:<br>
+<br>
+<br>
+<img src="genplt.png" alt="genplt.png">
+<p></p>
+<center><i>Last changed September 19. 2010</i></center>
+</body>
+</html>

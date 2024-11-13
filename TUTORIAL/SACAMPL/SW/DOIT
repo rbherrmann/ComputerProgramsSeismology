@@ -1,0 +1,68 @@
+#!/bin/sh
+
+set -x
+
+cat > soil.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+  0.0100  1.5     0.3     2.0         0.05   0.10   0    0      1       1
+  0.0100  1.5     0.6     2.0         0.03   0.06   0    0      1       1
+  0.0200  1.6     0.8     2.0         0.025  0.05   0    0      1       1
+  0.0200  3.0     1.5     2.2         0.01   0.02   0    0      1       1
+  0.1000  5.0     2.5     2.5         0.005  0.01   0    0      1       1
+  0.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+EOF
+
+cat > rock.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+ 20.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+EOF
+
+#####
+# for each model compute the Rayleigh wave amplitude factors
+#####
+
+for MOD in soil rock
+do
+	case $MOD in
+		soil) MODEL="soil.mod" ; DIR="SOIL" ;;
+		rock) MODEL="rock.mod" ; DIR="ROCK" ;;
+	esac
+if [ ! -d ${DIR} ]
+then
+	mkdir ${DIR}
+fi
+cp $MODEL ${DIR}
+(cd ${DIR}
+sprep96 -M $MODEL -R -NMOD 1 -FMIN 0.1 -FMAX 20
+sdisp96
+sregn96
+sdpegn96 -R -C -ASC
+)
+done
+
+#####
+#   make the plots
+#####
+DOMH

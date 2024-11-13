@@ -1,0 +1,81 @@
+#!/bin/sh
+
+
+#####
+#    plot current RMT in context of previus RMT's
+#####
+
+#####
+#   1. read fmdfit.dat to get mechanism lat lon etc
+#   2. plot events from ../../MECHANISM.FMECH/Mech.list
+#   3. plot current event
+#####
+
+#####
+#    safety
+#####
+if [ ! -f  mechlist.proto ]
+then
+	exit 0
+fi
+
+#####
+#    get the event parameters
+#####
+# 20151111_013904  36.93  -97.81   4.0 3.50 100 65  -55 WEB WUS SLU
+#####
+
+
+ID=`cat mechlist.proto | awk '{print $1}' `
+LAT=`cat mechlist.proto | awk '{print $2}' `
+LON=`cat mechlist.proto | awk '{print $3}' `
+HS=`cat mechlist.proto | awk '{print $4}' `
+MW=`cat mechlist.proto | awk '{print $5}' `
+STK=`cat mechlist.proto | awk '{print $6}' `
+DIP=`cat mechlist.proto | awk '{print $7}' `
+RAKE=`cat mechlist.proto | awk '{print $8}' `
+
+#####
+#    now make the GMT scripts
+#####
+#DLAT=0.5
+#DLON=0.5
+DLAT=`echo $LAT | awk '{ if ( $1 > 55.)  printf "1.0" ; else printf "0.5"}' `
+DLON=`echo $LAT | awk '{ if ( $1 > 55.)  printf "2.0" ; else printf "0.5"}' `
+LATMIN=`echo $LAT $DLAT | awk '{print $1 - $2}' `
+LATMAX=`echo $LAT $DLAT | awk '{print $1 + $2}' `
+LONMIN=`echo $LON $DLON | awk '{print $1 - $2}' `
+LONMAX=`echo $LON $DLON | awk '{print $1 + $2}' `
+
+#We need to convert everything to psmeca format
+
+if [ -f ../../MECHANISM.FMECH/Mech.list ]
+then
+	cat ../../MECHANISM.FMECH/Mech.list | \
+		sed "s/'//g" | \
+		awk '{print $2, $3, $4, $6, $7, $8, $5, 0, 0}' > mech.dat
+	cat ../../MECHANISM.FMECH/Mech.list | \
+		sed 's/N//' | \
+		sed 's/E//' | \
+		sed 's/_/ /' | \
+		sed 's:/::g' | \
+		awk '{print $3, $4, $5, $7, $8, $9, $6, $3, $4, $1 }' \
+		> mechdat
+fi
+
+# get the solution for this event
+cat mechlist.proto | \
+		sed "s/'//g" | \
+		awk '{print $2, $3, $4, $6, $7, $8, $5, 0, 0}' > mechevt.dat
+
+DOMECH $LAT $LON $MW $STK $DIP $RAKE $HS $LATMIN $LATMAX $LONMIN $LONMAX
+
+cat > context.html << EOF
+<h2>Context</H2>
+The next figure presents the focal mechanism for this earthquake (red) in the context of other events (blue) in the SLU Moment Tensor Catalog which are within &plusmn; 0.5 degrees of the new event. This comparison is shown in the left panel of the figure. The right panel shows the inferred direction of maximum compressive stress and the type of faulting (green is strike-slip, red is normal, blue is thrust; oblique is shown by a combination of colors).
+<br>
+<table>
+<tr><td><img src="contextmech.png"></td></tr>
+</table>
+EOF
+

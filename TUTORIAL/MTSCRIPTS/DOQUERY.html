@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <style type="text/css">
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;text-align: left; }
+        </style>
+    <style>
+table, th, td,  tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+</style>
+    <title>Moment Tensor Inversion Scripts - DOSETUP</title>
+  </head>
+  <body link="#0000EE" vlink="#551A8B" text="#000000" bgcolor="#ffffff"
+    alink="#EE0000">
+    <h2>Introduction</h2>
+    <h2>Discussion of script</h2>
+<p>
+The script is given below. It is will commented. The only difference between this version and that for GMT Versions 5 and up is that DOSOLUTION is replaced by DOSOLUTION5.
+</p>
+<p>
+<pre>
+#!/bin/bash
+set -x
+#####
+#	set up directory structure for an event that we get from the IRIS
+#	Changes:
+#	05 JAN 2009 - changed name of pole-zero response file from RESP.. to PZRESP
+#		for clarity. Also made similar change in CWBDOEVT
+#####
+echo ${MYPWD}
+echo ${PROTODIR}
+OFFSET=-60
+
+#####
+#	test usage
+#####
+echo $#
+
+if [ $# -ne 16 ]
+then
+echo DOQUERY YEAR MO DY HR MN SC MSC  LAT    LON    DEP  MAG REG NEIC FELTID STATE MYPWD
+echo DOQUERY 2006 02 05 08 17 04 000 66.25 -143.02 18.60 5.1 CUS iuae Xiuae_06 Alaska /backup/rbh/MOMENT_TENSOR/MECH.NA
+	echo $*
+	exit 0
+fi
+
+
+#####
+#	define internal variables: the quotes are required since some fields can have 
+#       blank spacing within"
+#####
+YEAR="${1}"
+MO="${2}"
+DY="${3}"
+HR="${4}"
+MN="${5}"
+SEC="${6}"
+MSEC="${7}"
+LAT="${8}"
+LON="${9}"
+DEP="${10}"
+MAG="${11}"
+REG="${12}"
+NEIC="${13}"
+FELTID="${14}"
+STATE="${15}"
+MYPWD="${16}"
+
+if [ "${REG}" = "EU" ]
+then
+DEG=20.0
+WINDOW=600
+else
+DEG=6.0
+WINDOW=400
+#DEG=6.0
+#WINDOW=600
+fi
+DEG=4.0
+WINDOW=300
+DELAZC=`echo $DEG $LAT $LON | awk '{printf "%f:%f:%f",$1,$2,$3}' `
+#####
+#    now run three scripts that set up everything
+#    DOQUERY - sets up the directory structure for the Query
+#####
+
+
+XXXDIR="${MYPWD}/0XXXREG"
+
+#####
+#	now define the directory name
+#####
+DIR=${YEAR}${MO}${DY}${HR}${MN}${SEC}
+
+cd ${MYPWD}
+
+PROTODIR="${MYPWD}/PROTO.CWB"
+echo DIR $DIR
+echo PROTODIR $PROTODIR
+echo 0XXXDIR $XXXDIR
+
+#####
+#	Create and populate the directory structure
+#####
+if [ ! -d ${DIR} ]
+then
+mkdir ${DIR}
+fi
+
+if [ ! -d ${DIR}/${DIR} ]
+then
+mkdir ${DIR}/${DIR}
+fi
+
+if [ ! -d ${DIR}/${DIR}/MFT ]
+then
+mkdir ${DIR}/${DIR}/MFT
+fi
+cp ${PROTODIR}/CWBDO* ${DIR}/${DIR}
+cd ${MYPWD}
+
+#####
+#	NOW THIS IS VERY VERY SPECIFIC - MODIFY THE SCRIPTS FOR THIS REGION
+#####
+
+
+#####
+#	go to the Trace directory get the data
+#####
+cd ${MYPWD}/${DIR}/${DIR}
+
+#####
+#	in the Trace directory modify the CWBDOEVT script so that
+#	it now has the correct parameters for the event
+#	This means that the CWBDOEVT copied into here is a prototype
+#
+#####
+cat > evt.proto << EOF
+YEAR="${YEAR}"
+MO="${MO}"
+DY="${DY}"
+HR="${HR}"
+MN="${MN}"
+SEC="${SEC}"
+MSEC="${MSEC}"
+LAT="${LAT}"
+LON="${LON}"
+DEP="${DEP}"
+MAG="${MAG}"
+EOF
+
+ed CWBDOEVT << EOF
+/ADDAFTERHERE/
+.r evt.proto
+.
+w
+q
+EOF
+
+#####
+#    get the correct velocity model into the ROT script
+#####
+if [ -f ${MYPWD}/${DIR}/VMODEL.used ]
+then
+export VMODEL=`cat  ${MYPWD}/${DIR}/VMODEL.used`
+else
+# default
+export VMODEL="tak135sph"
+fi
+ed CWBDOROT << EOF
+/VMODEL/s//${VMODEL}/p
+w
+q
+EOF
+
+
+#####
+#	process
+#####
+if [ ! -d Sac ] 
+then
+mkdir Sac
+fi
+cd Sac
+
+#####
+#       redefine the time window to include an offset from the origin time
+#       This was added 2008/01/02 by R B Herrmann at SLU
+#       This requires the new program redodate.  Also note that the
+#       time variables required to set the scripts are no longer required
+#       and can be overwritten
+#####
+redodate ${YEAR} ${MO} ${DY} ${HR} ${MN} ${SEC} ${MSEC} ${OFFSET} > datetmp
+read YR MO DY HR MN SEC MSEC <  datetmp
+
+
+#####
+#	set up the Query to get the waveforms
+#####
+echo query -nogaps -t sac -o "%N.SAC" -sacpz nm -b '"'${YEAR}/${MO}/${DY}\-${HR}:${MN}:${SEC}'"' -d ${WINDOW} -s .......[BH][HN]... -delazc "${DELAZC}" > doq
+chmod +x doq
+query -nogaps -t sac -o "%N.SAC" -sacpz nm -b '"'${YEAR}/${MO}/${DY}\-${HR}:${MN}:${SEC}'"' -d ${WINDOW} -s .......[BH][HN]... -delazc "${DELAZC}"
+
+
+#####
+#	create the NORESP directory
+#####
+
+if [ ! -d NORESP ] 
+then
+	echo creating NORESP
+	mkdir NORESP
+fi
+#####
+#	get the response data and rename because of underscores
+#####
+for i in *.SAC
+do
+#####
+#	check byte order
+#####
+	saccvt -I < $i > tmp ; mv tmp $i 
+        KSTNM=`saclhdr -KSTNM $i`
+        KCMPNM=`saclhdr -KCMPNM $i`
+        KNETWK=`saclhdr -KNETWK $i`
+        KHOLE=`saclhdr -KHOLE $i`
+        if [ "${KHOLE}" = "-12345" ]
+        then
+                LOC=""
+        else
+                LOC=${KHOLE}
+        fi
+        if [ "${KNETWK}" = "-12345" ]
+        then
+                NET=""
+        else
+                NET=${KNETWK}
+        fi
+#	cp ${NET}*${KSTNM}*${KCMPNM}*${LOC}*.SAC.pz PZRESP.${KNETWK}.${KSTNM}.${LOC}.${KCMPNM}
+done
+
+
+#####
+#       Now start all the processing
+#####
+cd ${MYPWD}/${DIR}/${DIR}
+CWBDOEVT
+#####
+#       form Z R T at the same time ensure that signal amplitudes
+#	are absolutely bounded by 1.0e-10
+#####
+cd ${MYPWD}/${DIR}/${DIR}
+sleep 20
+CWBDOROT
+#####
+#	at this point we must review the traces in the GOOD directory
+#	then from within the GOOD directory you will do a ../CWBDODEC
+#	then cd ../FINAL.DEC and pick the P waves
+#####
+cd ${MYPWD}/${DIR}/${DIR}
+CWBDODEC
+#####
+#      compute ML
+#####
+(cd ../ML.REG;DOML)&
+
+
+#####
+#       for waveforms inversion select the distance range
+#####
+CWBDODIST
+#####
+#	QC for traces for waveform inversion
+#####
+CWBDOQC
+
+
+</pre>
+</p>
+    <p align="center">Last changed May 21, 2022<br>
+    </p>
+  </body>
+</html>

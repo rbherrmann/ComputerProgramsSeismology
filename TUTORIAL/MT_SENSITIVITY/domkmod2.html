@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <title>MT Sensitivity - DOMKMOD2 Computer Programs in Seismology
+      Tutorials</title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <p>
+    </p>
+    <pre>#!/bin/sh
+export PATH=:.:./src:$PATH    <font color="#ff0000">#Change the path to find this script and to find the sacnoise program</font>
+<font color="#ff0000">			# The purpose of the code is to create synthetics for a given station <br>			# distribution for a known source (strike, dip, rkae, Mw and depth)<br>			# The directory structure is set up for the inversion, the inversion is run,<br>			# and the results are prepared for a web page in HTML<br></font>#####
+#   remember this starting directory
+#####
+MYTOP=`pwd`
+
+#####
+#    check for usage
+#####
+echo $*
+echo $#
+if [ $# -ne 7 ]
+then
+	echo 'Usage:  DOMKMOD model stk dip rake depth mw pval'
+	echo '  e.g.  DOMKMOD CUS 45 30 60 11.0 4.0 0.1'
+	exit 0
+fi
+MODEL="$1"	<font color="#ff0000"># these parameters are passed through the command line</font>
+STK="$2"
+DIP="$3"
+RAKE="$4"
+DEPTH="$5"
+MW="$6"
+PVAL="$7"
+ 
+#####			<font color="#ff0000"># Change this to define another event </font>
+# define the event	<font color="#ff0000"># The date time is used to define the directory name</font>
+#####			<font color="#ff0000"># The latitude longitude are required</font>
+YEAR=2013
+MO=05
+DY=22
+HR=17
+MN=19
+SEC=39
+MSEC=000
+LAT=35.299
+LON=-92.715
+
+MAG=${MW}
+
+#####
+#    examine the pval to determine if noise is used and if the pval is
+#    appropriate
+#####
+USENOISE=`echo "$PVAL" | awk '{ if( $1 &lt; 0.0 )print "NO";else if( $1 &gt; 1.0 )print "NO" ; else print "YES" }' `
+if [ "${USENOISE}" = "NO" ]
+then
+	DIRP="___"
+else
+	DIRP="$PVAL"
+fi
+
+#####
+#    get the day of year from the year/month/day
+#####
+# the LINUX date syntax differs significantly from that of MacOS-X
+# so use gsac
+#####
+gsac &lt;&lt; EOF
+fg impulse delta 1 npts 2
+w imp.sac
+r imp.sac
+ch ocal $YEAR $MO $DY $HR $MN $SEC 000
+synchronize o
+w imp.sac
+q
+EOF
+#####
+# LINUX
+#NZJDAY=$(date +"%j" -d "${YEAR}-${MO}-${DY} 00:00:00")
+#####
+NZJDAY=`saclhdr -NZJDAY imp.sac`
+rm imp.sac
+
+<font color="#ff0000"># This is essential. The environment parameter GREENDIR is defined in the<br># .bashrc or .profile or .bash_profile to provide the path to the Green s functions<br># I have Green s functions for the CUS, WUS and nnCIA models in the directories<br># ${GREENDIR}/CUS.REG  ${GREENDIR}/WUS.REG  ${GREENDIR}/nnCIA.REG respectively<br># THE GREEN S FUNCTIONS ARE REQUIRED<br>#<br></font>#####
+#    define the location of the Greens functions for the model
+#####
+GREEN=${GREENDIR}/${MODEL}.REG
+
+#####
+#    create the awk program that finds the depth closest to the desired depth
+#####			<font color="#ff0000"># To use the program, we must convert source depth to a directory name<br>			# This uses the convention that 0010 represents 10.0 km, 9999 represents 999.9 km<br></font>&nbsp;cat &gt; awkprog &lt;&lt; FOE
+BEGIN { MDIF = 10000.0 }
+{DIF = $DEPTH - \$1 ;
+if( DIF &lt; 0 ) DIF = - DIF ;
+if(DIF &lt; MDIF) { MDIF = DIF ; Hfile = \$2  }
+}
+END { print Hfile  }
+FOE
+
+        cat ${GREEN}/D.CTL | \
+                awk -f awkprog &gt; j
+        rm awkprog
+HS=`awk '{print $1}' &lt; j `
+rm -f j
+
+#####
+#     create a unique directory and subdirectories, make synthetics, run inversion
+#####
+
+DIR="$MODEL.$STK.$DIP.$RAKE.$HS.${MW}.${DIRP}"
+mkdir ${DIR}
+cd 0XXXREG
+
+#####
+#     copy the prototype processing files and update <font color="#ff0000"># This sets up the directory structure for the inversion</font>
+#####
+
+tar cf - . | ( cd ../${DIR} ; tar xvf - )
+
+cd ${MYTOP}/${DIR}
+
+#####
+#    modify the processing scripts
+#    using the ed line editor
+#####
+ed HTML.REG/DOHTML &lt;&lt; EOF		<font color="#ff0000"># Define the velocity model in the inversion scripts</font>
+g/VMODEL/s//${MODEL}/p
+/IDHERE/
+a
+REGION="NONE"
+FELTEVID="NONE"
+TITLE=""
+EVID="NONE"
+DATE="${YEAR}/${MO}/${DY}"
+TIME="${HR}:${MN}:${SEC}"
+LAT="${LAT}"
+LON="${LON}"
+DEPTH="${DEPTH}"
+MAG="$MAG"
+FELT="n"
+DIR="${YEAR}${MO}${DY}${HR}${MN}${SEC}"
+STATE=" "
+YEAR="${YEAR}"
+MO="$MO"
+DY="$DY"
+HR="$HR"
+MN="$MN"
+SEC="$SEC"
+MSEC="$MSEC"
+.
+w
+q
+EOF
+
+ed GRD.REG/DOSTA &lt;&lt; EOF
+g/GMODEL/s//${MODEL}.REG/p
+w
+q
+EOF
+
+#####
+#    create the synthetic data sets
+#####
+cd ${MYTOP}/${DIR}/DAT.REG
+
+<font color="#ff0000"># This does not use actual station coordinates, although this is possible. I only want to create a realistic<br># distribution of stations.  So, given the source coordinates, define above, and the azimuth and distance<br># to each station, use the simple script DOLL to estimate a usable latitude and<br># longitude for each station.<br>#<br># If trying to emulate a real data set, I did the following to save a lot of typing as a shell script<br>#<br>#     for i in *[ZRT]   # waveforms<br>#     do<br>#     KSTNM=`saclhdr -KSTNM $i`<br>#     AZ=`saclhdr -AZ $i`<br>#     DIST=`saclhdr -DIST $i`<br>#     echo $KSTNM $AZ $DIST | awk '{printf "\t%s) AZ=%f ; R=%f ;;\n",$1,$2,$3}'<br>#     done<br>#<br># This will produce line in the form<br>#     MGMO) AZ=10.899800 ; R=209.710000 ;;<br>#</font><br>for STA in CCM MGMO TUL1 U40A UALR W39A W41B X40A FCAR  
+do
+case ${STA} in
+	CCM) AZ=22.816100 ; R=332.941000 ;;
+	MGMO) AZ=10.899800 ; R=209.710000 ;;
+	TUL1) AZ=284.564000 ; R=286.923000 ;;
+	U40A) AZ=353.951000 ; R=117.979000 ;;
+	UALR) AZ=149.602000 ; R=67.312100 ;;
+	W39A) AZ=263.608000 ; R=97.960600 ;;
+	W41B) AZ=107.985000 ; R=44.735600 ;;
+	X40A) AZ=186.933000 ; R=90.705500 ;;
+	FCAR) AZ=39.070400 ; R=84.664600 ;;
+esac
+KSTNM=${STA}
+		<font color="#ff0000"># Here determine the station latitude longitude</font>
+cd ${MYTOP}
+DOLL $KSTNM $R $AZ $LAT $LON | \
+	`awk '{print $2,$3,$4,$5,$6,$7}'&gt;j `
+
+R=`awk '{print $1}' &lt; j `
+AZ=`awk '{print $2}' &lt; j `
+EVLA=`awk '{print $5}' &lt; j `
+EVLO=`awk '{print $6}' &lt; j `
+
+#########
+#	define STLA and STLO##############################################
+#########
+STLA=`awk '{print $3}' &lt; j `
+STLO=`awk '{print $4}' &lt; j `
+rm -f j
+############################################################################
+#####
+#    create the awk program that finds the Green function at the distance
+#    closest to the requested distance
+#####
+cd ${MYTOP}/${DIR}/DAT.REG
+cat &gt; awkprog &lt;&lt; FOE
+# This works under gawk - on Solaris try nawk
+BEGIN { MDIF = 10000.0 }
+{DIF = $R - \$1 ;
+if( DIF &lt; 0 ) DIF = - DIF ;
+if(DIF &lt; MDIF) { MDIF = DIF ; Dfile = \$7 ; Rate = \$2 ; Dist = \$1 }
+}
+END { print Dfile , Rate, Dist }
+FOE
+
+        cat ${GREEN}/${HS}/W.CTL | \
+                awk -f awkprog &gt; j
+        rm awkprog
+
+	DFILE=`awk '{print $1}' &lt; j `
+        rm j
+	<font color="#ff0000"># Use gsac to create the synthetic for the station. The result will be ground velocity<br>	# in units of M/S<br></font>gsac &lt;&lt; EOF
+mt to zrt mw $MW AZ $AZ STK $STK DIP $DIP RAKE $RAKE FILE ${GREENDIR}/${MODEL}.REG/${HS}/${DFILE}
+ch KSTNM $KSTNM EVLA $EVLA EVLO $EVLO STLA $STLA STLO $STLO
+ch NZYEAR $YEAR NZJDAY $NZJDAY NZHOUR $HR NZMIN $MN NZSEC $SEC NZMSEC $MSEC
+w
+mv T.Z ${KSTNM}Z
+mv T.R ${KSTNM}R
+mv T.T ${KSTNM}T
+#####
+#   to do the overlay next	<font color="#ff0000"># Add zeros at the beginning and the end of the synthetic</font>
+#   add zeros for 60 seconds before the P arrival
+#####
+cuterr fillz
+cut a -60 a 250
+r ${KSTNM}Z ${KSTNM}R ${KSTNM}T
+#####
+#    ensure that origin time is the reference time
+#####
+synchronize o
+w
+q
+EOF
+#####
+#     if USENOISE = YES		<font color="#ff0000"># if required generate noise and add to the trace. To use the gsac ADDF</font>
+#     add noise to the trace    <font color="#ff0000"># the noise must have the same absolute time as the synthetic trace</font>
+#####
+if [ "${USENOISE}" = "YES" ]
+then
+	cp ${KSTNM}Z ${KSTNM}Z.save
+	cp ${KSTNM}T ${KSTNM}T.save
+	cp ${KSTNM}R ${KSTNM}R.save
+	NPTS=`saclhdr -NPTS ${KSTNM}Z`
+	A=`saclhdr -A ${KSTNM}Z`
+	O=`saclhdr -O ${KSTNM}Z`
+	DELTA=`saclhdr -DELTA ${KSTNM}Z`
+	B=`saclhdr -B ${KSTNM}Z`
+	E=`saclhdr -E ${KSTNM}Z`
+	NZYEAR=`saclhdr -NZYEAR ${KSTNM}Z`
+	NZMON=`saclhdr -NZMON ${KSTNM}Z`
+	NZDAY=`saclhdr -NZDAY ${KSTNM}Z`
+	NZHOUR=`saclhdr -NZHOUR ${KSTNM}Z`
+	NZMIN=`saclhdr -NZMIN ${KSTNM}Z`
+	NZSEC=`saclhdr -NZSEC ${KSTNM}Z`
+	NZMSEC=`saclhdr -NZMSEC ${KSTNM}Z`
+	RVAL=${RANDOM}
+	sacnoise -dt ${DELTA} -seed ${RVAL} -pval ${PVAL} -npts 100000
+	#####
+	#  To get noise before the synthetic
+	#    for the synthetic  
+	#    set the O<br>	#    define the absolute time<br>	#    shift the trace to have 120 seconds of noise before the origin time<br>	#    then set the time stamp
+	#    then synchronize O
+	#    then set the A time for the P first arrival
+	#####
+gsac &lt;&lt; EOF
+	r O.sac
+#####
+#     set first sample 120 sec before origin time
+#####
+	ch o 0
+	ch NZYEAR $YEAR NZJDAY $NZJDAY NZHOUR $HR NZMIN $MN NZSEC $SEC NZMSEC $MSEC
+	shift fixed -120
+	synchronize o
+	ch a $A 
+	ch KSTNM N
+	ch KCMPNM C
+	ch EVLA $EVLA EVLO $EVLO STLA $STLA STLO $STLO
+	transfer from none to none freqlimits 0.005 0.01 10 20
+	#convert to velocity			<font color="#ff0000"># sacnoise gives acceleration in M/S**2. We need velocity M/S</font>
+	int					<font color="#ff0000"># The zero phase band pass filter is used before integration</font>
+	w noise					<font color="#ff0000"># Otherwise there will be a large amplitude very long period signal</font>
+	w ${KSTNM}.noise
+	cut O -120  a 280
+	r ${KSTNM}Z noise
+	addf master 1
+	w ${KSTNM}Z none
+	r ${KSTNM}T noise
+	addf master 1
+	w ${KSTNM}T none
+	r ${KSTNM}R noise
+	addf master 1
+	w ${KSTNM}R none
+	q
+EOF
+fi
+done
+
+	<font color="#ff0000"># now everything is set up, perform the inversion</font>
+
+ cd ${MYTOP}/${DIR}/GRD.REG ; DOGRD; DODELAY;DOPLTSAC;DOCLEANUP;cd ../HTML.REG;DOHTML
+</pre>
+  </body>
+</html>

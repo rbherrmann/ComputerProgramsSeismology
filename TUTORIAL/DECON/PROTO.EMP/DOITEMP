@@ -1,0 +1,189 @@
+#!/bin/sh
+
+#####
+#	define the location of  the deconvolved, QCd waveforms
+#	of both the large event, DIRBIG and the smaller event used
+#	for the empirical Green function, e.g.,
+#DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL
+#DIRSMALL=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL
+#####
+DIRBIG=path_to_big_event_waveform_directory
+DIRSMALL=path_to_small_event_waveform_directory
+
+#####
+#	ONLY CHANGE BELOW HERE TO FINE TUNE
+#####
+
+#####
+#	define the CUT window with respect to P
+#####
+CUTL=-40
+CUTH=200
+#####
+#	define the frequency band for the pre-filter
+#####
+FL=0.01
+FH=0.20
+#####
+#	define the DELTA for the traces used in the decon
+#####
+INTDELTA=0.25
+
+#####
+#	modified 10 AUG 2009 from the script used for Wells and L'Aquila
+#	Previously:
+#             ls $DIRBIG $DIRSMALL | sort | uniq > uniq.list
+#       this will not work since early IRIS data did not use location codes
+#       So
+#       1. Assume thaat only one location code is used
+#`	2. build up a list of unique STATION COMPONENT codes
+#####
+
+#####
+#	initialize by cleaning up
+#####
+rm -f stacmp
+rm -f *.decon
+
+if [ -d DECONDIR ]
+then
+	rm -fr DECONDIR
+fi
+mkdir DECONDIR
+
+for i in ${DIRBIG}/*[ZRT] ${DIRSMALL}/*[ZRT]
+do
+	saclhdr -KSTNM -KCMPNM -NL $i >> stacmp
+done
+cat stacmp | sort | uniq > uniqstacmp
+
+#####
+#	do the deconvolution
+#####
+
+#####
+#	select the ALPHA parameter
+#	The approximate relation between the ALPHA and Gaussian pulse duration is
+#	ALP	Duration	Corner Frequency
+#	0.5	  8 s	         ~ 0.2 Hz
+#	1.0	  4 s            ~ 0.4 Hz
+#	2.5	1.6s	         ~ 1 Hz
+#
+#	The ALP parameter will affect the resolution of the final fit
+#	A value of 2.5 may be too extreme for real data
+#
+#	The choice of the ALPHA parameter affects the resolution of the
+#	resulting empirical source time function
+#
+#	The interative decon program computes a measure of fit, we use the
+#	LEVEL parameters to guide the acceptance of the results
+#####
+for ALP in 0.5 1.0
+do
+	case ${ALP} in
+	0.5) LEVEL=70. ;;
+	1.0) LEVEL=60. ;;
+	2.5) LEVEL=50. ;;
+	esac
+#####
+#	select the component
+#	later use a case statement to set the cut, e.g., a vs t1
+#####
+	for COMP in HZ 
+	do
+		grep ${COMP} uniqstacmp  > unuq.list
+		rm -fr BIG.DIR SML.DIR
+		mkdir BIG.DIR
+		mkdir SML.DIR
+
+		while read KSTNM KCMPNM
+		do
+			if [ -f ${DIRBIG}/${KSTNM}*${KCMPNM} ]
+			then
+				if [ -f ${DIRSMALL}/${KSTNM}*${KCMPNM} ]
+				then
+
+					cp ${DIRBIG}/${KSTNM}*${KCMPNM} BIG.DIR/${KSTNM}${KCMPNM}
+					cp ${DIRSMALL}/${KSTNM}*${KCMPNM} SML.DIR/${KSTNM}${KCMPNM}
+
+				gsac << EOF
+					cuterr fillz
+					cut a ${CUTL} a ${CUTH}
+					r BIG.DIR/${KSTNM}${KCMPNM} SML.DIR/${KSTNM}${KCMPNM}
+					hp c ${FL} n 3
+					lp c ${FH} n 3
+					interpolate delta ${INTDELTA}
+					w N D
+					q
+EOF
+					saciterd -FN N -FD D -2 -ALP ${ALP} -POS -D 20 -N 100
+					USER5=`saclhdr -USER5 decon.out`
+#####
+#	only use decon that filt 80%
+#####
+cat > awkprog << EOF
+{
+        ANS="YES"; if(\$1 < ${LEVEL}) ANS="NO" ; print ANS
+}
+EOF
+					ANS=`echo $USER5 | awk -f awkprog`
+					if [ ${ANS} = "YES" ]
+					then
+						mv decon.out ${KSTNM}${KCMPNM}.${ALP}.decon
+					fi
+
+
+
+				fi
+				fi
+done < unuq.list
+
+
+#####
+#	make the map
+#####
+gsac << EOF
+rh BIG.DIR/* SML.DIR/*
+map kstnm on r on
+quit
+EOF
+sh map.sh
+gm convert -trim map.eps ${COMP}.${ALP}.map.png
+
+
+
+done
+
+
+for i in Z 
+do
+case $i in
+	Z) KOLOR=2 ;;
+	T) KOLOR=4 ;;
+esac
+gsac << EOF
+bg plt
+r *${i}.${ALP}.decon
+prs shd  pos color ${KOLOR} tl -20 200 amp 0.3 vl 0 360 az sa 0 ann sta
+q
+EOF
+if [ -f PRS001.PLT ]
+then
+	plotgif -C16 -F7 -W10 -K < PRS001.PLT > ${i}decon.gif
+fi
+
+done
+mv Zdecon.gif Zdecon.${ALP}.gif
+#mv Tdecon.gif Tdecon.${ALP}.gif
+mv *.decon DECONDIR
+
+done
+
+#####
+#	cleanup
+#####
+rm -fr BIG.DIR
+rm -fr SML.DIR
+rm -fr N D numerator denominator observed predicted stacmp PRS001.??? awkprog
+rm -fr  uniqstacmp unuq.list
+rm -fr decon.out

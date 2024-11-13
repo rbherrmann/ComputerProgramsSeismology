@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+	<TITLE>Diff CPS/evalresp.3.2.38 vs IRIS_DISTRIBUTION/evalresp.3.2.38</TITLE>
+</HEAD>
+<BODY>
+<H2>evalresp</H2>
+<P>This detailes the differences between the IRIS distribution of <B>evalresp</B> and the changes made for inclusion in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+The resaon for the change is for compatibility of the code under MacOS-X. The configure identifies the existence of the malloc.h include, except that it is actually in /usr/include/malloc/malloc.h instead of the expected /usr/include/malloc.h.  Note that the malloc.h is being deprecated and its definition is in /usr/include/stdlib.h.
+The CPS distribution ensures that the #include <stdlib.h> is in the routines where ther is an #include <malloc.h>
+<P>
+<PRE>
+evalresp-3.2.38/alloc_fctns.c
+7,11c7,9
+< /* REMOVED R B Herrmann November 17, 2007
+<       #ifdef HAVE_MALLOC_H
+<       #include <malloc.h>
+<       #endif
+< */
+---
+> #ifdef HAVE_MALLOC_H
+> #include <malloc.h>
+> #endif
+
+evalresp-3.2.38/parse_fctns.c
+14,19c14,16
+< /* REMOVED R B Herrmann November 17, 2007
+<         #ifdef HAVE_MALLOC_H
+<         #include <malloc.h>
+<         #endif
+< */
+<
+---
+> #ifdef HAVE_MALLOC_H
+> #include <malloc.h>
+> #endif
+
+evalresp-3.2.38/regexp.c
+35,40c35,37
+< /* REMOVED R B Herrmann November 17, 2007
+<         #ifdef HAVE_MALLOC_H
+<         #include <malloc.h>
+<         #endif
+< */
+< #include <stdlib.h>
+---
+> #ifdef HAVE_MALLOC_H
+> #include <malloc.h>          /* added 8/28/2001 -- [ET] */
+> #endif
+
+evalresp-3.2.38/string_fctns.c
+29,34c29,31
+< /* REMOVED R B Herrmann November 17, 2007
+<         #ifdef HAVE_MALLOC_H
+<         #include <malloc.h>
+<         #endif
+< */
+<
+---
+> #ifdef HAVE_MALLOC_H
+> #include <malloc.h>
+> #endif
+
+</PRE>
+<CENTER>Last changed November 17, 2007</CENTER>
+</BODY>
+</HTML>
+

@@ -1,0 +1,63 @@
+#!/bin/sh
+set -x
+
+#####
+#	script for processing IRIS Digital Data
+#####
+
+######
+#	shell script to make entries for the various command files
+######
+YEAR=2006
+MO=05
+DY=10
+HR=02
+MN=42
+SEC=56
+MSEC=300
+LAT=52.71
+LON=-169.24
+DEP=56.0
+MAG=6.3
+
+#####
+#	No changes below here
+#####
+
+if [ -d ../GOOD ]
+then
+	echo GOOD exists
+else
+	mkdir ../GOOD
+fi
+
+
+for i in *.SAC
+do
+NET=`saclhdr -KNETWK $i`
+KSTNM=`saclhdr -KSTNM $i`
+KCMPNM=`saclhdr -KCMPNM $i`
+LOC=`saclhdr -KHOLE $i`
+DOY=`saclhdr -NZJDAY $i`
+DELTA=`saclhdr -DELTA $i`
+FHH=`echo $DELTA | awk '{print 0.45/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+cp RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp
+evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} 0.001 ${FHH} 2049 -u 'vel' -f resp
+gsac << EOF
+r $i
+ch EVLA $LAT EVLO $LON EVDP $DEP
+ch O CAL $YEAR $MO $DY $HR $MN $SEC $MSEC
+ch lovrok true
+ch lcalda true
+wh
+rtr
+w ../GOOD/${KSTNM}${KCMPNM}.S
+transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE FREQLIMITS 0.005 0.01 ${FHL} ${FHH} 
+w ../GOOD/${KSTNM}${KCMPNM}.sac
+quit
+EOF
+
+done
+
+#SCRIPT FOR IRIS DATA

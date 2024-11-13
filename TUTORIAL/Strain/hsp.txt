@@ -1,0 +1,22 @@
+ USAGE: hspec96 [-H] [-A arg] [-K] [-N][-SU] [-SD] [-SPUP] [-SSUP] [-SPDN] [-SSDN] [-RU] [-RD] [-RPUP] [-RSUP] [-RPDN] [-RSDN] [-?] [-h]
+ -H (default false)   Use Hankel function not Bessel
+ -A arg (default arg=3.0) value of kr where Hn(kr) replaces
+             Jn(kr) in integration - only used when -H is used
+ -K      (default Futterman) use Kjartansson Causal Q
+ -N      (default causal) use non-causal Q
+ The following govern wavefield at source. The default is the entire wavefield
+ -SU      (default whole wavefield) Compute only upgoing                wavefield from the source
+ -SD      (default whole wavefield) Compute only downgoing                wavefield from the source
+  -SPUP  Include upward P at source
+  -SSUP  Include upward S at source
+  -SPDN  Include downward P at source
+  -SSDN  Include downward S at source
+ The following govern wavefield at receiver. The default is the entire wavefield
+  -RD    Only downgoing waves at receiver
+  -RU    Only upgoing waves at receiver
+  -RPUP  Include upward P at receiver
+  -RSUP  Include upward S at receiver
+  -RPDN  Include downward P at receiver
+  -RSDN  Include downward S at receiver
+ -?                   Display this usage message
+ -h                   Display this usage message

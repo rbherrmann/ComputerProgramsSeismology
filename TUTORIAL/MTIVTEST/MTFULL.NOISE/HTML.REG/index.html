@@ -1,0 +1,1377 @@
+<HTML>
+<TITLE> </TITLE>
+<HEAD>
+<style>
+th, td {
+  padding: 10px;
+}
+hr {
+width: 70%;
+height: 4px;
+background-color: #0F0F0F;
+border: 0  none;
+margin-left: 0;
+margin-right: auto;
+text-align:left
+}
+</style>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<H2>Location</H2>
+<h3>Location ANSS</h3>
+2021/08/13 11:57:35 35.877    -84.898 1.0  3.5 Tennessee
+<P>
+<H2>Focal Mechanism</H2>
+<P>
+<TABLE>
+        <TR><TD><PRE>
+ USGS/SLU Moment Tensor Solution
+ ENS  2021/08/13 11:57:35:0  35.88  -84.90   1.0 3.5 Tennessee
+ 
+ Stations used:
+   CO.CASEE CO.HODGE CO.PAULI ET.CPCT IM.TKL IU.WCI IU.WVT 
+   N4.R49A N4.R50A N4.S51A N4.T47A N4.T50A N4.U49A N4.V48A 
+   N4.V53A N4.V55A N4.W50A N4.W52A N4.X48A N4.X51A N4.Y52A 
+   NM.BLO NM.USIN US.GOGA US.LRAL US.TZTN 
+ 
+ Filtering commands used:
+   cut o DIST/3.3 -40 o DIST/3.3 +50
+   rtr
+   taper w 0.1
+   hp c 0.03 n 3 
+   lp c 0.10 n 3 
+ 
+ Best Fitting Double Couple
+  Mo = 1.26e+22 dyne-cm
+  Mw = 4.00 
+  Z  = 1 km
+  Plane   Strike  Dip  Rake
+   NP1       65    80    93
+   NP2      230    10    75
+  Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T   1.26e+22     55     338
+    N   0.00e+00      3     245
+    P  -1.26e+22     35     153
+
+ Moment Tensor: (dyne-cm)
+    Component   Value
+       Mxx    -3.00e+21
+       Mxy     1.95e+21
+       Mxz     1.08e+22
+       Myy    -1.16e+21
+       Myz    -4.89e+21
+       Mzz     4.16e+21
+                                                     
+                                                     
+                                                     
+                                                     
+                     --------------                  
+                 ----#################-              
+              ----#######################-           
+             --############################          
+           --################################        
+          --###########   ####################       
+         --############ T ####################-      
+        --#############   ##################----     
+        -#################################------     
+       --##############################----------    
+       --##########################--------------    
+       -########################-----------------    
+       -####################---------------------    
+        -###############------------------------     
+        -#########------------------------------     
+         -##-----------------------------------      
+          -----------------------   ----------       
+           ---------------------- P ---------        
+             --------------------   -------          
+              ----------------------------           
+                 ----------------------              
+                     --------------                  
+                                                     
+                                                     
+                                                     
+ Global CMT Convention Moment Tensor:
+      R          T          P
+  4.16e+21   1.08e+22   4.89e+21 
+  1.08e+22  -3.00e+21  -1.95e+21 
+  4.89e+21  -1.95e+21  -1.16e+21 
+
+
+Details of the solution is found at
+
+http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20210813115735/index.html
+        </PRE></TD></TR>
+</TABLE>
+<P>
+<H3>Preferred Solution</H3>
+The preferred solution from an analysis of the surface-wave spectral amplitude radiation pattern, waveform inversion and first motion observations is
+<P>
+<PRE>
+      STK = 230
+      DIP = 10
+     RAKE = 75
+       MW = 4.00
+       HS = 1.0
+</PRE>
+<P>
+The NDK file is <a href="20210813115735.ndk"> 20210813115735.ndk</a>
+The waveform inversion is preferred.
+<P>
+<hr>
+<a name="TOP"></a>
+<h2>Sections</h2>
+<a href="#MTCOMPARISON">Moment tensor comparison</a><br>
+<a href="#MAGNITUDES">Local magnitudes</a><br>
+<a href="#CONTEXT">Spatial context</a><br>
+<a href="#GRD.REG">Double couple grid search (wvfgrd96)</a><br>
+<a href="#MTD.REG">Deviatoric moment tensor linear inversion  (wvfmtd96)</a><br>
+<a href="#MT.REG">Full moment tensor linear inversion  (wvfmt96)</a><br>
+<a href="#MTGRD.REG">Grid search for full moment tensor (wvfmtgrd96)</a><br>
+<a href="#MTGRD.REG.DC">Grid search for double couple (wvfmtgrd96 -DC)</a><br>
+<a href="#MTGRD.REG.DEV">Grid search for deviatoric  moment tensor (wvfmtgrd96 -DEV)</a><br>
+<a href="#VELOCITY">Velocity Model</a><br>
+<a href="#DISCUSSION">Discussion</a><br>
+<a href="#ACKNOWLEDGMENTS">Acknowledgements</a><br>
+<a name="MTCOMPARISON"></a>
+<hr>
+<H2>Moment Tensor Comparison </H2>
+<P>
+The following compares this source inversion to others
+<TABLE BORDER="1">
+<TR>
+<TD><CENTER><B>WVFGRD</B></CENTER></TD>
+<TD><CENTER><B>TRUE</B></CENTER></TD>
+<TD><CENTER><B>MTGRDDC</B></CENTER></TD>
+<TD><CENTER><B>MTGRDDEV</B></CENTER></TD>
+<TD><CENTER><B>MTGRD</B></CENTER></TD>
+<TD><CENTER><B>WVFMT</B></CENTER></TD>
+<TD><CENTER><B>WVFMTD</B></CENTER></TD>
+</TR>
+<TR>
+	<TD VALIGN=top ><PRE>
+ USGS/SLU Moment Tensor Solution
+ ENS  2021/08/13 11:57:35:0  35.88  -84.90   1.0 3.5 Tennessee
+ 
+ Stations used:
+   CO.CASEE CO.HODGE CO.PAULI ET.CPCT IM.TKL IU.WCI IU.WVT 
+   N4.R49A N4.R50A N4.S51A N4.T47A N4.T50A N4.U49A N4.V48A 
+   N4.V53A N4.V55A N4.W50A N4.W52A N4.X48A N4.X51A N4.Y52A 
+   NM.BLO NM.USIN US.GOGA US.LRAL US.TZTN 
+ 
+ Filtering commands used:
+   cut o DIST/3.3 -40 o DIST/3.3 +50
+   rtr
+   taper w 0.1
+   hp c 0.03 n 3 
+   lp c 0.10 n 3 
+ 
+ Best Fitting Double Couple
+  Mo = 1.26e+22 dyne-cm
+  Mw = 4.00 
+  Z  = 1 km
+  Plane   Strike  Dip  Rake
+   NP1       65    80    93
+   NP2      230    10    75
+  Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T   1.26e+22     55     338
+    N   0.00e+00      3     245
+    P  -1.26e+22     35     153
+
+ Moment Tensor: (dyne-cm)
+    Component   Value
+       Mxx    -3.00e+21
+       Mxy     1.95e+21
+       Mxz     1.08e+22
+       Myy    -1.16e+21
+       Myz    -4.89e+21
+       Mzz     4.16e+21
+                                                     
+                                                     
+                                                     
+                                                     
+                     --------------                  
+                 ----#################-              
+              ----#######################-           
+             --############################          
+           --################################        
+          --###########   ####################       
+         --############ T ####################-      
+        --#############   ##################----     
+        -#################################------     
+       --##############################----------    
+       --##########################--------------    
+       -########################-----------------    
+       -####################---------------------    
+        -###############------------------------     
+        -#########------------------------------     
+         -##-----------------------------------      
+          -----------------------   ----------       
+           ---------------------- P ---------        
+             --------------------   -------          
+              ----------------------------           
+                 ----------------------              
+                     --------------                  
+                                                     
+                                                     
+                                                     
+ Global CMT Convention Moment Tensor:
+      R          T          P
+  4.16e+21   1.08e+22   4.89e+21 
+  1.08e+22  -3.00e+21  -1.95e+21 
+  4.89e+21  -1.95e+21  -1.16e+21 
+
+
+Details of the solution is found at
+
+http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20210813115735/index.html
+	</PRE></TD>
+	<TD VALIGN=top ><PRE>
+ Moment (dyne-cm)   2.08E+22   dyne-cm
+ Magnitude (Mw)    4.15
+ Depth   1 km 
+  
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T  -4.94E+21     29.     19.
+    N  -1.07E+22      1.    288.
+    P  -2.69E+22     61.    197.
+ Moment Tensor: (dyne-cm) Aki-Richards               Lune parameters
+    Component   Value
+       Mxx   -1.01E+22                                beta:  146.76
+       Mxy    3.00E+20                                gamma:  15.29
+       Mxz    8.80E+21
+       Myy   -1.06E+22
+       Myz    2.80E+21
+       Mzz   -2.19E+22
+ Global CMT Convention Moment Tensor: (dyne-cm)
+         R         T         F
+  R -2.19E+22  8.80E+21 -2.80E+21
+  T  8.80E+21 -1.01E+22 -3.00E+20
+  F -2.80E+21 -3.00E+20 -1.06E+22
+ 
+ 
+ 
+                    --------------                         :
+                ----------------------                   :---:
+             -----------------   --------              ::. ..::
+            ------------------ T ---------            :--------:
+          --------------------   -----------         :: .  . .  :
+         ------------------------------------        :  .  .  .  :
+        --------------------------------------      :------------::
+       ----------------------------------------    ::  .   .  .   :
+       ----------------------------------------    :   .   .   .  :
+      ------------------------------------------   :---------------:
+      ------------------------------------------   :   .   .   .   :
+      ------------------------------------------   :===============:
+      ------------------------------------------   :   .   .   .   :
+       ----------------   ---------------------    :   .   .   .   :
+       ---------------- P ---------------------    :---------------:
+        ---------------   --------------------     :   .   .   .  :
+         ------------------------------------      ::  .   .  .   :
+          ----------------------------------        :------------::
+            ------------------------------           :  .  .  .  :
+             ----------------------------            :: .  . #  :
+                ----------------------                :--------:
+                    --------------                     ::. ..::
+                                                         :---:
+                                                           :
+ 
+ 
+        </PRE></TD>
+	<TD VALIGN=top ><PRE>
+ Moment (dyne-cm)   1.26E+22   dyne-cm
+ Magnitude (Mw)    4.00
+ Depth   1.0 km
+  
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T   1.26E+22     55.    338.
+    N  -5.82E+18      3.    245.
+    P  -1.26E+22     35.    153.
+ Moment Tensor: (dyne-cm) Aki-Richards               Lune parameters
+    Component   Value
+       Mxx   -2.99E+21                                beta:   90.00
+       Mxy    1.94E+21                                gamma:  -0.02
+       Mxz    1.08E+22
+       Myy   -1.16E+21
+       Myz   -4.87E+21
+       Mzz    4.15E+21
+ Global CMT Convention Moment Tensor: (dyne-cm)
+         R         T         F
+  R  4.15E+21  1.08E+22  4.87E+21
+  T  1.08E+22 -2.99E+21 -1.94E+21
+  F  4.87E+21 -1.94E+21 -1.16E+21
+ 
+ 
+ 
+                    --------------                         :
+                ----#################-                   :---:
+             ----#######################-              ::. ..::
+            --############################            :--------:
+          --################################         :: .  . .  :
+         --###########   ####################        :  .  .  .  :
+        --############ T ####################-      :------------::
+       --#############   ##################----    ::  .   .  .   :
+       -#################################------    :   .   .   .  :
+      --##############################----------   :---------------:
+      --##########################--------------   :   .   .   .   :
+      -########################-----------------   :=======#=======:
+      -####################---------------------   :   .   .   .   :
+       -##############-------------------------    :   .   .   .   :
+       -#########------------------------------    :---------------:
+        -#------------------------------------     :   .   .   .  :
+         -----------------------   ----------      ::  .   .  .   :
+          ---------------------- P ---------        :------------::
+            --------------------   -------           :  .  .  .  :
+             ----------------------------            :: .  . .  :
+                ----------------------                :--------:
+                    --------------                     ::. ..::
+                                                         :---:
+                                                           :
+ 
+ 
+        </PRE></TD>
+	<TD VALIGN=top ><PRE>
+ Moment (dyne-cm)   1.39E+22   dyne-cm
+ Magnitude (Mw)    4.03
+ Depth   1.0 km
+  
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T   1.54E+22     55.      7.
+    N  -3.84E+21      2.    275.
+    P  -1.15E+22     35.    184.
+ Moment Tensor: (dyne-cm) Aki-Richards               Lune parameters
+    Component   Value
+       Mxx   -2.69E+21                                beta:   90.00
+       Mxy    4.79E+20                                gamma: -13.88
+       Mxz    1.26E+22
+       Myy   -3.76E+21
+       Myz    1.38E+21
+       Mzz    6.45E+21
+ Global CMT Convention Moment Tensor: (dyne-cm)
+         R         T         F
+  R  6.45E+21  1.26E+22 -1.38E+21
+  T  1.26E+22 -2.69E+21 -4.79E+20
+  F -1.38E+21 -4.79E+20 -3.76E+21
+ 
+ 
+ 
+                    -----#####----                         :
+                ---#################--                   :---:
+             ---#######################--              ::. ..::
+            ---##########################-            :--------:
+          ---#############################--         :: .  . .  :
+         ---###############   #############--        :  .  .  .  :
+        ----############### T ##############--      :------------::
+       -----###############   ##############---    ::  .   .  .   :
+       -----################################---    :   .   .   .  :
+      -------##############################-----   :---------------:
+      ---------###########################------   :   .   .   .   :
+      -----------########################-------   :===#===========:
+      ----------------###############-----------   :   .   .   .   :
+       ----------------------------------------    :   .   .   .   :
+       ----------------------------------------    :---------------:
+        --------------------------------------     :   .   .   .  :
+         ------------------------------------      ::  .   .  .   :
+          ---------------   ----------------        :------------::
+            ------------- P --------------           :  .  .  .  :
+             ------------   -------------            :: .  . .  :
+                ----------------------                :--------:
+                    --------------                     ::. ..::
+                                                         :---:
+                                                           :
+ 
+ 
+        </PRE></TD>
+	<TD VALIGN=top ><PRE>
+ Moment (dyne-cm)   1.66E+22   dyne-cm
+ Magnitude (Mw)    4.08
+ Depth   1.0 km
+  
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T  -1.78E+21     35.     16.
+    N  -9.25E+21      1.    285.
+    P  -2.15E+22     55.    194.
+ Moment Tensor: (dyne-cm) Aki-Richards               Lune parameters
+    Component   Value
+       Mxx   -8.44E+21                                beta:  143.13
+       Mxy    3.60E+20                                gamma:   7.99
+       Mxz    8.99E+21
+       Myy   -9.12E+21
+       Myz    2.33E+21
+       Mzz   -1.50E+22
+ Global CMT Convention Moment Tensor: (dyne-cm)
+         R         T         F
+  R -1.50E+22  8.99E+21 -2.33E+21
+  T  8.99E+21 -8.44E+21 -3.60E+20
+  F -2.33E+21 -3.60E+20 -9.12E+21
+ 
+ 
+ 
+                    --------------                         :
+                ----------------------                   :---:
+             ----------------   ---------              ::. ..::
+            ----------------- T ----------            :--------:
+          -------------------   ------------         :: .  . .  :
+         ------------------------------------        :  .  .  .  :
+        --------------------------------------      :------------::
+       ----------------------------------------    ::  .   .  .   :
+       ----------------------------------------    :   .   .   .  :
+      ------------------------------------------   :---------------:
+      ------------------------------------------   :   .   .   .   :
+      ------------------------------------------   :===============:
+      ------------------------------------------   :   .   .   .   :
+       ----------------------------------------    :   .   .   .   :
+       ----------------   ---------------------    :---------------:
+        --------------- P --------------------     :   .   .   .  :
+         --------------   -------------------      ::  .   .  .   :
+          ----------------------------------        :------------::
+            ------------------------------           :  .  .  .  :
+             ----------------------------            :: .  .#.  :
+                ----------------------                :--------:
+                    --------------                     ::. ..::
+                                                         :---:
+                                                           :
+ 
+ 
+        </PRE></TD>
+	<TD VALIGN=top ><PRE>
+ Moment (dyne-cm)   2.00E+22   dyne-cm
+ Magnitude (Mw)    4.13
+ Depth   1.0 km 
+  
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T  -4.42E+21     29.     18.
+    N  -1.06E+22      1.    287.
+    P  -2.58E+22     61.    197.
+ Moment Tensor: (dyne-cm) Aki-Richards               Lune parameters
+    Component   Value
+       Mxx   -9.65E+21                                beta:  146.55
+       Mxy    3.79E+20                                gamma:  13.75
+       Mxz    8.71E+21
+       Myy   -1.04E+22
+       Myz    2.65E+21
+       Mzz   -2.07E+22
+ Global CMT Convention Moment Tensor: (dyne-cm)
+         R         T         F
+  R -2.07E+22  8.71E+21 -2.65E+21
+  T  8.71E+21 -9.65E+21 -3.79E+20
+  F -2.65E+21 -3.79E+20 -1.04E+22
+ 
+ 
+ 
+                    --------------                         :
+                ----------------------                   :---:
+             -----------------   --------              ::. ..::
+            ------------------ T ---------            :--------:
+          --------------------   -----------         :: .  . .  :
+         ------------------------------------        :  .  .  .  :
+        --------------------------------------      :------------::
+       ----------------------------------------    ::  .   .  .   :
+       ----------------------------------------    :   .   .   .  :
+      ------------------------------------------   :---------------:
+      ------------------------------------------   :   .   .   .   :
+      ------------------------------------------   :===============:
+      ------------------------------------------   :   .   .   .   :
+       ----------------------------------------    :   .   .   .   :
+       ----------------   ---------------------    :---------------:
+        --------------- P --------------------     :   .   .   .  :
+         --------------   -------------------      ::  .   .  .   :
+          ----------------------------------        :------------::
+            ------------------------------           :  .  .  .  :
+             ----------------------------            :: .  . #  :
+                ----------------------                :--------:
+                    --------------                     ::. ..::
+                                                         :---:
+                                                           :
+ 
+ 
+        </PRE></TD>
+	<TD VALIGN=top ><PRE>
+ Moment (dyne-cm)   1.40E+22   dyne-cm
+ Magnitude (Mw)    4.03
+ Depth   1.0 km 
+  
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T   1.56E+22     55.     14.
+    N  -3.92E+21      1.    282.
+    P  -1.16E+22     35.    192.
+ Moment Tensor: (dyne-cm) Aki-Richards               Lune parameters
+    Component   Value
+       Mxx   -2.71E+21                                beta:   90.00
+       Mxy    5.11E+20                                gamma: -14.04
+       Mxz    1.25E+22
+       Myy   -3.75E+21
+       Myz    2.95E+21
+       Mzz    6.47E+21
+ Global CMT Convention Moment Tensor: (dyne-cm)
+         R         T         F
+  R  6.47E+21  1.25E+22 -2.95E+21
+  T  1.25E+22 -2.71E+21 -5.11E+20
+  F -2.95E+21 -5.11E+20 -3.75E+21
+ 
+ 
+ 
+                    -----#####----                         :
+                ---#################--                   :---:
+             ----######################--              ::. ..::
+            ---##########################-            :--------:
+          ----############################--         :: .  . .  :
+         ----###############   ############--        :  .  .  .  :
+        -----############### T #############--      :------------::
+       ------###############   #############---    ::  .   .  .   :
+       ------###############################---    :   .   .   .  :
+      ---------#############################----   :---------------:
+      ----------############################----   :   .   .   .   :
+      -------------#######################------   :===#===========:
+      ------------------################--------   :   .   .   .   :
+       ----------------------------------------    :   .   .   .   :
+       ----------------------------------------    :---------------:
+        --------------------------------------     :   .   .   .  :
+         ------------------------------------      ::  .   .  .   :
+          -------------   ------------------        :------------::
+            ----------- P ----------------           :  .  .  .  :
+             ----------   ---------------            :: .  . .  :
+                ----------------------                :--------:
+                    --------------                     ::. ..::
+                                                         :---:
+                                                           :
+ 
+ 
+        </PRE></TD>
+</TR>
+</TABLE>
+<a href="#TOP">(Return to  selection section)</a>
+<a name="MAGNITUDES"></a>
+<hr>
+<H2>Magnitudes </H2>
+<a href="#TOP">(Return to  selection section)</a>
+<a name="CONTEXT"></a>
+<hr>
+<h2>Context</H2>
+The next figure presents the focal mechanism for this earthquake (red) in the context of other events (blue) in the SLU Moment Tensor Catalog which are within &plusmn; 0.5 degrees of the new event. This comparison is shown in the left panel of the figure. The right panel shows the inferred direction of maximum compressive stress and the type of faulting (green is strike-slip, red is normal, blue is thrust; oblique is shown by a combination of colors).
+<br>
+<table>
+<tr><td><img src="contextmech.png"></td></tr>
+</table>
+<a href="#TOP">(Return to  selection section)</a>
+<a name="GRD.REG"></a>
+<hr>
+<H3>Waveform Inversion using wvfgrd96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="wmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search from 0.5 to 19 km depth are as follow:
+<P>
+<PRE>
+           DEPTH  STK   DIP  RAKE   MW    FIT
+WVFGRD96    1.0   230    10    75   4.00 0.6077
+WVFGRD96    2.0   230    15    75   3.89 0.5629
+WVFGRD96    3.0   230    15    75   3.83 0.5069
+WVFGRD96    4.0   225    15    70   3.78 0.4683
+WVFGRD96    5.0   200    15    45   3.75 0.4472
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFGRD96    1.0   230    10    75   4.00 0.6077
+</PRE>
+<P>
+The mechanism correspond to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="wfmplot.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="wfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="wcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<TABLE>
+<TR>
+	<TD>
+	<IMG SRC="wfmmfit.png" NAME="Focal mechanism sensitivity at the preferred depth," ALIGN="LEFT">
+	</TD>
+</TR>
+<TR>
+	<TD>
+	Focal mechanism sensitivity at the preferred depth. The red color indicates a very good fit to thewavefroms.
+Each solution is plotted as a vector at a given value of strike and dip with the angle of the vector representing the rake angle, measured, with respect to the upward vertical (N) in the figure. 
+	</TD>
+</TR>
+</TABLE>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="wdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+<a href="#TOP">(Return to  selection section)</a>
+<a name="MTD.REG"></a>
+<hr>
+<H3>Deviatoric Moment Tensor Inversion using wvfmtd96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtdmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program H(km)                    Mw                           Fit                              Mxx(dyne-cm)    Myy           Mxy            Mxz            Myz            Mzz       
+WVFMTD961    1.0  103.   80.   91.   4.03     0.688 0.771E-07     0.726     0.830 0.557E-07  50.5 -0.2712595E+22 -0.3752509E+22  0.5105764E+21  0.1247404E+23  0.2954127E+22  0.6465104E+22
+WVFMTD961    2.0  104.   73.   93.   3.95     0.593 0.883E-07     0.618     0.770 0.658E-07  78.9 -0.3375303E+22 -0.4429922E+22  0.7687316E+21  0.7595836E+22  0.2543832E+22  0.7805226E+22
+WVFMTD961    3.0   99.   72.   98.   3.89     0.477 0.100E-06     0.490     0.691 0.763E-07  82.7 -0.2762469E+22 -0.3652163E+22  0.1008909E+22  0.6077949E+22  0.2198820E+22  0.6414632E+22
+WVFMTD961    4.0  296.   62.  -96.   3.80     0.263 0.119E-06     0.270     0.513 0.911E-07  59.1  0.3241424E+22  0.2774784E+22  0.9923823E+21  0.3340321E+22  0.1001026E+22 -0.6016207E+22
+WVFMTD961    5.0  302.   53.  -94.   3.87     0.388 0.108E-06     0.398     0.623 0.826E-07  70.3  0.4695088E+22  0.4058439E+22  0.1187500E+22  0.2066909E+22  0.6018734E+21 -0.8753527E+22
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTD961    1.0  103.   80.   91.   4.03     0.688 0.771E-07     0.726     0.830 0.557E-07  50.5 -0.2712595E+22 -0.3752509E+22  0.5105764E+21  0.1247404E+23  0.2954127E+22  0.6465104E+22
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtdinfo</b> is given in the text file 
+<a href="MTDinfo.txt"> MTDinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTD.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtdfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTDcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtddelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+<a href="#TOP">(Return to  selection section)</a>
+<a name="MT.REG"></a>
+<hr>
+<H3>Full Moment Tensor Inversion using wvfmt96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmt96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program H(km)                    Mw                           Fit                              Mxx(dyne-cm)    Myy           Mxy            Mxz            Myz            Mzz       
+WVFMT961    1.0  287.   74.  -91.   4.13     0.738 0.706E-07     0.777     0.859 0.501E-07  49.5 -0.9648727E+22 -0.1043994E+23  0.3791273E+21  0.8709165E+22  0.2647632E+22 -0.2072908E+23
+WVFMT961    2.0  288.   65.  -91.   4.07     0.730 0.717E-07     0.768     0.854 0.512E-07  62.1 -0.8203923E+22 -0.9216135E+22  0.4693378E+21  0.4098097E+22  0.1252676E+22 -0.1804119E+23
+WVFMT961    3.0  288.   61.  -91.   4.05     0.716 0.736E-07     0.752     0.846 0.530E-07  63.5 -0.7292881E+22 -0.8569915E+22  0.5201738E+21  0.2953076E+22  0.8604069E+21 -0.1696994E+23
+WVFMT961    4.0  288.   59.  -91.   4.03     0.698 0.759E-07     0.732     0.835 0.551E-07  66.1 -0.6660663E+22 -0.7919485E+22  0.4884035E+21  0.2457086E+22  0.7006596E+21 -0.1618529E+23
+WVFMT961    5.0  289.   58.  -91.   4.01     0.678 0.784E-07     0.710     0.824 0.573E-07  73.0 -0.6236708E+22 -0.7158415E+22  0.4048755E+21  0.2173720E+22  0.6237521E+21 -0.1555500E+23
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMT961    1.0  287.   74.  -91.   4.13     0.738 0.706E-07     0.777     0.859 0.501E-07  49.5 -0.9648727E+22 -0.1043994E+23  0.3791273E+21  0.8709165E+22  0.2647632E+22 -0.2072908E+23
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTinfo.txt"> MTinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MT.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -40 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+<a href="#TOP">(Return to  selection section)</a>
+<a name="MTGRD.REG"></a>
+<hr>
+<H3>Grid Search Full Moment Tensor Inversion using wvfmtgrd96 </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtgrdmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program  H(km) Mxx(dyne-cm)   Myy        Mxy        Mxz        Myz        Mzz       Mw      Fit
+WVFMTGRD96    1.0 -0.844E+22 -0.912E+22  0.360E+21  0.899E+22  0.233E+22 -0.150E+23  4.0806  0.8060
+WVFMTGRD96    2.0 -0.793E+22 -0.914E+22  0.507E+21  0.431E+22  0.157E+22 -0.187E+23  4.0766  0.7979
+WVFMTGRD96    3.0 -0.689E+22 -0.840E+22  0.635E+21  0.289E+22  0.105E+22 -0.173E+23  4.0466  0.7806
+WVFMTGRD96    4.0 -0.635E+22 -0.775E+22  0.586E+21  0.266E+22  0.970E+21 -0.160E+23  4.0232  0.7599
+WVFMTGRD96    5.0 -0.554E+22 -0.679E+22  0.643E+21  0.111E+22 -0.124E+21 -0.162E+23  4.0114  0.7406
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTGRD96    1.0 -0.844E+22 -0.912E+22  0.360E+21  0.899E+22  0.233E+22 -0.150E+23  4.0806  0.8060
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTGRDinfo.txt"> MTGRDinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRD.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtgrdfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtgrddelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+<a href="#TOP">(Return to  selection section)</a>
+<a name="MTGRD.REG.DC"></a>
+<hr>
+<H3>Grid Search Double Couple Inversion using wvfmtgrd96 -DC </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtgrddcmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program  H(km) Mxx(dyne-cm)   Myy        Mxy        Mxz        Myz        Mzz       Mw      Fit
+WVFMTGRD96    1.0 -0.299E+22 -0.116E+22  0.194E+22  0.108E+23 -0.487E+22  0.415E+22  3.9993  0.6350
+WVFMTGRD96    2.0 -0.298E+22 -0.114E+22  0.193E+22  0.683E+22 -0.295E+22  0.411E+22  3.8870  0.5892
+WVFMTGRD96    3.0 -0.242E+22 -0.925E+21  0.157E+22  0.555E+22 -0.240E+22  0.334E+22  3.8269  0.5313
+WVFMTGRD96    4.0 -0.193E+22 -0.874E+21  0.140E+22  0.483E+22 -0.204E+22  0.281E+22  3.7840  0.4914
+WVFMTGRD96    5.0 -0.850E+21 -0.104E+22  0.136E+22  0.455E+22 -0.183E+22  0.189E+22  3.7519  0.4696
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTGRD96    1.0 -0.299E+22 -0.116E+22  0.194E+22  0.108E+23 -0.487E+22  0.415E+22  3.9993  0.6350
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTGRDDCinfo.txt"> MTGRDDCinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDDC.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtgrddcfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDDCcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtgrddcdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+<a href="#TOP">(Return to  selection section)</a>
+<a name="MTGRD.REG.DEV"></a>
+<hr>
+<H3>Grid Search Deviatoric Moment Tensor Inversion using wvfmtdgrd96 -DEV </H3>
+<P>
+The focal mechanism was determined using broadband seismic waveforms. The location of the event and the
+and stations used for the waveform inversion are shown in the next figure.
+<TABLE>
+<TR>
+        <TD>
+        <IMG SRC="mtgrddevmap.png" NAME="Station Location" ALIGN="LEFT" BORDER=0>
+        </TD>
+</TR>
+<TR>
+        <TD>
+        <CENTER>Location of broadband stations used for waveform inversion</CENTER>
+        </TD>
+</TR>
+</TABLE>
+
+<P>
+The program <I>wvfmtgrd96</I> was used with good traces observed at short distance to determine the focal mechanism, depth and seismic moment. This technique requires a high quality signal and well determined velocity model for the Green functions. To the extent that these are the quality data, this type of mechanism should be preferred over the radiation pattern technique which requires the separate step of defining the pressure and tension quadrants and the correct strike.
+<P>
+The observed and predicted traces are filtered using the following gsac commands:
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+The results of this grid search over depth are as follow:
+<P>
+<PRE>
+MT Program  H(km) Mxx(dyne-cm)   Myy        Mxy        Mxz        Myz        Mzz       Mw      Fit
+WVFMTGRD96    1.0 -0.269E+22 -0.376E+22  0.479E+21  0.126E+23  0.138E+22  0.645E+22  4.0281  0.7649
+WVFMTGRD96    2.0 -0.348E+22 -0.447E+22  0.448E+21  0.720E+22 -0.231E+22  0.795E+22  3.9404  0.6931
+WVFMTGRD96    3.0 -0.372E+22 -0.461E+22  0.496E+21  0.555E+22 -0.178E+22  0.833E+22  3.9124  0.5913
+WVFMTGRD96    4.0 -0.211E+22 -0.328E+22  0.753E+21  0.493E+22 -0.170E+22  0.539E+22  3.8326  0.5175
+WVFMTGRD96    5.0 -0.129E+22 -0.199E+22  0.425E+21  0.465E+22 -0.165E+22  0.328E+22  3.7716  0.4776
+</PRE>
+<P>
+The best solution is
+<PRE>
+WVFMTGRD96    1.0 -0.269E+22 -0.376E+22  0.479E+21  0.126E+23  0.138E+22  0.645E+22  4.0281  0.7649
+</PRE>
+<P>
+The complete moment tensor decomposition using the program <b>mtinfo</b> is given in the text file 
+<a href="MTGRDDEVinfo.txt"> MTGRDDEVinfo.txt</a>. (Jost, M. L., and R. B. Herrmann (1989). A student's guide to and review of moment tensors, Seism. Res. Letters 60, 37-57. <a href="http://www.eas.slu.edu/People/RBHerrmann/VITA/PUB/SRL_60_2_37-57.pdf"> SRL_60_2_37-57.pdf</a>. 
+<p>
+The P-wave first motion mechanism corresponding to the best fit is
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDDEV.png" NAME="focal mechanism " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+
+        <center>Figure 1. Waveform inversion focal mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The best fit as a function of depth is given in the following figure:
+<P>
+<table>
+<tr>
+        <td>
+        <img SRC="mtgrddevfmdfit.png" NAME="depth sensivitivy " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+
+        <td>
+        <center>Figure 2. Depth sensitivity for waveform mechanism</center>
+        </td>
+</tr>
+</table>
+<P>
+The comparison of the observed and predicted waveforms is given in the next figure. The red traces are the observed and the blue are the predicted.
+Each observed-predicted component is plotted to the same scale and peak amplitudes are indicated by the numbers to the left of each trace. A pair of numbers is given in black  at the right of each predicted traces. The upper number  it the time shift required for maximum correlation between the observed and predicted traces. This time shift is required because the synthetics are not computed at exactly the same distance as the observed and because the velocity model used in the predictions may not be perfect.
+A positive time shift indicates that the prediction is too fast and should be delayed to match the observed trace (shift to the right in this figure). A negative value indicates that the prediction is too slow. The lower number gives the percentage of variance reduction to characterize the individual goodness of fit (100% indicates a perfect fit).
+<P>
+The bandpass filter used in the processing and for the display was
+<PRE>
+cut o DIST/3.3 -20 o DIST/3.3 +50
+rtr
+taper w 0.1
+hp c 0.03 n 3 
+lp c 0.10 n 3 
+</PRE>
+<table>
+<tr>
+        <td>
+        <img SRC="MTGRDDEVcmp1.png" NAME="waveform  comparison " ALIGN="LEFT" BORDER=0>
+        </td>
+</tr>
+<tr>
+        <td>
+        <center>Figure 3. Waveform comparison for selected depth. Red: observed; Blue - predicted. The time shift with respect to the model prediction is indicated. The percent of fit is also indicated. </center>
+
+        </td>
+</tr>
+</table>
+<P>
+A check on the assumed source location is possible by looking at the time shifts between the observed and predicted traces. The time shifts for waveform matching arise for several reasons:
+<UL>
+<LI> The origin time and epicentral distance are incorrect </LI>
+<LI> The velocity model used for the inversion is incorrect </LI>
+<LI> The velocity model used to define the P-arrival time is not the
+same as the velocity model used for the waveform inversion
+(assuming that the initial trace alignment is based on the
+P arrival time) </LI>
+</UL>
+Assuming only a mislocation, the time shifts are fit to a functional form:
+<P>
+<PRE> Time_shift = A + B cos Azimuth + C Sin Azimuth</PRE>
+<P>
+The time shifts for this inversion lead to the next figure:
+<BR>
+<IMG SRC="mtgrddevdelay.png">
+<BR>
+The derived shift in origin time and epicentral coordinates are given at the bottom of the figure.
+<P>
+
+<a href="#TOP">(Return to  selection section)</a>
+<a href="#TOP">(Return to  selection section)</a>
+<a name="VELOCITY"></a>
+<hr>
+<H2>Velocity Model</H2>
+<P>
+The CUS.model  used for the waveform synthetic seismograms and for the surface wave eigenfunctions and dispersion is as follows:
+<PRE>
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  1.0000  5.0000  2.8900  2.5000 0.172E-02 0.387E-02 0.00  0.00  1.00  1.00 
+  9.0000  6.1000  3.5200  2.7300 0.160E-02 0.363E-02 0.00  0.00  1.00  1.00 
+ 10.0000  6.4000  3.7000  2.8200 0.149E-02 0.336E-02 0.00  0.00  1.00  1.00 
+ 20.0000  6.7000  3.8700  2.9020 0.000E-04 0.000E-04 0.00  0.00  1.00  1.00 
+  0.0000  8.1500  4.7000  3.3640 0.194E-02 0.431E-02 0.00  0.00  1.00  1.00 
+</PRE>
+<P>
+<a href="#TOP">(Return to  selection section)</a>
+<a name="DISCUSSION"></a>
+<hr>
+<H2>Discussion</H2>
+<P>
+<a href="#TOP">(Return to  selection section)</a>
+<a name="ACKNOWLEDGMENTS"></a>
+<hr>
+<H2>Acknowledgments</H2>
+<P>
+Thanks also to the many seismic network operators whose dedication make this effort possible: University of Nevada Reno, University of Alaska, University of Washington, Oregon State University, University of Utah, Montana Bureau of Mines, UC Berkeley, Caltech,  Saint Louis University, University of Memphis, the Oklahoma Geological Survey, TexNet, the Iris stations and other networks.
+
+<center><i>Last Changed Wed Jun  8 20:53:23 CDT 2022</i></center>
+
+</body>
+</html>

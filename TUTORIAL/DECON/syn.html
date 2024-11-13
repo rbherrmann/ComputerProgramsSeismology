@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Creating Synthetic Green's Function</title>
+</head>
+<body>
+<h2>Introduction</h2>
+<p>
+This section discusses the script
+<b>DOMKSYN</b> in detail in order to let you know what the script
+actually does and also how you might modify the script
+</p>
+<h2>The Script</h2>
+<table border="2" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">
+      <pre>#!/bin/sh<br><br>#####<br>#    create synthetics for each Z in the observed<br>#     Syntax:<br>#    DOMKSYN DIRBIG STK DIP RAKE HS MW<br>#####<br><br>#####<br>#    test usage<br>#####<br>if [ $# != 6 ]<br>then<br>    echo DOMKSYN DIRBIG STK DIP RAKE HS MW<br>    echo you entered:<br>    echo $*<br>    exit 0<br>fi<br><br>#####<br>#    define the internal parameters for the synthetic<br>#####<br><br>DIRBIG=$1<br>STK=$2<br>DIP=$3<br>RAKE=$4<br>HS=$5<br>MW=$6<br><br>if [ ! -d SYN ]<br>then<br>    mkdir SYN<br>else<br>    rm -fr SYN<br>    mkdir SYN<br>fi<br><br>#####<br>#    make synthetics<br>#####<br><br>for Ztrace in `ls ${DIRBIG}/*Z`<br>do<br><br>rm -fr *.[ZRT]<br><br>GCARC=`saclhdr -GCARC ${Ztrace} `<br>AZ=`saclhdr -AZ ${Ztrace}`<br>KSTNM=`saclhdr -KSTNM ${Ztrace}`<br>KCMPNM=`saclhdr -KCMPNM ${Ztrace}`<br><br>echo GCARC $GCARC AZ $AZ<br>MODEL=${GREENDIR}/Models/tak135sph.mod<br><br>hudson96 -TEL ${MODEL} -HS ${HS} -P -GCARC ${GCARC} -NPTS 2048 -DT 0.20<br>hpulse96 -p -V -l 4 | fmech96 -S ${STK} -D ${DIP} -R ${RAKE} -MW ${MW} -AZ ${AZ} -ROT | f96tosac -T<br>mv *.Z SYN/${KSTNM}${KCMPNM}<br><br>#####<br>#    convert to m/s and set station component names<br>#####<br>gsac &lt;&lt; EOF<br>r SYN/${KSTNM}${KCMPNM}<br>ch kstnm ${KSTNM}<br>ch kcmpnm ${KCMPNM}<br>div 100<br>w<br>q<br>EOF<br><br>done<br></pre>
+      </td>
+      <td style="vertical-align: top;">
+      <pre>      </pre>
+This script will make a synthetic to match an observed trace.<br>
+The command syntax is given here. This script is called by the<br>
+DOITGRN script.<br>
+      <br>
+Note this is currently set up to make vertical component synthetics<br>
+using the program hudson96<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+Create a directory where synthetics are computed. This is mostly <br>
+to keep the organization clean<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+This is the top of the loop to make a forward synthetic for each<br>
+observed vertical (Z) trace.<br>
+      <br>
+      <br>
+Use saclhdr to get information from the trace so that we<br>
+can create the synthetic<br>
+      <br>
+      <br>
+      <br>
+      <br>
+Note that the DT = 0.20 sec. Also not that the source pulse, e.g.,<br>
+the '-l 4 ' flag means that the source wavelet will be <br>
+4 *4 * 0.2 = 3.2 seconds long in duration. Note that we are <br>
+creating velocity synthetics in units of cm/s<br>
+      <br>
+Here we give the synthetic the correct station and component name<br>
+We also divide the trace by 100 to convert the units to m/sec<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+</p>
+<center>Last changed August 17, 2009</center>
+</body>
+</html>

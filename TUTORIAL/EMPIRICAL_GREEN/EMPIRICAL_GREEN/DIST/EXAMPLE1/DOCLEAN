@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm -fr mft96* phv96*
+rm -fr MFT96* PHV96*
+rm -fr sdisp* sregn* slegn*
+rm -f *.dsp *.phv

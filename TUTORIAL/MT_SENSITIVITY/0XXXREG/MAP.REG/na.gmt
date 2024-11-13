@@ -1,0 +1,82 @@
+#!/bin/sh
+#
+
+
+
+rm -f  *.gif
+rm -f *.grd
+set -x
+
+#####
+#	GMT plotting script
+#	note the topos are in /usr/local/gtopo30
+#####
+
+#####
+#	define the color palete for elevation
+# MIN_ELV R G B MAX_ELEV R G B
+#####
+cat > us.cpt << EOF
+-1000	100	200	255	-500	100	200	255
+-500	150	225	255	0	150	225	255
+0	100	150	100	30	100	150	100
+30	125	175	125	60	125	175	125
+60	150	200	150	122	150	200	150
+122	175	225	175	183	175	225	175
+183	200	255	200	244	200	255	200
+244	212	255	212	305	212	255	212
+305	255	255	225	457	255	255	225
+457	255	225	175	610	255	225	175
+610	255	225	125	702	255	225	125
+702	255	175	75	914	255	175	75
+914	200	150	50	1219	200	150	50
+1219	175	125	50	1450	175	125	50
+1450	150	100	50	1700	150	100	50
+1700	150	125	100	1981	150	125	100
+1981	125	125	125	2134	125	125	125
+2134	150	150	150	2438	150	150	150
+2438	175	175	175	2743	175	175	175
+2743	200	200	200	3048	200	200	200
+3048	233	233	233	9000	233	233	233
+B	100	200	255
+F	100	200	255
+EOF
+
+gmtset PAPER_MEDIA letter+ LABEL_FONT_SIZE 10 LABEL_FONT 5  DEGREE_FORMAT 1
+#
+# 
+#
+LATLON=-175/-45/25/80
+GRDRAS=1
+PROJ=M4i
+PROJ=B45/-90/30/60/4i
+PROJ=G-88/39/4i
+PROJ=Kf-90/4i
+PROJ=Ks-95/4i
+PROJ=M4i
+#####
+#	TM  LONG/LAT/scale
+#####
+PROJ=T-95/50/6i
+PROJ=B-110/60/50/60/6i
+#####
+#	8 /usr/local/gtopo30/W100N40.DEM
+#	/usr/local/gmt3.3.3/share/dbase/grdraster.info
+#
+#####
+grdraster ${GRDRAS} -I10m -R${LATLON} -Gna.grd -V
+grdgradient na.grd -A135 -GNA.grd -Nt -V
+grdimage -P na.grd -X2.5i -Y1.5i -J${PROJ} -R${LATLON} -Cus.cpt -K -INA.grd  -V > na.eps
+pscoast -P  -J${PROJ} -R${LATLON} -Ba30.0g0/a15.0g0WSne -O -K -Na -Dh -A2500 -V >> na.eps
+#####
+#	plot STS locations as a circle
+# Stations in solid circle
+#####
+# Stations - note the text position is shifted by 0.08 degrees in latitude for legibility
+psxy -P -J${PROJ} -R${LATLON} -O -: -Sc0.15 -W0.5 -G255/0/0 -V -K  na.latlon >> na.eps
+psxy -P -J${PROJ} -R${LATLON} -O -: -SA0.20 -W0.8 -G255/255/0 -V  evt.coord >> na.eps
+#pstext -P  -J${PROJ} -R${LATLON} -: -O -V na.txt >> na.eps
+
+
+
+rm *.grd us.cpt

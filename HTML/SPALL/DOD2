@@ -1,0 +1,41 @@
+#!/bin/sh
+####
+# use gsac profile to make the depth section
+#####
+gsac << EOF
+cut o 0 o 8
+r FORCE/force.001**Z.con CRACK*/crack.001*Z.con
+bg plt
+prs evdp reverse tl 0 8 amp 0.8 vl -0.1 0.5 sa 0
+q
+EOF
+reframe -N2 -O < PRS001.PLT > P1.PLT
+calplt << EOF
+NEWPEN
+1
+CENTER
+3.2 1.3 0.14 'P' 0.0
+CENTER
+4.5 1.3 0.14 'S' 0.0
+LEFT 
+1.5 6.1 0.10 'Force' 0.0
+LEFT 
+1.5 5.1 0.10 'Crack' 0.0
+LEFT 
+1.5 4.1 0.10 'Crack' 0.0
+LEFT 
+1.5 3.1 0.10 'Crack' 0.0
+LEFT 
+1.5 2.1 0.10 'Crack' 0.0
+PEND
+EOF
+cat CALPLT.PLT >> P1.PLT
+rm PRS001.PLT CALPLT.cmd
+
+#plotxvig -p2  -F7 -W10 -EPS -K < P1.PLT 
+plotnps -S0.8  -F7 -W10 -EPS -K < P1.PLT > FigD2.eps
+ed FigD2.eps << EOF
+g/(Origin set)/s//(          )/
+w
+q
+EOF

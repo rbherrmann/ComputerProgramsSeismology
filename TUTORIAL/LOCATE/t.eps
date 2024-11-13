@@ -1,0 +1,6136 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: (atend)
+%%Creator: plotnps
+%%DocumentNeededResources: (atend)
+%%Pages: (atend)
+%%PageOrder: Ascend
+%%EndComments
+%%BeginProlog
+/ShowEqui 	% HEIGHT NCHAR STRING ShowEqui
+	{
+		% stack is HEIGHT NCHAR STRING
+		dup
+		% stack is HEIGHT NCHAR STRING STRING 
+		stringwidth pop exch
+		% stack is HEIGHT NCHAR XWIDTH STRING
+		4 1 roll
+		% stack is STRING HEIGHT NCHAR XWIDTH
+		exch div   
+		% stack is STRING HEIGHT EXTRA_PER_CHARACTER
+		sub
+		% stack is STRING EXTRAX
+		exch  0 exch  ashow
+	}
+	def
+/plaid {		
+		unit /xmin exch def 	
+		unit /dx exch def 	
+		unit /xmax exch def	
+		unit /ymin exch def 	
+		unit /dy exch def 	
+		unit /ymax exch def	
+		/strn exch def	
+	
+		xmin dx xmax 			% loop over x	
+			{ ymin dy ymax 		% loop over y	
+				{ exch dup 3 2 roll dx dy 4 2 roll	
+					maskit   	
+				} for 	
+				pop 	
+			} for	
+} def	
+	
+	
+/maskit {	
+		1 setgray	
+		gsave	
+		4 copy	
+		translate	
+		scale	
+		6 6 	
+		false	
+		[6 0 0 6 0 0]	
+		strn	
+		imagemask	
+		% return to initial position	
+		4 2 roll	
+		1 exch div exch  1 exch div exch  	
+		scale	
+		neg exch neg exch 	
+		translate	
+		grestore	
+} def	
+/unit { 0.072 mul } def 
+/m { unit exch unit exch moveto } def 
+/n { unit exch unit exch rlineto } def 
+/l { unit exch unit exch lineto } def 
+/sn { stroke newpath } def
+/cgf { closepath gsave  0 setgray fill grestore stroke } def
+1 setlinecap 2 setlinejoin newpath
+%%EndPrologue
+%%Page: 1 1
+%%BeginPageSetup
+%%EndPageSetup
+-1000000 -1000000 m 1000000 -1000000 l 1000000 1000000 l -1000000 1000000 l closepath clip
+gsave
+ newpath
+-1000000 -1000000 m 1000000 -1000000 l 1000000 1000000 l -1000000 1000000 l closepath 
+1.000 1.000 1.000 setrgbcolor fill
+grestore
+newpath
+0.000 0.000 0.000 setrgbcolor
+newpath
+6000 4000 m
+10 unit setlinewidth
+-1 34 n
+-1 35 n
+-1 35 n
+-2 35 n
+-3 35 n
+-3 35 n
+-4 34 n
+-5 35 n
+-5 34 n
+-6 35 n
+-6 34 n
+-7 34 n
+-8 34 n
+-8 34 n
+-9 34 n
+-9 34 n
+-10 33 n
+-10 34 n
+-11 33 n
+-12 33 n
+-12 32 n
+-13 33 n
+-13 32 n
+-14 32 n
+-15 32 n
+-15 31 n
+-15 31 n
+-17 31 n
+-16 31 n
+-17 31 n
+-18 30 n
+-18 29 n
+-19 30 n
+-19 29 n
+-20 29 n
+-20 28 n
+-21 28 n
+-21 28 n
+-22 27 n
+-22 27 n
+-23 27 n
+-23 26 n
+-24 25 n
+-24 26 n
+-24 25 n
+-25 24 n
+-26 24 n
+-25 24 n
+-26 23 n
+-27 23 n
+-27 22 n
+-27 22 n
+-28 21 n
+-28 21 n
+-28 20 n
+-29 20 n
+-29 19 n
+-30 19 n
+-29 18 n
+-30 18 n
+-31 17 n
+-31 16 n
+-31 17 n
+-31 15 n
+-31 15 n
+-32 15 n
+-32 14 n
+-32 13 n
+-33 13 n
+-32 12 n
+-33 12 n
+-33 11 n
+-34 10 n
+-33 10 n
+-34 9 n
+-34 9 n
+-34 8 n
+-34 8 n
+-34 7 n
+-34 6 n
+-35 6 n
+-34 5 n
+-35 5 n
+-34 4 n
+-35 3 n
+-35 3 n
+-35 2 n
+-35 1 n
+-35 1 n
+-34 1 n
+-35 -1 n
+-35 -1 n
+-35 -1 n
+-35 -2 n
+-35 -3 n
+-35 -3 n
+-34 -4 n
+-35 -5 n
+-34 -5 n
+-35 -6 n
+-34 -6 n
+stroke
+newpath
+3618 5963 m
+-34 -7 n
+-34 -8 n
+-34 -8 n
+-34 -9 n
+-34 -9 n
+-33 -10 n
+-34 -10 n
+-33 -11 n
+-33 -12 n
+-32 -12 n
+-33 -13 n
+-32 -13 n
+-32 -14 n
+-32 -15 n
+-31 -15 n
+-31 -15 n
+-31 -17 n
+-31 -16 n
+-30 -17 n
+-31 -18 n
+-29 -18 n
+-30 -19 n
+-29 -19 n
+-29 -20 n
+-28 -20 n
+-28 -21 n
+-28 -21 n
+-27 -22 n
+-27 -22 n
+-27 -23 n
+-26 -23 n
+-25 -24 n
+-26 -24 n
+-25 -24 n
+-24 -25 n
+-24 -26 n
+-24 -25 n
+-23 -26 n
+-23 -27 n
+-22 -27 n
+-22 -27 n
+-21 -28 n
+-21 -28 n
+-20 -28 n
+-20 -29 n
+-19 -29 n
+-19 -30 n
+-18 -29 n
+-18 -30 n
+-17 -31 n
+-16 -31 n
+-17 -31 n
+-15 -31 n
+-15 -31 n
+-15 -32 n
+-14 -32 n
+-13 -32 n
+-13 -33 n
+-12 -32 n
+-12 -33 n
+-11 -33 n
+-10 -34 n
+-10 -33 n
+-9 -34 n
+-9 -34 n
+-8 -34 n
+-8 -34 n
+-7 -34 n
+-6 -34 n
+-6 -35 n
+-5 -34 n
+-5 -35 n
+-4 -34 n
+-3 -35 n
+-3 -35 n
+-2 -35 n
+-1 -35 n
+-1 -35 n
+0 -35 n
+0 -34 n
+1 -35 n
+1 -35 n
+2 -35 n
+3 -35 n
+3 -35 n
+4 -34 n
+5 -35 n
+5 -34 n
+6 -35 n
+6 -34 n
+7 -34 n
+8 -34 n
+8 -34 n
+9 -34 n
+9 -34 n
+10 -33 n
+10 -34 n
+11 -33 n
+12 -33 n
+12 -32 n
+13 -33 n
+stroke
+newpath
+2145 3250 m
+13 -32 n
+14 -32 n
+15 -32 n
+15 -31 n
+15 -31 n
+17 -31 n
+16 -31 n
+17 -30 n
+18 -31 n
+18 -29 n
+19 -30 n
+19 -29 n
+20 -29 n
+20 -28 n
+21 -28 n
+21 -28 n
+22 -27 n
+22 -27 n
+23 -27 n
+23 -26 n
+24 -25 n
+24 -26 n
+24 -25 n
+25 -24 n
+26 -24 n
+25 -24 n
+26 -23 n
+27 -23 n
+27 -22 n
+27 -22 n
+28 -21 n
+28 -21 n
+28 -20 n
+29 -20 n
+29 -19 n
+30 -19 n
+29 -18 n
+31 -18 n
+30 -17 n
+31 -16 n
+31 -17 n
+31 -15 n
+31 -15 n
+32 -15 n
+32 -14 n
+32 -13 n
+33 -13 n
+32 -12 n
+33 -12 n
+33 -11 n
+34 -10 n
+33 -10 n
+34 -9 n
+34 -9 n
+34 -8 n
+34 -8 n
+34 -7 n
+34 -6 n
+35 -6 n
+34 -5 n
+35 -5 n
+34 -4 n
+35 -3 n
+35 -3 n
+35 -2 n
+35 -1 n
+35 -1 n
+35 0 n
+34 0 n
+35 1 n
+35 1 n
+35 2 n
+35 3 n
+35 3 n
+34 4 n
+35 5 n
+34 5 n
+35 6 n
+34 6 n
+34 7 n
+34 8 n
+34 8 n
+34 9 n
+34 9 n
+33 10 n
+34 10 n
+33 11 n
+33 12 n
+32 12 n
+33 13 n
+32 13 n
+32 14 n
+32 15 n
+31 15 n
+31 15 n
+31 17 n
+31 16 n
+31 17 n
+30 18 n
+29 18 n
+30 19 n
+stroke
+newpath
+5089 2322 m
+29 19 n
+29 20 n
+28 20 n
+28 21 n
+28 21 n
+27 22 n
+27 22 n
+27 23 n
+26 23 n
+25 24 n
+26 24 n
+25 24 n
+24 25 n
+24 26 n
+24 25 n
+23 26 n
+23 27 n
+22 27 n
+22 27 n
+21 28 n
+21 28 n
+20 28 n
+20 29 n
+19 29 n
+19 30 n
+18 29 n
+18 30 n
+17 31 n
+16 31 n
+17 31 n
+15 31 n
+15 31 n
+15 32 n
+14 32 n
+13 32 n
+13 33 n
+12 32 n
+12 33 n
+11 33 n
+10 34 n
+10 33 n
+9 34 n
+9 34 n
+8 34 n
+8 34 n
+7 34 n
+6 34 n
+6 35 n
+5 34 n
+5 35 n
+4 34 n
+3 35 n
+3 35 n
+2 35 n
+1 35 n
+1 35 n
+1 35 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+93 39 n
+-54 54 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2796 2644 m
+20 unit setlinewidth
+-54 54 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+39 93 n
+-77 0 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2742 2698 m
+-77 0 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+-38 93 n
+-54 -54 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2665 2698 m
+-54 -54 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+-92 39 n
+0 -77 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2611 2644 m
+0 -77 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+-92 -38 n
+54 -54 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2611 2567 m
+54 -54 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+-38 -92 n
+77 0 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2665 2513 m
+77 0 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+39 -92 n
+54 54 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2742 2513 m
+54 54 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+2703 2605 m
+93 -38 n
+0 77 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+2796 2567 m
+0 77 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+-1000000 -1000000 m 1000000 -1000000 l 1000000 1000000 l -1000000 1000000 l closepath clip
+0.000 0.000 0.000 setrgbcolor
+2847 2845 m
+0 rotate
+/Helvetica-Bold findfont
+25.920002 scalefont setfont
+17.280001 1 (T) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+93 38 n
+-54 54 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+4066 4243 m
+-54 54 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+39 92 n
+-77 0 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+4012 4297 m
+-77 0 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+-38 92 n
+-54 -54 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+3935 4297 m
+-54 -54 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+-92 38 n
+0 -76 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+3881 4243 m
+0 -76 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+-92 -38 n
+54 -55 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+3881 4167 m
+54 -55 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+-38 -93 n
+77 0 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+3935 4112 m
+77 0 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+39 -93 n
+54 55 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+4012 4112 m
+54 55 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+3973 4205 m
+93 -38 n
+0 76 n
+closepath
+0.000 0.000 0.000 setrgbcolor
+fill 
+1.000 0.000 0.000 setrgbcolor
+newpath
+4066 4167 m
+0 76 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+newpath
+gsave
+-1000000 -1000000 m 1000000 -1000000 l 1000000 1000000 l -1000000 1000000 l closepath clip
+0.000 0.000 0.000 setrgbcolor
+4117 4445 m
+0 rotate
+/Helvetica-Bold findfont
+25.920002 scalefont setfont
+17.280001 1 (P) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+6000 4000 m
+40 unit setlinewidth
+-1 34 n
+-1 35 n
+-1 35 n
+-2 35 n
+-3 35 n
+-3 35 n
+-4 34 n
+-5 35 n
+-5 34 n
+-6 35 n
+-6 34 n
+-7 34 n
+-8 34 n
+-8 34 n
+-9 34 n
+-9 34 n
+-10 33 n
+-10 34 n
+-11 33 n
+-12 33 n
+-12 32 n
+-13 33 n
+-13 32 n
+-14 32 n
+-15 32 n
+-15 31 n
+-15 31 n
+-17 31 n
+-16 31 n
+-17 31 n
+-18 30 n
+-18 29 n
+-19 30 n
+-19 29 n
+-20 29 n
+-20 28 n
+-21 28 n
+-21 28 n
+-22 27 n
+-22 27 n
+-23 27 n
+-23 26 n
+-24 25 n
+-24 26 n
+-24 25 n
+-25 24 n
+-26 24 n
+-25 24 n
+-26 23 n
+-27 23 n
+-27 22 n
+-27 22 n
+-28 21 n
+-28 21 n
+-28 20 n
+-29 20 n
+-29 19 n
+-30 19 n
+-29 18 n
+-30 18 n
+-31 17 n
+-31 16 n
+-31 17 n
+-31 15 n
+-31 15 n
+-32 15 n
+-32 14 n
+-32 13 n
+-33 13 n
+-32 12 n
+-33 12 n
+-33 11 n
+-34 10 n
+-33 10 n
+-34 9 n
+-34 9 n
+-34 8 n
+-34 8 n
+-34 7 n
+-34 6 n
+-35 6 n
+-34 5 n
+-35 5 n
+-34 4 n
+-35 3 n
+-35 3 n
+-35 2 n
+-35 1 n
+-35 1 n
+-34 1 n
+-35 -1 n
+-35 -1 n
+-35 -1 n
+-35 -2 n
+-35 -3 n
+-35 -3 n
+-34 -4 n
+-35 -5 n
+-34 -5 n
+-35 -6 n
+-34 -6 n
+stroke
+newpath
+3618 5963 m
+-34 -7 n
+-34 -8 n
+-34 -8 n
+-34 -9 n
+-34 -9 n
+-33 -10 n
+-34 -10 n
+-33 -11 n
+-33 -12 n
+-32 -12 n
+-33 -13 n
+-32 -13 n
+-32 -14 n
+-32 -15 n
+-31 -15 n
+-31 -15 n
+-31 -17 n
+-31 -16 n
+-30 -17 n
+-31 -18 n
+-29 -18 n
+-30 -19 n
+-29 -19 n
+-29 -20 n
+-28 -20 n
+-28 -21 n
+-28 -21 n
+-27 -22 n
+-27 -22 n
+-27 -23 n
+-26 -23 n
+-25 -24 n
+-26 -24 n
+-25 -24 n
+-24 -25 n
+-24 -26 n
+-24 -25 n
+-23 -26 n
+-23 -27 n
+-22 -27 n
+-22 -27 n
+-21 -28 n
+-21 -28 n
+-20 -28 n
+-20 -29 n
+-19 -29 n
+-19 -30 n
+-18 -29 n
+-18 -30 n
+-17 -31 n
+-16 -31 n
+-17 -31 n
+-15 -31 n
+-15 -31 n
+-15 -32 n
+-14 -32 n
+-13 -32 n
+-13 -33 n
+-12 -32 n
+-12 -33 n
+-11 -33 n
+-10 -34 n
+-10 -33 n
+-9 -34 n
+-9 -34 n
+-8 -34 n
+-8 -34 n
+-7 -34 n
+-6 -34 n
+-6 -35 n
+-5 -34 n
+-5 -35 n
+-4 -34 n
+-3 -35 n
+-3 -35 n
+-2 -35 n
+-1 -35 n
+-1 -35 n
+0 -35 n
+0 -34 n
+1 -35 n
+1 -35 n
+2 -35 n
+3 -35 n
+3 -35 n
+4 -34 n
+5 -35 n
+5 -34 n
+6 -35 n
+6 -34 n
+7 -34 n
+8 -34 n
+8 -34 n
+9 -34 n
+9 -34 n
+10 -33 n
+10 -34 n
+11 -33 n
+12 -33 n
+12 -32 n
+13 -33 n
+stroke
+newpath
+2145 3250 m
+13 -32 n
+14 -32 n
+15 -32 n
+15 -31 n
+15 -31 n
+17 -31 n
+16 -31 n
+17 -30 n
+18 -31 n
+18 -29 n
+19 -30 n
+19 -29 n
+20 -29 n
+20 -28 n
+21 -28 n
+21 -28 n
+22 -27 n
+22 -27 n
+23 -27 n
+23 -26 n
+24 -25 n
+24 -26 n
+24 -25 n
+25 -24 n
+26 -24 n
+25 -24 n
+26 -23 n
+27 -23 n
+27 -22 n
+27 -22 n
+28 -21 n
+28 -21 n
+28 -20 n
+29 -20 n
+29 -19 n
+30 -19 n
+29 -18 n
+31 -18 n
+30 -17 n
+31 -16 n
+31 -17 n
+31 -15 n
+31 -15 n
+32 -15 n
+32 -14 n
+32 -13 n
+33 -13 n
+32 -12 n
+33 -12 n
+33 -11 n
+34 -10 n
+33 -10 n
+34 -9 n
+34 -9 n
+34 -8 n
+34 -8 n
+34 -7 n
+34 -6 n
+35 -6 n
+34 -5 n
+35 -5 n
+34 -4 n
+35 -3 n
+35 -3 n
+35 -2 n
+35 -1 n
+35 -1 n
+35 0 n
+34 0 n
+35 1 n
+35 1 n
+35 2 n
+35 3 n
+35 3 n
+34 4 n
+35 5 n
+34 5 n
+35 6 n
+34 6 n
+34 7 n
+34 8 n
+34 8 n
+34 9 n
+34 9 n
+33 10 n
+34 10 n
+33 11 n
+33 12 n
+32 12 n
+33 13 n
+32 13 n
+32 14 n
+32 15 n
+31 15 n
+31 15 n
+31 17 n
+31 16 n
+31 17 n
+30 18 n
+29 18 n
+30 19 n
+stroke
+newpath
+5089 2322 m
+29 19 n
+29 20 n
+28 20 n
+28 21 n
+28 21 n
+27 22 n
+27 22 n
+27 23 n
+26 23 n
+25 24 n
+26 24 n
+25 24 n
+24 25 n
+24 26 n
+24 25 n
+23 26 n
+23 27 n
+22 27 n
+22 27 n
+21 28 n
+21 28 n
+20 28 n
+20 29 n
+19 29 n
+19 30 n
+18 29 n
+18 30 n
+17 31 n
+16 31 n
+17 31 n
+15 31 n
+15 31 n
+15 32 n
+14 32 n
+13 32 n
+13 33 n
+12 32 n
+12 33 n
+11 33 n
+10 34 n
+10 33 n
+9 34 n
+9 34 n
+8 34 n
+8 34 n
+7 34 n
+6 34 n
+6 35 n
+5 34 n
+5 35 n
+4 34 n
+3 35 n
+3 35 n
+2 35 n
+1 35 n
+1 35 n
+1 35 n
+stroke
+newpath
+5589 2786 m
+-37 -4 n
+stroke
+newpath
+5494 2771 m
+58 11 n
+stroke
+newpath
+5411 2704 m
+65 54 n
+stroke
+newpath
+5494 2771 m
+-18 -13 n
+stroke
+newpath
+5381 2672 m
+-38 -76 n
+stroke
+newpath
+5319 2558 m
+24 38 n
+stroke
+newpath
+5319 2558 m
+-11 -42 n
+stroke
+newpath
+5294 2475 m
+14 41 n
+stroke
+newpath
+2396 5048 m
+-1 3 n
+stroke
+newpath
+2394 5057 m
+1 -6 n
+stroke
+newpath
+2394 5057 m
+2 74 n
+stroke
+newpath
+2405 5207 m
+-9 -76 n
+stroke
+newpath
+2711 5529 m
+79 25 n
+stroke
+newpath
+2842 5570 m
+-52 -16 n
+stroke
+newpath
+2914 5578 m
+-38 -4 n
+stroke
+newpath
+2842 5570 m
+34 4 n
+stroke
+newpath
+5423 2853 m
+3 -11 n
+stroke
+newpath
+5438 2816 m
+-12 26 n
+stroke
+newpath
+5438 2816 m
+-22 -52 n
+stroke
+newpath
+5411 2704 m
+5 60 n
+stroke
+newpath
+5306 2721 m
+14 -13 n
+stroke
+newpath
+5374 2678 m
+-54 30 n
+stroke
+newpath
+5381 2672 m
+-7 6 n
+stroke
+newpath
+2404 4892 m
+-1 2 n
+stroke
+newpath
+2403 4897 m
+0 -3 n
+stroke
+newpath
+2403 4897 m
+-6 75 n
+stroke
+newpath
+2396 5048 m
+1 -76 n
+stroke
+newpath
+2914 5578 m
+47 11 n
+stroke
+newpath
+2989 5595 m
+-28 -6 n
+stroke
+newpath
+3126 5605 m
+-80 -5 n
+stroke
+newpath
+2989 5595 m
+57 5 n
+stroke
+newpath
+5462 3062 m
+-3 -54 n
+stroke
+newpath
+5458 2964 m
+1 44 n
+stroke
+newpath
+5458 2964 m
+-13 -39 n
+stroke
+newpath
+5423 2853 m
+22 72 n
+stroke
+newpath
+5306 2721 m
+-62 -23 n
+stroke
+newpath
+5201 2686 m
+43 12 n
+stroke
+newpath
+5144 2693 m
+23 -4 n
+stroke
+newpath
+5201 2686 m
+-34 3 n
+stroke
+newpath
+2426 4736 m
+-1 4 n
+stroke
+newpath
+2424 4743 m
+1 -3 n
+stroke
+newpath
+2424 4743 m
+-12 73 n
+stroke
+newpath
+2404 4892 m
+8 -76 n
+stroke
+newpath
+3126 5605 m
+5 1 n
+stroke
+newpath
+3134 5606 m
+-3 0 n
+stroke
+newpath
+3134 5606 m
+14 1 n
+stroke
+newpath
+3216 5609 m
+-68 -2 n
+stroke
+newpath
+3274 5609 m
+-58 0 n
+stroke
+newpath
+3334 5604 m
+-35 3 n
+stroke
+newpath
+3274 5609 m
+25 -2 n
+stroke
+newpath
+5477 3280 m
+1 -26 n
+stroke
+newpath
+5480 3235 m
+-2 19 n
+stroke
+newpath
+5480 3235 m
+-4 -62 n
+stroke
+newpath
+5476 3157 m
+0 16 n
+stroke
+newpath
+5472 3103 m
+4 54 n
+stroke
+newpath
+5472 3103 m
+-4 -13 n
+stroke
+newpath
+5462 3062 m
+6 28 n
+stroke
+newpath
+5144 2693 m
+-54 -10 n
+stroke
+newpath
+5048 2678 m
+42 5 n
+stroke
+newpath
+4984 2683 m
+30 -3 n
+stroke
+newpath
+5048 2678 m
+-34 2 n
+stroke
+newpath
+2463 4582 m
+-3 8 n
+stroke
+newpath
+2457 4599 m
+3 -9 n
+stroke
+newpath
+2457 4599 m
+-17 65 n
+stroke
+newpath
+2426 4736 m
+14 -72 n
+stroke
+newpath
+3334 5604 m
+48 -2 n
+stroke
+newpath
+3410 5601 m
+-28 1 n
+stroke
+newpath
+3464 5594 m
+59 -8 n
+stroke
+newpath
+3410 5601 m
+54 -7 n
+stroke
+newpath
+3540 5583 m
+-17 3 n
+stroke
+newpath
+3550 5580 m
+-6 2 n
+stroke
+newpath
+3540 5583 m
+4 -1 n
+stroke
+newpath
+5466 3508 m
+2 -13 n
+stroke
+newpath
+5470 3487 m
+-2 8 n
+stroke
+newpath
+5473 3460 m
+2 -44 n
+stroke
+newpath
+5470 3487 m
+3 -27 n
+stroke
+newpath
+5479 3363 m
+-4 53 n
+stroke
+newpath
+5479 3363 m
+-1 -28 n
+stroke
+newpath
+5477 3280 m
+1 55 n
+stroke
+newpath
+4984 2683 m
+-46 -3 n
+stroke
+newpath
+4903 2679 m
+35 1 n
+stroke
+newpath
+4820 2688 m
+43 -5 n
+stroke
+newpath
+4903 2679 m
+-40 4 n
+stroke
+newpath
+2513 4427 m
+-8 20 n
+stroke
+newpath
+2498 4464 m
+7 -17 n
+stroke
+newpath
+2498 4464 m
+-17 53 n
+stroke
+newpath
+2463 4582 m
+18 -65 n
+stroke
+newpath
+3550 5580 m
+74 -13 n
+stroke
+newpath
+3664 5559 m
+-40 8 n
+stroke
+newpath
+3771 5530 m
+-69 19 n
+stroke
+newpath
+3664 5559 m
+38 -10 n
+stroke
+newpath
+4004 5447 m
+-3 2 n
+stroke
+newpath
+4000 5449 m
+1 0 n
+stroke
+newpath
+5426 3751 m
+5 -23 n
+stroke
+newpath
+5434 3717 m
+-3 11 n
+stroke
+newpath
+5441 3688 m
+6 -36 n
+stroke
+newpath
+5434 3717 m
+7 -29 n
+stroke
+newpath
+5456 3605 m
+-9 47 n
+stroke
+newpath
+5456 3605 m
+3 -31 n
+stroke
+newpath
+5466 3508 m
+-7 66 n
+stroke
+newpath
+4820 2688 m
+-32 1 n
+stroke
+newpath
+4766 2689 m
+22 0 n
+stroke
+newpath
+4651 2706 m
+64 -10 n
+stroke
+newpath
+4766 2689 m
+-51 7 n
+stroke
+newpath
+2577 4271 m
+-18 38 n
+stroke
+newpath
+2546 4339 m
+13 -30 n
+stroke
+newpath
+2546 4339 m
+-15 38 n
+stroke
+newpath
+2513 4427 m
+18 -50 n
+stroke
+newpath
+3771 5530 m
+8 -3 n
+stroke
+newpath
+3782 5526 m
+-3 1 n
+stroke
+newpath
+3782 5526 m
+11 -3 n
+stroke
+newpath
+3854 5504 m
+-61 19 n
+stroke
+newpath
+3894 5491 m
+-40 13 n
+stroke
+newpath
+3928 5478 m
+68 -27 n
+stroke
+newpath
+3894 5491 m
+34 -13 n
+stroke
+newpath
+4000 5449 m
+-4 2 n
+stroke
+newpath
+4004 5447 m
+68 -30 n
+stroke
+newpath
+4099 5405 m
+-27 12 n
+stroke
+newpath
+4142 5384 m
+14 -7 n
+stroke
+newpath
+4099 5405 m
+43 -21 n
+stroke
+newpath
+4193 5358 m
+-37 19 n
+stroke
+newpath
+4260 5320 m
+-51 29 n
+stroke
+newpath
+4193 5358 m
+16 -9 n
+stroke
+newpath
+5345 4026 m
+1 -2 n
+stroke
+newpath
+5346 4023 m
+0 1 n
+stroke
+newpath
+5347 4022 m
+24 -70 n
+stroke
+newpath
+5346 4023 m
+1 -1 n
+stroke
+newpath
+5380 3926 m
+-9 26 n
+stroke
+newpath
+5380 3926 m
+14 -47 n
+stroke
+newpath
+5397 3870 m
+-3 9 n
+stroke
+newpath
+5409 3824 m
+-12 46 n
+stroke
+newpath
+5409 3824 m
+5 -20 n
+stroke
+newpath
+5426 3751 m
+-12 53 n
+stroke
+newpath
+4651 2706 m
+-8 1 n
+stroke
+newpath
+4638 2707 m
+5 0 n
+stroke
+newpath
+4638 2707 m
+-25 4 n
+stroke
+newpath
+4571 2719 m
+42 -8 n
+stroke
+newpath
+4519 2729 m
+52 -10 n
+stroke
+newpath
+4475 2740 m
+26 -7 n
+stroke
+newpath
+4519 2729 m
+-18 4 n
+stroke
+newpath
+2658 4111 m
+-3 5 n
+stroke
+newpath
+2653 4119 m
+2 -3 n
+stroke
+newpath
+2645 4133 m
+-24 45 n
+stroke
+newpath
+2653 4119 m
+-8 14 n
+stroke
+newpath
+2598 4224 m
+23 -46 n
+stroke
+newpath
+2598 4224 m
+-8 19 n
+stroke
+newpath
+2577 4271 m
+13 -28 n
+stroke
+newpath
+4260 5320 m
+16 -9 n
+stroke
+newpath
+4281 5308 m
+-5 3 n
+stroke
+newpath
+4281 5308 m
+9 -5 n
+stroke
+newpath
+4341 5271 m
+-51 32 n
+stroke
+newpath
+4364 5256 m
+-23 15 n
+stroke
+newpath
+4364 5256 m
+39 -25 n
+stroke
+newpath
+4405 5230 m
+-2 1 n
+stroke
+newpath
+4443 5203 m
+-38 27 n
+stroke
+newpath
+4467 5186 m
+35 -25 n
+stroke
+newpath
+4443 5203 m
+24 -17 n
+stroke
+newpath
+4518 5148 m
+-16 13 n
+stroke
+newpath
+4584 5096 m
+-56 44 n
+stroke
+newpath
+4518 5148 m
+10 -8 n
+stroke
+newpath
+5180 4386 m
+9 -16 n
+stroke
+newpath
+5190 4368 m
+-1 2 n
+stroke
+newpath
+5192 4364 m
+33 -61 n
+stroke
+newpath
+5190 4368 m
+2 -4 n
+stroke
+newpath
+5233 4288 m
+-8 15 n
+stroke
+newpath
+5245 4263 m
+13 -28 n
+stroke
+newpath
+5233 4288 m
+12 -25 n
+stroke
+newpath
+5273 4204 m
+-15 31 n
+stroke
+newpath
+5273 4204 m
+17 -38 n
+stroke
+newpath
+5297 4150 m
+-7 16 n
+stroke
+newpath
+5311 4116 m
+-14 34 n
+stroke
+newpath
+5311 4116 m
+8 -21 n
+stroke
+newpath
+5345 4026 m
+-26 69 n
+stroke
+newpath
+4475 2740 m
+-42 10 n
+stroke
+newpath
+4409 2755 m
+24 -5 n
+stroke
+newpath
+4365 2767 m
+-38 11 n
+stroke
+newpath
+4409 2755 m
+-44 12 n
+stroke
+newpath
+4306 2785 m
+21 -7 n
+stroke
+newpath
+4288 2791 m
+12 -4 n
+stroke
+newpath
+4306 2785 m
+-6 2 n
+stroke
+newpath
+2758 3945 m
+-32 50 n
+stroke
+newpath
+2709 4022 m
+17 -27 n
+stroke
+newpath
+2709 4022 m
+-19 32 n
+stroke
+newpath
+2658 4111 m
+32 -57 n
+stroke
+newpath
+4584 5096 m
+4 -3 n
+stroke
+newpath
+4588 5092 m
+0 1 n
+stroke
+newpath
+4588 5092 m
+1 -1 n
+stroke
+newpath
+4646 5043 m
+-57 48 n
+stroke
+newpath
+4655 5035 m
+-9 8 n
+stroke
+newpath
+4655 5035 m
+12 -11 n
+stroke
+newpath
+4704 4991 m
+-37 33 n
+stroke
+newpath
+4719 4976 m
+-15 15 n
+stroke
+newpath
+4719 4976 m
+19 -18 n
+stroke
+newpath
+4761 4936 m
+-23 22 n
+stroke
+newpath
+4781 4916 m
+-20 20 n
+stroke
+newpath
+4781 4916 m
+23 -23 n
+stroke
+newpath
+4817 4879 m
+-13 14 n
+stroke
+newpath
+4839 4854 m
+-22 25 n
+stroke
+newpath
+4839 4854 m
+25 -26 n
+stroke
+newpath
+4872 4819 m
+-8 9 n
+stroke
+newpath
+4895 4791 m
+-23 28 n
+stroke
+newpath
+4895 4791 m
+25 -28 n
+stroke
+newpath
+4926 4755 m
+-6 8 n
+stroke
+newpath
+4949 4726 m
+-23 29 n
+stroke
+newpath
+4949 4726 m
+23 -28 n
+stroke
+newpath
+4980 4688 m
+-8 10 n
+stroke
+newpath
+5001 4659 m
+-21 29 n
+stroke
+newpath
+5001 4659 m
+20 -26 n
+stroke
+newpath
+5034 4616 m
+-13 17 n
+stroke
+newpath
+5051 4590 m
+-17 26 n
+stroke
+newpath
+5051 4590 m
+16 -22 n
+stroke
+newpath
+5087 4539 m
+-20 29 n
+stroke
+newpath
+5099 4519 m
+-12 20 n
+stroke
+newpath
+5099 4519 m
+11 -16 n
+stroke
+newpath
+5140 4455 m
+-30 48 n
+stroke
+newpath
+5146 4445 m
+-6 10 n
+stroke
+newpath
+5146 4445 m
+4 -8 n
+stroke
+newpath
+5180 4386 m
+-30 51 n
+stroke
+newpath
+4288 2791 m
+-53 17 n
+stroke
+newpath
+4211 2816 m
+24 -8 n
+stroke
+newpath
+4172 2830 m
+-22 8 n
+stroke
+newpath
+4211 2816 m
+-39 14 n
+stroke
+newpath
+4122 2850 m
+28 -12 n
+stroke
+newpath
+4081 2866 m
+29 -12 n
+stroke
+newpath
+4122 2850 m
+-12 4 n
+stroke
+newpath
+2887 3767 m
+-6 9 n
+stroke
+newpath
+2878 3779 m
+3 -3 n
+stroke
+newpath
+2872 3787 m
+-31 41 n
+stroke
+newpath
+2878 3779 m
+-6 8 n
+stroke
+newpath
+2822 3853 m
+19 -25 n
+stroke
+newpath
+2822 3853 m
+-21 29 n
+stroke
+newpath
+2772 3924 m
+29 -42 n
+stroke
+newpath
+2766 3934 m
+6 -10 n
+stroke
+newpath
+2766 3934 m
+-3 4 n
+stroke
+newpath
+2758 3945 m
+5 -7 n
+stroke
+newpath
+4081 2866 m
+-31 13 n
+stroke
+newpath
+4039 2884 m
+11 -5 n
+stroke
+newpath
+4039 2884 m
+-22 8 n
+stroke
+newpath
+3991 2905 m
+26 -13 n
+stroke
+newpath
+3961 2918 m
+30 -13 n
+stroke
+newpath
+3933 2932 m
+-23 10 n
+stroke
+newpath
+3961 2918 m
+-28 14 n
+stroke
+newpath
+3888 2954 m
+22 -12 n
+stroke
+newpath
+3826 2986 m
+50 -26 n
+stroke
+newpath
+3888 2954 m
+-12 6 n
+stroke
+newpath
+3073 3554 m
+-26 27 n
+stroke
+newpath
+3041 3588 m
+6 -7 n
+stroke
+newpath
+3031 3598 m
+-27 30 n
+stroke
+newpath
+3041 3588 m
+-10 10 n
+stroke
+newpath
+2987 3647 m
+17 -19 n
+stroke
+newpath
+2987 3647 m
+-25 28 n
+stroke
+newpath
+2956 3683 m
+6 -8 n
+stroke
+newpath
+2933 3710 m
+23 -27 n
+stroke
+newpath
+2933 3710 m
+-12 15 n
+stroke
+newpath
+2887 3767 m
+34 -42 n
+stroke
+newpath
+3826 2986 m
+-5 3 n
+stroke
+newpath
+3819 2990 m
+2 -1 n
+stroke
+newpath
+3819 2990 m
+-1 1 n
+stroke
+newpath
+3766 3019 m
+52 -28 n
+stroke
+newpath
+3754 3026 m
+12 -7 n
+stroke
+newpath
+3754 3026 m
+-17 9 n
+stroke
+newpath
+3712 3050 m
+25 -15 n
+stroke
+newpath
+3691 3062 m
+21 -12 n
+stroke
+newpath
+3691 3062 m
+-26 16 n
+stroke
+newpath
+3658 3082 m
+7 -4 n
+stroke
+newpath
+3631 3099 m
+27 -17 n
+stroke
+newpath
+3605 3116 m
+-7 4 n
+stroke
+newpath
+3631 3099 m
+-26 17 n
+stroke
+newpath
+3573 3137 m
+25 -17 n
+stroke
+newpath
+3552 3151 m
+-15 10 n
+stroke
+newpath
+3573 3137 m
+-21 14 n
+stroke
+newpath
+3517 3175 m
+20 -14 n
+stroke
+newpath
+3499 3187 m
+-20 15 n
+stroke
+newpath
+3517 3175 m
+-18 12 n
+stroke
+newpath
+3462 3214 m
+17 -12 n
+stroke
+newpath
+3446 3226 m
+-22 16 n
+stroke
+newpath
+3462 3214 m
+-16 12 n
+stroke
+newpath
+3409 3255 m
+15 -13 n
+stroke
+newpath
+3392 3267 m
+-20 16 n
+stroke
+newpath
+3409 3255 m
+-17 12 n
+stroke
+newpath
+3356 3296 m
+16 -13 n
+stroke
+newpath
+3338 3310 m
+-16 14 n
+stroke
+newpath
+3356 3296 m
+-18 14 n
+stroke
+newpath
+3303 3339 m
+19 -15 n
+stroke
+newpath
+3282 3357 m
+-9 8 n
+stroke
+newpath
+3303 3339 m
+-21 18 n
+stroke
+newpath
+3251 3384 m
+22 -19 n
+stroke
+newpath
+3251 3384 m
+-25 22 n
+stroke
+newpath
+3224 3408 m
+2 -2 n
+stroke
+newpath
+3199 3431 m
+25 -23 n
+stroke
+newpath
+3199 3431 m
+-19 18 n
+stroke
+newpath
+3163 3464 m
+17 -15 n
+stroke
+newpath
+3147 3480 m
+16 -16 n
+stroke
+newpath
+3147 3480 m
+-12 12 n
+stroke
+newpath
+3100 3526 m
+35 -34 n
+stroke
+newpath
+3094 3532 m
+6 -6 n
+stroke
+newpath
+3094 3532 m
+-3 4 n
+stroke
+newpath
+3073 3554 m
+18 -18 n
+stroke
+newpath
+6000 4000 m
+40 unit setlinewidth
+-1 34 n
+-1 35 n
+-1 35 n
+-2 35 n
+-3 35 n
+-3 35 n
+-4 34 n
+-5 35 n
+-5 34 n
+-6 35 n
+-6 34 n
+-7 34 n
+-8 34 n
+-8 34 n
+-9 34 n
+-9 34 n
+-10 33 n
+-10 34 n
+-11 33 n
+-12 33 n
+-12 32 n
+-13 33 n
+-13 32 n
+-14 32 n
+-15 32 n
+-15 31 n
+-15 31 n
+-17 31 n
+-16 31 n
+-17 31 n
+-18 30 n
+-18 29 n
+-19 30 n
+-19 29 n
+-20 29 n
+-20 28 n
+-21 28 n
+-21 28 n
+-22 27 n
+-22 27 n
+-23 27 n
+-23 26 n
+-24 25 n
+-24 26 n
+-24 25 n
+-25 24 n
+-26 24 n
+-25 24 n
+-26 23 n
+-27 23 n
+-27 22 n
+-27 22 n
+-28 21 n
+-28 21 n
+-28 20 n
+-29 20 n
+-29 19 n
+-30 19 n
+-29 18 n
+-30 18 n
+-31 17 n
+-31 16 n
+-31 17 n
+-31 15 n
+-31 15 n
+-32 15 n
+-32 14 n
+-32 13 n
+-33 13 n
+-32 12 n
+-33 12 n
+-33 11 n
+-34 10 n
+-33 10 n
+-34 9 n
+-34 9 n
+-34 8 n
+-34 8 n
+-34 7 n
+-34 6 n
+-35 6 n
+-34 5 n
+-35 5 n
+-34 4 n
+-35 3 n
+-35 3 n
+-35 2 n
+-35 1 n
+-35 1 n
+-34 1 n
+-35 -1 n
+-35 -1 n
+-35 -1 n
+-35 -2 n
+-35 -3 n
+-35 -3 n
+-34 -4 n
+-35 -5 n
+-34 -5 n
+-35 -6 n
+-34 -6 n
+stroke
+newpath
+3618 5963 m
+-34 -7 n
+-34 -8 n
+-34 -8 n
+-34 -9 n
+-34 -9 n
+-33 -10 n
+-34 -10 n
+-33 -11 n
+-33 -12 n
+-32 -12 n
+-33 -13 n
+-32 -13 n
+-32 -14 n
+-32 -15 n
+-31 -15 n
+-31 -15 n
+-31 -17 n
+-31 -16 n
+-30 -17 n
+-31 -18 n
+-29 -18 n
+-30 -19 n
+-29 -19 n
+-29 -20 n
+-28 -20 n
+-28 -21 n
+-28 -21 n
+-27 -22 n
+-27 -22 n
+-27 -23 n
+-26 -23 n
+-25 -24 n
+-26 -24 n
+-25 -24 n
+-24 -25 n
+-24 -26 n
+-24 -25 n
+-23 -26 n
+-23 -27 n
+-22 -27 n
+-22 -27 n
+-21 -28 n
+-21 -28 n
+-20 -28 n
+-20 -29 n
+-19 -29 n
+-19 -30 n
+-18 -29 n
+-18 -30 n
+-17 -31 n
+-16 -31 n
+-17 -31 n
+-15 -31 n
+-15 -31 n
+-15 -32 n
+-14 -32 n
+-13 -32 n
+-13 -33 n
+-12 -32 n
+-12 -33 n
+-11 -33 n
+-10 -34 n
+-10 -33 n
+-9 -34 n
+-9 -34 n
+-8 -34 n
+-8 -34 n
+-7 -34 n
+-6 -34 n
+-6 -35 n
+-5 -34 n
+-5 -35 n
+-4 -34 n
+-3 -35 n
+-3 -35 n
+-2 -35 n
+-1 -35 n
+-1 -35 n
+0 -35 n
+0 -34 n
+1 -35 n
+1 -35 n
+2 -35 n
+3 -35 n
+3 -35 n
+4 -34 n
+5 -35 n
+5 -34 n
+6 -35 n
+6 -34 n
+7 -34 n
+8 -34 n
+8 -34 n
+9 -34 n
+9 -34 n
+10 -33 n
+10 -34 n
+11 -33 n
+12 -33 n
+12 -32 n
+13 -33 n
+stroke
+newpath
+2145 3250 m
+13 -32 n
+14 -32 n
+15 -32 n
+15 -31 n
+15 -31 n
+17 -31 n
+16 -31 n
+17 -30 n
+18 -31 n
+18 -29 n
+19 -30 n
+19 -29 n
+20 -29 n
+20 -28 n
+21 -28 n
+21 -28 n
+22 -27 n
+22 -27 n
+23 -27 n
+23 -26 n
+24 -25 n
+24 -26 n
+24 -25 n
+25 -24 n
+26 -24 n
+25 -24 n
+26 -23 n
+27 -23 n
+27 -22 n
+27 -22 n
+28 -21 n
+28 -21 n
+28 -20 n
+29 -20 n
+29 -19 n
+30 -19 n
+29 -18 n
+31 -18 n
+30 -17 n
+31 -16 n
+31 -17 n
+31 -15 n
+31 -15 n
+32 -15 n
+32 -14 n
+32 -13 n
+33 -13 n
+32 -12 n
+33 -12 n
+33 -11 n
+34 -10 n
+33 -10 n
+34 -9 n
+34 -9 n
+34 -8 n
+34 -8 n
+34 -7 n
+34 -6 n
+35 -6 n
+34 -5 n
+35 -5 n
+34 -4 n
+35 -3 n
+35 -3 n
+35 -2 n
+35 -1 n
+35 -1 n
+35 0 n
+34 0 n
+35 1 n
+35 1 n
+35 2 n
+35 3 n
+35 3 n
+34 4 n
+35 5 n
+34 5 n
+35 6 n
+34 6 n
+34 7 n
+34 8 n
+34 8 n
+34 9 n
+34 9 n
+33 10 n
+34 10 n
+33 11 n
+33 12 n
+32 12 n
+33 13 n
+32 13 n
+32 14 n
+32 15 n
+31 15 n
+31 15 n
+31 17 n
+31 16 n
+31 17 n
+30 18 n
+29 18 n
+30 19 n
+stroke
+newpath
+5089 2322 m
+29 19 n
+29 20 n
+28 20 n
+28 21 n
+28 21 n
+27 22 n
+27 22 n
+27 23 n
+26 23 n
+25 24 n
+26 24 n
+25 24 n
+24 25 n
+24 26 n
+24 25 n
+23 26 n
+23 27 n
+22 27 n
+22 27 n
+21 28 n
+21 28 n
+20 28 n
+20 29 n
+19 29 n
+19 30 n
+18 29 n
+18 30 n
+17 31 n
+16 31 n
+17 31 n
+15 31 n
+15 31 n
+15 32 n
+14 32 n
+13 32 n
+13 33 n
+12 32 n
+12 33 n
+11 33 n
+10 34 n
+10 33 n
+9 34 n
+9 34 n
+8 34 n
+8 34 n
+7 34 n
+6 34 n
+6 35 n
+5 34 n
+5 35 n
+4 34 n
+3 35 n
+3 35 n
+2 35 n
+1 35 n
+1 35 n
+1 35 n
+stroke
+newpath
+gsave
+-1000000 -1000000 m 1000000 -1000000 l 1000000 1000000 l -1000000 1000000 l closepath clip
+0.000 0.000 0.000 setrgbcolor
+3921 6200 m
+0 rotate
+/Times-Bold findfont
+21.168001 scalefont setfont
+14.112000 1 (N) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+5589 2786 m
+20 unit setlinewidth
+-37 -4 n
+stroke
+newpath
+5494 2771 m
+58 11 n
+stroke
+newpath
+5411 2704 m
+65 54 n
+stroke
+newpath
+5494 2771 m
+-18 -13 n
+stroke
+newpath
+5381 2672 m
+-38 -76 n
+stroke
+newpath
+5319 2558 m
+24 38 n
+stroke
+newpath
+5319 2558 m
+-11 -42 n
+stroke
+newpath
+5294 2475 m
+14 41 n
+stroke
+newpath
+2396 5048 m
+-1 3 n
+stroke
+newpath
+2394 5057 m
+1 -6 n
+stroke
+newpath
+2394 5057 m
+2 74 n
+stroke
+newpath
+2405 5207 m
+-9 -76 n
+stroke
+newpath
+2711 5529 m
+79 25 n
+stroke
+newpath
+2842 5570 m
+-52 -16 n
+stroke
+newpath
+2914 5578 m
+-38 -4 n
+stroke
+newpath
+2842 5570 m
+34 4 n
+stroke
+newpath
+5423 2853 m
+3 -11 n
+stroke
+newpath
+5438 2816 m
+-12 26 n
+stroke
+newpath
+5438 2816 m
+-22 -52 n
+stroke
+newpath
+5411 2704 m
+5 60 n
+stroke
+newpath
+5306 2721 m
+14 -13 n
+stroke
+newpath
+5374 2678 m
+-54 30 n
+stroke
+newpath
+5381 2672 m
+-7 6 n
+stroke
+newpath
+2404 4892 m
+-1 2 n
+stroke
+newpath
+2403 4897 m
+0 -3 n
+stroke
+newpath
+2403 4897 m
+-6 75 n
+stroke
+newpath
+2396 5048 m
+1 -76 n
+stroke
+newpath
+2914 5578 m
+47 11 n
+stroke
+newpath
+2989 5595 m
+-28 -6 n
+stroke
+newpath
+3126 5605 m
+-80 -5 n
+stroke
+newpath
+2989 5595 m
+57 5 n
+stroke
+newpath
+5462 3062 m
+-3 -54 n
+stroke
+newpath
+5458 2964 m
+1 44 n
+stroke
+newpath
+5458 2964 m
+-13 -39 n
+stroke
+newpath
+5423 2853 m
+22 72 n
+stroke
+newpath
+5306 2721 m
+-62 -23 n
+stroke
+newpath
+5201 2686 m
+43 12 n
+stroke
+newpath
+5144 2693 m
+23 -4 n
+stroke
+newpath
+5201 2686 m
+-34 3 n
+stroke
+newpath
+2426 4736 m
+-1 4 n
+stroke
+newpath
+2424 4743 m
+1 -3 n
+stroke
+newpath
+2424 4743 m
+-12 73 n
+stroke
+newpath
+2404 4892 m
+8 -76 n
+stroke
+newpath
+3126 5605 m
+5 1 n
+stroke
+newpath
+3134 5606 m
+-3 0 n
+stroke
+newpath
+3134 5606 m
+14 1 n
+stroke
+newpath
+3216 5609 m
+-68 -2 n
+stroke
+newpath
+3274 5609 m
+-58 0 n
+stroke
+newpath
+3334 5604 m
+-35 3 n
+stroke
+newpath
+3274 5609 m
+25 -2 n
+stroke
+newpath
+5477 3280 m
+1 -26 n
+stroke
+newpath
+5480 3235 m
+-2 19 n
+stroke
+newpath
+5480 3235 m
+-4 -62 n
+stroke
+newpath
+5476 3157 m
+0 16 n
+stroke
+newpath
+5472 3103 m
+4 54 n
+stroke
+newpath
+5472 3103 m
+-4 -13 n
+stroke
+newpath
+5462 3062 m
+6 28 n
+stroke
+newpath
+5144 2693 m
+-54 -10 n
+stroke
+newpath
+5048 2678 m
+42 5 n
+stroke
+newpath
+4984 2683 m
+30 -3 n
+stroke
+newpath
+5048 2678 m
+-34 2 n
+stroke
+newpath
+2463 4582 m
+-3 8 n
+stroke
+newpath
+2457 4599 m
+3 -9 n
+stroke
+newpath
+2457 4599 m
+-17 65 n
+stroke
+newpath
+2426 4736 m
+14 -72 n
+stroke
+newpath
+3334 5604 m
+48 -2 n
+stroke
+newpath
+3410 5601 m
+-28 1 n
+stroke
+newpath
+3464 5594 m
+59 -8 n
+stroke
+newpath
+3410 5601 m
+54 -7 n
+stroke
+newpath
+3540 5583 m
+-17 3 n
+stroke
+newpath
+3550 5580 m
+-6 2 n
+stroke
+newpath
+3540 5583 m
+4 -1 n
+stroke
+newpath
+5466 3508 m
+2 -13 n
+stroke
+newpath
+5470 3487 m
+-2 8 n
+stroke
+newpath
+5473 3460 m
+2 -44 n
+stroke
+newpath
+5470 3487 m
+3 -27 n
+stroke
+newpath
+5479 3363 m
+-4 53 n
+stroke
+newpath
+5479 3363 m
+-1 -28 n
+stroke
+newpath
+5477 3280 m
+1 55 n
+stroke
+newpath
+4984 2683 m
+-46 -3 n
+stroke
+newpath
+4903 2679 m
+35 1 n
+stroke
+newpath
+4820 2688 m
+43 -5 n
+stroke
+newpath
+4903 2679 m
+-40 4 n
+stroke
+newpath
+2513 4427 m
+-8 20 n
+stroke
+newpath
+2498 4464 m
+7 -17 n
+stroke
+newpath
+2498 4464 m
+-17 53 n
+stroke
+newpath
+2463 4582 m
+18 -65 n
+stroke
+newpath
+3550 5580 m
+74 -13 n
+stroke
+newpath
+3664 5559 m
+-40 8 n
+stroke
+newpath
+3771 5530 m
+-69 19 n
+stroke
+newpath
+3664 5559 m
+38 -10 n
+stroke
+newpath
+4004 5447 m
+-3 2 n
+stroke
+newpath
+4000 5449 m
+1 0 n
+stroke
+newpath
+5426 3751 m
+5 -23 n
+stroke
+newpath
+5434 3717 m
+-3 11 n
+stroke
+newpath
+5441 3688 m
+6 -36 n
+stroke
+newpath
+5434 3717 m
+7 -29 n
+stroke
+newpath
+5456 3605 m
+-9 47 n
+stroke
+newpath
+5456 3605 m
+3 -31 n
+stroke
+newpath
+5466 3508 m
+-7 66 n
+stroke
+newpath
+4820 2688 m
+-32 1 n
+stroke
+newpath
+4766 2689 m
+22 0 n
+stroke
+newpath
+4651 2706 m
+64 -10 n
+stroke
+newpath
+4766 2689 m
+-51 7 n
+stroke
+newpath
+2577 4271 m
+-18 38 n
+stroke
+newpath
+2546 4339 m
+13 -30 n
+stroke
+newpath
+2546 4339 m
+-15 38 n
+stroke
+newpath
+2513 4427 m
+18 -50 n
+stroke
+newpath
+3771 5530 m
+8 -3 n
+stroke
+newpath
+3782 5526 m
+-3 1 n
+stroke
+newpath
+3782 5526 m
+11 -3 n
+stroke
+newpath
+3854 5504 m
+-61 19 n
+stroke
+newpath
+3894 5491 m
+-40 13 n
+stroke
+newpath
+3928 5478 m
+68 -27 n
+stroke
+newpath
+3894 5491 m
+34 -13 n
+stroke
+newpath
+4000 5449 m
+-4 2 n
+stroke
+newpath
+4004 5447 m
+68 -30 n
+stroke
+newpath
+4099 5405 m
+-27 12 n
+stroke
+newpath
+4142 5384 m
+14 -7 n
+stroke
+newpath
+4099 5405 m
+43 -21 n
+stroke
+newpath
+4193 5358 m
+-37 19 n
+stroke
+newpath
+4260 5320 m
+-51 29 n
+stroke
+newpath
+4193 5358 m
+16 -9 n
+stroke
+newpath
+5345 4026 m
+1 -2 n
+stroke
+newpath
+5346 4023 m
+0 1 n
+stroke
+newpath
+5347 4022 m
+24 -70 n
+stroke
+newpath
+5346 4023 m
+1 -1 n
+stroke
+newpath
+5380 3926 m
+-9 26 n
+stroke
+newpath
+5380 3926 m
+14 -47 n
+stroke
+newpath
+5397 3870 m
+-3 9 n
+stroke
+newpath
+5409 3824 m
+-12 46 n
+stroke
+newpath
+5409 3824 m
+5 -20 n
+stroke
+newpath
+5426 3751 m
+-12 53 n
+stroke
+newpath
+4651 2706 m
+-8 1 n
+stroke
+newpath
+4638 2707 m
+5 0 n
+stroke
+newpath
+4638 2707 m
+-25 4 n
+stroke
+newpath
+4571 2719 m
+42 -8 n
+stroke
+newpath
+4519 2729 m
+52 -10 n
+stroke
+newpath
+4475 2740 m
+26 -7 n
+stroke
+newpath
+4519 2729 m
+-18 4 n
+stroke
+newpath
+2658 4111 m
+-3 5 n
+stroke
+newpath
+2653 4119 m
+2 -3 n
+stroke
+newpath
+2645 4133 m
+-24 45 n
+stroke
+newpath
+2653 4119 m
+-8 14 n
+stroke
+newpath
+2598 4224 m
+23 -46 n
+stroke
+newpath
+2598 4224 m
+-8 19 n
+stroke
+newpath
+2577 4271 m
+13 -28 n
+stroke
+newpath
+4260 5320 m
+16 -9 n
+stroke
+newpath
+4281 5308 m
+-5 3 n
+stroke
+newpath
+4281 5308 m
+9 -5 n
+stroke
+newpath
+4341 5271 m
+-51 32 n
+stroke
+newpath
+4364 5256 m
+-23 15 n
+stroke
+newpath
+4364 5256 m
+39 -25 n
+stroke
+newpath
+4405 5230 m
+-2 1 n
+stroke
+newpath
+4443 5203 m
+-38 27 n
+stroke
+newpath
+4467 5186 m
+35 -25 n
+stroke
+newpath
+4443 5203 m
+24 -17 n
+stroke
+newpath
+4518 5148 m
+-16 13 n
+stroke
+newpath
+4584 5096 m
+-56 44 n
+stroke
+newpath
+4518 5148 m
+10 -8 n
+stroke
+newpath
+5180 4386 m
+9 -16 n
+stroke
+newpath
+5190 4368 m
+-1 2 n
+stroke
+newpath
+5192 4364 m
+33 -61 n
+stroke
+newpath
+5190 4368 m
+2 -4 n
+stroke
+newpath
+5233 4288 m
+-8 15 n
+stroke
+newpath
+5245 4263 m
+13 -28 n
+stroke
+newpath
+5233 4288 m
+12 -25 n
+stroke
+newpath
+5273 4204 m
+-15 31 n
+stroke
+newpath
+5273 4204 m
+17 -38 n
+stroke
+newpath
+5297 4150 m
+-7 16 n
+stroke
+newpath
+5311 4116 m
+-14 34 n
+stroke
+newpath
+5311 4116 m
+8 -21 n
+stroke
+newpath
+5345 4026 m
+-26 69 n
+stroke
+newpath
+4475 2740 m
+-42 10 n
+stroke
+newpath
+4409 2755 m
+24 -5 n
+stroke
+newpath
+4365 2767 m
+-38 11 n
+stroke
+newpath
+4409 2755 m
+-44 12 n
+stroke
+newpath
+4306 2785 m
+21 -7 n
+stroke
+newpath
+4288 2791 m
+12 -4 n
+stroke
+newpath
+4306 2785 m
+-6 2 n
+stroke
+newpath
+2758 3945 m
+-32 50 n
+stroke
+newpath
+2709 4022 m
+17 -27 n
+stroke
+newpath
+2709 4022 m
+-19 32 n
+stroke
+newpath
+2658 4111 m
+32 -57 n
+stroke
+newpath
+4584 5096 m
+4 -3 n
+stroke
+newpath
+4588 5092 m
+0 1 n
+stroke
+newpath
+4588 5092 m
+1 -1 n
+stroke
+newpath
+4646 5043 m
+-57 48 n
+stroke
+newpath
+4655 5035 m
+-9 8 n
+stroke
+newpath
+4655 5035 m
+12 -11 n
+stroke
+newpath
+4704 4991 m
+-37 33 n
+stroke
+newpath
+4719 4976 m
+-15 15 n
+stroke
+newpath
+4719 4976 m
+19 -18 n
+stroke
+newpath
+4761 4936 m
+-23 22 n
+stroke
+newpath
+4781 4916 m
+-20 20 n
+stroke
+newpath
+4781 4916 m
+23 -23 n
+stroke
+newpath
+4817 4879 m
+-13 14 n
+stroke
+newpath
+4839 4854 m
+-22 25 n
+stroke
+newpath
+4839 4854 m
+25 -26 n
+stroke
+newpath
+4872 4819 m
+-8 9 n
+stroke
+newpath
+4895 4791 m
+-23 28 n
+stroke
+newpath
+4895 4791 m
+25 -28 n
+stroke
+newpath
+4926 4755 m
+-6 8 n
+stroke
+newpath
+4949 4726 m
+-23 29 n
+stroke
+newpath
+4949 4726 m
+23 -28 n
+stroke
+newpath
+4980 4688 m
+-8 10 n
+stroke
+newpath
+5001 4659 m
+-21 29 n
+stroke
+newpath
+5001 4659 m
+20 -26 n
+stroke
+newpath
+5034 4616 m
+-13 17 n
+stroke
+newpath
+5051 4590 m
+-17 26 n
+stroke
+newpath
+5051 4590 m
+16 -22 n
+stroke
+newpath
+5087 4539 m
+-20 29 n
+stroke
+newpath
+5099 4519 m
+-12 20 n
+stroke
+newpath
+5099 4519 m
+11 -16 n
+stroke
+newpath
+5140 4455 m
+-30 48 n
+stroke
+newpath
+5146 4445 m
+-6 10 n
+stroke
+newpath
+5146 4445 m
+4 -8 n
+stroke
+newpath
+5180 4386 m
+-30 51 n
+stroke
+newpath
+4288 2791 m
+-53 17 n
+stroke
+newpath
+4211 2816 m
+24 -8 n
+stroke
+newpath
+4172 2830 m
+-22 8 n
+stroke
+newpath
+4211 2816 m
+-39 14 n
+stroke
+newpath
+4122 2850 m
+28 -12 n
+stroke
+newpath
+4081 2866 m
+29 -12 n
+stroke
+newpath
+4122 2850 m
+-12 4 n
+stroke
+newpath
+2887 3767 m
+-6 9 n
+stroke
+newpath
+2878 3779 m
+3 -3 n
+stroke
+newpath
+2872 3787 m
+-31 41 n
+stroke
+newpath
+2878 3779 m
+-6 8 n
+stroke
+newpath
+2822 3853 m
+19 -25 n
+stroke
+newpath
+2822 3853 m
+-21 29 n
+stroke
+newpath
+2772 3924 m
+29 -42 n
+stroke
+newpath
+2766 3934 m
+6 -10 n
+stroke
+newpath
+2766 3934 m
+-3 4 n
+stroke
+newpath
+2758 3945 m
+5 -7 n
+stroke
+newpath
+4081 2866 m
+-31 13 n
+stroke
+newpath
+4039 2884 m
+11 -5 n
+stroke
+newpath
+4039 2884 m
+-22 8 n
+stroke
+newpath
+3991 2905 m
+26 -13 n
+stroke
+newpath
+3961 2918 m
+30 -13 n
+stroke
+newpath
+3933 2932 m
+-23 10 n
+stroke
+newpath
+3961 2918 m
+-28 14 n
+stroke
+newpath
+3888 2954 m
+22 -12 n
+stroke
+newpath
+3826 2986 m
+50 -26 n
+stroke
+newpath
+3888 2954 m
+-12 6 n
+stroke
+newpath
+3073 3554 m
+-26 27 n
+stroke
+newpath
+3041 3588 m
+6 -7 n
+stroke
+newpath
+3031 3598 m
+-27 30 n
+stroke
+newpath
+3041 3588 m
+-10 10 n
+stroke
+newpath
+2987 3647 m
+17 -19 n
+stroke
+newpath
+2987 3647 m
+-25 28 n
+stroke
+newpath
+2956 3683 m
+6 -8 n
+stroke
+newpath
+2933 3710 m
+23 -27 n
+stroke
+newpath
+2933 3710 m
+-12 15 n
+stroke
+newpath
+2887 3767 m
+34 -42 n
+stroke
+newpath
+3826 2986 m
+-5 3 n
+stroke
+newpath
+3819 2990 m
+2 -1 n
+stroke
+newpath
+3819 2990 m
+-1 1 n
+stroke
+newpath
+3766 3019 m
+52 -28 n
+stroke
+newpath
+3754 3026 m
+12 -7 n
+stroke
+newpath
+3754 3026 m
+-17 9 n
+stroke
+newpath
+3712 3050 m
+25 -15 n
+stroke
+newpath
+3691 3062 m
+21 -12 n
+stroke
+newpath
+3691 3062 m
+-26 16 n
+stroke
+newpath
+3658 3082 m
+7 -4 n
+stroke
+newpath
+3631 3099 m
+27 -17 n
+stroke
+newpath
+3605 3116 m
+-7 4 n
+stroke
+newpath
+3631 3099 m
+-26 17 n
+stroke
+newpath
+3573 3137 m
+25 -17 n
+stroke
+newpath
+3552 3151 m
+-15 10 n
+stroke
+newpath
+3573 3137 m
+-21 14 n
+stroke
+newpath
+3517 3175 m
+20 -14 n
+stroke
+newpath
+3499 3187 m
+-20 15 n
+stroke
+newpath
+3517 3175 m
+-18 12 n
+stroke
+newpath
+3462 3214 m
+17 -12 n
+stroke
+newpath
+3446 3226 m
+-22 16 n
+stroke
+newpath
+3462 3214 m
+-16 12 n
+stroke
+newpath
+3409 3255 m
+15 -13 n
+stroke
+newpath
+3392 3267 m
+-20 16 n
+stroke
+newpath
+3409 3255 m
+-17 12 n
+stroke
+newpath
+3356 3296 m
+16 -13 n
+stroke
+newpath
+3338 3310 m
+-16 14 n
+stroke
+newpath
+3356 3296 m
+-18 14 n
+stroke
+newpath
+3303 3339 m
+19 -15 n
+stroke
+newpath
+3282 3357 m
+-9 8 n
+stroke
+newpath
+3303 3339 m
+-21 18 n
+stroke
+newpath
+3251 3384 m
+22 -19 n
+stroke
+newpath
+3251 3384 m
+-25 22 n
+stroke
+newpath
+3224 3408 m
+2 -2 n
+stroke
+newpath
+3199 3431 m
+25 -23 n
+stroke
+newpath
+3199 3431 m
+-19 18 n
+stroke
+newpath
+3163 3464 m
+17 -15 n
+stroke
+newpath
+3147 3480 m
+16 -16 n
+stroke
+newpath
+3147 3480 m
+-12 12 n
+stroke
+newpath
+3100 3526 m
+35 -34 n
+stroke
+newpath
+3094 3532 m
+6 -6 n
+stroke
+newpath
+3094 3532 m
+-3 4 n
+stroke
+newpath
+3073 3554 m
+18 -18 n
+stroke
+newpath
+4448 3039 m
+0 70 n
+stroke
+newpath
+4447 3039 m
+0 70 n
+stroke
+newpath
+4448 3109 m
+-35 0 n
+stroke
+newpath
+4447 3109 m
+-35 0 n
+stroke
+newpath
+4413 3109 m
+-35 -35 n
+stroke
+newpath
+4412 3109 m
+-35 -35 n
+stroke
+newpath
+4378 3074 m
+0 -70 n
+stroke
+newpath
+4377 3074 m
+0 -70 n
+stroke
+newpath
+4378 3004 m
+35 -35 n
+stroke
+newpath
+4377 3004 m
+35 -35 n
+stroke
+newpath
+4413 2969 m
+70 0 n
+stroke
+newpath
+4412 2969 m
+70 0 n
+stroke
+newpath
+4483 2969 m
+35 35 n
+stroke
+newpath
+4482 2969 m
+35 35 n
+stroke
+newpath
+4518 3004 m
+0 70 n
+stroke
+newpath
+4517 3004 m
+0 70 n
+stroke
+newpath
+4518 3074 m
+-35 35 n
+stroke
+newpath
+4517 3074 m
+-35 35 n
+stroke
+newpath
+4483 3109 m
+-35 0 n
+stroke
+newpath
+4482 3109 m
+-35 0 n
+stroke
+newpath
+4448 3109 m
+0 -70 n
+stroke
+newpath
+4447 3109 m
+0 -70 n
+stroke
+newpath
+4788 3291 m
+0 70 n
+stroke
+newpath
+4787 3291 m
+0 70 n
+stroke
+newpath
+4788 3361 m
+-70 -105 n
+stroke
+newpath
+4787 3361 m
+-70 -105 n
+stroke
+newpath
+4718 3256 m
+140 0 n
+stroke
+newpath
+4717 3256 m
+140 0 n
+stroke
+newpath
+4858 3256 m
+-70 105 n
+stroke
+newpath
+4857 3256 m
+-70 105 n
+stroke
+newpath
+4788 3361 m
+0 -70 n
+stroke
+newpath
+4787 3361 m
+0 -70 n
+stroke
+newpath
+4953 3535 m
+0 70 n
+stroke
+newpath
+4952 3535 m
+0 70 n
+stroke
+newpath
+4953 3605 m
+-35 0 n
+stroke
+newpath
+4952 3605 m
+-35 0 n
+stroke
+newpath
+4918 3605 m
+-35 -35 n
+stroke
+newpath
+4917 3605 m
+-35 -35 n
+stroke
+newpath
+4883 3570 m
+0 -70 n
+stroke
+newpath
+4882 3570 m
+0 -70 n
+stroke
+newpath
+4883 3500 m
+35 -35 n
+stroke
+newpath
+4882 3500 m
+35 -35 n
+stroke
+newpath
+4918 3465 m
+70 0 n
+stroke
+newpath
+4917 3465 m
+70 0 n
+stroke
+newpath
+4988 3465 m
+35 35 n
+stroke
+newpath
+4987 3465 m
+35 35 n
+stroke
+newpath
+5023 3500 m
+0 70 n
+stroke
+newpath
+5022 3500 m
+0 70 n
+stroke
+newpath
+5023 3570 m
+-35 35 n
+stroke
+newpath
+5022 3570 m
+-35 35 n
+stroke
+newpath
+4988 3605 m
+-35 0 n
+stroke
+newpath
+4987 3605 m
+-35 0 n
+stroke
+newpath
+4953 3605 m
+0 -70 n
+stroke
+newpath
+4952 3605 m
+0 -70 n
+stroke
+newpath
+4775 3277 m
+70 0 n
+stroke
+newpath
+4774 3277 m
+70 0 n
+stroke
+newpath
+4845 3277 m
+-140 0 n
+stroke
+newpath
+4844 3277 m
+-140 0 n
+stroke
+newpath
+4705 3277 m
+70 0 n
+stroke
+newpath
+4704 3277 m
+70 0 n
+stroke
+newpath
+4775 3277 m
+0 -70 n
+stroke
+newpath
+4774 3277 m
+0 -70 n
+stroke
+newpath
+4775 3207 m
+0 140 n
+stroke
+newpath
+4774 3207 m
+0 140 n
+stroke
+newpath
+4775 3347 m
+0 -70 n
+stroke
+newpath
+4774 3347 m
+0 -70 n
+stroke
+newpath
+5052 4129 m
+0 70 n
+stroke
+newpath
+5051 4129 m
+0 70 n
+stroke
+newpath
+5052 4199 m
+-35 0 n
+stroke
+newpath
+5051 4199 m
+-35 0 n
+stroke
+newpath
+5017 4199 m
+-35 -35 n
+stroke
+newpath
+5016 4199 m
+-35 -35 n
+stroke
+newpath
+4982 4164 m
+0 -70 n
+stroke
+newpath
+4981 4164 m
+0 -70 n
+stroke
+newpath
+4982 4094 m
+35 -35 n
+stroke
+newpath
+4981 4094 m
+35 -35 n
+stroke
+newpath
+5017 4059 m
+70 0 n
+stroke
+newpath
+5016 4059 m
+70 0 n
+stroke
+newpath
+5087 4059 m
+35 35 n
+stroke
+newpath
+5086 4059 m
+35 35 n
+stroke
+newpath
+5122 4094 m
+0 70 n
+stroke
+newpath
+5121 4094 m
+0 70 n
+stroke
+newpath
+5122 4164 m
+-35 35 n
+stroke
+newpath
+5121 4164 m
+-35 35 n
+stroke
+newpath
+5087 4199 m
+-35 0 n
+stroke
+newpath
+5086 4199 m
+-35 0 n
+stroke
+newpath
+5052 4199 m
+0 -70 n
+stroke
+newpath
+5051 4199 m
+0 -70 n
+stroke
+newpath
+5057 4073 m
+0 70 n
+stroke
+newpath
+5056 4073 m
+0 70 n
+stroke
+newpath
+5057 4143 m
+-35 0 n
+stroke
+newpath
+5056 4143 m
+-35 0 n
+stroke
+newpath
+5022 4143 m
+-35 -35 n
+stroke
+newpath
+5021 4143 m
+-35 -35 n
+stroke
+newpath
+4987 4108 m
+0 -70 n
+stroke
+newpath
+4986 4108 m
+0 -70 n
+stroke
+newpath
+4987 4038 m
+35 -35 n
+stroke
+newpath
+4986 4038 m
+35 -35 n
+stroke
+newpath
+5022 4003 m
+70 0 n
+stroke
+newpath
+5021 4003 m
+70 0 n
+stroke
+newpath
+5092 4003 m
+35 35 n
+stroke
+newpath
+5091 4003 m
+35 35 n
+stroke
+newpath
+5127 4038 m
+0 70 n
+stroke
+newpath
+5126 4038 m
+0 70 n
+stroke
+newpath
+5127 4108 m
+-35 35 n
+stroke
+newpath
+5126 4108 m
+-35 35 n
+stroke
+newpath
+5092 4143 m
+-35 0 n
+stroke
+newpath
+5091 4143 m
+-35 0 n
+stroke
+newpath
+5057 4143 m
+0 -70 n
+stroke
+newpath
+5056 4143 m
+0 -70 n
+stroke
+newpath
+4899 3438 m
+-70 70 n
+stroke
+newpath
+4898 3438 m
+-70 70 n
+stroke
+newpath
+4829 3508 m
+140 -140 n
+stroke
+newpath
+4828 3508 m
+140 -140 n
+stroke
+newpath
+4969 3368 m
+-70 70 n
+stroke
+newpath
+4968 3368 m
+-70 70 n
+stroke
+newpath
+4899 3438 m
+-70 -70 n
+stroke
+newpath
+4898 3438 m
+-70 -70 n
+stroke
+newpath
+4829 3368 m
+140 140 n
+stroke
+newpath
+4828 3368 m
+140 140 n
+stroke
+newpath
+4969 3508 m
+-70 -70 n
+stroke
+newpath
+4968 3508 m
+-70 -70 n
+stroke
+newpath
+3348 4834 m
+0 70 n
+stroke
+newpath
+3347 4834 m
+0 70 n
+stroke
+newpath
+3348 4904 m
+-70 -105 n
+stroke
+newpath
+3347 4904 m
+-70 -105 n
+stroke
+newpath
+3278 4799 m
+140 0 n
+stroke
+newpath
+3277 4799 m
+140 0 n
+stroke
+newpath
+3418 4799 m
+-70 105 n
+stroke
+newpath
+3417 4799 m
+-70 105 n
+stroke
+newpath
+3348 4904 m
+0 -70 n
+stroke
+newpath
+3347 4904 m
+0 -70 n
+stroke
+newpath
+4800 3304 m
+70 0 n
+stroke
+newpath
+4799 3304 m
+70 0 n
+stroke
+newpath
+4870 3304 m
+-140 0 n
+stroke
+newpath
+4869 3304 m
+-140 0 n
+stroke
+newpath
+4730 3304 m
+70 0 n
+stroke
+newpath
+4729 3304 m
+70 0 n
+stroke
+newpath
+4800 3304 m
+0 -70 n
+stroke
+newpath
+4799 3304 m
+0 -70 n
+stroke
+newpath
+4800 3234 m
+0 140 n
+stroke
+newpath
+4799 3234 m
+0 140 n
+stroke
+newpath
+4800 3374 m
+0 -70 n
+stroke
+newpath
+4799 3374 m
+0 -70 n
+stroke
+newpath
+4166 5046 m
+0 70 n
+stroke
+newpath
+4165 5046 m
+0 70 n
+stroke
+newpath
+4166 5116 m
+-35 0 n
+stroke
+newpath
+4165 5116 m
+-35 0 n
+stroke
+newpath
+4131 5116 m
+-35 -35 n
+stroke
+newpath
+4130 5116 m
+-35 -35 n
+stroke
+newpath
+4096 5081 m
+0 -70 n
+stroke
+newpath
+4095 5081 m
+0 -70 n
+stroke
+newpath
+4096 5011 m
+35 -35 n
+stroke
+newpath
+4095 5011 m
+35 -35 n
+stroke
+newpath
+4131 4976 m
+70 0 n
+stroke
+newpath
+4130 4976 m
+70 0 n
+stroke
+newpath
+4201 4976 m
+35 35 n
+stroke
+newpath
+4200 4976 m
+35 35 n
+stroke
+newpath
+4236 5011 m
+0 70 n
+stroke
+newpath
+4235 5011 m
+0 70 n
+stroke
+newpath
+4236 5081 m
+-35 35 n
+stroke
+newpath
+4235 5081 m
+-35 35 n
+stroke
+newpath
+4201 5116 m
+-35 0 n
+stroke
+newpath
+4200 5116 m
+-35 0 n
+stroke
+newpath
+4166 5116 m
+0 -70 n
+stroke
+newpath
+4165 5116 m
+0 -70 n
+stroke
+newpath
+4380 3010 m
+0 70 n
+stroke
+newpath
+4379 3010 m
+0 70 n
+stroke
+newpath
+4380 3080 m
+-35 0 n
+stroke
+newpath
+4379 3080 m
+-35 0 n
+stroke
+newpath
+4345 3080 m
+-35 -35 n
+stroke
+newpath
+4344 3080 m
+-35 -35 n
+stroke
+newpath
+4310 3045 m
+0 -70 n
+stroke
+newpath
+4309 3045 m
+0 -70 n
+stroke
+newpath
+4310 2975 m
+35 -35 n
+stroke
+newpath
+4309 2975 m
+35 -35 n
+stroke
+newpath
+4345 2940 m
+70 0 n
+stroke
+newpath
+4344 2940 m
+70 0 n
+stroke
+newpath
+4415 2940 m
+35 35 n
+stroke
+newpath
+4414 2940 m
+35 35 n
+stroke
+newpath
+4450 2975 m
+0 70 n
+stroke
+newpath
+4449 2975 m
+0 70 n
+stroke
+newpath
+4450 3045 m
+-35 35 n
+stroke
+newpath
+4449 3045 m
+-35 35 n
+stroke
+newpath
+4415 3080 m
+-35 0 n
+stroke
+newpath
+4414 3080 m
+-35 0 n
+stroke
+newpath
+4380 3080 m
+0 -70 n
+stroke
+newpath
+4379 3080 m
+0 -70 n
+stroke
+newpath
+5060 4000 m
+0 70 n
+stroke
+newpath
+5059 4000 m
+0 70 n
+stroke
+newpath
+5060 4070 m
+-35 0 n
+stroke
+newpath
+5059 4070 m
+-35 0 n
+stroke
+newpath
+5025 4070 m
+-35 -35 n
+stroke
+newpath
+5024 4070 m
+-35 -35 n
+stroke
+newpath
+4990 4035 m
+0 -70 n
+stroke
+newpath
+4989 4035 m
+0 -70 n
+stroke
+newpath
+4990 3965 m
+35 -35 n
+stroke
+newpath
+4989 3965 m
+35 -35 n
+stroke
+newpath
+5025 3930 m
+70 0 n
+stroke
+newpath
+5024 3930 m
+70 0 n
+stroke
+newpath
+5095 3930 m
+35 35 n
+stroke
+newpath
+5094 3930 m
+35 35 n
+stroke
+newpath
+5130 3965 m
+0 70 n
+stroke
+newpath
+5129 3965 m
+0 70 n
+stroke
+newpath
+5130 4035 m
+-35 35 n
+stroke
+newpath
+5129 4035 m
+-35 35 n
+stroke
+newpath
+5095 4070 m
+-35 0 n
+stroke
+newpath
+5094 4070 m
+-35 0 n
+stroke
+newpath
+5060 4070 m
+0 -70 n
+stroke
+newpath
+5059 4070 m
+0 -70 n
+stroke
+newpath
+4945 3518 m
+-70 70 n
+stroke
+newpath
+4944 3518 m
+-70 70 n
+stroke
+newpath
+4875 3588 m
+140 -140 n
+stroke
+newpath
+4874 3588 m
+140 -140 n
+stroke
+newpath
+5015 3448 m
+-70 70 n
+stroke
+newpath
+5014 3448 m
+-70 70 n
+stroke
+newpath
+4945 3518 m
+-70 -70 n
+stroke
+newpath
+4944 3518 m
+-70 -70 n
+stroke
+newpath
+4875 3448 m
+140 140 n
+stroke
+newpath
+4874 3448 m
+140 140 n
+stroke
+newpath
+5015 3588 m
+-70 -70 n
+stroke
+newpath
+5014 3588 m
+-70 -70 n
+stroke
+newpath
+2468 4297 m
+0 70 n
+stroke
+newpath
+2467 4297 m
+0 70 n
+stroke
+newpath
+2468 4367 m
+-70 -105 n
+stroke
+newpath
+2467 4367 m
+-70 -105 n
+stroke
+newpath
+2398 4262 m
+140 0 n
+stroke
+newpath
+2397 4262 m
+140 0 n
+stroke
+newpath
+2538 4262 m
+-70 105 n
+stroke
+newpath
+2537 4262 m
+-70 105 n
+stroke
+newpath
+2468 4367 m
+0 -70 n
+stroke
+newpath
+2467 4367 m
+0 -70 n
+stroke
+newpath
+4968 3569 m
+70 0 n
+stroke
+newpath
+4967 3569 m
+70 0 n
+stroke
+newpath
+5038 3569 m
+-140 0 n
+stroke
+newpath
+5037 3569 m
+-140 0 n
+stroke
+newpath
+4898 3569 m
+70 0 n
+stroke
+newpath
+4897 3569 m
+70 0 n
+stroke
+newpath
+4968 3569 m
+0 -70 n
+stroke
+newpath
+4967 3569 m
+0 -70 n
+stroke
+newpath
+4968 3499 m
+0 140 n
+stroke
+newpath
+4967 3499 m
+0 140 n
+stroke
+newpath
+4968 3639 m
+0 -70 n
+stroke
+newpath
+4967 3639 m
+0 -70 n
+stroke
+newpath
+gsave
+-1000000 -1000000 m 1000000 -1000000 l 1000000 1000000 l -1000000 1000000 l closepath clip
+0.000 0.000 0.000 setrgbcolor
+5018 3707 m
+0 rotate
+/Times-Bold findfont
+15.120000 scalefont setfont
+10.080000 1 (-) ShowEqui
+grestore
+0.000 0.000 0.000 setrgbcolor
+newpath
+3369 2907 m
+0 70 n
+stroke
+newpath
+3368 2907 m
+0 70 n
+stroke
+newpath
+3369 2977 m
+-35 0 n
+stroke
+newpath
+3368 2977 m
+-35 0 n
+stroke
+newpath
+3334 2977 m
+-35 -35 n
+stroke
+newpath
+3333 2977 m
+-35 -35 n
+stroke
+newpath
+3299 2942 m
+0 -70 n
+stroke
+newpath
+3298 2942 m
+0 -70 n
+stroke
+newpath
+3299 2872 m
+35 -35 n
+stroke
+newpath
+3298 2872 m
+35 -35 n
+stroke
+newpath
+3334 2837 m
+70 0 n
+stroke
+newpath
+3333 2837 m
+70 0 n
+stroke
+newpath
+3404 2837 m
+35 35 n
+stroke
+newpath
+3403 2837 m
+35 35 n
+stroke
+newpath
+3439 2872 m
+0 70 n
+stroke
+newpath
+3438 2872 m
+0 70 n
+stroke
+newpath
+3439 2942 m
+-35 35 n
+stroke
+newpath
+3438 2942 m
+-35 35 n
+stroke
+newpath
+3404 2977 m
+-35 0 n
+stroke
+newpath
+3403 2977 m
+-35 0 n
+stroke
+newpath
+3369 2977 m
+0 -70 n
+stroke
+newpath
+3368 2977 m
+0 -70 n
+stroke
+newpath
+5033 3761 m
+70 0 n
+stroke
+newpath
+5032 3761 m
+70 0 n
+stroke
+newpath
+5103 3761 m
+-140 0 n
+stroke
+newpath
+5102 3761 m
+-140 0 n
+stroke
+newpath
+4963 3761 m
+70 0 n
+stroke
+newpath
+4962 3761 m
+70 0 n
+stroke
+newpath
+5033 3761 m
+0 -70 n
+stroke
+newpath
+5032 3761 m
+0 -70 n
+stroke
+newpath
+5033 3691 m
+0 140 n
+stroke
+newpath
+5032 3691 m
+0 140 n
+stroke
+newpath
+5033 3831 m
+0 -70 n
+stroke
+newpath
+5032 3831 m
+0 -70 n
+stroke
+newpath
+3581 2627 m
+0 70 n
+stroke
+newpath
+3580 2627 m
+0 70 n
+stroke
+newpath
+3581 2697 m
+-35 0 n
+stroke
+newpath
+3580 2697 m
+-35 0 n
+stroke
+newpath
+3546 2697 m
+-35 -35 n
+stroke
+newpath
+3545 2697 m
+-35 -35 n
+stroke
+newpath
+3511 2662 m
+0 -70 n
+stroke
+newpath
+3510 2662 m
+0 -70 n
+stroke
+newpath
+3511 2592 m
+35 -35 n
+stroke
+newpath
+3510 2592 m
+35 -35 n
+stroke
+newpath
+3546 2557 m
+70 0 n
+stroke
+newpath
+3545 2557 m
+70 0 n
+stroke
+newpath
+3616 2557 m
+35 35 n
+stroke
+newpath
+3615 2557 m
+35 35 n
+stroke
+newpath
+3651 2592 m
+0 70 n
+stroke
+newpath
+3650 2592 m
+0 70 n
+stroke
+newpath
+3651 2662 m
+-35 35 n
+stroke
+newpath
+3650 2662 m
+-35 35 n
+stroke
+newpath
+3616 2697 m
+-35 0 n
+stroke
+newpath
+3615 2697 m
+-35 0 n
+stroke
+newpath
+3581 2697 m
+0 -70 n
+stroke
+newpath
+3580 2697 m
+0 -70 n
+stroke
+newpath
+2920 3155 m
+0 70 n
+stroke
+newpath
+2919 3155 m
+0 70 n
+stroke
+newpath
+2920 3225 m
+-35 0 n
+stroke
+newpath
+2919 3225 m
+-35 0 n
+stroke
+newpath
+2885 3225 m
+-35 -35 n
+stroke
+newpath
+2884 3225 m
+-35 -35 n
+stroke
+newpath
+2850 3190 m
+0 -70 n
+stroke
+newpath
+2849 3190 m
+0 -70 n
+stroke
+newpath
+2850 3120 m
+35 -35 n
+stroke
+newpath
+2849 3120 m
+35 -35 n
+stroke
+newpath
+2885 3085 m
+70 0 n
+stroke
+newpath
+2884 3085 m
+70 0 n
+stroke
+newpath
+2955 3085 m
+35 35 n
+stroke
+newpath
+2954 3085 m
+35 35 n
+stroke
+newpath
+2990 3120 m
+0 70 n
+stroke
+newpath
+2989 3120 m
+0 70 n
+stroke
+newpath
+2990 3190 m
+-35 35 n
+stroke
+newpath
+2989 3190 m
+-35 35 n
+stroke
+newpath
+2955 3225 m
+-35 0 n
+stroke
+newpath
+2954 3225 m
+-35 0 n
+stroke
+newpath
+2920 3225 m
+0 -70 n
+stroke
+newpath
+2919 3225 m
+0 -70 n
+stroke
+newpath
+3351 3527 m
+0 70 n
+stroke
+newpath
+3350 3527 m
+0 70 n
+stroke
+newpath
+3351 3597 m
+-70 -105 n
+stroke
+newpath
+3350 3597 m
+-70 -105 n
+stroke
+newpath
+3281 3492 m
+140 0 n
+stroke
+newpath
+3280 3492 m
+140 0 n
+stroke
+newpath
+3421 3492 m
+-70 105 n
+stroke
+newpath
+3420 3492 m
+-70 105 n
+stroke
+newpath
+3351 3597 m
+0 -70 n
+stroke
+newpath
+3350 3597 m
+0 -70 n
+stroke
+newpath
+4268 3588 m
+0 70 n
+stroke
+newpath
+4267 3588 m
+0 70 n
+stroke
+newpath
+4268 3658 m
+-70 -105 n
+stroke
+newpath
+4267 3658 m
+-70 -105 n
+stroke
+newpath
+4198 3553 m
+140 0 n
+stroke
+newpath
+4197 3553 m
+140 0 n
+stroke
+newpath
+4338 3553 m
+-70 105 n
+stroke
+newpath
+4337 3553 m
+-70 105 n
+stroke
+newpath
+4268 3658 m
+0 -70 n
+stroke
+newpath
+4267 3658 m
+0 -70 n
+stroke
+newpath
+4380 4989 m
+0 70 n
+stroke
+newpath
+4379 4989 m
+0 70 n
+stroke
+newpath
+4380 5059 m
+-35 0 n
+stroke
+newpath
+4379 5059 m
+-35 0 n
+stroke
+newpath
+4345 5059 m
+-35 -35 n
+stroke
+newpath
+4344 5059 m
+-35 -35 n
+stroke
+newpath
+4310 5024 m
+0 -70 n
+stroke
+newpath
+4309 5024 m
+0 -70 n
+stroke
+newpath
+4310 4954 m
+35 -35 n
+stroke
+newpath
+4309 4954 m
+35 -35 n
+stroke
+newpath
+4345 4919 m
+70 0 n
+stroke
+newpath
+4344 4919 m
+70 0 n
+stroke
+newpath
+4415 4919 m
+35 35 n
+stroke
+newpath
+4414 4919 m
+35 35 n
+stroke
+newpath
+4450 4954 m
+0 70 n
+stroke
+newpath
+4449 4954 m
+0 70 n
+stroke
+newpath
+4450 5024 m
+-35 35 n
+stroke
+newpath
+4449 5024 m
+-35 35 n
+stroke
+newpath
+4415 5059 m
+-35 0 n
+stroke
+newpath
+4414 5059 m
+-35 0 n
+stroke
+newpath
+4380 5059 m
+0 -70 n
+stroke
+newpath
+4379 5059 m
+0 -70 n
+stroke
+newpath
+3124 4408 m
+0 70 n
+stroke
+newpath
+3123 4408 m
+0 70 n
+stroke
+newpath
+3124 4478 m
+-70 -105 n
+stroke
+newpath
+3123 4478 m
+-70 -105 n
+stroke
+newpath
+3054 4373 m
+140 0 n
+stroke
+newpath
+3053 4373 m
+140 0 n
+stroke
+newpath
+3194 4373 m
+-70 105 n
+stroke
+newpath
+3193 4373 m
+-70 105 n
+stroke
+newpath
+3124 4478 m
+0 -70 n
+stroke
+newpath
+3123 4478 m
+0 -70 n
+stroke
+newpath
+3301 2627 m
+0 70 n
+stroke
+newpath
+3300 2627 m
+0 70 n
+stroke
+newpath
+3301 2697 m
+-35 0 n
+stroke
+newpath
+3300 2697 m
+-35 0 n
+stroke
+newpath
+3266 2697 m
+-35 -35 n
+stroke
+newpath
+3265 2697 m
+-35 -35 n
+stroke
+newpath
+3231 2662 m
+0 -70 n
+stroke
+newpath
+3230 2662 m
+0 -70 n
+stroke
+newpath
+3231 2592 m
+35 -35 n
+stroke
+newpath
+3230 2592 m
+35 -35 n
+stroke
+newpath
+3266 2557 m
+70 0 n
+stroke
+newpath
+3265 2557 m
+70 0 n
+stroke
+newpath
+3336 2557 m
+35 35 n
+stroke
+newpath
+3335 2557 m
+35 35 n
+stroke
+newpath
+3371 2592 m
+0 70 n
+stroke
+newpath
+3370 2592 m
+0 70 n
+stroke
+newpath
+3371 2662 m
+-35 35 n
+stroke
+newpath
+3370 2662 m
+-35 35 n
+stroke
+newpath
+3336 2697 m
+-35 0 n
+stroke
+newpath
+3335 2697 m
+-35 0 n
+stroke
+newpath
+3301 2697 m
+0 -70 n
+stroke
+newpath
+3300 2697 m
+0 -70 n
+stroke
+newpath
+2999 4344 m
+0 70 n
+stroke
+newpath
+2998 4344 m
+0 70 n
+stroke
+newpath
+2999 4414 m
+-35 0 n
+stroke
+newpath
+2998 4414 m
+-35 0 n
+stroke
+newpath
+2964 4414 m
+-35 -35 n
+stroke
+newpath
+2963 4414 m
+-35 -35 n
+stroke
+newpath
+2929 4379 m
+0 -70 n
+stroke
+newpath
+2928 4379 m
+0 -70 n
+stroke
+newpath
+2929 4309 m
+35 -35 n
+stroke
+newpath
+2928 4309 m
+35 -35 n
+stroke
+newpath
+2964 4274 m
+70 0 n
+stroke
+newpath
+2963 4274 m
+70 0 n
+stroke
+newpath
+3034 4274 m
+35 35 n
+stroke
+newpath
+3033 4274 m
+35 35 n
+stroke
+newpath
+3069 4309 m
+0 70 n
+stroke
+newpath
+3068 4309 m
+0 70 n
+stroke
+newpath
+3069 4379 m
+-35 35 n
+stroke
+newpath
+3068 4379 m
+-35 35 n
+stroke
+newpath
+3034 4414 m
+-35 0 n
+stroke
+newpath
+3033 4414 m
+-35 0 n
+stroke
+newpath
+2999 4414 m
+0 -70 n
+stroke
+newpath
+2998 4414 m
+0 -70 n
+stroke
+newpath
+3102 4561 m
+0 70 n
+stroke
+newpath
+3101 4561 m
+0 70 n
+stroke
+newpath
+3102 4631 m
+-35 0 n
+stroke
+newpath
+3101 4631 m
+-35 0 n
+stroke
+newpath
+3067 4631 m
+-35 -35 n
+stroke
+newpath
+3066 4631 m
+-35 -35 n
+stroke
+newpath
+3032 4596 m
+0 -70 n
+stroke
+newpath
+3031 4596 m
+0 -70 n
+stroke
+newpath
+3032 4526 m
+35 -35 n
+stroke
+newpath
+3031 4526 m
+35 -35 n
+stroke
+newpath
+3067 4491 m
+70 0 n
+stroke
+newpath
+3066 4491 m
+70 0 n
+stroke
+newpath
+3137 4491 m
+35 35 n
+stroke
+newpath
+3136 4491 m
+35 35 n
+stroke
+newpath
+3172 4526 m
+0 70 n
+stroke
+newpath
+3171 4526 m
+0 70 n
+stroke
+newpath
+3172 4596 m
+-35 35 n
+stroke
+newpath
+3171 4596 m
+-35 35 n
+stroke
+newpath
+3137 4631 m
+-35 0 n
+stroke
+newpath
+3136 4631 m
+-35 0 n
+stroke
+newpath
+3102 4631 m
+0 -70 n
+stroke
+newpath
+3101 4631 m
+0 -70 n
+stroke
+newpath
+4257 5028 m
+0 70 n
+stroke
+newpath
+4256 5028 m
+0 70 n
+stroke
+newpath
+4257 5098 m
+-35 0 n
+stroke
+newpath
+4256 5098 m
+-35 0 n
+stroke
+newpath
+4222 5098 m
+-35 -35 n
+stroke
+newpath
+4221 5098 m
+-35 -35 n
+stroke
+newpath
+4187 5063 m
+0 -70 n
+stroke
+newpath
+4186 5063 m
+0 -70 n
+stroke
+newpath
+4187 4993 m
+35 -35 n
+stroke
+newpath
+4186 4993 m
+35 -35 n
+stroke
+newpath
+4222 4958 m
+70 0 n
+stroke
+newpath
+4221 4958 m
+70 0 n
+stroke
+newpath
+4292 4958 m
+35 35 n
+stroke
+newpath
+4291 4958 m
+35 35 n
+stroke
+newpath
+4327 4993 m
+0 70 n
+stroke
+newpath
+4326 4993 m
+0 70 n
+stroke
+newpath
+4327 5063 m
+-35 35 n
+stroke
+newpath
+4326 5063 m
+-35 35 n
+stroke
+newpath
+4292 5098 m
+-35 0 n
+stroke
+newpath
+4291 5098 m
+-35 0 n
+stroke
+newpath
+4257 5098 m
+0 -70 n
+stroke
+newpath
+4256 5098 m
+0 -70 n
+stroke
+newpath
+4918 4529 m
+0 70 n
+stroke
+newpath
+4917 4529 m
+0 70 n
+stroke
+newpath
+4918 4599 m
+-35 0 n
+stroke
+newpath
+4917 4599 m
+-35 0 n
+stroke
+newpath
+4883 4599 m
+-35 -35 n
+stroke
+newpath
+4882 4599 m
+-35 -35 n
+stroke
+newpath
+4848 4564 m
+0 -70 n
+stroke
+newpath
+4847 4564 m
+0 -70 n
+stroke
+newpath
+4848 4494 m
+35 -35 n
+stroke
+newpath
+4847 4494 m
+35 -35 n
+stroke
+newpath
+4883 4459 m
+70 0 n
+stroke
+newpath
+4882 4459 m
+70 0 n
+stroke
+newpath
+4953 4459 m
+35 35 n
+stroke
+newpath
+4952 4459 m
+35 35 n
+stroke
+newpath
+4988 4494 m
+0 70 n
+stroke
+newpath
+4987 4494 m
+0 70 n
+stroke
+newpath
+4988 4564 m
+-35 35 n
+stroke
+newpath
+4987 4564 m
+-35 35 n
+stroke
+newpath
+4953 4599 m
+-35 0 n
+stroke
+newpath
+4952 4599 m
+-35 0 n
+stroke
+newpath
+4918 4599 m
+0 -70 n
+stroke
+newpath
+4917 4599 m
+0 -70 n
+stroke
+newpath
+4909 4545 m
+0 70 n
+stroke
+newpath
+4908 4545 m
+0 70 n
+stroke
+newpath
+4909 4615 m
+-35 0 n
+stroke
+newpath
+4908 4615 m
+-35 0 n
+stroke
+newpath
+4874 4615 m
+-35 -35 n
+stroke
+newpath
+4873 4615 m
+-35 -35 n
+stroke
+newpath
+4839 4580 m
+0 -70 n
+stroke
+newpath
+4838 4580 m
+0 -70 n
+stroke
+newpath
+4839 4510 m
+35 -35 n
+stroke
+newpath
+4838 4510 m
+35 -35 n
+stroke
+newpath
+4874 4475 m
+70 0 n
+stroke
+newpath
+4873 4475 m
+70 0 n
+stroke
+newpath
+4944 4475 m
+35 35 n
+stroke
+newpath
+4943 4475 m
+35 35 n
+stroke
+newpath
+4979 4510 m
+0 70 n
+stroke
+newpath
+4978 4510 m
+0 70 n
+stroke
+newpath
+4979 4580 m
+-35 35 n
+stroke
+newpath
+4978 4580 m
+-35 35 n
+stroke
+newpath
+4944 4615 m
+-35 0 n
+stroke
+newpath
+4943 4615 m
+-35 0 n
+stroke
+newpath
+4909 4615 m
+0 -70 n
+stroke
+newpath
+4908 4615 m
+0 -70 n
+stroke
+newpath
+4293 5018 m
+0 70 n
+stroke
+newpath
+4292 5018 m
+0 70 n
+stroke
+newpath
+4293 5088 m
+-35 0 n
+stroke
+newpath
+4292 5088 m
+-35 0 n
+stroke
+newpath
+4258 5088 m
+-35 -35 n
+stroke
+newpath
+4257 5088 m
+-35 -35 n
+stroke
+newpath
+4223 5053 m
+0 -70 n
+stroke
+newpath
+4222 5053 m
+0 -70 n
+stroke
+newpath
+4223 4983 m
+35 -35 n
+stroke
+newpath
+4222 4983 m
+35 -35 n
+stroke
+newpath
+4258 4948 m
+70 0 n
+stroke
+newpath
+4257 4948 m
+70 0 n
+stroke
+newpath
+4328 4948 m
+35 35 n
+stroke
+newpath
+4327 4948 m
+35 35 n
+stroke
+newpath
+4363 4983 m
+0 70 n
+stroke
+newpath
+4362 4983 m
+0 70 n
+stroke
+newpath
+4363 5053 m
+-35 35 n
+stroke
+newpath
+4362 5053 m
+-35 35 n
+stroke
+newpath
+4328 5088 m
+-35 0 n
+stroke
+newpath
+4327 5088 m
+-35 0 n
+stroke
+newpath
+4293 5088 m
+0 -70 n
+stroke
+newpath
+4292 5088 m
+0 -70 n
+stroke
+newpath
+5019 4292 m
+0 70 n
+stroke
+newpath
+5018 4292 m
+0 70 n
+stroke
+newpath
+5019 4362 m
+-35 0 n
+stroke
+newpath
+5018 4362 m
+-35 0 n
+stroke
+newpath
+4984 4362 m
+-35 -35 n
+stroke
+newpath
+4983 4362 m
+-35 -35 n
+stroke
+newpath
+4949 4327 m
+0 -70 n
+stroke
+newpath
+4948 4327 m
+0 -70 n
+stroke
+newpath
+4949 4257 m
+35 -35 n
+stroke
+newpath
+4948 4257 m
+35 -35 n
+stroke
+newpath
+4984 4222 m
+70 0 n
+stroke
+newpath
+4983 4222 m
+70 0 n
+stroke
+newpath
+5054 4222 m
+35 35 n
+stroke
+newpath
+5053 4222 m
+35 35 n
+stroke
+newpath
+5089 4257 m
+0 70 n
+stroke
+newpath
+5088 4257 m
+0 70 n
+stroke
+newpath
+5089 4327 m
+-35 35 n
+stroke
+newpath
+5088 4327 m
+-35 35 n
+stroke
+newpath
+5054 4362 m
+-35 0 n
+stroke
+newpath
+5053 4362 m
+-35 0 n
+stroke
+newpath
+5019 4362 m
+0 -70 n
+stroke
+newpath
+5018 4362 m
+0 -70 n
+stroke
+newpath
+5019 4292 m
+0 70 n
+stroke
+newpath
+5018 4292 m
+0 70 n
+stroke
+newpath
+5019 4362 m
+-35 0 n
+stroke
+newpath
+5018 4362 m
+-35 0 n
+stroke
+newpath
+4984 4362 m
+-35 -35 n
+stroke
+newpath
+4983 4362 m
+-35 -35 n
+stroke
+newpath
+4949 4327 m
+0 -70 n
+stroke
+newpath
+4948 4327 m
+0 -70 n
+stroke
+newpath
+4949 4257 m
+35 -35 n
+stroke
+newpath
+4948 4257 m
+35 -35 n
+stroke
+newpath
+4984 4222 m
+70 0 n
+stroke
+newpath
+4983 4222 m
+70 0 n
+stroke
+newpath
+5054 4222 m
+35 35 n
+stroke
+newpath
+5053 4222 m
+35 35 n
+stroke
+newpath
+5089 4257 m
+0 70 n
+stroke
+newpath
+5088 4257 m
+0 70 n
+stroke
+newpath
+5089 4327 m
+-35 35 n
+stroke
+newpath
+5088 4327 m
+-35 35 n
+stroke
+newpath
+5054 4362 m
+-35 0 n
+stroke
+newpath
+5053 4362 m
+-35 0 n
+stroke
+newpath
+5019 4362 m
+0 -70 n
+stroke
+newpath
+5018 4362 m
+0 -70 n
+stroke
+0.000 0.000 0.000 setrgbcolor
+showpage
+%%Trailer
+%%Pages: 1
+%%DocumentNeededResources: font /Times-Bold
+%%+ font /Helvetica-Bold
+%%BoundingBox: 135 135 440 469
+%%EOF

@@ -1,0 +1,536 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+  <title>Synthetic Comparison</title>
+</head>
+<body>
+<h2>Introduction</h2>
+This is a comparison between&nbsp;<a
+ href="http://geodynamics.org/cig/software/packages/seismo/mineos/">mineos</a>
+and earth-flattened wavenumber integration synthetics (<a
+ href="../../../../eqccps.html">Computer
+Programs in Seismology - 3.30</a> ) for the AK-135f continental model.<br>
+<br>
+I use the same model for both sets of synthetics, except that the
+wavenumber integration model does not have an inner core [The reason
+for this is that my formulation for wavenumber integration only permits
+fluid layers at the top or at the bottom of the elastic stack.<br>
+<br>
+<h2>Computations</h2>
+The comparison is run in the directory MINEOS/share/mineos2.&nbsp; The
+effort is computationally intensive in terms of computations and the
+construction of graphics. The objective is to compare the two sets of
+synthetics at arc distances of 30, 60 and 90 degrees for source depths
+of 10, 100 and 700 km.<br>
+<br>
+The following steps are performed:<br>
+<h3 style="margin-left: 40px;">1. Wavenumber integration synthetics:<br>
+</h3>
+<div style="margin-left: 40px;"><br>
+</div>
+<div style="margin-left: 80px;">cd AK135-Z<br>
+zDOIT<br>
+</div>
+<div style="margin-left: 40px;"><br>
+After 10 hours of computation, the result will be a directory listing:<br>
+<br>
+</div>
+<div style="margin-left: 80px;">00README&nbsp; 1000/&nbsp;
+date.end&nbsp;&nbsp;&nbsp;
+MKW*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zDOIT*<br>
+0100/&nbsp;&nbsp;&nbsp;&nbsp; 7000/&nbsp; date.start&nbsp; tak135sph.mod<br>
+</div>
+<div style="margin-left: 40px;"><br>
+The directory 0100 has the Green's functions for the source depth of
+10.0 km, 1000 for a source depth of 100.0 km, and 7000 for a source
+depth of 700.0 km.<br>
+Within each directory are 10 Green's functions for each distance. For
+example, in the 1000 directory you will find<br>
+<br>
+</div>
+<div style="margin-left: 80px;">0333581000.RDD&nbsp;
+0333581000.ZDS&nbsp; 0667171000.TDS&nbsp; 1000751000.RDS&nbsp;
+1000751000.ZEX<br>
+0333581000.RDS&nbsp; 0333581000.ZEX&nbsp; 0667171000.TSS&nbsp;
+1000751000.REX&nbsp; 1000751000.ZSS<br>
+0333581000.REX&nbsp; 0333581000.ZSS&nbsp; 0667171000.ZDD&nbsp;
+1000751000.RSS&nbsp; W.CTL<br>
+0333581000.RSS&nbsp; 0667171000.RDD&nbsp; 0667171000.ZDS&nbsp;
+1000751000.TDS<br>
+0333581000.TDS&nbsp; 0667171000.RDS&nbsp; 0667171000.ZEX&nbsp;
+1000751000.TSS<br>
+0333581000.TSS&nbsp; 0667171000.REX&nbsp; 0667171000.ZSS&nbsp;
+1000751000.ZDD<br>
+0333581000.ZDD&nbsp; 0667171000.RSS&nbsp; 1000751000.RDD&nbsp;
+1000751000.ZDS<br>
+</div>
+<div style="margin-left: 40px;"><br>
+The naming convention is distance_depth.green.&nbsp; <br>
+<br>
+These synthetics have a sample rate of 2.0 sec, have a zero-phase&nbsp;
+triangular source pulse of length 8 seconds.&nbsp; This source pulse
+has a spectral zero at the Nyquist frequency and a corresponding
+spectral shaping for frequencies greater than 1/2 the Nyquist
+frequency.&nbsp; The synthetics are those of ground velocicy in units
+of cm/sec.<br>
+<br>
+</div>
+<h3 style="margin-left: 40px;">2. Normal mode synthetics:</h3>
+<div style="margin-left: 80px;">cd nDEMO6<br>
+DOIT<br>
+</div>
+<div style="margin-left: 40px;"><br>
+&nbsp;&nbsp;&nbsp; This runs the script DOEGN which computes the free
+oscillation frequencies and eigenfunctions for the spehroidal and
+toroidal modes.&nbsp; The script is set to compute up to frequencies of
+0.2 Hz (e.g., 200 mHz).&nbsp; This computation will require several
+days.<br>
+After running DOEGN, SAC files are generated for the following cases:<br>
+<br>
+</div>
+<pre style="margin-left: 80px;">#####<br>#       now compute the synthetics for a specific moment tensor that represents<br>#       the following cases<br>#<br>#       Source  STK     DIP     RAKE Mw [M0(dyne-cm)] Src-Rec Az<br>#       DS      45      90      90   2.6 [1.0E+20]       0<br>#       SS      22.5    90       0   2.6 [1.0E+20]       0<br>#       DD      45      45      90   2.6 [1.0E+20]       0<br>#       EX      Center of expansion  2.6 [1.0E+20]       0<br>#####</pre>
+<div style="margin-left: 40px;">The SAC files are in the directories
+with names GRN_Syndat_DEP, where GRN is one of DS, SS, DD or EX and DEP
+is on of 010 (10 km), 100 (100 km) or 700 (700km).&nbsp; The contents
+of these directories with files with names such as "Syndat.1969365: 0:
+0:-4.170.LHZ.SAC". A zero phase source time function of a triangle with
+length 8 seconds is applied.&nbsp; The SAC files are gound acceleration
+with units of <span style="font-style: italic;">nm/s/s.</span><br>
+<br>
+When the evaluation is complete, run the script DOCLEAN to return the
+directory to the original distribution.<br>
+<br>
+</div>
+<h3 style="margin-left: 40px;">3. Populate the wavenumber integration
+synthetics</h3>
+<div style="margin-left: 40px;">At this point, both sets of synthetics
+have the same sample interval and the same source time function.<br>
+<br>
+In the directory MINEOS/share/mineos2&nbsp; we will create
+subdirectories with names TEST.DEP.DEG where DEP is 010, 100 or 700 and
+DEG is 30, 50 or 90. The reason for this organization is that I wish to
+compare the two types of synthetics at the same depth and distance.<br>
+<br>
+&nbsp;&nbsp;&nbsp; DOPOPULATERBH<br>
+<br>
+This creates the dirrectories, within which there is a new directory
+called NEW_-Z with the CPS Green's functions. For example the command<br>
+<br>
+</div>
+<div style="margin-left: 80px;">rbh&gt; ls -R TEST.010.030<br>
+TEST.010.030:<br>
+NEW_-Z/<br>
+<br>
+TEST.010.030/NEW_-Z:<br>
+0333580100.RDD&nbsp; 0333580100.REX&nbsp; 0333580100.TDS&nbsp;
+0333580100.ZDD&nbsp; 0333580100.ZEX<br>
+0333580100.RDS&nbsp; 0333580100.RSS&nbsp; 0333580100.TSS&nbsp;
+0333580100.ZDS&nbsp; 0333580100.ZSS<br>
+</div>
+<div style="margin-left: 40px;"><br>
+</div>
+<h3 style="margin-left: 40px;">4. Apply the source mechanism to the
+wavenumber integration synthetics</h3>
+<div style="margin-left: 40px;">&nbsp;&nbsp;&nbsp; DOPOPULATEMCH<br>
+<br>
+This systematically creates the synthetics for the specific
+mechanism.&nbsp; <br>
+It&nbsp; uses the program <span style="font-weight: bold;">wvfmch96 </span>to
+compute the predicted synthetics on the basis of the observed. In this
+case the observed are just the Z, R and T components of the SS Green's
+functions, relying on the fact that the SAC header variable AZ is set
+to 0.0 for the Green's functions.&nbsp; The program <span
+ style="font-weight: bold;">wvfmch96 </span>converts the Green's
+functions units to <span style="font-style: italic;">m/sec </span>for
+the given moment of 1.0E+20 dyne-cm.<br>
+<br>
+The result is<br>
+<br>
+</div>
+<div style="margin-left: 80px;">
+rbh&gt; ls -R TEST.010.030TEST.010.030:<br>
+DD.WK/&nbsp;&nbsp;&nbsp; DS.WK/&nbsp; NEW_-Z/&nbsp;&nbsp;&nbsp; SS.WK/<br>
+<br>
+TEST.010.030/DD.WK:<br>
+D.-Z.LHR&nbsp; D.-Z.LHT&nbsp; D.-Z.LHZ<br>
+<br>
+TEST.010.030/DS.WK:<br>
+D.-Z.LHR&nbsp; D.-Z.LHT&nbsp; D.-Z.LHZ<br>
+<br>
+TEST.010.030/NEW_-Z:<br>
+0333580100.RDD&nbsp; 0333580100.REX&nbsp; 0333580100.TDS&nbsp;
+0333580100.ZDD&nbsp; 0333580100.ZEX<br>
+0333580100.RDS&nbsp; 0333580100.RSS&nbsp; 0333580100.TSS&nbsp;
+0333580100.ZDS&nbsp; 0333580100.ZSS<br>
+<br>
+TEST.010.030/SS.WK:<br>
+D.-Z.LHR&nbsp; D.-Z.LHT&nbsp; D.-Z.LHZ<br>
+</div>
+<div style="margin-left: 40px;"><br>
+Here the SS.WK are the wavenumber integration synthetics in units of m/s<br>
+<br>
+</div>
+<h3 style="margin-left: 40px;">5. Populate the free oscillation&nbsp;
+synthetics</h3>
+<div style="margin-left: 40px;">&nbsp;&nbsp;&nbsp; DOPOPULATEMIN<br>
+<br>
+This script reads the selected synthetics, removes a linear trend,
+integrates and divides by 1.0E+09 to convert the synthetics in ground
+velocity in units of <span style="font-style: italic;">m/s.</span> The
+result is<br>
+<br>
+</div>
+<div style="margin-left: 80px;">rbh&gt; ls -R TEST.010.030<br>
+<br>
+</div>
+<h3 style="margin-left: 40px;">6. Compare the synthetics</h3>
+<div style="margin-left: 40px;">&nbsp;&nbsp;&nbsp; DOALLHTML<br>
+<br>
+This script searches through all distances and depths to run DOCMP
+which creates the .gif images for the documentation.&nbsp; <br>
+There are several aspects here.&nbsp; First the wavenumber integration
+synthetics had a zero-phase source pulse with a duration of 4 seconds,
+while the free-oscillation synthetics had a zero phase source pulse
+with duration of 8.0 sec.&nbsp; <br>
+</div>
+<h2>Comparisons</h2>
+<h3>Timing</h3>
+The first test compares the synthetized ground velocities for a source
+depth of 10 km and a distance of 90 degrees.&nbsp; The focus here is on
+the amplitudes and the timing, especially that of the surface wave
+arrival.&nbsp; For the distance the waveforms are bandpass filtered
+using the command<br>
+<br>
+<pre>&nbsp;&nbsp;&nbsp; transfer from none to none freqlimits 0.001 0.002 0.06 0.10<br></pre>
+The figures compare the complete seismograms, e.g., a window of 700 to
+3400 seconds after origin time, a focus on the surface-wave train using
+a window of 2200 to 3400 seconds after the origin time, and a zomm on
+the short period surface wave using a window 2800 to 3000 seconds after
+the origin time. The <span style="font-weight: bold;">mineos </span>synthetics
+are in red and the <span style="font-weight: bold;">CPS </span>synthetics
+are in blue.<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Z.gif"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="R.gif"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="T.gif"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and Earth
+flattened(blue) synthetics for the Z component at 90 degrees. The
+vertical red lines indicate the model predicted P- and S-times.<br>
+      </td>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and
+Earth flattened(blue) synthetics for the R component at 90 degrees. The
+vertical red lines indicate the model predicted P- and S-times.</td>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and
+Earth flattened(blue) synthetics for the T component at 90 degrees. The
+vertical red lines indicate the model predicted P- and S-times.</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Zw.gif"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Rw.gif"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Tw.gif"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and Earth
+flattened(blue) synthetics for the Z component at 90 degrees.
+This plot shows the arrivals in the travel time window of 2200 to 3400
+seconds.<br>
+      </td>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and
+Earth flattened(blue) synthetics for the R component at 90 degrees.
+This plot shows the arrivals in the travel time window of 2200 to 3400
+seconds..</td>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and
+Earth flattened(blue) synthetics for the T component at 90 degrees.
+This plot shows the arrivals in the travel time window of 2200 to 3400
+seconds..</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Zww.gif"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Rww.gif"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 640px; height: 480px;" alt="" src="Tww.gif"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and Earth
+flattened(blue) synthetics for the Z component at 90 degrees.
+This plot shows the arrivals in the travel time window of 2800 to 3000
+seconds. This indicates a 3 second travel time difference at a 20
+second period.<br>
+      </td>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and
+Earth flattened(blue) synthetics for the R component at 90 degrees.
+This plot shows the arrivals in the travel time window of 2800 to 3000
+seconds. this indicates a 3 second travel time difference. <br>
+      </td>
+      <td style="vertical-align: top;">Comparison of&nbsp; <span
+ style="font-weight: bold;">mineos </span>(red) and
+Earth flattened(blue) synthetics for the T component at 90 degrees.
+This plot shows the arrivals in the travel time window of 2800 to 3000
+seconds. This indicates a 1 second travel time difference at a 20
+second period.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<h3>Strike-Slip synthetics as a function of depth<br>
+</h3>
+<br>
+<p>I created synthetics for strike-slip (SS), vertical dip-slip (DS)
+and 45 degree dip-slip (DD) mechanisms and compare the Z R and T
+components.
+Ground displacements are compared, which are filtered using the gsac
+command. This also serves as an independent test of the moment tensor
+formulation using in Computer Programs in Seismology.&nbsp;<br>
+</p>
+<pre>	transfer from none to none freqlimits 0.002 0.003 0.025 0.030<br></pre>
+which accounts for the fact that the minos synthetics only include
+frequencies as high as 0.10 HZ, whereas the wavenumber integration
+synthetics go up to 0.25 Hz. The use of the gsac transfer function is a
+simple way to accomplish a zero phase filter. This also eliminates much
+of the 0.03&nbsp; rippling in the free-oscillation synthetics.
+isotropic source for completeness)<br>
+<br>
+To permit the comparison I had to account for the fact that my
+wavenumber integrations synthetics had a zero-phase source pulse,
+whereas the mineos used a causal triangular pulse implemented in the
+frequency domain,<br>
+<br>
+I also had to account for the fact that mineos accepts geodetic
+coordinates and then converts internally to geocentric. I had to
+slightly change my input to mineos so that the epicentral distance in
+kilometers agreed with that used for the wavenumber integration.<br>
+<p>For each mechanism, source depth and arc distance, there are
+separate figures for the Z, R and T components.
+The traces shown are in two groups:<br>
+</p>
+<p>Top panel:<br>
+</p>
+<ul>
+  <li>Top: &nbsp; &nbsp; &nbsp;&nbsp; mineos synthetic - all times are
+absolute travel time (note that the zero phase filter used above
+eliminates causality.</li>
+  <li>Middle:&nbsp;&nbsp; wavenumber integration synthetic</li>
+  <li>Bottom:&nbsp; result of subtracting wavenumber integration
+synthetic from mineos synthetic</li>
+</ul>
+Bottom panel&nbsp; (in red): Same as top but filtered&nbsp; with&nbsp; <span
+ style="font-style: italic;">lp c 0.005 n 2 </span>
+and
+<span style="font-style: italic;">hp c 0.002 n 2 </span>
+to test ability to
+model mantle waves.<br>
+<br>
+Conclusion:&nbsp; The comparison is good. The difference shows the
+effect of a slight time shift.&nbsp; If a partitioned inversion is
+used, e.g.,&nbsp; inverting for P, SV/SH and mantloe waves in separate
+time windows with a permissible time shift, then THESE SYNTHETICS ARE
+THE ONES TO USE.<br>
+<br>
+Finally, the predicted travel times agree with the AK-135 values from
+Tom Owens p-tau program<br>
+<table border="1">
+  <tbody>
+    <tr>
+      <td> HS </td>
+      <td> GCARC </td>
+      <td> MECH </td>
+      <td> TauP (ak135) </td>
+      <td>
+      <center> Z </center>
+      </td>
+      <td>
+      <center> R </center>
+      </td>
+      <td>
+      <center> T </center>
+      </td>
+    </tr>
+    <tr>
+      <td> 010 </td>
+      <td> 030 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   30.00    10.0   P        368.73     8.843      30.00  = P    <br>   30.00    10.0   pP       371.79     8.844      30.00  = pP   <br>   30.00    10.0   sP       373.04     8.844      30.00  = sP   <br>   30.00    10.0   PP       425.24    13.626      30.00  = PP   <br>   30.00    10.0   PP       425.27    13.186      30.00  = PP   <br>   30.00    10.0   PP       425.61    13.508      30.00  = PP   <br>   30.00    10.0   PPP      433.48    13.700      30.00  = PPP  <br>   30.00    10.0   PP       436.40    11.109      30.00  = PP   <br>   30.00    10.0   PP       436.54    11.230      30.00  = PP   <br>   30.00    10.0   PcP      550.86     2.585      30.00  = PcP  <br>   30.00    10.0   pPcP     554.28     2.583      30.00  = pPcP <br>   30.00    10.0   S        666.60    15.690      30.00  = S    <br>   30.00    10.0   pS       670.11    15.697      30.00  = pS   <br>   30.00    10.0   sS       671.64    15.694      30.00  = sS   <br>   30.00    10.0   SS       758.27    24.349      30.00  = SS   <br>   30.00    10.0   sSS      762.04    24.354      30.00  = sSS  <br>   30.00    10.0   SSS      771.54    24.544      30.00  = SSS  <br>   30.00    10.0   ScP      773.05     3.243      30.00  = ScP  <br>   30.00    10.0   PcS      774.22     3.243      30.00  = PcS  <br>   30.00    10.0   pPcS     777.62     3.241      30.00  = pPcS <br>   30.00    10.0   SS       794.15    20.474      30.00  = SS   <br>   30.00    10.0   SS       794.29    20.651      30.00  = SS   <br>   30.00    10.0   sSS      798.60    20.475      30.00  = sSS  <br>   30.00    10.0   sSS      798.71    20.635      30.00  = sSS  <br>   30.00    10.0   ScS     1008.41     4.778      30.00  = ScS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="010.030.SS.Z.gif"><br>
+      <img src="010.030.SS.ZL.gif"> </td>
+      <td> <img src="010.030.SS.R.gif"><br>
+      <img src="010.030.SS.RL.gif"> </td>
+      <td> <img src="010.030.SS.T.gif"><br>
+      <img src="010.030.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 010 </td>
+      <td> 060 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   60.00    10.0   P        606.70     6.866      60.00  = P    <br>   60.00    10.0   pP       609.92     6.872      60.00  = pP   <br>   60.00    10.0   sP       611.13     6.870      60.00  = sP   <br>   60.00    10.0   PcP      652.77     4.000      60.00  = PcP  <br>   60.00    10.0   pPcP     656.14     3.999      60.00  = pPcP <br>   60.00    10.0   PP       738.99     8.843      60.00  = PP   <br>   60.00    10.0   PPP      820.84    10.896      60.00  = PPP  <br>   60.00    10.0   PPP      825.91    11.848      60.00  = PPP  <br>   60.00    10.0   PPP      826.62    11.508      60.00  = PPP  <br>   60.00    10.0   PPP      837.11     9.226      60.00  = PPP  <br>   60.00    10.0   PPP      838.07     9.486      60.00  = PPP  <br>   60.00    10.0   ScP      893.85     4.436      60.00  = ScP  <br>   60.00    10.0   PcS      895.04     4.436      60.00  = PcS  <br>   60.00    10.0   pPcS     898.39     4.436      60.00  = pPcS <br>   60.00    10.0   S       1099.21    12.858      60.00  = S    <br>   60.00    10.0   pS      1103.14    12.871      60.00  = pS   <br>   60.00    10.0   sS      1104.51    12.866      60.00  = sS   <br>   60.00    10.0   ScS     1197.34     7.442      60.00  = ScS  <br>   60.00    10.0   SS      1335.71    15.691      60.00  = SS   <br>   60.00    10.0   sSS     1340.76    15.693      60.00  = sSS  <br>   60.00    10.0   SSS     1497.04    19.990      60.00  = SSS  <br>   60.00    10.0   SSS     1501.76    24.098      60.00  = SSS  <br>   60.00    10.0   SSS     1502.67    22.630      60.00  = SSS  <br>   60.00    10.0   SSS     1504.28    23.642      60.00  = SSS  <br>   60.00    10.0   SSS     1508.13    21.287      60.00  = SSS  <br>   60.00    10.0   SSS     1522.54    16.642      60.00  = SSS  <br>   60.00    10.0   SSS     1525.60    17.313      60.00  = SSS  <br>   60.00    10.0   SSS     4565.72     8.343     300.00  = SSS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="010.060.SS.Z.gif"><br>
+      <img src="010.060.SS.ZL.gif"> </td>
+      <td> <img src="010.060.SS.R.gif"><br>
+      <img src="010.060.SS.RL.gif"> </td>
+      <td> <img src="010.060.SS.T.gif"><br>
+      <img src="010.060.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 010 </td>
+      <td> 090 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   90.00    10.0   P        779.71     4.642      90.00  = P    <br>   90.00    10.0   PcP      780.94     4.428      90.00  = PcP  <br>   90.00    10.0   pP       783.06     4.642      90.00  = pP   <br>   90.00    10.0   sP       784.25     4.642      90.00  = sP   <br>   90.00    10.0   pPcP     784.30     4.427      90.00  = pPcP <br>   90.00    10.0   PP       992.62     7.959      90.00  = PP   <br>   90.00    10.0   PPP     1109.25     8.843      90.00  = PPP  <br>   90.00    10.0   SKS     1410.63     5.818      90.00  = SKS  <br>   90.00    10.0   S       1432.65     9.267      90.00  = S    <br>   90.00    10.0   ScS     1436.78     8.298      90.00  = ScS  <br>   90.00    10.0   pS      1436.93     9.277      90.00  = pS   <br>   90.00    10.0   sS      1438.19     9.274      90.00  = sS   <br>   90.00    10.0   SS      1790.59    14.483      90.00  = SS   <br>   90.00    10.0   sSS     1795.75    14.488      90.00  = sSS  <br>   90.00    10.0   SSS     2004.83    15.692      90.00  = SSS  <br>   90.00    10.0   PPP     2342.49     4.642     270.00  = PPP  <br>   90.00    10.0   SSS     4303.49     9.269     270.00  = SSS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="010.090.SS.Z.gif"><br>
+      <img src="010.090.SS.ZL.gif"> </td>
+      <td> <img src="010.090.SS.R.gif"><br>
+      <img src="010.090.SS.RL.gif"> </td>
+      <td> <img src="010.090.SS.T.gif"><br>
+      <img src="010.090.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 100 </td>
+      <td> 030 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   30.00   100.0   P        359.07     8.831      30.00  = P    <br>   30.00   100.0   pP       381.45     8.856      30.00  = pP   <br>   30.00   100.0   sP       393.03     8.850      30.00  = sP   <br>   30.00   100.0   PP       420.20    13.003      30.00  = PP   <br>   30.00   100.0   PP       421.81    13.573      30.00  = PP   <br>   30.00   100.0   PP       421.84    13.550      30.00  = PP   <br>   30.00   100.0   PP       428.54    11.105      30.00  = PP   <br>   30.00   100.0   PP       428.82    11.284      30.00  = PP   <br>   30.00   100.0   PcP      538.94     2.595      30.00  = PcP  <br>   30.00   100.0   pPcP     566.20     2.573      30.00  = pPcP <br>   30.00   100.0   S        649.68    15.667      30.00  = S    <br>   30.00   100.0   sS       688.55    15.718      30.00  = sS   <br>   30.00   100.0   ScP      751.94     3.251      30.00  = ScP  <br>   30.00   100.0   SS       752.39    24.238      30.00  = SS   <br>   30.00   100.0   PcS      762.41     3.258      30.00  = PcS  <br>   30.00   100.0   SS       781.22    20.463      30.00  = SS   <br>   30.00   100.0   SS       781.63    20.774      30.00  = SS   <br>   30.00   100.0   pPcS     789.44     3.226      30.00  = pPcS <br>   30.00   100.0   sSS      811.53    20.479      30.00  = sSS  <br>   30.00   100.0   sSS      811.53    20.501      30.00  = sSS  <br>   30.00   100.0   ScS      987.50     4.797      30.00  = ScS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="100.030.SS.Z.gif"><br>
+      <img src="100.030.SS.ZL.gif"> </td>
+      <td> <img src="100.030.SS.R.gif"><br>
+      <img src="100.030.SS.RL.gif"> </td>
+      <td> <img src="100.030.SS.T.gif"><br>
+      <img src="100.030.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 100 </td>
+      <td> 060 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   60.00   100.0   P        595.98     6.835      60.00  = P    <br>   60.00   100.0   pP       620.62     6.903      60.00  = pP   <br>   60.00   100.0   sP       631.65     6.887      60.00  = sP   <br>   60.00   100.0   PcP      641.11     4.007      60.00  = PcP  <br>   60.00   100.0   pPcP     667.81     3.992      60.00  = pPcP <br>   60.00   100.0   PP       729.32     8.837      60.00  = PP   <br>   60.00   100.0   PPP      812.78    10.870      60.00  = PPP  <br>   60.00   100.0   PPP      818.80    11.755      60.00  = PPP  <br>   60.00   100.0   PPP      819.18    11.514      60.00  = PPP  <br>   60.00   100.0   PPP      827.69     9.223      60.00  = PPP  <br>   60.00   100.0   PPP      828.86     9.504      60.00  = PPP  <br>   60.00   100.0   ScP      872.90     4.437      60.00  = ScP  <br>   60.00   100.0   PcS      883.49     4.438      60.00  = PcS  <br>   60.00   100.0   pPcS     909.94     4.435      60.00  = pPcS <br>   60.00   100.0   S       1080.74    12.810      60.00  = S    <br>   60.00   100.0   pS      1108.42    13.125      60.00  = pS   <br>   60.00   100.0   pS      1108.94    13.587      60.00  = pS   <br>   60.00   100.0   sS      1122.96    12.918      60.00  = sS   <br>   60.00   100.0   ScS     1176.96     7.455      60.00  = ScS  <br>   60.00   100.0   SS      1318.80    15.679      60.00  = SS   <br>   60.00   100.0   sSS     1357.67    15.705      60.00  = sSS  <br>   60.00   100.0   SSS     1483.54    19.917      60.00  = SSS  <br>   60.00   100.0   SSS     1492.41    22.368      60.00  = SSS  <br>   60.00   100.0   SSS     1494.96    24.033      60.00  = SSS  <br>   60.00   100.0   SSS     1496.17    21.311      60.00  = SSS  <br>   60.00   100.0   SSS     1496.40    23.776      60.00  = SSS  <br>   60.00   100.0   SSS     1506.27    16.629      60.00  = SSS  <br>   60.00   100.0   SSS     1509.83    17.348      60.00  = SSS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="100.060.SS.Z.gif"><br>
+      <img src="100.060.SS.ZL.gif"> </td>
+      <td> <img src="100.060.SS.R.gif"><br>
+      <img src="100.060.SS.RL.gif"> </td>
+      <td> <img src="100.060.SS.T.gif"><br>
+      <img src="100.060.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 100 </td>
+      <td> 090 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   90.00   100.0   P        768.22     4.640      90.00  = P    <br>   90.00   100.0   PcP      769.39     4.428      90.00  = PcP  <br>   90.00   100.0   pP       794.55     4.651      90.00  = pP   <br>   90.00   100.0   pPcP     795.85     4.426      90.00  = pPcP <br>   90.00   100.0   sP       805.17     4.643      90.00  = sP   <br>   90.00   100.0   PP       982.43     7.939      90.00  = PP   <br>   90.00   100.0   PPP     1099.58     8.839      90.00  = PPP  <br>   90.00   100.0   SKS     1389.91     5.799      90.00  = SKS  <br>   90.00   100.0   S       1412.78     9.226      90.00  = S    <br>   90.00   100.0   ScS     1416.63     8.301      90.00  = ScS  <br>   90.00   100.0   pS      1446.27     9.370      90.00  = pS   <br>   90.00   100.0   sS      1458.04     9.318      90.00  = sS   <br>   90.00   100.0   SS      1772.96    14.454      90.00  = SS   <br>   90.00   100.0   sSS     1813.37    14.517      90.00  = sSS  <br>   90.00   100.0   SSS     1987.92    15.684      90.00  = SSS  <br>   90.00   100.0   PPP     2330.99     4.641     270.00  = PPP  <br>   90.00   100.0   SSS     4283.63     9.256     270.00  = SSS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="100.090.SS.Z.gif"><br>
+      <img src="100.090.SS.ZL.gif"> </td>
+      <td> <img src="100.090.SS.R.gif"><br>
+      <img src="100.090.SS.RL.gif"> </td>
+      <td> <img src="100.090.SS.T.gif"><br>
+      <img src="100.090.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 700 </td>
+      <td> 030 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   30.00   700.0   P        317.19     8.458      30.00  = P    <br>   30.00   700.0   PcP      474.89     2.691      30.00  = PcP  <br>   30.00   700.0   sP       501.77     9.008      30.00  = sP   <br>   30.00   700.0   sP       505.32    10.063      30.00  = sP   <br>   30.00   700.0   sP       505.56     9.764      30.00  = sP   <br>   30.00   700.0   S        570.32    15.200      30.00  = S    <br>   30.00   700.0   pPcP     630.41     2.482      30.00  = pPcP <br>   30.00   700.0   ScP      632.98     3.323      30.00  = ScP  <br>   30.00   700.0   PcS      699.45     3.396      30.00  = PcS  <br>   30.00   700.0   pPcS     852.69     3.093      30.00  = pPcS <br>   30.00   700.0   ScS      870.41     4.978      30.00  = ScS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="700.030.SS.Z.gif"><br>
+      <img src="700.030.SS.ZL.gif"> </td>
+      <td> <img src="700.030.SS.R.gif"><br>
+      <img src="700.030.SS.RL.gif"> </td>
+      <td> <img src="700.030.SS.T.gif"><br>
+      <img src="700.030.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 700 </td>
+      <td> 060 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   60.00   700.0   P        542.85     6.535      60.00  = P    <br>   60.00   700.0   PcP      579.56     4.065      60.00  = PcP  <br>   60.00   700.0   pP       671.94     7.270      60.00  = pP   <br>   60.00   700.0   PP       688.32     8.677      60.00  = PP   <br>   60.00   700.0   pPcP     729.50     3.930      60.00  = pPcP <br>   60.00   700.0   sP       745.13     7.036      60.00  = sP   <br>   60.00   700.0   ScP      755.20     4.442      60.00  = ScP  <br>   60.00   700.0   PcS      822.90     4.444      60.00  = PcS  <br>   60.00   700.0   pPcS     970.57     4.415      60.00  = pPcS <br>   60.00   700.0   S        985.04    12.314      60.00  = S    <br>   60.00   700.0   ScS     1064.67     7.571      60.00  = ScS  <br>   60.00   700.0   sS      1215.61    13.494      60.00  = sS   <br>   60.00   700.0   SS      1240.46    15.477      60.00  = SS   <br>   60.00   700.0   sSS     1434.78    15.880      60.00  = sSS  <br>   60.00   700.0   SSS     1435.40    16.256      60.00  = SSS  <br><br>      </pre>
+      <br>
+      </td>
+      <td> <img src="700.060.SS.Z.gif"><br>
+      <img src="700.060.SS.ZL.gif"> </td>
+      <td> <img src="700.060.SS.R.gif"><br>
+      <img src="700.060.SS.RL.gif"> </td>
+      <td> <img src="700.060.SS.T.gif"><br>
+      <img src="700.060.SS.TL.gif"> </td>
+    </tr>
+    <tr>
+      <td> 700 </td>
+      <td> 090 </td>
+      <td> SS </td>
+      <td>
+      <pre>Model: ak135<br>Distance   Depth   Phase   Travel    Ray Param   Purist    Purist<br>  (deg)     (km)   Name    Time (s)  p (s/deg)  Distance   Name<br>----------------------------------------------------------------<br>   90.00   700.0   P        708.11     4.615      90.00  = P    <br>   90.00   700.0   PcP      708.78     4.437      90.00  = PcP  <br>   90.00   700.0   pP       854.31     4.870      90.00  = pP   <br>   90.00   700.0   pPcP     856.50     4.415      90.00  = pPcP <br>   90.00   700.0   sP       922.52     4.749      90.00  = sP   <br>   90.00   700.0   PP       935.08     7.735      90.00  = PP   <br>   90.00   700.0   PPP     1058.84     8.749      90.00  = PPP  <br>   90.00   700.0   SKS     1274.09     5.638      90.00  = SKS  <br>   90.00   700.0   S       1304.35     8.849      90.00  = S    <br>   90.00   700.0   ScS     1306.25     8.319      90.00  = ScS  <br>   90.00   700.0   sS      1565.06     9.731      90.00  = sS   <br>   90.00   700.0   SS      1686.22    14.159      90.00  = SS   <br>   90.00   700.0   sSS     1897.89    14.832      90.00  = sSS  <br>   90.00   700.0   SSS     1909.89    15.570      90.00  = SSS  <br>   90.00   700.0   PPP     2270.91     4.637     270.00  = PPP  <br>   90.00   700.0   SSS     4175.64     9.121     270.00  = SSS  <br><br>      </pre>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+      </td>
+      <td> <img src="700.090.SS.Z.gif"><br>
+      <img src="700.090.SS.ZL.gif"> </td>
+      <td> <img src="700.090.SS.R.gif"><br>
+      <img src="700.090.SS.RL.gif"> </td>
+      <td> <img src="700.090.SS.T.gif"><br>
+      <img src="700.090.SS.TL.gif"></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+</body>
+</html>

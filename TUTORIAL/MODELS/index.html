@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Computer Programs in Seismology Tutorials - Velocity model files</title>
+</head>
+<body bgcolor="FFFFFF">
+<h2>Velocity model download and installation</h2>
+The downloadable file <a href="models.tgz">models.tgz</a> contains some velocity models that are used for creating synthetics. To unpack these for use in making velocity models, do the followin:
+<brr>
+<ul>
+	<li> Create a directory named GREEN which will contain the Green's functions for the individual velocity models</li>
+	<li> Note the absolute path of this directory. For example this might be<i>/backup/rbh/PROGRAMS.310t/GREEN</i></li>
+	<li> Set the environment parameter <i>GREENDIR</i> in the <i>.bashrc</i>
+	file if you use the <b>bash</b> shell. [If you use another shell, set up something similar]. The line to be added to <i>.bashrc</i> for the parameter above is<br><pre>export GREENDIR=/backup/rbh/PROGRAMS.310t/GREEN</pre></li>
+	<li> Refresh the environment<br><pre> source ~/.bashrc</pre><br>Note this will be done automatically when you login again.</li>
+	<li> Install the models:<br><pre>cd $GREENDIR <br>gunzip -c models.tgz | tar xvf - </pre><br>This will create the subdirectory <i>Models</i> with the model files</li>
+</ul>
+<h2>Velocity models</h2>
+The following velocity models are included in this distribution:
+<ul>
+	<li><i>CUS.mod</i> - model for North America craton</li>
+	<li><i>WUS.mod</i> - model for North America with lower velocities in the upper crust</li>
+	<li><i>CIA.mod</i> - model for the central Italian Apeninines</li>
+	<li><i>KOREA.mod</i> - model for the southern Korean peninsula </li>
+	<li><i>tak135sph.mod</i> - continental AK135 model for telseisms </li>
+</ul>
+<p>
+<center>Last Changed April 15, 2012</center>
+</body >
+</html>
+

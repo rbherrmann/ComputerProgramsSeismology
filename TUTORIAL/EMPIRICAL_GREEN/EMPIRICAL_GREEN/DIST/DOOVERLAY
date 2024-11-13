@@ -1,0 +1,35 @@
+#####
+#  whiten, filter and then overlay the
+#  cross-correlation empirical Green's functions with
+#  the point force solutions. The whitening gives both the same
+#  amplitude spectrum. 
+#####
+
+for i in Z1Z2 N1N2 E1E2
+do
+gsac << EOF
+r EXAMPLE.GRN/$i RANDOM4/$i.sym
+whiten freqlimits 0.01 0.02 0.25 0.5
+w $i.G $i.E
+q
+EOF
+done
+
+#####
+#    make a plot
+#####
+gsac << EOF
+r E* N* Z*
+xlim o 80 o 180
+ylim all
+fileid name
+bg plt
+p
+q
+EOF
+
+plotnps -BGFILL -F7 -W10 -EPS -K < P001.PLT > t.eps
+convert -trim t.eps EMPGRN.png
+
+rm t.eps
+rm P001.PLT

@@ -1,0 +1,15 @@
+This is a test of rdseed, evalresp and gsac
+
+Do the following
+
+mkdir Sac
+cd Sac
+rdseed -f ../20020618.5710 -R -d -o 1
+../IDOEVT
+cd ../GOOD
+../IDOROT
+cd ../FINAL.DEC
+cd ..
+mkdir MFT
+cd MFT
+do_mft ../FINAL/*

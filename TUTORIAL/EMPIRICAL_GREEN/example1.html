@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>do_mft sample run</title>
+  </head>
+  <body>
+    <h2>Introduction</h2>
+    The files for this example are in EMPIRICAL/GREEN/EXAMPLE1. To
+    perform the processing, you will have to set your shell PATH
+    variable to point to the current direction, e.g., in bash
+    <pre>export PATH=:.:$PATH
+
+</pre>
+    You will find the following files in this directory:
+    <ul>
+      <li>SIUCBHZBLOBHZ.WSTK - This is a typical result of noise
+        cross-correlation </li>
+      <li>DOSRF - This creates the eigenfunctions required to give the
+        theoretical dispersion</li>
+      <li>MFTDOOVERLAY</li>
+      <li>PHVDOOVERLAY - These are sample scripts for overlaying a
+        dispersion curve on the results of the processing. </li>
+      <li>CUS.mod - Velocity model to provide dispersion curves</li>
+      <li>DOCLEAN - This cleans up after a processing run</li>
+    </ul>
+    <p> The two scripts MFTDOOVERLAY and PHVDOOVERLAY can be modified to
+      use results of your tomography to provide reference dispersion
+      curves. </p>
+    <p> Note that if you do not have an Intel/AMD computer, e.g., a
+      SPARC you will have to get the correct byte order in the Sac file,
+      but entering the commands <br>
+    </p>
+    <pre>     saccvt -I &lt; SIUCBHZBLOBHZ.WSTK &gt; t
+     mv t SIUCBHZBLOBHZ.WSTK
+</pre>
+    <br>
+    <h2>Starting the program</h2>
+    <br>
+    The program <b>do_mft</b> options can be seen by running the
+    command
+    <pre>do_mft -h
+Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN dmin] [-DMAX dmax] sacfiles
+  e.g.:  do_mft -N2 -G -T *Z
+  -Nnumberperpage  (default 10) number of file menu items per page
+        this option is useful when using a slow connection since writing 
+        a complete menu takes time
+  -G              (default off) The default dispersion file name is of the form 
+        StationComponent.dsp, e.g., SLMBHZ.dsp 
+        When working with ground-noise crosscorrelation for interstation Green functions, the
+        naming is Station1Component1Station2Component2.dsp , e.g., SLMBHZFVMBHZ.dsp
+  -T              (default off)  run script MFTDOOVERLAY
+  -11MIN min11 
+  -11MAX max11 
+  -DMIN  dmin 
+  -DMAX  dmax 
+   These options control the selection of the files for MFT
+   analysis. The first two use the number in the IHDR11 field,
+   which is the number of waveforms stacked for cross-correlation 
+   of ground noise. The last two select the distances 
+  -IG             (default false)  Inter-station phase velocity from cross-correlation 
+  -h              (default false)  Usage 
+</pre>
+    <p> Some of these options are useful when working with the
+      cross-correlation of ground noise. If there are N stations, then
+      shere are N(N-1)/2 station pairs. When working with TA data, the
+      number of station pairs is huge for manual anlysis using <b>do_mft</b>.
+      The <i>-DMIN</i> and <i>-DMAX</i> flags permit the selection of
+      a range of distances. The IHDR11 field is created by the <b>gsac</b>
+      <i>stack</i> command set this parameter with the number of trces
+      stacked. The chances of a useful cross-correlation should be
+      better if the number of traces stacked is larger. </p>
+    <p> The <i>-T</i> option permits the display of the <i>Tomo</i>
+      buttons of <b>do_mft</b>. On pressing these buttons, the scripts
+      MFTDOOVERLAY or PHVDOOVERLAY are executed. </p>
+    <p> The <i>-IG</i> option permits the interctive phase velocity
+      analysis. </p>
+    <h2>Example</h2>
+    Before running this example, go to the example directory:<br>
+    <br>
+    <pre>cd EMPIRICAL_GREEN/DIST/EXAMPLE1<br><br></pre>
+    Now create the eigenfunctions which are used to provide the
+    theoretical dispersion curves:<br>
+    <br>
+    <pre>DOSRF<br></pre>
+    Start the example by entering <br>
+    <pre>do_mft -G -IG -T *.WSTK
+</pre>
+    <p> The processing example follows: </p>
+    <p> <img src="FIGURES/Win01.png"><br>
+    </p>
+    <p>Place the mouse cursor on the trace of interest, and click. You
+      will then see the next page.<br>
+    </p>
+    <p> <img src="FIGURES/Win02.png"><br>
+    </p>
+    <p>Click on "Units" to seelct the physical units of the trace.&nbsp;
+      For quantitative studies using spectral amplitudes, e.g., to
+      determine earthquake source parameters, the proper physical unit
+      must be used.&nbsp; For my source inversion processing, the traces
+      always represent ground motion in <i>m/sec</i>.&nbsp; <br>
+    </p>
+    <p>When working with empirical Green's functions from noise
+      cross-correlation, select "Counts" as the unit.&nbsp; For such
+      studies we are interested in the dispersion and not the spectral
+      amplitude.<br>
+    </p>
+    <p> <img src="FIGURES/Win03.png"><br>
+    </p>
+    <p>After clicking on the "Do MFT" at the top of the page, we get a
+      page for specifying parameters for the program <b>sacmft96</b>
+      which does the work. Recall that the purpose of <b>do_mft</b> is
+      to graphically select the output from <b>sacmft</b>. <br>
+    </p>
+    <p>In this menu, I have have selected the period range of 1.0 to
+      50.0 seconds and identified the wave type as "Rayleigh" by
+      clicking on the buttons and selecting a value. The "PhvPeak" menu
+      item appears only because of the "-IG" flag used when starting <b>do_mft</b>.&nbsp;
+
+
+      Clicking on "PhvPeak" will either give the message "1st" or "1st
+      &amp; 2nd".&nbsp;&nbsp; <br>
+    </p>
+    <p>The purpose of this is the following.&nbsp; The multiple filter
+      analysis consists of applying a narrow band pass filter to the
+      waveform.&nbsp; Up to 10 envelope peaks are determined.&nbsp; This
+      may be useful to follow a mode in the presence of other
+      signal.&nbsp; However since each envelope peak can be used to
+      estimate a phase velocity, and because each phase velocity
+      estimate has other possible values because of the N2&#960; phase
+      ambiguity, the phase velocity display can be very cluttered and
+      difficult to use. To keep that clean, and assumoing that the
+      larger spectral amplitudes (envelope peak values) will have better
+      determined phase velocities, this menu restricts output to the
+      largest or largest two envelope peaks.<br>
+    </p>
+    <p> <img src="FIGURES/Win04.png"><br>
+    </p>
+    <p>Upon clicking on "DoMFT", the program <b>sacmft96</b> is run,
+      and the following display is shown. At the bottom of that display
+      will be a button "Tomo" because of the "-T" flag when <b>do_mft</b>
+      was started.&nbsp; On clicking "Tomo" , a dispersion curve in
+      white (note this only works when the background is shaded) is
+      displayed and the "Tomo" button is removed.<br>
+    </p>
+    <p>This path between two stations of the Saint Louis University
+      component of the New Madrid Seismic Network (NM) goes through part
+      of the Illinois Basin which has deep sections of&nbsp; paleozoic
+      strata.<br>
+      This is the reason that the observed dispersion at short periods
+      lies beneath the model prediction. <br>
+    </p>
+    <p> <img src="FIGURES/Win05.png"><br>
+    </p>
+    <p>If we now click the "PhVel" button a new image appears.&nbsp; The
+      group velocity overlay picture is reproduced from the previoous
+      display. If we again click the "Tomo" button, the model predicted
+      phase velocities are displayed together with the possible phase
+      velocities. The "Tomo" button is now displayed.&nbsp; The purpose
+      of the overlay is to use the prior knowledge of the predicted
+      curve, which is based on a reasonable velocity model for the area,
+      to resolve the N2&#960; phase ambiguity.<br>
+    </p>
+    <p>"Autofeed" is set the processing state, so that the 2nd and 3rd
+      menus do not appear. This assumes that one is comfortable with the
+      processing parameters. The effect is that fewer mouse movements
+      and clicks are required. This is very important when processing
+      many, many waveforms.<br>
+    </p>
+    <p> <img src="FIGURES/Win06.png"><br>
+    </p>
+    <p>Now click on "Auto" which brings up a menu to define the mode.<br>
+    </p>
+    <p> <img src="FIGURES/Win07.png"><br>
+    </p>
+    <p>After the mode is selected, the top of the figure will display
+      the parameters.&nbsp; "Auto Picking" means that a rubber band can
+      be used to select a group of points closest to the line. <br>
+      The selected points are plotted in red in the next figure. As
+      phase velocity values are selected, the corresponding group
+      velocity values are highlighted. This provides confidence that the
+      proper mode is selected.<br>
+    </p>
+    <p> <img src="FIGURES/Win08.png"><br>
+    </p>
+    <p>One can also use the "Zoom" buttom&nbsp; to focus in on part of
+      the plot.&nbsp; Click on "Zoom" and then click on a point&nbsp; in
+      the right figure and move the mouse. You will see a box open.
+      Click again and the region will be expanded.&nbsp; You will also
+      see the selected points.&nbsp; You can now select a few more, here
+      shown in red.<br>
+    </p>
+    <p>When done seleting, click "Exit"&nbsp; you will asked whether to
+      save the picks. You do not have to save the picks if you do not
+      believe them.&nbsp; In this case we will save them. The file
+      created used the original file name and appends a .phv, e.g.,
+      SIUCBHZBLOBHZ.WSTK.phv to identify the pahgse velocity
+      selection.&nbsp; The use of the file name occurs because the "-G"
+      flag ws used in invoking <b>do_mft.</b><br>
+    </p>
+    <p> <img src="FIGURES/Win10.png"><br>
+    </p>
+    <p>You are now returned to to the group velocity selection page. We
+      again use the "Auto" command, identify the "Fund" mode, and select
+      the dispersion. The corresponding spectral amplitudes are colored.
+      For earthquake studies, the shape of the amplitude spectrum has
+      some theoretical expectations as a function of period. This
+      knowledge can be used to define the range of acceptable periods.<br>
+    </p>
+    <p>On clicking the "Exit" the user is asked whether to save the
+      results in the file SIUCBHZBLOBHZ.WSTK.dsp. We will respond "Yes"
+      to this question.&nbsp; The control returns to the first page
+      display that lists the file names. </p>
+    <p> <img src="FIGURES/Win11.png"><br>
+    </p>
+    <p>Since this discussion focused on the dispersion estimates, there
+      was no discussion of the "Match" button which uses the group
+      velocity picks to phase match filter the seismogram to isolate a
+      mode.<br>
+    </p>
+    <h2>Output formats</h2>
+    <p>The two files SIUBHZBLOBHZ.WSTK.dsp and SIUCBHZBLOBHZ.WSTK.phv
+      are very similar. Both have many columns. The group velocity outpu
+      is identified by the initial MFT96 and the pahse velocity by the
+      initial PHV96.&nbsp; The SIUCBHZBLOBHZ.WSTK.phv file has three
+      additional columns<br>
+    </p>
+    <p><br>
+    </p>
+    <pre>MFT96 R U  0          20     3.07357     0.66166   285.5515   54.7  3.9580e+02 37.714802 -89.217400 39.171902 -86.522202 0 1 19.309999 COMMENT: BLO BHZ 1970 1 0 0<br>MFT96 R U  0          19     3.12174     0.64843   285.5515   54.7  4.7050e+02 37.714802 -89.217400 39.171902 -86.522202 0 1 18.469999 COMMENT: BLO BHZ 1970 1 0 0<br><br>         <br>PHV96 R C  0          20     3.57038     0.00100   285.5515   54.7  3.9580e+02 37.714802 -89.217400 39.171902 -86.522202 0 1 19.309999 COMMENT: BLO BHZ 1970 1 0 0 -1.436470 3.073600 -1<br>PHV96 R C  0          19     3.54042     0.00100   285.5515   54.7  4.7050e+02 37.714802 -89.217400 39.171902 -86.522202 0 1 18.469999 COMMENT: BLO BHZ 1970 1 0 0 -1.920620 3.121700 -1<br><br></pre>
+    The columns are as follow:<br>
+    <br>
+    Column&nbsp;&nbsp;&nbsp;&nbsp; Value<br>
+    1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Type of file, either MFT96 or PHV96<br>
+    2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Wave type: R for Rayleigh and L for Love<br>
+    3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Dispersion type:&nbsp; C for phase velocity and U for group velocity<br>
+    4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Mode: 0 represents the fundamental mode<br>
+    5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Filter period, T,&nbsp; in seconds<br>
+    6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Dispersion value, either group or phase<br>
+    7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Error in dispersion.&nbsp; This is just a place holder since there
+    is no way to estimate an error from a single trace. The group
+    velocity error is determined from the ratio of the filter period to
+    travel time<br>
+    8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Distance in km<br>
+    9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Azimuth from the source to the receiver<br>
+    10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Spectral amplitude. If an initial physical unit were given on Page
+    2, e.g., m/s, m, this would be the spectral amplitude in <i>cm-sec.<br>
+    </i>11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Epicenter latitude <br>
+    12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Epicenter longitude<br>
+    13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Station latitude<br>
+    14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Station longitude<br>
+    15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    control flag<br>
+    16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    control flag<br>
+    17&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Instantaneous period if this is preferred. This differs from the
+    ilter period because the signal spectram is not flat.<br>
+    18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Comment:&nbsp;&nbsp;&nbsp; keyword<br>
+    19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Station&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
+    20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Component<br>
+    21&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Year<br>
+    22&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Day of year<br>
+    23&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Hour<br>
+    24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Minute&nbsp;&nbsp;&nbsp; - these identify the event origin
+    time&nbsp; <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <br>
+    <br>
+    For the PHV96 file, there are three additional columns:<br>
+    <br>
+    25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Phase - this is the phase term<br>
+    26&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    This is the N in N2&#960;. The phase velocity, c, is obtained from 1/c =
+    [ -Phase&nbsp; - &#960;/4 + &#960;/2 +&nbsp; &#969;r/U + N2&#960;] / ( &#969;r ) where U is
+    the group velocity, r is the epicentral distance and &#969; = 2&#960;/T. I do
+    not use the instantaneous period.<br>
+    <br>
+    <br>
+    The purpose of this length format is to provide spectral amplitudes,
+    distance and azimuth for a study of the surface-wave spectra,<br>
+    to provide information for surface-wave tomography, e.g., the
+    dispersion value and the coordinates of the source and receiver, and
+    finally<br>
+    dispersion values for use with <b>surf96</b> or <b>joint96 </b>or
+    <b>shallow96</b>.&nbsp;&nbsp; If we enter the command<br>
+    <br>
+    <pre>MFTSRF *.dsp *.phv<br><br></pre>
+    we get the dispersion in the <b>surf96</b> format, e.g.,<br>
+    <br>
+    <pre>SURF96 R U X 0 20 3.07357 0.66166<br>SURF96 R U X 0 19 3.12174 0.64843<br>SURF96 R U X 0 18 3.09009 0.60191<br>SURF96 R U X 0 17 3.06323 0.55863<br>SURF96 R U X 0 16 3.07775 0.53076<br>SURF96 R U X 0 15 3.09434 0.50297<br>SURF96 R U X 0 14 3.09599 0.46994<br>SURF96 R U X 0 13 3.09202 0.43525<br>         .............<br>SURF96 R C X 0 2.4 2.85734 0.00100<br>SURF96 R C X 0 2.3 2.83691 0.00100<br>SURF96 R C X 0 2.2 2.81739 0.00100<br>SURF96 R C X 0 2.1 2.79642 0.00100<br>SURF96 R C X 0 2 2.75870 0.00100<br>SURF96 R C X 0 1.9 2.73027 0.00100<br>SURF96 R C X 0 1.8 2.70266 0.00100<br><br></pre>
+    <br>
+    <pre><br></pre>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p> </p>
+  </body>
+</html>

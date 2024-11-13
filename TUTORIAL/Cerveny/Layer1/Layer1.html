@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <title>TITLE</title>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body>
+    <h1>Layer1</h1>
+    The purpose here is two fold - to make synthetics and then to make
+    receiver functions from them. We examine a horizontal profile with
+    observations at the surface
+    between x-coordinates if 0 and 200 km. The source is placed at
+    (100,100), e.g., an x-coordinate of 100 km
+    and a depth of 100 km.
+    <p></p>
+    <p>
+      The velocity model is contained within the <b>DOIT</b> file. The
+      receiver positions are also defined in this file. The sequence of
+      commands to
+      make the Sac files is just
+      <br>
+    </p>
+    <pre>cprep96 -M model.d -d dfile -HS 100 -XS 100 -HR 0 -DOALL  -DOCONV
+cseis96 -R &gt; cseis96.out
+cpulse96 -V -p -l 4 -EXF -DELAY 10  | f96tosac -B
+cray96 -XMIN -50 -XMAX 250 -ZMIN 0 -ZMAX 150
+</pre>
+    <p></p>
+    <b>cprep96</b> creates the following two plots
+    <br>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>CPREP96M.PLT</center>
+              <br>
+              <img src="CPREP96M.png"></td>
+            <td>
+              <center>CPREP96R.PLT</center>
+              <br>
+              <img src="CPREP96R.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    &nbsp;
+    <b>cprep96</b> creates two plot files. <i>CPREP96M.PLT</i> is a
+    plot of the model and <i>CPREP96R.PLT</i> is a plot of the rays.
+    <p></p>
+    <p>
+      <b>cray96</b> creates the following plot:
+      <br>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>CRAY96.PLT</center>
+              <br>
+              <img src="CRAY96.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    which shows all of the ray paths. In the example Layer2 the results
+    for just one ray will be shown.
+    <p></p>
+    <p>
+      After the computations are completed the script <b>DOPLT</b> is
+      run to plot record sections, and in this simple case compare the
+      receiver function from the synthetic at receiver position 200 km
+      to the analytic value using <b>hrftn96</b>. The plots are in the
+      next two figures.
+    </p>
+    <p>
+    </p>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>ZEX.PLT</center>
+              <br>
+              <img src="ZEX.png"></td>
+            <td>
+              <center>REX.PLT</center>
+              <br>
+              <img src="REX.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    This is the output of <b>cpulse96</b>. <b>gsac</b> was used to
+    make the plot. Note that this is a relative amplitude plot. The peak
+    amplitude of each traces has the same amplitude on the plot. In the
+    plots, a positive amplitude is to the left. At the station at 200
+    km, the initial Z and R are positive. The initial P wave is in a
+    direction upward and to the right away from the source. At a
+    distance of 0 km, the ray leaves the source up and to the left. The
+    initial P motion here is
+    up on the vertical and down on the horizontal, meaning in the
+    negative z-direction,&nbsp; which is what is expected. The normal
+    use of R meaning Radial away form the source does not apply here.
+    <p></p>
+    <p>
+      The computation of the receiver function presents an opportunity
+      to better understand the meaning of the entry in column 8 of <i>cseis96.amp</i>.
+      For the receiver distance of 200 km, this line for the direct P
+      ray is
+      <br>
+    </p>
+    <pre>    1   21  0.19849E+02  0.11161E-01  0.13669E-01  0.31416E+01  0.00000E+00 -0.696068E+00    1  0.33000E+01  0.80000E+01  0.00000E+00  0.28000E+01  0.60000E+01
+</pre>
+    <br>
+    The angle -0.696068E+00 in radians is measured with respect to the
+    horizontal and corresponds to 39.3968 degrees. The angle required
+    for the ray parameter is measured with respect to the vertical and
+    is thus 50.083 degrees. The ray parameter is <i>sin(50.083
+      degrees)/8.0 = 0.09587</i> s/km. Since this is a plane layered
+    model, <b>time96</b> can be used to get the plane wave ray
+    parameter and the travel time by the commands
+    <br>
+    <pre>time96 -EVDP 100 -DIST 100 -M model.d -P -RAYP 
+time96 -EVDP 100 -DIST 100 -M model.d  
+</pre>
+    <br>
+    From these two commands one obtains 9.59405228E-02 s/km for the ray
+    parameter and 19.8530426s for the travel time. <br>
+    in addition the negative value indicates that this ray goes up from
+    the source. Since it is greater than -&#960;/2, the ray goes upward and
+    to the right of the source.
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>RFTN.PLT</center>
+              <br>
+              <img src="RFTN.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <p>
+    </p>
+    <h1>Exercises</h1>
+    <p>
+    </p>
+    <ul>
+      <li>The comparison of receiver functions was not exact. What is
+        the effect of using a smaller value of <i>dt</i> in the
+        synthetics.
+        <br>
+        Answer: a little bit using dt - 0.0625s.<br>
+        <center>
+          <table>
+            <tbody>
+              <tr>
+                <td><img src="RFTNa.png"></td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+        </center>
+      </li>
+      <li>Test whether the problem was due to the use of curved
+        wavefronts in <b>cseis96</b> rather than the assumed incident
+        plane wave by placing the source deeper, e.g., perhaps 2000 km.
+        <br>
+        Answer: Yes, much better even with the original dt of 0.125s.<br>
+        <center>
+          <table>
+            <tbody>
+              <tr>
+                <td><img src="RFTNb.png"></td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+        </center>
+      </li>
+    </ul>
+  </body>
+</html>

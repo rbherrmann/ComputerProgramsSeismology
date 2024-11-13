@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Jackknife error estiamtes for location</title>
+</head>
+<body bgcolor="#ffffff">
+<h2>Last Change</h2>
+2011-10-30 20:13
+<h2>Introduction</h2>
+<p>
+The Computer Program in Seismology location program <b>elocate</b> is
+a simple program that can easily be run in a batch mode. The program
+requires only a velocity model file, <i>VEL.MOD</i> and the data file <i>elocate.dat</i>.
+The
+program is described in Chapter 4 of the distributed
+PROGRAMS.330/DOC/GSAC.pdf/cps330g.pdf.
+</p>
+<p>There are many references to the "leave one out" jackknife procedure
+for estimating means and variances. A recent reference is
+</p>
+<p>G. A. Prieto, D. J. Thomas, F. L. Vernon, P. M. Shearer and R. L.
+Parker, (2007). Confidence intervals for earthquake
+source parameters, Geophys. J. Int 168, 1227-1234.
+doi:10.1111/j.1365-246X.2006.03257.x
+</p>
+<p>The essence of the the procedure is to systematically leave one
+observation out of a data set, and then to run the inversion procedure.
+Then the inverted results are examined. Define <b>K</b> as the
+original number of observations. The result of each inversion will be a
+<b>Vj</b> for <b>j=1,K</b>. The mean value is
+</p>
+<pre>     Vbar = (1/K) SUM V<sub>j</sub>
+</pre>
+and the variance is
+<pre>     Var = (K-1)/K  SUM [V<sub>j</sub> - Vbar]<sup>2</sup>
+</pre>
+<h2>Installation and execution</h2>
+<p>
+To run this procedure, you must have installed the Computer Program in
+Seismology location program <b>elocate</b>. You must also have access
+to the programs <b>awk</b>/<b>gawk</b> and the C compiler <b>gcc</b>.
+</p>
+<p>Download the following:
+</p>
+<ul>
+  <li><a href="DOIT">DOIT - the processing shell script</a> <i>(you
+must make this executable with the chmod +x DOIT command</i></li>
+  <li><a href="elocate.dat"> elocate.dat - test data set</a></li>
+</ul>
+<p>
+or
+<a href="t.tgz">t.tgz</a> and then <b>gunzip -c t.tgz | tar xvf - </b>
+to get the <i>DOIT</i> and <i>elocate.dat</i> files.
+</p>
+<p>Make the shell script executable:
+<br>
+</p>
+<pre>	chmod +x DOIT<br></pre>
+<br>
+Execute the shell script:
+<br>
+<pre>	DOIT<br>or<br>	./DOIT<br></pre>
+<br>
+<h2>Output</h2>
+<p>
+All processing results are placed in a sub-directory RESULT:
+<br>
+</p>
+<pre>     ls RESULT<br>     elocate.sum.1	elocate.sum.13	elocate.sum.3  elocate.sum.7  elocate.txt.10  elocate.txt.14  elocate.txt.4  elocate.txt.8<br>     elocate.sum.10	elocate.sum.14	elocate.sum.4  elocate.sum.8  elocate.txt.11  elocate.txt.15  elocate.txt.5  elocate.txt.9<br>     elocate.sum.11	elocate.sum.15	elocate.sum.5  elocate.sum.9  elocate.txt.12  elocate.txt.2   elocate.txt.6<br>     elocate.sum.12	elocate.sum.2	elocate.sum.6  elocate.txt.1  elocate.txt.13  elocate.txt.3   elocate.txt.7<br></pre>
+<br>
+The files starting with <i>elocate.txt</i> are the complete output of
+the <b>elocate</b> program run in batch mode. <br>
+The files starting with <i>elocate.sum</i> are the simple summary of
+the location:
+<pre>     cat RESULT/elocate.sum.10<br>          0.035      37.9515    -77.9603      5.69 20111026223658.022       1319668618.022<br></pre>
+The entries are the RMS error, latitude, longitude, depth, origin time
+as YYYYMMDDHHmmSS.MSEC and the epoch time in
+seconds after January 1, 1970.
+<p>The listed output of the DOIT script is:
+</p>
+<pre>    37.9501 0.0040 -77.9569 0.0059 5.6960 0.4665 1319668617.987 0.057 20111026223657.987<br></pre>
+where the columns are
+<pre>    Latitude Dlat   Longitude Dlon Depth Ddep Epoch_time Dtime and  origin time in human form.<br></pre>
+<p>
+The location estimate obtained using all data is in the elocate.txt
+output:
+</p>
+<pre> Error Ellipse  X=   0.3721 km  Y= 0.6225 km  Theta = 130.7784 deg<br><br> RMS Error        :               0.036              sec<br> Travel_Time_Table:          CUS     <br> Latitude         :             37.9500 +-    0.0048 N         0.5303 km<br> Longitude        :            -77.9570 +-    0.0057 E         0.4946 km<br> Depth            :                5.69 +-      0.88 km<br> Epoch Time       :      1319668617.988 +-      0.11 sec<br> Event Time       :  20111026223657.988 +-      0.11 sec<br> Event (OCAL)     :  2011 10 26 22 36 57 988<br> HYPO71 Quality   :                  BB<br> Gap              :                 102              deg<br></pre>
+<p>The jackknife estimated standard error are similar to those for
+latitude and longitude, and smaller for depth and origin time
+for this data set. </p>
+<h2>Description of the shell script</h2>
+<pre>#!/bin/sh<br><br><br>######<br>#   preserve the original elocate.dat<br>######<br>cp elocate.dat elocate.dat.save<br><br>#####<br>#     create a work subdirectory and populate it<br>#     if it already exists start anew!<br>#####<br>rm -fr TEMP<br>mkdir TEMP<br>cp VEL.MOD TEMP<br><br>#####<br>#    create a result directory to preserve the <br>#    different run output<br>#####<br>rm -fr RESULT<br>mkdir RESULT<br><br>#####<br>#    initialize to get the VEL.MOD file<br>#####<br>elocate -VELMOD<br><br>#####<br>#    define the velocity model and starting depth<br>#####<br>MODEL=4<br>DEPTH=10<br><br>#####<br>#    determine the number of lines in elocate.dat<br>#####<br>NLINE=`wc elocate.dat.save | awk '{print $1}' `<br><br>#####<br>#    now loop over the lines<br>#####<br>COUNT=0<br>while [ ${COUNT} -lt ${NLINE} ]<br>do<br>        head -${COUNT} elocate.dat.save &gt; TEMP/elocate.dat<br>        COUNTM1=`echo ${COUNT} ${NLINE} | awk '{print $2 -$1 -1}' `<br>	tail -${COUNTM1} elocate.dat.save &gt;&gt; TEMP/elocate.dat<br>	COUNT=` echo ${COUNT} | awk '{print $1 + 1}' `<br>#####<br>#       use subshell to do the work<br>#####<br>	(cp VEL.MOD TEMP; cd TEMP; elocate -M ${MODEL} -D ${DEPTH} -BATCH &gt; elocate.txt)<br>#####<br>#       preserve the results with a unique name<br>#####<br>	mv TEMP/elocate.txt RESULT/elocate.txt.${COUNT}<br>	mv TEMP/elocate.sum RESULT/elocate.sum.${COUNT}<br><br><br>done<br><br>#####<br>#    Use Jackknife procedure to get location and one sigma<br>#####<br><br>#####<br>#    Reference: Equations (1) - (4)<br>#     G. A. Prieto, D. J. Thomas, F. L. Vernon, P. M. Shearer <br>#     and R. L. Parker, (2007).  Confidence intervals for earthquake<br>#     source parameters, Geophys. J. Int 168, 1227-1234. <br>#      doi:10.1111/j.1365-246X.2006.03257.x<br><br><br>#####<br>#    scan the elocate.sum.* files<br>#    to perform the leave one out<br>#<br>#    the entries in elocate.sum are<br># RMS  LAT LON DEP OT OT_CSS<br># 0.007 37.9478 -77.9593 5.64 20111026223658.017 1319668618.017<br><br>#####<br>#    make lists of the variables<br>#####<br>rm -f list.lat list.lon list.dep list.otcss<br>cat RESULT/elocate.sum.* | awk '{print $2}' &gt; list.lat<br>cat RESULT/elocate.sum.* | awk '{print $3}' &gt; list.lon<br>cat RESULT/elocate.sum.* | awk '{print $4}' &gt; list.dep<br>cat RESULT/elocate.sum.* | awk '{print $6}' &gt; list.otcss<br><br>#####<br>#    now get the jackknife estimates for each parameter.<br>#    this ignores any possible covariance<br>#####<br><br>for P in LAT LON DEP OT<br>do<br>case ${P} in<br>	LAT) IND=1 ;FILE=list.lat ;FMTSD="%9.4f" ;;<br>	LON) IND=2 ;FILE=list.lon ;FMTSD="%9.4f" ;;<br>	DEP) IND=3 ;FILE=list.dep ;FMTSD="%9.4f" ;;<br>	OT)  IND=4 ;FILE=list.otcss ;FMTSD="%20.3f" ;;<br>esac<br>#####<br>#     M is the number of entries in the file<br>#####<br>M=`wc ${FILE} | awk '{print $1}' `<br>#####<br>#     create and awk scrip to compute the mean<br>#####<br>cat &gt; awkscmn &lt;&lt; EOF<br>BEGIN {SUM=0.0}<br>{SUM+=\$1}<br>END { printf "${FMTSD}\n", SUM/NR} <br>EOF<br>MEAN=`cat ${FILE} | awk -f awkscmn  `<br>#####<br>#    save the mean in an array<br>#####<br>MVAL[${IND}]="${MEAN}"<br><br>#####<br>#     now computed the standard error from the square root of the variance<br>#####<br>cat &gt; awkscsd &lt;&lt; EOF<br>BEGIN {SUM=0.0}<br>{<br>SUM+= (\$1 -(${MEAN}) )*(\$1 -(${MEAN}) )<br>}<br>END { printf "${FMTSD}\n", sqrt( ( NR - 1 ) * SUM / NR ) }<br>EOF<br>SD=`cat ${FILE} | awk -f awkscsd`<br>SDVAL[${IND}]="${SD}"<br><br>done<br><br><br>rm -f awkscmn awkscsd list.dep list.lat list.lon list.otcss<br><br>#####<br>#     at this point compile a C program uner LINUX to convert<br>#      epoch time to human time<br>#####<br><br>#####<br>#     now compile a C program to convert the time in seconds from<br>#     January 1, 1970 00:00:00.000 to UTC<br>#####<br>cat &gt; c.c &lt;&lt; EOF<br>#include <stdio.h>&lt;stdio.h&gt;<br>#include &lt;time.h&gt;<time.h>
+
+double TIME=${MVAL[4]} ;
+time_t TIMES;
+struct tm tm;
+char ostr[30];
+
+main()
+{
+	TIMES=(time_t)TIME;
+	gmtime_r( &amp;TIMES, &amp;tm);
+	strftime(ostr,sizeof(ostr),"%Y%m%d%H%M%S", &amp;tm);
+	printf("%s.%3.3d\n",ostr,(int)( 1000*(TIME - (double)TIMES )+0.49));
+}
+EOF
+gcc c.c
+TIMEHUMAN=`a.out`
+
+######
+#   now format the nice summary
+#####
+echo ${MVAL[1]} ${SDVAL[1]}  ${MVAL[2]} ${SDVAL[2]}  ${MVAL[3]} ${SDVAL[3]}  ${MVAL[4]} ${SDVAL[4]} ${TIMEHUMAN}
+
+rm -f a.out c.c
+</time.h></stdio.h></pre>
+</body>
+</html>

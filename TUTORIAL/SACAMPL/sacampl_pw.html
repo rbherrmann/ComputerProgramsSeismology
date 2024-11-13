@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>sacrmsl</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body>
+    <h1>Plane wave tests</h1>
+<h2>Introduction</h2>
+<p>This set of tests uses the CPS program sequence <b>hprep96p</b>, <b>hspec96p</b>,  <b>hpulse96</b> and <b>f96tosac</b> to create plane wave responses, which
+are the inverse Fourier transform of <i>F(p,&omega;)</i>. The corresponding wavenumebr integration code gives the Fourier transform of the
+Green's function at distance <i>r</i> as <i>f(r,&omega;) = INT F(k,&omega;) J<sub>n</sub> ( k r ) k dk </i>. The <i>F</i>'s are related through the definition 
+<i>k = p &omega;</i>. This plane-wave code computes the respective Green's functions which include a radiation pattern term. When taking spectra ratios, the common source effect is canceled our if just one ray from the source is considered.
+</p>
+<p>We consider the two cases of the S-ray leaves the source at angles of 10<sup>o</sup> and 35<sup>o</sup>. This is the angle of incident at the surface for the "rock" model and the angle of incidence at the base of the sediments for the "soil" model.<p>
+<p>The two models are
+<br>
+<table>
+<tr><td>Rock model</td><td>Soil model </td><tr>
+<tr>
+<td>
+<pre>
+Rock halfspace
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+ 20.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1<td>
+</pre>
+</td>
+<td>
+<pre>
+MODEL.01
+Soil model with Q overlying a halfspace
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+  0.0100  1.5     0.3     2.0         0.05   0.10   0    0      1       1
+  0.0100  1.5     0.6     2.0         0.03   0.06   0    0      1       1
+  0.0200  1.6     0.8     2.0         0.025  0.05   0    0      1       1
+  0.0200  3.0     1.5     2.2         0.01   0.02   0    0      1       1
+  0.1000  5.0     2.5     2.5         0.005  0.01   0    0      1       1
+  0.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+</pre>
+</td>
+</tr>
+</table>
+</p>
+<p>One has to be careful in computing the response. When using an angle of 45<sup>o</sup> the surface radial motions were huge. I noted that the phase velocity of an S wave leaving the source was 4.95 km/s which is less than the P velocity in the medium. Thus the P-contribution would be evanescent, and this would affect the surface motion. 
+</p>
+<h3> 10<sup>o</sup> Angle of incidence</h3>
+<p>
+The processing script for this angle of incidence is <a href="CPSPW10/DOITPW10">DOITPW10</a>. This script is annotated with comments that describe the operations. Note that the
+shell script <b>DOPLTPNG</b> is used to convert the CPS PLT files to a png file using the ImageMagick convert. If ImageMagick is not installed, do something like
+<br>
+<pre>
+plotnps -F7 -W10 -EPS -K < P001.PLT > P001.eps
+</pre>
+and then use some other code to convert the Encapsulated PostScript <i>P001.eps</i> to a useful format. The <b>DOPLTPNG</b> script is given below.
+</p> 
+<p>The <b>DOITPW10</b> invokes <b>sacampl</b> with the <i>-TXT</i> flag. This means that the ASCII file <i>sacsampl.txt</i> will be available. As an aside, if one wishes to compare the synthetics response to the output of <b>sacampl</sac>, then use <b>gsac</b> to create a CSV file using the commands
+<br>
+<pre>
+gsac
+<GSAC> cut b b 20
+<GSAC> r *rock_soil.sac.am KAMP.sac.am
+<GSAC> interpolate delta 0.1
+<GSAC>outcsv
+<i> Creating f001.csv</i>
+</pre>
+<br>
+The interpolation was required to have the same spacing./ The first few lines of the <i>f001.csv</i> are
+<br>
+<pre>
+Freq (Hz),GRN21   RSS     ,GRN21   TSS     ,GRN21   ZSS     ,-12345  -12345  
+0.100000,1.003463,1.003403,1.000284,1.014438
+0.200000,1.004884,1.005057,1.000618,1.029704
+0.300000,1.010836,1.011030,1.001545,1.045874
+0.400000,1.019957,1.020095,1.002902,1.063032
+0.500000,1.031061,1.031501,1.004651,1.081276
+0.600000,1.044949,1.045721,1.006788,1.100714
+0.700000,1.062762,1.063560,1.009327,1.121474
+0.800000,1.082774,1.083689,1.012225,1.143704
+0.900000,1.103481,1.104894,1.015500,1.167573
+</pre>
+<br> The top line is a bit obtuse since it contains the Station name and component name. The columns here are
+Frequency, Radial soil.rock ratio, Transverse soil/rock ratio, Vertical  soil/rock ratio and the quarter-wavelength ratio.
+</p>
+<p>Two figures are produced with a linear and a logarithmic amplitude scale. Fro this case the logarithmic scale is not very informative.
+</p>
+<p>the trace colors indicate the various component ratios. The black curve is the results from the quarter-wavelength code. It is interesting that for nearly vertical incidents that the soil/rock spectral ratios of the radial and transverse components are the same.
+<br>
+<table>
+<tr>
+<td><img src="CPSPW10/PWlin_10.png">
+</td>
+<td><img src="CPSPW10/PWlog_10.png">
+</td>
+</tr>
+</table>
+<br>
+<h3> 35<sup>o</sup> Angle of incidence</h3>
+<p>
+The processing script for this angle of incidence is <a href="CPSPW35/DOITPW35">DOITPW35</a>. The graphic output is
+<br>
+<table>
+<tr>
+<td><img src="CPSPW35/PWlin_35.png">
+</td>
+<td><img src="CPSPW35/PWlog_35.png">
+</td>
+</tr>
+</table>
+<br>
+</p> 
+<h2>DOPLTPNG</h2>
+<br>
+<pre>
+#!/bin/sh
+
+for i 
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done
+</pre>
+<br>
+  </body>
+</html>

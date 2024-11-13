@@ -1,0 +1,60 @@
+#!/bin/sh
+
+EIGEN=${GREENDIR}/GMODEL/SW/
+
+
+#####
+#	clean up
+#####
+rm -f fmfit*
+#####
+#	do a complete search - normally one would use larger values of
+#	DD DH DS and DR
+#
+#	note that since amplitude spectra are being fit, the search over
+#	rake need only cover 180 degrees since strike is varied over 360 degrees
+#	- hence the restriction to positive values here
+#####
+#	DMIN	minimum distance to use (km)
+#	DMAX	maximum distance to use (km)
+#	DMN	minimum dip (deg)
+#	DMX	maximum dip (deg)
+#	DD	dip increment (deg)
+#	RMN	minimum rake (deg)
+#	RMX	maximum rake (deg)
+#	DR	rake increment (deg)
+#	SMN	minimum strike (deg)
+#	SMX	maximum strike (deg)
+#	DS	strke increment (deg)
+#	FMIN	minimum fit for output in fmfitXXX.dat [0,1]
+#	HMN	minimum source depth (km)
+#	HMX	maximum source depth (km)
+#	DH	source depth increment (km)
+#	PMN	minmum period to consider (sec)
+#		
+#####
+
+DMIN=100
+DMAX=5000
+DMN=10
+DMX=90
+DD=5
+RMN=0
+RMX=90
+DR=5
+SMN=0
+SMX=180
+DS=5
+FMIN=0.5
+HMN=1
+HMX=25
+DH=1
+PMN=5
+
+srfgrd96 -N2 -PATH ${EIGEN} -O ALL.DSP \
+	-DMIN ${DMIN} -DMAX ${DMAX} \
+	-DMN ${DMN} -DMX ${DMX} -DD ${DD} \
+	-RMN ${RMN} -RMX ${RMX} -DR ${DR} \
+	-SMN ${SMN} -SMX ${SMX} -DS ${DS} \
+	-HMN ${HMN} -HMX ${HMX} -DH ${DH} \
+	-FMIN ${FMIN}  -PMN ${PMN} 

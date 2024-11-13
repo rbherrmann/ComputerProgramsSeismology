@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Exploration synthetics - I</title>
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<h1>Seismic Exploration Synthetics - Part I</h1>
+<h2>Introduction</h2>
+The synthetic seismogram code for Computer Programs in Seismology is
+designed to provide the medium response to a step in seismic moment for
+moment tensor source and a step force for point force sources.&nbsp;
+The source time function selection permits a rise time, to reflect the
+earthquake source duration, through the selection of triangular and
+parabolic pulses. These are discussed in Appenxid B of the Computer
+Program ins Seimology - Overview document (
+PROGRAMS.330/DOC/OVERVIEW.pdf/cps330o.pdf).&nbsp; The use of the
+triangular and parabolic pulses have the benefit making clean looking
+synthetics to remove the noise caused by a sharp trunction at the
+Nyquist frequency.<br>
+<br>
+To be able to use the Green's functions computed using the shortest
+duration source pulse to model large earthquakes, the <span
+ style="font-weight: bold;">gsac</span> commands <span
+ style="font-style: italic;">triangle, boxcar </span>or <span
+ style="font-style: italic;">trapezoid<span style="font-weight: bold;">
+</span></span>can be used to make the source pulse longer.<br>
+<br>
+The programs used to convolve the source pulse are <span
+ style="font-weight: bold;">hpulse96, spulse96, gpulse96</span> and <span
+ style="font-weight: bold;">cpulse96 </span>for use with the
+wave-number integration, modal superposition, generalized ray and
+asymptotic ray tracing synthetics.&nbsp; These codes specificy the
+source pulses with the following command line flags:<br>
+<br>
+<div style="margin-left: 40px;"><span style="font-weight: bold;">-p -l
+L </span>&nbsp; Use a parabolic pulse of duration 4L dt, where dt is
+the sampling interval<br>
+<span style="font-weight: bold;">-t -l N&nbsp;&nbsp; </span>Use a
+trialgular pulse of duration 2N dt for N &gt; 1&nbsp; [ -p -L 1 is
+equivalent to -t -l 2 ]<br>
+<span style="font-weight: bold;">-F rfile</span>&nbsp; Use the pulse
+defined by the contents of the file <span style="font-weight: bold;">rfile&nbsp;
+</span>[See the subroutine<span style="font-weight: bold;"> </span><span
+ style="font-style: italic;">pupud</span> in the source code for the
+format ]<br>
+<span style="font-weight: bold;">-i</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Use
+an
+impulse
+(e.g., true step source with zero rise-time. The pulse
+definitions description given here represent the derivative of the
+source time function).<br>
+</div>
+<br>
+In addition the user can specify the type of synthetic,<span
+ style="font-weight: bold;"> -A</span> for acceleration,<span
+ style="font-weight: bold;"> -V</span> for velocity and<span
+ style="font-weight: bold;"> -D</span> for displacement.<br>
+<br>
+Recently, October 28, 2011) a user had problems with using the <span
+ style="font-weight: bold;">-F rfile</span>&nbsp; to apply a Ricker
+wavelet.&nbsp; There may be a problem in the code, but one source may
+be the fact that the maximum of the Ricker wavelet occurs at some time
+after the initial point and there is no easy way to zero phase the
+pulse when making the synthetics. As a solution <span
+ style="font-weight: bold;">gsac</span> now can convolve a waveform
+with a zero phase Ricker wavelet.<br>
+<br>
+Before making synthetics, we should discuss source time functions for
+exploration.&nbsp; This is more convoluted than for the earthquake
+source problem, since the earthquake source time function must be step
+like to represent the permanent deformation due to an earthquake. <br>
+<br>
+If we wish to model a simple explositon, a step in isotropic moment may
+be adequate, although some overshoot should be allowed according the
+Sharpe (1942) model [Sharpe, J. A., (1942). Production of elastic waves
+by explosion pressures, <span style="font-style: italic;">Geophysics</span>
+<span style="font-weight: bold;">7</span>,&nbsp; 144-154].&nbsp; If we
+wish to model a weight drop, a simple step in force at the surface may
+not be adequate.&nbsp; Following Day et al (1983) [Day, S. M., N. Rimer
+and J. T. Cherry (1983). Surface waves from underground explosions with
+spall analysis of elastic and nonlinear source models, <span
+ style="font-style: italic;">Bull. Seism.Am. </span><span
+ style="font-weight: bold;">73, </span>247-264.], the applied force
+may be as in the next figure:<br>
+<br>
+<div style="text-align: center;"><img
+ style="width: 490px; height: 397px;" alt="Weight Drop" src="wtdrop.png"><br>
+<div style="text-align: left;">When the weight is released, there is a
+negative force applied to the ground at the weight supports.&nbsp; The
+weight falls because of gravity a time &#964; seconds, when it impacts the
+ground the source time function may be represented as<br>
+<br>
+<div style="margin-left: 40px;"><big style="font-weight: bold;">F(t) =
+-mg [ H(t) - H(t - &#964;) ] + mg&#964;&nbsp; &#948; (t-&#964;)<br>
+</big><br>
+</div>
+This relation assures that momentum is conserved. To see this
+phenomena, one must start recording at the instant the weight is
+released rather than at the time of impact.&nbsp; For high frequency
+seismograms, the waves generated by the impulsive point force will
+dominate the record.<br>
+<br>
+To actually make a synthetic that looks like real observations, one
+must simulate the source, as duscussed above, and then place the record
+through a geophone, which outputs a voltage proportional to a high-pass
+filtered ground velocity.&nbsp; The geophone introduces a shape to the
+waveforms. <br>
+</div>
+</div>
+<div style="margin-left: 40px;"><br>
+<br>
+</div>
+<h2>Download</h2>
+Download the file <a href="ricker.tgz"> ricker.tgz</a> and unpack
+using the command<br>
+<pre>             gunzip -c ricker.tgz | tar xvf -<br>             cd RICKER<br></pre>
+There will be a shell script DOFIT and two subdirectories, WK and
+SW.&nbsp; The wavenumber integration synthetics are in WK and the
+fundamental mode surface wave synthetics are in SW.&nbsp; <br>
+<br>
+To make the synthetics,<br>
+<pre>            cd RICKER<br>            cd SW<br>            DOIT-sw<br>            cd ..<br>            DOIT-wk<br>            cd ..<br><br>            DOFIT  (script to make the plots below)<br></pre>
+<h2>Sample Run</h2>
+The DOIT-sw and DOIT-wk scripts differ only in the use of the
+synthetics seismogram programs.&nbsp; The annotated DOIT-wk script<br>
+is as follows:<br>
+<br>
+<pre style="margin-left: 40px;">#!/bin/bash<br><br>rm -fr ORIG RICKER<br><br>#####<br># MODEL 1 , dr pujol, date 23 Aug 2011, from paper <br># "shear wave velocity profiling, at sites with high <br># freqeuncy stiffness contrasts: a comparison between <br># invasive and non-invasive methods", TABLE 1<br>#<br># Create the model using mkmod96                              <span
+ style="color: rgb(255, 0, 0); font-weight: bold;">CREATE THE VELOCITY MODEL USING mkmod96</span><br>#####                                                         <span
+ style="color: rgb(255, 0, 0);"><span style="font-weight: bold;">THIS IS COMMENTED SINCE THE MODEL IS GIVEN BELOW</span></span><br>#mkmod96 &lt;&lt; EOF<br>#simple.mod<br>#Simple Crustal Model<br>#0<br>#0.0050 1.100 0.300 1.6 20 20 0 0 1 1<br>#000000 1.800 0.400 2.0 20 20 0 0 1 1<br>#EOF<br><br><br>cat &gt; simple.mod &lt;&lt; EOF<br>MODEL.01<br>Simple Crustal Model<br>ISOTROPIC<br>KGS<br>FLAT EARTH<br>1-D<br>CONSTANT VELOCITY<br>LINE08<br>LINE09<br>LINE10<br>LINE11<br>  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)  QP   QS  ETAP  ETAS  FREFP  FREFS <br>  0.0050  1.1000  0.3000  1.6000 20.0  20.0  0.00  0.00  1.00  1.00 <br>  0.0000  1.8000  0.4000  2.0000 20.0  20.0  0.00  0.00  1.00  1.00 <br>EOF<br><br>cat &gt; dfile &lt;&lt; EOF<br>0.002   0.0005  512     -0.05   0                           <span
+ style="color: rgb(255, 0, 0);"><span style="font-weight: bold;">DEFINE THE DISTANCES, NUMBER OF POINTS AND SAMPLE INTERVAL</span></span><br>0.004   0.0005  512     -0.05   0                           <span
+ style="font-weight: bold; color: rgb(255, 0, 0);">THIS WAS ORIGINALLY 0.00025 FOR SAMPLING INTERVAL AND 1024</span><br>0.006   0.0005  512     -0.05   0                           <span
+ style="font-weight: bold; color: rgb(255, 0, 0);">POINTS.  THIS MAKES THE COMPUTATIONAL TIME SIGNIFICANTLY</span><br>0.008   0.0005  512     -0.05   0                           <span
+ style="font-weight: bold; color: rgb(255, 0, 0);">LONGER</span><br>0.01    0.0005  512     -0.05   0<br>0.012   0.0005  512     -0.05   0<br>0.014   0.0005  512     -0.05   0<br>0.016   0.0005  512     -0.05   0                           <span
+ style="font-weight: bold; color: rgb(255, 0, 0);">NOT THAT THE TIME SERIES DOES NOT START NOT AT 0 SEC BUT 0.05 SEC</span><br>0.018   0.0005  512     -0.05   0                           <span
+ style="color: rgb(255, 0, 0); font-weight: bold;">BEFORE THE ORIGIN TIME. THIS IS DOME SINCE THE USE OF THE SYMMETRIC RICKER</span><br>0.02    0.0005  512     -0.05   0                           <span
+ style="font-weight: bold; color: rgb(255, 0, 0);">WAVELET EXTENDS INTO NEGATIVE TIME AT SHORT DISTANCE</span><br>0.022   0.0005  512     -0.05   0<br>0.024   0.0005  512     -0.05   0<br>0.026   0.0005  512     -0.05   0<br>0.028   0.0005  512     -0.05   0<br>0.03    0.0005  512     -0.05   0<br>EOF<br><br>hprep96 -M simple.mod -d dfile -HS 0.002 -HR 0 -EXF<br>hspec96 &gt; hspec96.out<br>hpulse96 -p -V -l 1  |  f96tosac -B                        <span
+ style="color: rgb(255, 0, 0);"><span style="font-weight: bold;">GENERATE GROUND VELOCITY. USE THE parabolic pulse TO AVOID GIBB's EFFECTS</span></span><br><br>mkdir ORIG<br>mv *sac ORIG<br><br>#####<br>#    differentiate the point force synthetics<br>#    to simulate a delta function source <br>#####<br>gsac &lt;&lt; EOF<br>r ORIG/*VF.sac ORIG/*HF.sac<br>dif<br>w<br>q<br>EOF<br><br>#####<br>#  convolve with a Ricker wavelet<br>#####<br>mkdir RICKER<br>FREQ_RICKER=25<br>gsac &lt;&lt; EOF<br>##### process the explosion sources                <span
+ style="color: rgb(255, 0, 0);"><span style="font-weight: bold;">THE RICKER FILTERED TRACES ARE OF GROUND VELOCITY TO SIMULATE A GEOPHONE WITH</span></span><br>cd ORIG                                            <span
+ style="color: rgb(255, 0, 0);"><span style="font-weight: bold;">NATURAL FREQUENCY LESS THAN 25 Hz.</span></span><br>r *.sac<br>ricker f ${FREQ_RICKER}<br>cd ../RICKER<br>w<br>q<br>EOF<br><br><br>#####<br>#   clean up<br>#####<br>rm -f dfile hspec96.dat hspec96.grn hspec96.out simple.mod<br><br></pre>
+The first comparison is of the B01509ZEX.sac and B01511ZVF.SAC&nbsp;
+files from each
+technique&nbsp; the <span style="font-weight: bold;">gsac</span>
+command for the plot is<br>
+<br>
+<pre style="margin-left: 40px;">r SW/ORIG/B01509ZEX.sac WK/ORIG/B01509ZEX.sac<br>color list red blue<br>fileid name<br>ylim all<br>bg plt<br>title on l top s m text "Original at 30 m Dt=0.001 s"<br>p overlay on<br>plotnps -F7 -W10 -EPS -K &lt; P001.PLT &gt; t.eps ; gm convert -trim t.eps ZEX.over.o.png<br>r SW/ORIG/B01511ZVF.sac  WK/ORIG/B01511ZVF.sac<br>p<br>plotnps -F7 -W10 -EPS -K &lt; P002.PLT &gt; t.eps ; gm convert -trim t.eps ZVF.over.o.png<br>q<br><br></pre>
+The plots comparing the synthetics for the ZEX and ZVF Greens functions
+for the surface-wave SW (red) and wavenumber integration (blue). The
+difference between a fundamental mode synthetic and the complete
+solution are obvious. We also see that the high frequency generation of
+P waves is greater for the explosion source.<br>
+<pre style="margin-left: 40px;"><br></pre>
+<div style="text-align: center;">
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 647px; height: 493px;" alt="ZEX-original"
+ src="ZEX.over.o.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 620px; height: 493px;" alt="ZVF-original"
+ src="ZVF.over.o.png"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+</div>
+<br>
+The next comparison is of the B01509ZEX.sac and B01511zvf.SAC&nbsp;
+files from each
+technique which have been convolved with the Ricker wavelet.&nbsp; The <span
+ style="font-weight: bold;">gsac</span>
+command for the plot is<br>
+<br>
+<div style="margin-left: 40px;">
+<pre><br>r SW/RICKER/B01509ZEX.sac WK/RICKER/B01509ZEX.sac<br>lh delta dist<br>color list red blue<br>fileid name<br>ylim all<br>bg plt<br>title on l top s m text "Ricker 25 Hz wavelet at 30 m Dt=0.001 s"<br>p overlay on<br>r SW/RICKER/B01511ZVF.sac  WK/RICKER/B01511ZVF.sac<br>p<br>q<br><br></pre>
+</div>
+The plots comparing the synthetics for the ZEX and ZVF Greens functions
+for the surface-wave SW (red) and wavenumber integration (blue)<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 647px; height: 493px;" alt="ZEX-Ricker"
+ src="ZEX.over.r.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 620px; height: 493px;" alt="ZVF-Ricker"
+ src="ZVF.over.r.png"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The final comparison provides record sections for the explosion source
+for the original and wavelet filtered traces are created using the <span
+ style="font-weight: bold;">gsac</span> commands:<br>
+<br>
+<pre style="margin-left: 40px;">r WK/ORIG/*ZEX.sac<br>bg plt<br>prs shd pos color 2<br>r WK/RICKER/*ZEX.sac<br>prs <br>q<br></pre>
+The plots resulting plots for the original traces and Ricker wavelets
+are given in the next plot:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">Original
+Traces<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;">Ricker
+Wavelet<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 661px; height: 486px;" alt="Original Record Section"
+ src="PRS001.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 653px; height: 486px;" alt="Record Section - Ricker"
+ src="PRS002.PLT.png"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

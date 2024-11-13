@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Synthetic Green's Function Processing</title>
+</head>
+<body>
+<h2>Introduction</h2>
+<p>
+This section discusses the script
+<b>DOITGRN</b> in detail in order to let you know what the script
+actually does and also how you might modify the script
+</p>
+<h2>The Script</h2>
+<table border="5" cellpadding="5" cellspacing="5">
+  <tbody>
+    <tr>
+      <td>
+      <pre>#!/bin/sh<br>set -x<br><br>#####<br>#       define the location of  the deconvolved, QCd waveforms<br>#       of both the large event, DIRBIG and the smaller event used<br>#       for the empirical Green function, e.g.,<br>#DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL<br>#DIRSMALL=./SYN<br>#  DO NOT CHANGE THE LOCATION OF THE SYNTHETICS<br>#####<br>DIRBIG=path_to_big_event_waveform_directory<br><br>#####<br>#    define the mechanism and depth for the synthetics<br>#    These values can be obtained from the regional<br>#    averages of mechanisms using the new code<br>#    STK = strike<br>#    DIP = dip<br>#    RAKE = rake<br>#    HS = sourrce depth in km<br>#    MW = this is the reference MW, in theory the zero frequency<br>#    level of the derived source time function is the moment ratio<br>#    of the two events, e.g., a ratio of 1000 corresponds to a<br>#    delta Mw of 2.0, so if thw reference Mw=5 then the big event has Mw=7!<br>#####<br>STK=171<br>DIP=55<br>RAKE=112<br>HS=30<br>MW=5.0<br><br>#####<br>#    ONLY CHANGE BELOW HERE TO FINE TUNE<br>#####<br>DIRSMALL=./SYN<br><br>#####<br>#    make the synthetics for all vertical components and<br>#    create synthetic ground velocities at each station in units of m/s<br>#    Place the synthetics in a subdirectory called SYN<br>#####<br>DOMKSYN ${DIRBIG} ${STK} ${DIP} ${RAKE} ${HS} ${MW}<br><br><br><br><br>#####<br>#    define the CUT window with respect to P<br>#####<br>CUTL=-40<br>CUTH=200<br>#####<br>#    define the frequency band<br>#####<br>FL=0.01<br>FH=0.20<br>#####<br>#    define the DELTA for the traces used in the decon<br>#####<br>INTDELTA=0.25<br><br>#####<br>#    modified 10 AUG 2009 from the script used for Wells and L'Aquila<br>#    Previously:<br>#             ls $DIRBIG $DIRSMALL | sort | uniq &gt; uniq.list<br>#       this will not work since early IRIS data did not use location codes<br>#       So<br>#       1. Assume thaat only one location code is used<br>#`    2. build up a list of unique STATION COMPONENT codes<br>#####<br><br>#####<br>#    initialize by cleaning up<br>#####<br>rm -f stacmp<br>rm -f *.decon<br><br>#####<br>#    create a synthetic for each of the observed waveforms<br>#####<br><br>if [ -d DECONDIR ]<br>then<br>    rm -fr DECONDIR<br>fi<br>mkdir DECONDIR<br><br>for i in ${DIRBIG}/*[ZRT] ${DIRSMALL}/*[ZRT]<br>do<br>    saclhdr -KSTNM -KCMPNM -NL $i &gt;&gt; stacmp<br>done<br>cat stacmp | sort | uniq &gt; uniqstacmp<br><br>#####<br>#    do the deconvolution<br>#####<br><br>#####<br>#    select the ALPHA parameter<br>#    The approximate relation between the ALPHA and Gaussian pulse duration is<br>#    ALP    Duration    Corner Frequency<br>#    0.5      8 s             ~ 0.2 Hz<br>#    1.0      4 s            ~ 0.4 Hz<br>#    2.5    1.6s             ~ 1 Hz<br>#<br>#    The ALP parameter will affect the resolution of the final fit<br>#    A value of 2.5 may be too extreme for real data<br>#<br>#    The choice of the ALPHA parameter affects the resolution of the<br>#    resulting empirical source time function<br>#<br>#    The interative decon program computes a measure of fit, we use the<br>#    LEVEL parameters to guide the acceptance of the results<br>#<br>#    NOTE: for synthetics the fits will generally be good and the LEVEL<br>#    does little in selecting good traces<br>#####<br>for ALP in 0.5 1.0<br>do<br>    case ${ALP} in<br>    0.5) LEVEL=70. ;;<br>    1.0) LEVEL=60. ;;<br>    2.5) LEVEL=50. ;;<br>    esac<br>#####<br>#    select the component<br>#    later use a case statement to set the cut, e.g., a vs t1<br>#####<br>    for COMP in HZ <br>    do<br>        grep ${COMP} uniqstacmp  &gt; unuq.list<br>        rm -fr BIG.DIR SML.DIR<br>        mkdir BIG.DIR<br>        mkdir SML.DIR<br><br>        while read KSTNM KCMPNM<br>        do<br>            if [ -f ${DIRBIG}/${KSTNM}*${KCMPNM} ]<br>            then<br>                if [ -f ${DIRSMALL}/${KSTNM}*${KCMPNM} ]<br>                then<br><br>                    cp ${DIRBIG}/${KSTNM}*${KCMPNM} BIG.DIR/${KSTNM}${KCMPNM}<br>                    cp ${DIRSMALL}/${KSTNM}*${KCMPNM} SML.DIR/${KSTNM}${KCMPNM}<br><br>                gsac &lt;&lt; EOF<br>                    cuterr fillz<br>                    cut a ${CUTL} a ${CUTH}<br>                    r BIG.DIR/${KSTNM}${KCMPNM} SML.DIR/${KSTNM}${KCMPNM}<br>                    hp c ${FL} n 3<br>                    lp c ${FH} n 3<br>                    interpolate delta ${INTDELTA}<br>                    w N D<br>                    q<br>EOF<br>                    saciterd -FN N -FD D -2 -ALP ${ALP} -POS -D 20 -N 100<br>                    USER5=`saclhdr -USER5 decon.out`<br>#####<br>#    only use decon that filt 80%<br>#####<br>cat &gt; awkprog &lt;&lt; EOF<br>{<br>        ANS="YES"; if(\$1 &lt; ${LEVEL}) ANS="NO" ; print ANS<br>}<br>EOF<br>                    ANS=`echo $USER5 | awk -f awkprog`<br>                    if [ ${ANS} = "YES" ]<br>                    then<br>                        mv decon.out ${KSTNM}${KCMPNM}.${ALP}.decon<br>                    fi<br><br><br><br>                fi<br>                fi<br>done &lt; unuq.list<br><br><br>#####<br>#    make the map<br>#####<br>gsac &lt;&lt; EOF<br>rh BIG.DIR/* SML.DIR/*<br>map kstnm on r on<br>quit<br>EOF<br>sh map.sh<br>gm convert -trim map.eps ${COMP}.${ALP}.map.png<br><br><br><br>done<br><br><br>for i in Z <br>do<br>case $i in<br>    Z) KOLOR=2 ;;<br>    T) KOLOR=4 ;;<br>esac<br>gsac &lt;&lt; EOF<br>bg plt<br>r *${i}.${ALP}.decon<br>prs shd  pos color ${KOLOR} tl -20 200 amp 0.3 vl 0 360 az sa 0 ann sta<br>q<br>EOF<br>if [ -f PRS001.PLT ]<br>then<br>    plotgif -C16 -F7 -W10 -K &lt; PRS001.PLT &gt; ${i}decon.gif<br>fi<br><br>done<br>mv Zdecon.gif Zdecon.${ALP}.gif<br>#mv Tdecon.gif Tdecon.${ALP}.gif<br>mv *.decon DECONDIR<br><br>done<br>#####<br>#    cleanup<br>#####<br>rm -fr BIG.DIR<br>rm -fr SML.DIR<br>rm -fr numerator denominator N D observed predicted<br>rm -fr  stacmp PRS001.??? awkprog<br>rm -fr uniqstacmp unuq.list<br>rm -fr decon.out<br></pre>
+      </td>
+      <td style="vertical-align: top;">
+      <pre></pre>
+      <br>
+      <br>
+This is the most&nbsp; important part since this this tells where<br>
+to find the waveforms assiciated with the large earthquake. this
+directory has waveform files that end in 'Z'
+'R' or 'T'&nbsp; Note we do not need a second directory since we will
+create synthetics for the small earthquake.<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+We must also tell the program the focal mechanism, depth and target Mw
+for the small earthquake. Note that the Mw does not affect the duration
+of the source time function which has a duration of 4 * 4 *0.20 sec =
+3.2 sec Perhaps this is too long<br>
+      <br>
+We will place our created small earthquake waveforms in a local
+directory called&nbsp; SYN. The script DOMKSYN will create this
+directory<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+Make the synthetics<br>
+      <br>
+      <br>
+      <br>
+      <br>
+This says that we will consider the time window 40 seconds before and
+200 seconds after the predicted P-wave first arrival<br>
+      <br>
+If we filter both sets of waveforms identically, the deconvolution
+should yield the same result. However, the high-pass removes some low
+frequency noise.<br>
+      <br>
+To run the deconvolution, both traces must have the same sample rate.
+In addition resampling make the process faster since we do not wish to
+fit high frequencies. This value may be adequate when the deconvolved
+function is much longer than a few seconds. When the function is
+shorter, this must be smaller<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+Do the deconvolution for these two values of the filter parameter ALP<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+This is set up for the P-wave. First because we use the vertical
+component and because we cut with respect to the P-wave first arrival
+time.&nbsp; If you wish to use SH, then the loop should start as&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for COMP in HT<br>
+and the gsac command cut should be with 't0' instead of 'a'<br>
+      <br>
+      <br>
+These two 'if' statements ensure that the station-component is in both
+directories, then<br>
+      <br>
+copy them to a local work directory<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+cut both waveforms with respect to P<br>
+prefilter both waveforms<br>
+      <br>
+resample to a smaller dt<br>
+save as N for numerator (big event) and D for denominator (small event)<br>
+      <br>
+      <br>
+Do the interative deconvolution and examine the goodness of fit
+parameter. To see how 'saciterd' works<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; saciterd -h<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+If the fit matches the desired level, save the result with a name that
+reflects station, component, ALP. Since we work with synthetics the
+fits will be good.<br>
+      <br>
+      <br>
+      <br>
+      <br>
+All processing is complete for this value of ALP<br>
+      <br>
+      <br>
+Use the 'gsac' command to make a GMT script to plot the stations and
+ray paths used for the deconvolution<br>
+      <br>
+      <br>
+Use the GraphicsMagick package to convert the map.eps&nbsp; to a PNG
+graphics file. If you have ImageMagick installed, the command is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+convert -trim map.eps ${COMP}.${ALP}.map.png<br>
+      <br>
+All processing is complete<br>
+      <br>
+      <br>
+Using 'gsac' plot some aximuthal record sections of the deconvolved
+traces.<br>
+      <br>
+      <br>
+      <br>
+      <br>
+Convert these directly to a 'gif' image instead of an eps, and then a
+PNG<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+Clean up<br>
+      <br>
+      <br>
+      <br>
+      <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+</p>
+<center>Last changed August 17, 2009</center>
+</body>
+</html>

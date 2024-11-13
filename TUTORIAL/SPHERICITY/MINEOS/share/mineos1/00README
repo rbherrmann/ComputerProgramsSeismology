@@ -1,0 +1,31 @@
+This directory contains the scripts for comparing the mineos and CPS dispersion curves.
+
+The resulting graphics are placed in HTML.SW
+
+Directories
+
+	nnDEMO6 - perform the comparison for a spherical model
+
+		RUN_MINEOS.sh tak135-f
+		DOSEL
+		DOCLEAN ( to clean up )
+
+		This places the graphics qDEMO6SRFPHG96.png qDEMO6SRFPHV96.png 
+		and text files 12.txt and 17.txt into HTML.SW
+
+	fnDEMO6 - perform the comparison for a flat model. This
+                compares the mineos free-oscillation code to the surface wave
+                code with no Earth flattening. This demonstrates the need to
+		flatten  
+
+		RUN_MINEOS.sh tak135-f  (or copy the_S and _T files 
+                  from nnDEMO6)
+		DOSEL
+		DOCLEAN ( to clean up )
+
+		This places the graphics qflatDEMO6SRFPHG96.png 
+                qflatDEMO6SRFPHV96.png  into HTML.SW
+
+	HTML.SW - the is the web page master for the comparison
+
+        

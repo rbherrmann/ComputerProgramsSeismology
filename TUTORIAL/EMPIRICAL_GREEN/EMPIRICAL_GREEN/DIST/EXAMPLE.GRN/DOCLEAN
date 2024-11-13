@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm -f dfile sdisp* *.egn 
+rm -fr *.[ZRT]??
+rm -f ?1?2

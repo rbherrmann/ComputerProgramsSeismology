@@ -1,0 +1,6 @@
+This lesson creates some synthetic seismograms by surface wave model superposition
+
+The user is request to determine the group velocities through the use of the interactive program do_mft
+
+The observerved dispersion is then inverted to determine the velocity nmodel
+

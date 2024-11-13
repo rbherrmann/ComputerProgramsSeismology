@@ -1,0 +1,459 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>High frequency ambient noise simulation</title>
+    <meta name="generator" content="LibreOffice 5.4.4.2 (MacOSX)">
+    <meta name="created" content="00:00:00">
+    <meta name="changed" content="2018-01-01T07:41:47.814527000">
+    <style type="text/css">
+		h2.cjk { font-family: "Arial Unicode MS" }
+		h2.ctl { font-family: "Arial Unicode MS" }
+	</style>
+  </head>
+  <body dir="ltr" bgcolor="#ffffff" lang="en-US">
+    <h2 class="western">Introduction</h2>
+    <p>The purpose of this tutorial is to generate surface-wave noise
+      for a known 1-D structural model by applying randomly oriented
+      point sources at the surface of the structure and then propagating
+      the 3-D ground motion to two receivers. The ground motions consist
+      of multimode Rayleigh and Love waves.</p>
+    <p>After generating a realistic noise sequence of 900 seconds length
+      with a sampling interval of 0.002 sec, these noise segments are
+      then cross-correlated and stacked to form the empirical Green’s
+      function. The noise generation is done by the DOITHF script and
+      the cross-correlation and stacking by the DOSTKZNE script.<br>
+    </p>
+    <p>This tutorial is set up to emulate real data acquisition. The
+      total record of 900 sec at 0.002 sec sampling and receivers 100
+      meters apart&nbsp; is reasonable for a field study.<br>
+    </p>
+    <h2>Caution</h2>
+    <p>Many details of processing to determine the empirical Greens
+      functions by cross-correlation have been simplified. For real data
+      I have only applied a frequency domain whitening before
+      cross-correlation. Since tis simulation assumes noise sources
+      equally spaced in origin time, the records may be very spiky. I
+      had no luck with these simulations. However, if I applied a AGC to
+      the cross-correlation time series before stacking, then I got
+      something that gave acceptable results for analysis using <b>do_mft.</b>&nbsp;&nbsp;
+      The value of these scripts is that then be modified through the
+      use of different velocity models or different distances between
+      the two receivers.&nbsp; As the seapration distance is made
+      smaller, I would expect that it will be difficult to get
+      dispersion data at the longer periods. There may also be a problem
+      with the many modes arriving, so that a dispersion mode may not be
+      able to be identified.<br>
+    </p>
+    <p>The other caution is that this script is set up to emulate a high frequency data acquisition where cartesian coordinates are appropriate. Anotehr script will have to be written to emulate data sets for stations widely separated, e.g., the TArray of USArray, where geocentric coodrinates have to be used.
+    </p>
+    <h2 class="western">Download and distribution</h2>
+    <p>This exercise is contained in the gzip’d tar file <a
+        href="HFAMBIENTNOISE.tgz">HFAMBIENTNOISE.tgz</a></p>
+    After downloading execute the following commands:
+    <blockquote>
+      <pre>HFAMBIENTNOISE.dist/
+HFAMBIENTNOISE.dist/DISP.PLT
+HFAMBIENTNOISE.dist/DOITHF
+HFAMBIENTNOISE.dist/DOSTKZNE
+HFAMBIENTNOISE.dist/Models/
+HFAMBIENTNOISE.dist/Models/CUS.mod
+HFAMBIENTNOISE.dist/Models/soil.mod
+HFAMBIENTNOISE.dist/Models/soilm2.mod
+HFAMBIENTNOISE.dist/Models/tak135sph.mod
+</pre>
+    </blockquote>
+    <p><br>
+    </p>
+    <h2 class="western">DOITHF</h2>
+    <p>This
+      <meta charset="utf-8">
+      <span style="color: rgb(0, 0, 0); font-family: Times; font-size:
+        medium; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; font-weight: 400; letter-spacing:
+        normal; orphans: 2; text-align: start; text-indent: 0px;
+        text-transform: none; white-space: normal; widows: 2;
+        word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        background-color: rgb(255, 255, 255); text-decoration-style:
+        initial; text-decoration-color: initial; display: inline
+        !important; float: none;">shell script performs the simulation.
+        It has many comment lines to describe each operation. The
+        initial part of the shell script defines the parameters that
+        control the results. The reason for writing the script in this
+        manner is so that much of it can be used to simulate the noise
+        fields at two stations so that ambient noise cross-correlation
+        techniques could be used to estimate the empirical Green's
+        function.</span></p>
+    <p style="color: rgb(0, 0, 0); font-family: Times; font-size:
+      medium; font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: start; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      text-decoration-style: initial; text-decoration-color: initial;">For
+
+
+
+
+      the example here, we consider the velocity model
+      HFAMBIENTNOISE.dist/Models/soilm2.mod. The dispersion curves for
+      this model are given Figure 1. The fundamental and higher modes
+      are plotted. In this simulation the effects of Q are not
+      considered since the eigenfunction programs were executed tith the
+      -NOQ flag, e.g., sregn96 -NOQ and slegn96 -NOQ.&nbsp; The group
+      velocities indicate that there could be arrivals propagating as
+      slow as 80 m/s. (0.08 km/sec).</p>
+    <table width="50%" cellspacing="2" cellpadding="2" align="center"
+      border="1">
+      <tbody>
+        <tr>
+          <td valign="top"><img src="FIGS/disp.png" alt="disp.png"
+              width="525" height="496"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">Fig. 1. Dispersion curves for the test
+            velocity model.&nbsp;
+            <meta charset="utf-8">
+            <span style="color: rgb(0, 0, 0); font-family: Times;
+              font-size: medium; font-style: normal;
+              font-variant-ligatures: normal; font-variant-caps: normal;
+              font-weight: 400; letter-spacing: normal; orphans: 2;
+              text-align: start; text-indent: 0px; text-transform: none;
+              white-space: normal; widows: 2; word-spacing: 0px;
+              -webkit-text-stroke-width: 0px; background-color: rgb(255,
+              255, 255); text-decoration-style: initial;
+              text-decoration-color: initial; display: inline
+              !important; float: none;">The first row gives phase
+              velocity and the second gives group velocity. The left
+              column is for Love waves and the right is for Rayleigh
+              waves.</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+      As set up, the DOITHF will generate 900 sec of noise for each of
+      two stations.<br>
+    </p>
+    <p>The script DOITHF is built on the DOITHVHF described under other
+      tutorials. The only difference is that the creation of the
+      synthetic is placed into a function, and noise is simulated at two
+      stations. The output files have names such as 1.010101.Z and
+      2.010101.Z&nbsp; which are the vertical component noise
+      simulations for stations 1 and 2, respectively for time segment
+      010101.&nbsp; All segments are then stacked to form the 900 second
+      long noise waveform 1.Z.stk and 2.Z.stk<br>
+    </p>
+    <p>The initial pare of <b>DOITHF&nbsp; </b>sets up the parameters
+      for the simulation:<br>
+    </p>
+    <blockquote>
+      <pre>#!/bin/bash<br><br>#####<br>#    create a noise data set at two stations  by generating synthetic<br>#    motions from randomly distributed point forces<br>#    applied at the surface<br>#    <br>#    To mimic actual field recordings, a long time series is <br>#    created which will then be analyzed by a separate script.<br>#<br>#    This script is designed for high frequency<br>#    motions for local site studies<br>#####<br><br>#####<br>#    Velocity model<br>#####<br>VMOD="Models/soilm2.mod"<br>#####<br>#    for surface wave synthetics<br>#####<br>NMODE=100<br><br>#####<br>#    noise sources:  These occur in the region<br>#    -XMAX &lt;= x &lt;= XMAX<br>#    -YMAX &lt;= y &lt;= YMAX<br>#    except about a region DMIN about the receiver<br>#####<br>DELTA=0.002     # sample interval in seconds<br><br>DMIN=0.025      # exclude sources within DMIN km of receiver<br>XMAX=1.000      # define source region <br>YMAX=1.000<br><br>#####<br>#    define the receiver coordinate   <font color="#ff0000">	By placing the receivers along the x-axis, the Rayleigh wave fill be on the Z and E components </font><br>#    XR,YR				<font color="#ff0000">and the Love on the N component after the cross-correlations and stacking</font><br>#####<br>XR1=0.050<br>YR1=0.0<br>XR2=-0.050<br>YR2=0.0<br><br>#####<br>TMAX=900        # The sac file will 0 to TMAX seconds long<br>#<br>NSRC=10000      # number of random sources<br>                # these will occur at intervals of TMAX/NSRC seconds<br><br></pre>
+    </blockquote>
+    <meta charset="utf-8">
+    <span style="color: rgb(0, 0, 0); font-family: Times; font-size:
+      medium; font-style: normal; font-variant-ligatures: normal;
+      font-variant-caps: normal; font-weight: 400; letter-spacing:
+      normal; orphans: 2; text-align: start; text-indent: 0px;
+      text-transform: none; white-space: normal; widows: 2;
+      word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-style:
+      initial; text-decoration-color: initial; display: inline
+      !important; float: none;">The next part of the script defines some
+      functions. The details of the functions are not given in this
+      description.<br>
+      <br>
+    </span><span style="color: rgb(0, 0, 0); font-family: Times;
+      font-size: medium; font-style: normal; font-variant-ligatures:
+      normal; font-variant-caps: normal; font-weight: 400;
+      letter-spacing: normal; orphans: 2; text-align: start;
+      text-indent: 0px; text-transform: none; white-space: normal;
+      widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
+      background-color: rgb(255, 255, 255); text-decoration-style:
+      initial; text-decoration-color: initial; display: inline
+      !important; float: none;"></span>
+    <blockquote>
+      <pre>function getvmodextreme () {<br>#####<br>#    examine the velocity model to determine the<br>#    minimum and maximum shear velocities which<br>#    will be used for the noise sampling<br>#    <br>#   the following are returned globally:<br>#   VMIN - minimum S velocity in the model<br>#   VMAX - maximum S velocity in the model<br>#####<br>}<br><br>function getsrc()<br>{<br>#####<br>#    get random coordinates in the region <br>#    -XMAX &lt;= x &lt;= XMAX<br>#    -YMAX &lt;= y &lt;= YMAX<br>#<br>#   the following are returned globally:<br>#   (XS,YS) - source coordinates in km<br>#   (EVAL,EVLO) - sourc coordinate in geocentrc coordinates<br>#           - for simplicity the receivers are assumed to be<br>#           - near (0,0) so that te conversion from km to degree<br>#           - does is essentially cartesian<br>#####<br>}<br><br><br>function getforce()<br>{<br>#####<br>#    get the components for the force to be applied at the surface<br>#    the following are returned globally:<br>#    FN - force component in north direction<br>#    FE - force component in east  direction<br>#    FD - force component in down  direction<br>#   <br>#####<br>}<br><br>function getdistaz ()<br>{<br>#####<br>#   get distance, azimuth, backazimuth<br>#   Input arguments:<br>#       1 Source x coordinate<br>#       2 Source y coordinate<br>#       3 Receiver x coordinate<br>#       4 Receiver y coordinate<br>#<br>#   returns the following global variables<br>#   DIST - distance between source and receiver in km<br>#   AZ   - azimuth from source to receiver in degrees<br>#   BAZ  - backazimuth from receiver to source in degrees<br>#####<br>}<br><br>function makesyn ()<br>{<br>#####<br>#    make a synthetic for the global location and global force<br>#    for a particular distance, azimuth, backazimuth<br>#####<br>#    input:<br>#    $1 = distance<br>#    $2 = azimuth<br>#    $3 = backazimuth<br>#    $4,$5  x,y coordinates of source<br>#    $6,$7  x,y coordinates of receiver<br>#<br>#    return<br>#    sac files T.Z T.N T.E<br>#####<br>}<br><br></pre>
+    </blockquote>
+    <p>
+      <meta charset="utf-8">
+      <span style="color: rgb(0, 0, 0); font-family: Times; font-size:
+        medium; font-style: normal; font-variant-ligatures: normal;
+        font-variant-caps: normal; font-weight: 400; letter-spacing:
+        normal; orphans: 2; text-align: start; text-indent: 0px;
+        text-transform: none; white-space: normal; widows: 2;
+        word-spacing: 0px; -webkit-text-stroke-width: 0px;
+        background-color: rgb(255, 255, 255); text-decoration-style:
+        initial; text-decoration-color: initial; display: inline
+        !important; float: none;">The last part of the script performs
+        the simulation:<br>
+      </span></p>
+    <pre><span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"></span></pre>
+    <blockquote>##### everything below here does the synthetic of the
+      noise #####<br>
+      <br>
+      #####<br>
+      #&nbsp;&nbsp;&nbsp; clean up previouse run<br>
+      #####<br>
+      rm -f ??????.stk<br>
+      rm -f *.Z<br>
+      rm -f *.N<br>
+      rm -f *.E<br>
+      <br>
+      #####<br>
+      #&nbsp;&nbsp;&nbsp; get the extreme values of the S velocity from
+      the model<br>
+      #####<br>
+      getvmodextreme<br>
+      echo VMIN=$VMIN VMAX=$VMAX<br>
+      <br>
+      #####<br>
+      #&nbsp;&nbsp;&nbsp; first generate the eigenfunctions so that the<br>
+      #&nbsp;&nbsp;&nbsp; synthetics can be made<br>
+      #&nbsp;&nbsp;&nbsp; The time window must be long enough to
+      encompass the<br>
+      #&nbsp;&nbsp;&nbsp; arrivals at the fastest and slowest velocities<br>
+      #####<br>
+      NPT=`echo $XMAX $YMAX $VMIN $VMAX $DELTA | awk \<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '{ DIST=sqrt($1*$1 +
+      $2*$2) ; TWIN=(DIST/$3 ) ; print int(TWIN/$5)}' `<br>
+      DIST=`echo $XMAX $YMAX | awk '{print sqrt($1*$1 + $2*$2)}' `<br>
+      echo DIST $DIST XMAX $XMAX YMAX $YMAX<br>
+      cat &gt; ddfile &lt;&lt; EOF<br>
+      ${DIST} ${DELTA} ${NPT} 0.0 0.0<br>
+      EOF<br>
+      sprep96&nbsp; -M ${VMOD} -HS 0 -HR 0 -L -R -NMOD ${NMODE} -d
+      ddfile<br>
+      sdisp96<br>
+      sregn96 -NOQ<br>
+      slegn96 -NOQ<br>
+      FNYQ=`echo $DELTA | awk '{print 0.5/$1}' `<br>
+      <br>
+      #####<br>
+      #&nbsp;&nbsp;&nbsp; make plot of the dispersion of the form<br>
+      #&nbsp;&nbsp;&nbsp; LC RC<br>
+      #&nbsp;&nbsp;&nbsp; LU RU<br>
+      #####<br>
+      rm -fr S?EGN?.PLT<br>
+      rm -f DISP.PLT<br>
+      sdpegn96 -L -C&nbsp; -XLIN -YLIN -X0 2.0 -Y0 8 -XLEN 6 -YLEN 6
+      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
+      sdpegn96 -L -U&nbsp; -XLIN -YLIN -X0 2.0 -Y0 1 -XLEN 6 -YLEN 6
+      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
+      sdpegn96 -R -C&nbsp; -XLIN -YLIN -X0 9.5 -Y0 8 -XLEN 6 -YLEN 6
+      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
+      sdpegn96 -R -U&nbsp; -XLIN -YLIN -X0 9.5 -Y0 1 -XLEN 6 -YLEN 6
+      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
+      cat S?EGN?.PLT &gt; DISP.PLT<br>
+      <br>
+      #####<br>
+      #&nbsp;&nbsp;&nbsp; now make the synthetics<br>
+      #&nbsp;&nbsp;&nbsp; for each subsource<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; get source coordinates<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; get force orientation<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make synthetic<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; use gsac to apply the
+      force<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open the synthetic
+      using cut o 0 o TMAX<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; save<br>
+      #&nbsp;&nbsp;&nbsp; then stack the subsources<br>
+      #####<br>
+      count=1<br>
+      while [ $count -lt ${NSRC} ]<br>
+      do<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SRC=`echo $count | awk
+      '{printf "%6.6d", $1}' `<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getsrc<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo $EVLA $EVLO $XS $YS<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getforce<br>
+      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo $FN $FE $FD<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #####<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp;&nbsp; Y = north<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp;&nbsp; X = east<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #####<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getdistaz $XS $YS $XR1
+      $YR1<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIST1=$DIST<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AZ1=$AZ<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BAZ1=$BAZ<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getdistaz $XS $YS $XR2
+      $YR2<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIST2=$DIST<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AZ2=$AZ<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BAZ2=$BAZ<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TSHIFT=`echo $SRC $NSRC
+      $TMAX | awk '{WIN=$3/$2; print ($1 -1.) *&nbsp; WIN}'`<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ######<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # check to see that
+      DIST1 &gt; DMIN and DIST2 &gt; XMIN<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #####<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ANS=`echo $DIST1
+      $DIST2&nbsp; $DMIN | awk '{ if ( $1 &gt;= $3 &amp;&amp; $2 &gt;=
+      $3 ) print "YES" ; else print "NO" }' `<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ $ANS = "YES" ]<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      makesyn $DIST1 $AZ1 $BAZ1 $XS $YS $XR1 $YR1<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      mv T.Z 1.${SRC}.Z<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      mv T.N 1.${SRC}.N<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      mv T.E 1.${SRC}.E<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      makesyn $DIST2 $AZ2 $BAZ2 $XS $YS $XR2 $YR2<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      mv T.Z 2.${SRC}.Z<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      mv T.N 2.${SRC}.N<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      mv T.E 2.${SRC}.E<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; count=`expr $count + 1
+      `<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi<br>
+      done<br>
+      <br>
+      <br>
+      #####<br>
+      #&nbsp;&nbsp;&nbsp; make the final stack <font color="#ff0000">These
+        are the 900 second long windows for noise</font><br>
+      #####<br>
+      gsac &lt;&lt; EOF<br>
+      cut o o ${TMAX}<br>
+      r 1.??????.E<br>
+      stack relative<br>
+      ch kcmpnm E<br>
+      w 1.E.stk<br>
+      <br>
+      r 1.??????.N<br>
+      stack relative<br>
+      ch kcmpnm N<br>
+      w 1.N.stk<br>
+      <br>
+      r 1.??????.Z<br>
+      stack relative<br>
+      ch kcmpnm Z<br>
+      w 1.Z.stk<br>
+      q<br>
+      EOF<br>
+      <br>
+      <br>
+      gsac &lt;&lt; EOF<br>
+      cut o o ${TMAX}<br>
+      r 2.??????.E<br>
+      stack relative<br>
+      ch kcmpnm E<br>
+      w 2.E.stk<br>
+      <br>
+      r 2.??????.N<br>
+      stack relative<br>
+      ch kcmpnm N<br>
+      w 2.N.stk<br>
+      <br>
+      r 2.??????.Z<br>
+      stack relative<br>
+      ch kcmpnm Z<br>
+      w 2.Z.stk<br>
+      q<br>
+      EOF<br>
+      <br>
+      <br>
+      <br>
+    </blockquote>
+    <pre><span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"></span>
+    </pre>
+    <h2 class="western">DOSTKZNE</h2>
+    <p>As set up, this script processes each of the 900 seconds of
+      continuous 3-component noise at the two stations in 10 second
+      segments. Each segment is whitened int he frequency domain and
+      amplitude adjusted usg an AGC operator. Then the 10 second
+      segments are cross-correlated. After all of the noise is
+      processed, the cross-correlations and reversed cross-correlations
+      are saved, and stacked to form the interstation Green's
+      functions&nbsp; Z.correv, N.correv and E.correv.&nbsp;&nbsp;
+      Because the stations were aligned in the EW direction, The
+      Z.correv will have the Rayleigh wave, the E.correv will have the
+      Rayleigh wave and the N.correv will have the&nbsp; Love wave
+      signal.<br>
+      <br>
+      These were processed using the command<br>
+    </p>
+    <blockquote>
+      <pre><b>do_mft -G -IG ?.correv</b><br></pre>
+    </blockquote>
+    <p>The -G ensures that the selected dispersion files will be named
+      Z.correv.dsp&nbsp; for the ground velocities and Z.correc.phv for
+      the phase velocities if the Z.correv is processed. The -IG flag<br>
+      indicates that these are empirical Green's functions which permits
+      the determination of phase velocities from the waveforms.</p>
+    <p>Recall that<b> do_mft</b> invokes the programs <b>sacmft96 </b>to
+
+      process the waveform. Besides creating a data file of possible
+      dispersion values and a figure, the scripts <b>MFT96CMP</b> and <b>PHV96CMP</b>
+      are<br>
+      created to permit the plot of theoretical dispersion on top of the
+      output of <b>sacmft96</b>.<br>
+    </p>
+    <table width="75%" cellspacing="2" cellpadding="2" align="center"
+      border="1">
+      <tbody>
+        <tr>
+          <td valign="top"><img src="FIGS/loveu.png" alt="loveu.png"
+              width="691" height="337"><br>
+          </td>
+          <td valign="top"><img src="FIGS/lovec.png" alt="lovec.png"
+              width="338" height="337"><br>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" valign="top">Fig. 2. Results of processing the
+            file N.correv which will give the Love waves. The
+            theoretical dispersion is plotted as red lines on top of the
+            output of <b>sacmft96</b>.<br>
+            The colors in the group velocity plot indicate the amplitude
+            of the signal. The phase velocities are estimated from the
+            largest amplitude in the ground velocity plot at a given
+            period. The many phase velocity curves arise because of the
+            ambiguity of multiples of 2 π radians in the phase. <br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <br>
+    <table width="75%" cellspacing="2" cellpadding="2" align="center"
+      border="1">
+      <tbody>
+        <tr>
+          <td valign="top"><img src="FIGS/raylu.png" alt="raylu.png"
+              width="691" height="337"><br>
+          </td>
+          <td valign="top"><img src="FIGS/raylc.png" alt="raylc.png"
+              width="338" height="337"><br>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" valign="top">Fig. 3. Results of processing the
+            file Z.correv which will give the Rayleigh waves. The
+            theoretical dispersion is plotted as red lines on top of the
+            output of <b>sacmft96</b>. The colors in the group velocity
+            plot indicate the amplitude of the signal. The phase
+            velocities are estimated from the largest amplitude in the
+            ground velocity plot at a given period. The many phase
+            velocity curves arise because of the ambiguity of multiples
+            of 2 π radians in the phase. <br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <p><br>
+      <br>
+    </p>
+    <p style="margin-bottom: 0in" align="center">Last changed December
+      31, 2017</p>
+  </body>
+</html>

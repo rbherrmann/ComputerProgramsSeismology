@@ -1,0 +1,310 @@
+<HTML>
+<HEAD>
+        <TITLE>Diff CPS/rdseedv5.0.slu vs IRIS_DISTRIBUTION/rdseedv5.0</TITLE>
+</HEAD>
+<BODY>
+<H2>rdseedv5.0</H2>
+<P>This details the differences between the IRIS distribution of <B>rdseedv5.0</B> the changes made for inclusion in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+<PRE>
+<BR>
+<BR>
+<B>diff Decoders/process_event_requests.c ../rdseedv5.0/Decoders/process_event_requests.c</B>
+41,42c41,42
+< 		Strupr(start_phase_point[i].name);
+< 		if (i < end_phase_count) Strupr(end_phase_point[i].name);
+---
+> 		strupr(start_phase_point[i].name);
+> 		if (i < end_phase_count) strupr(end_phase_point[i].name);
+175c175
+< 			strncpy(cbuf, type72->phasename, 30); cbuf[30] = '\0'; Strupr(cbuf);
+---
+> 			strncpy(cbuf, type72->phasename, 30); cbuf[30] = '\0'; strupr(cbuf);
+185c185
+< 					strncpy(cbuf, tmp72->phasename, 30); cbuf[30] = '\0'; Strupr(cbuf);
+---
+> 					strncpy(cbuf, tmp72->phasename, 30); cbuf[30] = '\0'; strupr(cbuf);
+<BR>
+<B>diff Decoders/process_data.c ../rdseedv5.0/Decoders/process_data.c</B>
+949c949
+< 		Strupr(decode);	    /* make all upper case comparisons */
+---
+> 		strupr(decode);	    /* make all upper case comparisons */
+<BR>
+<B>diff Utilities/alloc_linklist_element.c ../rdseedv5.0/Utilities/alloc_linklist_element.c</B>
+77c77
+< size_t size;										/* number of byte to alloc */
+---
+> int size;										/* number of byte to alloc */
+<BR>
+<B>diff Utilities/get_date.c ../rdseedv5.0/Utilities/get_date.c</B>
+15,18c15
+< /* Begin RBH 04 OCT 2010 */
+< /* #include <time.h> */
+< #include <sys/time.h>
+< /* End Change RBH 04 OCT 2010 */
+---
+> #include <time.h>
+<BR>
+<B>diff Include/rdseed.h ../rdseedv5.0/Include/rdseed.h</B>
+275,278c275
+< /* Begin Change R B Herrmann November 24, 2007 */
+< /* char *alloc_linklist_element(); */
+< char *alloc_linklist_element (size_t size, char *caller);
+< /* End   Change R B Herrmann November 24, 2007 */
+---
+> char *alloc_linklist_element();
+401,404d397
+< /* Begin Change R B Herrmann November 24, 2007 */
+< void Strupr(char *string);
+< /* End   Change R B Herrmann November 24, 2007 */
+< 
+<BR>
+<B>diff Main/summary.c ../rdseedv5.0/Main/summary.c</B>
+649c649
+< 		Strupr(stn_ptr->ts_head->chn_list);
+---
+> 		strupr(stn_ptr->ts_head->chn_list);
+1208,1209c1208,1209
+< 	Strupr(chn_list);
+< 	Strupr(channel);
+---
+> 	strupr(chn_list);
+> 	strupr(channel);
+1240,1241c1240,1241
+<         Strupr(l);
+<         Strupr(location);
+---
+>         strupr(l);
+>         strupr(location);
+<BR>
+<B>diff Main/output_css.c ../rdseedv5.0/Main/output_css.c</B>
+183c183
+< 				Strupr(temp);
+---
+> 				strupr(temp);
+<BR>
+<B>diff Main/output_sac.c ../rdseedv5.0/Main/output_sac.c</B>
+1117,1124c1117
+< 
+< /* CHANGE R B HERRMANN NOVEMBER 16, 2007 
+<         IF one does a rdseed followed by a rdseed the SAC file is appended
+<         sac will not be able touse this file
+<         fptr = fopen(fname, "a");
+< */
+<         fptr = fopen(fname, "w");
+< /* END CHANGE R B HERRMANN NOVEMBER 16, 2007 */
+---
+> 	fptr = fopen(fname, "a");
+1139,1142c1132,1135
+< 	fprintf(fptr, "* Network   (KNETWK): %s\n", 	current_station->network_code? current_station->network_code: "");
+< 	fprintf(fptr, "* Station   (KSTNM) : %s\n", 	current_station->station? current_station->station: ""); /* RBH should never occur */
+< 	fprintf(fptr, "* Component (KCMPNM): %s\n", 	current_channel->channel? current_channel->channel: ""); /* RBH should never occur */
+< 	fprintf(fptr, "* Location  (KHOLE) : %s\n", 	current_channel->location?  current_channel->location:""); /* RBH change */
+---
+> 	fprintf(fptr, "* Network   (KNETWK): %s\n", 	current_station->network_code);
+> 	fprintf(fptr, "* Station   (KSTNM) : %s\n", 	current_station->station);
+> 	fprintf(fptr, "* Component (KCMPNM): %s\n", 	current_channel->channel);
+> 	fprintf(fptr, "* Location  (KHOLE) : %s\n", 	current_channel->location);
+1144c1137
+< 	fprintf(fptr, "* End               : %s\n", 	current_station->end == NULL? "No Ending Time": current_station->end); /* RBH change */
+---
+> 	fprintf(fptr, "* End               : %s\n", 	current_station->end == NULL? "N/A": current_station->end);
+1147,1159c1140,1145
+< 	fprintf(fptr, "* Site Name         : %s\n",
+< 		current_station->name? current_station->name: "");                   /* RBH addition */
+<         fprintf(fptr, "* Rate (Hz)         : %f\n",current_channel->samplerate);     /* RBH addition */
+< 	fprintf(fptr, "* Owner             : ");
+< 		find_type33(fptr, current_station->owner_code);                      /* RBH addition */
+< 	fprintf(fptr, "* Latitude  (Deg)   : %10.6f\n",	current_channel->latitude);  /* RBH change - units */
+< 	fprintf(fptr, "* Longitude (Deg)   : %11.6f\n",	current_channel->longitude); /* RBH change - units */
+< 	fprintf(fptr, "* Elevation (m)     : %7.1f\n", 	current_channel->elevation); /* RBH change - units */
+< 	fprintf(fptr, "* Depth     (m)     : %5.1f\n", 	current_channel->elevation); /* RBH change - units */
+< 	fprintf(fptr, "* Dip       (Deg)   : %5.1f\n", 	current_channel->dip);       /* RBH change - units */
+< 	fprintf(fptr, "* Azimuth   (Deg)   : %5.1f\n", 	current_channel->azimuth);   /* RBH change - units */
+<         fprintf(fptr, "* Instrument        :       ");
+< 			find_type33(fptr,current_channel->instrument_code);          /* RBH addition */
+---
+> 	fprintf(fptr, "* Latitude          : %10.6f\n",	current_channel->latitude);
+> 	fprintf(fptr, "* Longitude         : %11.6f\n",	current_channel->longitude);
+> 	fprintf(fptr, "* Elevation         : %7.1f\n", 	current_channel->elevation);
+> 	fprintf(fptr, "* Depth             : %5.1f\n", 	current_channel->elevation);
+> 	fprintf(fptr, "* Dip               : %5.1f\n", 	current_channel->dip);
+> 	fprintf(fptr, "* Azimuth           : %5.1f\n", 	current_channel->azimuth);
+<BR>
+<B>diff Main/output_resp.c ../rdseedv5.0/Main/output_resp.c</B>
+93,98d92
+<         /* Begin RBH 04 DEC 2009 */
+<         char sacpolezero_name[100];
+< 	struct time start;
+< 	struct time end;
+< 	void cnvt_end_time();
+<         /* End   RBH 04 DEC 2009 */
+109,156d102
+< /* ADDITION R B HERRMANN November 16, 2007
+<         to provide more information the dataless SEED about the stations
+<         modified 04 DEC 2009 to define the SAC Polezero file name
+< */
+< 	timecvt(&start, current_channel->start);
+< 	timecvt(&end, current_channel->end);
+< 	
+< 	cnvt_end_time(&end);
+< 
+< 
+< 
+< sprintf(sacpolezero_name,"SAC_PZs_%s_%s_%s_%s_%04d.%03d.%02d.%02d.%02d.%04d_%04d.%03d.%02d.%02d.%02d.%04d",
+<                                 current_station->network_code ?
+<                                                 current_station->network_code :
+<                                                 "NA",
+<                                 current_station->station,
+<                                 current_channel->channel,
+<                                 current_channel->location,
+<                                 start.year,
+<                                 start.day,
+<                                 start.hour,
+<                                 start.minute,
+<                                 start.second,
+<                                 start.fracsec,
+<                                 end.year,
+<                                 end.day,
+<                                 end.hour,
+<                                 end.minute,
+<                                 end.second, end.fracsec);
+< 
+< 
+< fprintf(stderr,"%3s %5s %2s %3s %25s %25s %10.6f %11.6f %7.1f %5.1f %5.1f %10.4g %s %s \n",current_station->network_code ? current_station->network_code : "**",
+< current_station->station,
+< (strlen(current_channel->location) != 0 ) ?  current_channel->location : "**",
+< current_channel->channel,
+< current_channel->start,
+< (current_channel->end != NULL) ?  current_channel->end : "99999,9999,00:00:00.0000",
+< current_channel->latitude,
+< current_channel->longitude,
+< current_channel->elevation,
+< current_channel->dip,
+< current_channel->azimuth,
+< current_channel->samplerate,
+< outfile_name,
+< sacpolezero_name);
+< 
+< /* END ADDITION R B HERRMANN November 16, 2007
+< */
+<BR>
+<B>diff Main/ah_resp.c ../rdseedv5.0/Main/ah_resp.c</B>
+638c638
+< 			Strupr(t_34->description);
+---
+> 			strupr(t_34->description);
+<BR>
+<B>diff Main/rdseed.c ../rdseedv5.0/Main/rdseed.c</B>
+2161c2161
+<                         Strupr(location_point[location_count]);
+---
+>                         strupr(location_point[location_count]);
+2579c2579
+< 		Strupr(station_point[i]);
+---
+> 		strupr(station_point[i]);
+2623c2623
+< 		Strupr(channel_point[i]);
+---
+> 		strupr(channel_point[i]);
+2780c2780
+< /* SEED reader     |               Strupr              |    main program */
+---
+> /* SEED reader     |               strupr              |    main program */
+2783c2783
+< void Strupr(string)
+---
+> strupr(string)
+<BR>
+<B>diff Parsers/parse_50.c ../rdseedv5.0/Parsers/parse_50.c</B>
+56,57d55
+< 	int i;
+< 
+103,109d100
+< 	/* BEGIN R B Herrmann September 3, 2009
+< 		get rid of non-printing characters from the name */
+< 	for(i=0; i < strlen(type50.name); i++){
+< 		if(! isprint(type50.name[i])) type50.name[i] = '\0';
+< 	}
+<         /* END  R B Herrmann September 3, 2009 */
+< 
+<BR>
+<B>diff Ah/makefile ../rdseedv5.0/Ah/makefile</B>
+0a1
+> CC=cc
+<BR>
+<B>diff Decoders/makefile ../rdseedv5.0/Decoders/makefile</B>
+0a1
+> CC=cc
+<BR>
+<B>diff Main/makefile ../rdseedv5.0/Main/makefile</B>
+1a2
+> CC=cc
+<BR>
+<B>diff Printers/makefile ../rdseedv5.0/Printers/makefile</B>
+0a1
+> CC=cc
+<BR>
+<B>diff Parsers/makefile ../rdseedv5.0/Parsers/makefile</B>
+0a1
+> CC=cc
+<BR>
+<B>diff Snoop/makefile ../rdseedv5.0/Snoop/makefile</B>
+0a1
+> CC=cc
+<BR>
+<B>diff Utilities/makefile ../rdseedv5.0/Utilities/makefile</B>
+0a1
+> CC=cc
+<BR>
+<B>diff Man/rdseed.1 ../rdseedv5.0/Man/rdseed.1</B>
+20c20
+< .B "-{aclsSRtdoxzei} [-f filename] [-v  (n)] "
+---
+> .B "-{aclsSRtdoxzei} [-f filename] [v (n)] "
+38,44d37
+< .B \-C STN
+< .TP
+< .B \-C CHN
+< .TP
+< .B \-C STN CHN
+< Output station/channel comments.
+< .TP
+59a53,55
+> .B \-R
+> retrieve all response information in a "evalresp" compatible format.
+> .TP
+68,70d63
+< Used together with the 
+< .B \-d
+< flag. The combination \f2-d -o 1\f1 gives SAC binary output files for waveforms.
+81,85d73
+< .B \-E
+< Output filename includes endtime, e.g.,
+< .br
+< 2002.169.17.31.08.0480_2002.169.18.00.39.2480.IU.WCI..BHE.D.SAC instead of the default 2002.169.17.31.08.0480.IU.WCI..BHE.D.SAC for the \f2-d -o 1\f1 requested output.
+< .TP
+99,112d86
+< .TP
+< .B \-k
+< Strip records with zero samples.
+< .B \-d
+< flag.
+< .TP
+< .B \-p
+< Output response in SAC pole-zero format
+< .TP
+< .B \-R
+< retrieve all response information in a "evalresp" compatible format.
+< .TP
+< .B \-u
+< show command line usage for "rdseed"
+612,613d585
+< .br
+< Modified R B Herrmann, November 24, 2007
+</PRE>
+<CENTER>Last changed October 3, 2010</CENTER>
+</BODY>
+</HTML>

@@ -1,0 +1,45 @@
+#!/bin/sh
+rm -f *.gif
+
+for HS in 0100 1000 
+do
+for SRC in SS 
+do
+for CMP in Z R T
+do
+for GCARC in 30 60 65 70 75 80 85
+do
+case $GCARC in
+	30) DIST=0333 ;;
+	60) DIST=0667 ;;
+	65) DIST=0722 ;;
+	70) DIST=0778 ;;
+	75) DIST=0833 ;;
+	80) DIST=0889 ;;
+	85) DIST=0945 ;;
+esac
+
+B=`saclhdr -B ${HS}/${DIST}*.ZSS`
+E=`saclhdr -E ${HS}/${DIST}*.ZSS`
+echo $B $E
+gsac << EOF
+cut o ${B} o ${E}
+fileid name
+r  ${GREENDIR}/AK135.TEL/${HS}/${DIST}*.${CMP}${SRC} ${HS}/${DIST}*.${CMP}${SRC} 
+color list black blue 
+bg plt
+ylim all
+p 
+plotgif -K -C16 < P001.PLT > ${GCARC}.${HS}.${CMP}${SRC}.gif
+quit
+EOF
+done
+done
+done
+done
+
+rm -f diff zero
+#####
+#    clean up a non-existing comparison
+#####
+rm -fr *.TDD.gif

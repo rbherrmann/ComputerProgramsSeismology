@@ -1,0 +1,7 @@
+#!/bin/sh
+
+sacpsd
+plotnps -F7 -W10 -EPS -L < SACPSD.PLT > j.eps
+gm convert -trim j.eps Fig01.png
+rm j.eps SACPSD.PLT
+

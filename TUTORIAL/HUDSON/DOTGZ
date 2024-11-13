@@ -1,0 +1,4 @@
+#!/bin/sh
+
+tar cf - MODELS */DO* | gzip -c > hudson.tgz
+

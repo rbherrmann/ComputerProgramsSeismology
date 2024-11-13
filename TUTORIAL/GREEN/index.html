@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Computer Programs in Seismology Tutorials - Green's Functions for Source Inversion</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8401000">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<H2>Introduction</H2>
+<P>This tutorial will discuss the organization of and the scripts
+used&nbsp; to compute the Green's functions for source inversion.<BR><BR><BR>
+</P>
+<H2>1. Unpack the prototypes</H2>
+<P>Grab the <A HREF="GREEN.tgz">GREEN.tgz</A></P>
+<PRE>cd Suitable_Directory
+gunzip -c GREEN.tgz | tar xvf -</PRE><P>
+You will see the following directories:</P>
+<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in">AK135.TEL/  AK135.TELPBBD/  CUS.REG/    Models/  PROTO.REG/  WUS.REG/</PRE><P>
+&nbsp;In these you will see scripts that I used for my Green's
+functions.&nbsp; These are examples.&nbsp; The prototypes for your
+Green's functions are in the directory PROTP.REG. The Models
+directory contains the models that I use.</P>
+<H2>2. Set the environment</H2>
+<P>The moment tensor inversion scripts require knowledge of the
+location of the Green's functions.&nbsp; To make the scripts
+independent of the physical disk location of the Green's functions,
+the SHELL variable GREENDIR is used in the scripts.&nbsp; Do the
+following on your system:<BR><BR>If using the bash shell, place this
+in the&nbsp; .bashrc file in your login directory:<BR><BR>&nbsp;&nbsp;&nbsp;
+export GREENDIR=/<I>path_to_top_level/</I>GREEN<BR>On my system I
+have<BR>&nbsp;&nbsp;&nbsp; export GREENDIR=/backup/rbh/GREEN<BR>Now
+execute the command<BR>&nbsp;&nbsp;&nbsp; source ~/.bashrc<BR>And now
+verify that this variable is in your environment.</P>
+<PRE> rbh@crust:~&gt; echo $GREENDIR
+    /backup/rbh/GREEN
+will verify that this is correctly set. If you execute the command
+     ls ${GREEDDIR}
+you will see the contents of the distribution
+ 
+        AK135.TEL/  AK135.TELPBBD/  CUS.REG/   Models/  PROTO.REG/  WUS.REG/</PRE><P>
+<BR>Of course if you logout and then login, this will be set without
+the required <I>source</I> command.<BR><BR>If you are using the csh
+shell, then edit the .cshrc in you login directory to add something
+like<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sevtenv GREENDIR
+/backup/rbh/GREEN<BR>and then <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+source .cshrc</P>
+<H2>3. Modify the prototypes for your models</H2>
+<P>First define a name for your velocity model. This is very
+important for the proper operation of the scripts. For example,
+assume that we wish to create Green's functions for regional data in
+Yunnan Province. <I>YUN </I>is a good identifier.</P>
+<H3>3.1 Create the model file:</H3>
+<P>You can read the tutorial on the overview of synthetic seismogram
+generation, or use the program <B>mkmod96</B>. I use <B>mkmod96 </B>even
+for models with very many layers, just manually entering the first
+few layers and then using a editor to create the complete velocity
+model file.<BR><BR>Assume that we are given the following information
+for a model:</P>
+<PRE STYLE="margin-left: 0.42in">Average velocity structure model in Yunnan
+thickness   Vp     Vs     Qa      Qb
+ 4.00      4.85   2.80   600.0   300.0
+16.00      6.25   3.61   600.0   300.0
+22.00      6.40   3.70   600.0   300.0
+ 0.00      7.75   4.47   600.0   300.0
+Wu Jian Ping</PRE><P>
+Using <B>mkmod96 </B>I interactively create the model file&nbsp;
+<I>YUN.mod</I>&nbsp; which is just</P>
+<PRE STYLE="margin-left: 0.42in">MODEL.01
+Yunnan model from Wu Jian Ping CEA 2003?
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+ H(KM) VP(KM/S) VS(KM/S)  RHO(GM/CC)   QP   QS  ETAP  ETAS FREFP  FREFS
+ 4.000   4.8500   2.8000      2.4670   600. 300. 0.00  0.00 1.00   1.00
+16.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+22.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 0.0     7.75     4.47        3.225    600. 300. 0     0    1      1</PRE><P>
+I derived the density from the p-wave velocity using a Nafe-Drake
+relation (buried in surf96).&nbsp; The ETAP=ETAS=0 for wavenumber
+integration and the FREFP and FREFS are the reference frequency for
+causal Q, which is always 1 Hz.</P>
+<H3>3.2 Create a directory for Regional Green's functions for the YUN
+model</H3>
+<P>In this step we create a unique place for the Green's functions,
+copy the prototype processing scripts into that directory, and then
+copy the velocity model there as well as the Model directory.&nbsp;
+First we go to the proper area, and then we perform these steps.</P>
+<PRE STYLE="margin-left: 0.42in">cd ${GREENDIR}
+mkdir YUN.REG
+cp YUN.mod YUN.REG
+mv YUN.mod Models
+cp PROTO.REG/* YUN.REG
+cd YUN.REG</PRE><H3>
+3.3 Modify the prototype processing scripts</H3>
+<P>The scripts that you see here are the following:<BR><BR>&nbsp;&nbsp;&nbsp;
+DOIT.WK&nbsp; - computes complete waveform integration synthetics<BR>&nbsp;&nbsp;&nbsp;
+DOIT.SW&nbsp; - computes synthetics by model superposition and also
+creates the eigenfunctions versus depth for source inversion<BR>&nbsp;&nbsp;&nbsp;
+MWK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - a script to compute a
+complete table of contents for each source depth directory.&nbsp; The
+waveform inversion code uses this table of contents.<BR>&nbsp;&nbsp;&nbsp;
+DODCTL&nbsp; - creates a table of contents for source depths.<BR><BR>Now
+edit DOIT.WK and DOIT.SW&nbsp; to replace the word <I>PROTO</I> by
+your model name, which is <I>YUN </I>for this example.<BR><BR>The
+changed lines in DOIT.SW and in DOIT.WK will look like</P>
+<PRE STYLE="margin-left: 0.42in">DEST=${GREENDIR}
+#####
+#
+#####
+MODEL=YUN.REG
+PMIN=4.0
+PMAX=100.0
+Mname=YUN.mod</PRE><P>
+If you wish to use the surface-wave spectral amplitude technique,
+then you must create another velocity file with many layers to give
+the eigenfunctions as a function of depth.&nbsp; This file must be
+called <I>dYUN.mod </I>for the scripts. This is what it looks like:</P>
+<PRE STYLE="margin-left: 0.42in">MODEL.01
+Yunnan model from Wu Jian Ping CEA 2003?
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+ H(KM) VP(KM/S) VS(KM/S)  RHO(GM/CC)   QP   QS  ETAP  ETAS FREFP  FREFS
+ 1.000   4.8500   2.8000      2.4670   600. 300. 0.00  0.00 1.00   1.00
+ 1.000   4.8500   2.8000      2.4670   600. 300. 0.00  0.00 1.00   1.00
+ 1.000   4.8500   2.8000      2.4670   600. 300. 0.00  0.00 1.00   1.00
+ 1.000   4.8500   2.8000      2.4670   600. 300. 0.00  0.00 1.00   1.00
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.25     3.61        2.775    600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     6.40     3.70        2.82     600. 300. 0     0    1      1
+ 1.0     7.75     4.47        3.225    600. 300. 0     0    1      1
+ 1.0     7.75     4.47        3.225    600. 300. 0     0    1      1
+ 1.0     7.75     4.47        3.225    600. 300. 0     0    1      1
+ 1.0     7.75     4.47        3.225    600. 300. 0     0    1      1
+ 1.0     7.75     4.47        3.225    600. 300. 0     0    1      1
+ 1.0     7.75     4.47        3.225    600. 300. 0     0    1      1</PRE><H2>
+4. Compute the Green' functions</H2>
+<P>This is the most time consuming part.&nbsp; First decide if you
+require all of the distances.&nbsp; If you are only looking at one
+earthquake, then you only need to compute the synthetics at the
+required distances.&nbsp;&nbsp; So,</P>
+<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in">cp DOIT.WK DOIT.WK.save</PRE><P ALIGN=LEFT>
+I will compute some distances to 566 km. I know that the time
+interval between the first P arrival and the end of the surface wave
+depends on depth somewhat, but on distance a lot.&nbsp; I thus need
+to compute a longer time series for the larger distances.&nbsp; In
+the DOIT.WK script you will see that there are two loops over source
+depth, within each is a loop&nbsp; over distance. The first loop is
+for short distance and the second is for larger, and will have a
+longer time series.&nbsp; The number of points and sampling interval
+are fine for my sudy of earthquakes from broadband stations 10 - 500
+km and in the frequency band of 0.02 - 0.10 Hz.<BR>In selecting the
+distances, use distances to the nearest km.&nbsp; Do not change the
+depth selection.<BR><BR>The DOIT.SW script accomplished two purposes.
+First it creates the eigenfunctions as a function of depth. The are
+stored in the subdirectory SW. It also creates the Green's functions
+for a selection of depths.&nbsp; For regional earthquakes with M &lt;
+5, it is difficult to see the P wave at large distances because of
+ground noise.&nbsp; The&nbsp; surface wave is usually very easy to
+see.&nbsp; So DOIT.SW creates the Green's functions by adding
+together surface-wave modes, e.g., creating a seismogram for the
+signal following the first S arrival.&nbsp; These synthetics are very
+fast to compute and are actully quite good at 200 km. Compute these
+if you do not want to fit the initial P-wave form.<BR><BR>After the
+computations are complete the <I>GREEN/YUN.REG</I> directory contains
+the following:</P>
+<PRE STYLE="margin-left: 0.42in; text-align: left">0005/  0060/  0120/  0180/  0240/  0300/  0360/  0420/  0480/     dYUN.mod
+0010/  0070/  0130/  0190/  0250/  0310/  0370/  0430/  0490/     MKW*
+0020/  0080/  0140/  0200/  0260/  0320/  0380/  0440/  0500/     Model/
+0030/  0090/  0150/  0210/  0270/  0330/  0390/  0450/  DODCTL*   YUN.mod
+0040/  0100/  0160/  0220/  0280/  0340/  0400/  0460/  DOIT.SW*
+0050/  0110/  0170/  0230/  0290/  0350/  0410/  0470/  DOIT.WK*</PRE><P ALIGN=LEFT>
+The directories <I>0005, 0010, ... 0500</I> contain the Green's
+functions for source depths of 0.5, 1, ..., 50 km.&nbsp; A partial
+listing of the contents of the <I>0100</I> directory shows the
+following</P>
+<PRE STYLE="margin-left: 0.42in; text-align: left">007000100.RDD  017500100.RDS  020000100.REX  036000100.RSS  046000100.TDS
+007000100.RDS  017500100.REX  020000100.RSS  036000100.TDS  046000100.TSS
+.........................................................................
+011500100.TSS  019000100.ZDD  035000100.ZDS  045000100.ZEX  056500100.ZSS
+011500100.ZDD  019000100.ZDS  035000100.ZEX  045000100.ZSS  dfile
+011500100.ZDS  019000100.ZEX  035000100.ZSS  046000100.RDD  hspec96.dat
+011500100.ZEX  019000100.ZSS  036000100.RDD  046000100.RDS  hspec96.grn
+011500100.ZSS  020000100.RDD  036000100.RDS  046000100.REX  W.CTL
+017500100.RDD  020000100.RDS  036000100.REX  046000100.RSS</PRE><P ALIGN=LEFT>
+The files&nbsp; 011500100.ZEX is the Green function for the ZEX
+source at an epicentral&nbsp; distance of 115.0 km and a source depth
+of 10.0 km. The file naming convention used is DDDDdHHHh.GRN which
+permits us to represent distances from 0 to 9999.9 km in increments
+of 0.1 km and source depths from 0 to 999.9 km in 0.1 km
+increments.<BR><BR>The <I>dfile</I>, <I>hspec96.dat</I> and
+<I>hspec96.grn</I> are from the computational run and can be
+removed.&nbsp; The <I>W.CTL </I>file has entries as follow:</P>
+<PRE STYLE="margin-left: 0.42in; text-align: left">70 0.25 512 3.75 0 0100 007000100
+115 0.25 512 9.375 0 0100 011500100
+175 0.25 512 16.875 0 0100 017500100
+190 0.25 512 18.75 0 0100 019000100
+200 0.25 1024 20 0 0100 020000100
+350 0.25 1024 38.75 0 0100 035000100
+360 0.25 1024 40 0 0100 036000100
+450 0.25 1024 51.25 0 0100 045000100
+460 0.25 1024 52.5 0 0100 046000100
+565 0.25 2048 65.625 0 0100 056500100</PRE><P ALIGN=LEFT>
+The columns are the epicentral distacne, the sample rate, the number
+of points, the time of the first sample, the reduction velocity (a 0
+hear means that the time is actually that of the first sample), the
+directory for this dource depth, and the Green function prototype for
+this source depth and the distance.&nbsp; Moment tensor inversion
+uses the epicentral distance of the actual observed waveform to find
+the Green function appropriate for that distance by searching the
+first column for the best fit.&nbsp; For example if the actual
+distance is 116.51 km, then the processing script will use the Green
+function computed at a distance of 115 km.</P>
+<H2 ALIGN=LEFT STYLE="margin-left: 0.42in">5. Other Green's functions</H2>
+<P ALIGN=LEFT>The distribution contains several other
+directories.<BR>&nbsp;&nbsp;&nbsp; AK135.TEL&nbsp; gives the scripts
+and in the location for teleseismic Green's functions from 30 to 95
+degrees.&nbsp; These are used for network QC, and for source
+inversion. The computation of the complete set of Green's functions
+will keep the computer busy for several weeks. The continental AK135
+model is used.<BR>&nbsp;&nbsp;&nbsp; AK135.TELPBBD - The program
+<B>hudson96</B> is used to comptue high-frequency synthetics for use
+in BroadBand Depth determination from the teleseismic P-wave signal
+at epicentral distances of 30 to 95 degrees.&nbsp; This computation
+is fast because of the assumption that only one ray parameter is
+required. This assumption is fine for shallow earthquakes for which
+the P, pP and sP have the same ray parameter, but may not be
+appropriate for large epicentral distances and 700 km depths.&nbsp;
+<BR><BR>&nbsp;&nbsp;&nbsp; CUS.REG - Compute the Green's&nbsp;
+functions for the CUS model<BR>&nbsp;&nbsp;&nbsp; WUS.REG - Compute
+the Green's functions for the WUS model<BR><BR>Note that I attempt to
+distinguish Green's functions by the naming of the directory. If I
+wish to use the AK135 model for regional synthetics, I would place
+the Green's functions in a directory named AK135.REG, which would
+have the synthetics from 0 to&nbsp; 2000 km 
+</P>
+<P ALIGN=CENTER STYLE="margin-left: 0.42in; margin-bottom: 0in">Last
+Changed November 19, 2008 
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,27 @@
+#!/bin/sh
+DEST=../FINAL.DEC
+
+#####
+#	script for processing IRIS Digital Data
+#####
+
+if [ -d  ${DEST} ]
+then
+	echo ${DEST} exists
+else
+	mkdir ${DEST}
+fi
+
+for i in *[ZRT]
+do
+
+gsac > /dev/null 2>&1 << EOF
+r $i
+lp c 2 np 3 p 2
+interpolate delta 0.25
+w ${DEST}/$i
+quit
+EOF
+done
+
+#SCRIPT FOR IRIS DATA

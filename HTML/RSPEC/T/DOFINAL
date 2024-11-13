@@ -1,0 +1,245 @@
+#!/bin/sh
+set -x
+
+cat > S.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1
+EOF
+cat > Sa.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  0.0100  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1
+EOF
+cat > Sb.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  0.0050  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  3.5000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  4.7000  3.3000 0 0 0 0 1 1
+EOF
+HS=20
+cat > FHR << EOF
+0.0
+0.5
+1.0
+1.5
+2.0
+2.5
+3.0
+3.5
+3.9
+4.0
+4.1
+4.2
+4.3
+4.4
+4.5
+4.6
+4.7
+4.8
+4.9
+5.0
+5.1
+5.2
+5.3
+5.4
+5.5
+5.6
+5.7
+5.8
+5.9
+6.0
+6.1
+6.2
+6.3
+6.4
+6.5
+6.6
+6.7
+6.8
+6.9
+7.0
+7.1
+7.2
+7.3
+7.4
+7.5
+7.6
+7.7
+7.8
+7.9
+8.0
+8.1
+8.2
+8.3
+8.4
+8.5
+8.6
+8.7
+8.8
+8.9
+9.0
+9.5
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+EOF
+P=0.05
+DT=0.25
+cat > dfile << EOF
+ 10.0 ${DT} 256 0 0
+ 20.0 ${DT} 256 0 0
+ 30.0 ${DT} 256 0 0
+ 40.0 ${DT} 256 0 0
+ 50.0 ${DT} 256 0 0
+ 60.0 ${DT} 256 0 0
+ 70.0 ${DT} 256 0 0
+ 80.0 ${DT} 256 0 0
+ 90.0 ${DT} 256 0 0
+100.0 ${DT} 256 0 0
+EOF
+cat > dfile << EOF
+100.0 ${DT} 512 0 0
+EOF
+BC="-TF -BH"
+
+rm -fr FINAL.DIR
+mkdir FINAL.DIR
+
+MODEL=S.mod
+#################################
+hprep96 -M $MODEL -d dfile -FHR FHR -HS ${HS} ${BC} -ALL  -NDEC 1
+rm -f hspec96.grn
+time rspec96 > rspec.out 2>&1
+rm -f B*.sac
+hpulse96 -V -p -l 1 | f96tosac -B
+(cd FINAL.DIR
+for i in ../B*.sac; do STEL=`saclhdr -STEL $i | awk '{printf "%5.2f",$1}' `; KCMPNM=`saclhdr -KCMPNM $i`; FNAME=`echo ${KCMPNM} ${STEL} | awk '{printf "%s%sR",$1,$2}' `;mv $i ${FNAME}; done
+)
+rm -f hspec96.grn
+rm -f B*.sac
+
+#################################
+#################################
+
+MODEL=Sa.mod
+hprep96 -M $MODEL -d dfile -FHR FHR -HS ${HS} ${BC} -ALL  -NDEC 1
+rm -f hspec96.grn
+time hspec96 > hspec.out 2>&1
+rm -f B*.sac
+hpulse96 -V -p -l 1 | f96tosac -B
+(cd FINAL.DIR
+for i in ../B*.sac; do STEL=`saclhdr -STEL $i | awk '{printf "%5.2f",$1}' `; KCMPNM=`saclhdr -KCMPNM $i`; FNAME=`echo ${KCMPNM} ${STEL} | awk '{printf "%s%sa",$1,$2}' `;mv $i ${FNAME}; done
+)
+rm -f hspec96.grn
+rm -f B*.sac
+
+#################################
+
+#MODEL=Sb.mod
+#hprep96 -M $MODEL -d dfile -FHR FHR -HS ${HS} ${BC} -ALL  -NDEC 1
+#rm -f hspec96.grn
+#time hspec96 > hspec.out 2>&1
+#rm -f B*.sac
+#hpulse96 -V -p -l 1 | f96tosac -B
+#(cd FINAL.DIR
+#for i in ../B*.sac; do STEL=`saclhdr -STEL $i | awk '{printf "%5.2f",$1}' `; KCMPNM=`saclhdr -KCMPNM $i`; FNAME=`echo ${KCMPNM} ${STEL} | awk '{printf "%s%sb",$1,$2}' `;mv $i ${FNAME}; done
+#)
+#rm -f hspec96.grn
+#rm -f B*.sac
+
+#################################
+#shwmod96 -VMIN -0.1 -VMAX 5 -LEGIN -K -1 *.mod
+#DOPLTPNG SHWMOD96.PLT
+#####
+#   make prs plots
+#####
+
+#################################
+shwmod96 -VMIN -0.1 -VMAX 5 -LEGIN -K -1 *.mod
+DOPLTPNG SHWMOD96.PLT
+#####
+#   make prs plots
+#####
+for GRN in ZDD RDD ZDS RDS ZSS RSS ZEX REX ZVF RVF ZHF RHF
+do
+gsac << EOF
+r FINAL.DIR/${GRN}*00[Ra]
+bg plt
+color list red blue
+prs sa 0 amp 0.2 stel reverse vl -2 32
+q
+EOF
+mv PRS001.PLT ${GRN}.PLT
+DOPLTPNG ${GRN}.PLT
+done
+
+for GRN in ZDD RDD ZDS RDS ZSS RSS ZEX REX ZVF RVF ZHF RHF
+do
+gsac << EOF
+r FINAL.DIR/${GRN}*[0123456789]0[Ra]
+bg plt
+color list red blue
+prs sa 0 amp 0.2 stel reverse vl 3.5 8.5
+q
+EOF
+mv PRS001.PLT a${GRN}.PLT
+DOPLTPNG a${GRN}.PLT
+done

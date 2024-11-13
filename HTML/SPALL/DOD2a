@@ -1,0 +1,24 @@
+#!/bin/sh
+####
+# use gsac profile to make the depth section
+#####
+gsac << EOF
+cut o 0 o 8
+r FORCE/force.001**Z.con CRACK*/crack.001*Z.con
+color rainbow
+fileid location  ll  concat on format colon type list stel fname
+title on l top size s text "Comparison of surface force to buried crack"
+bg plt
+p overlay on
+lp c 0.1 n 2
+title on  l top size s text "Comparison of surface force to buried crack lp c 0.1 n 2"
+p
+q
+EOF
+
+for i in P00?.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W1 -EPS -K < $i > $B.eps
+EPSTOPNGWHITE $B.eps
+done

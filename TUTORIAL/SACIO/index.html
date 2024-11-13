@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>SACIO Examples</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8481700">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<H2>Introduction</H2>
+<P>This tutorial further develops the use of the Computer Programs in
+Seismology routines that work with the SAC format. It is assumed that
+you have already downloaded and installed the current version of
+Computer Programs in Seismology.<BR><BR>The library routines for
+working with SAC files are described in the PDF file in the
+distribution, e.g.,&nbsp; in Appendix C of
+PROGRAMS.330/DOC/GSAC.pdf/cps330g.pdf.<BR>The C file containing the
+routines is in<BR>&nbsp;&nbsp;&nbsp; PROGRAMS.330/SUBS/sacsubc.c<BR>with
+header file with prototypes<BR>&nbsp;&nbsp;&nbsp;
+PROGRAMS.330/SUBS/sacsubc.h<BR><BR>The examples given here describe
+the minimum requirements for creating a valid SAC trace file.&nbsp;
+Other information can be added latter using the <I>ch (changeheader)
+command of </I><B>gsac </B>or <B>sac2000.<BR><BR></B>We will also use
+the GNU gcc compiler to create the executables</P>
+<H2>Writing a time series in SAC format</H2>
+<H3>Program purpose:</H3>
+<P>This simple program will create two sac files, one consisting of a
+unit area impulse. This is called <I>imp.sac</I>. This impulse is
+passed through a bilinear recursive digital lowpass filter to create
+<I>filt.sac</I>. <B>gsac </B>is used to display the trace and <B>plotgif
+</B>is used to create the graphic for this tutorial.</P>
+<H3>The Program:</H3>
+<P>Copy the files <I><A HREF="sacsubc.c">sacsubc.c</A> </I>and
+<A HREF="sacsubc.h"><I>sacsubc.h</I></A> to your working directory.
+Then create the file<A HREF="writesac.c"> </A><I><A HREF="writesac.c">writesac.c</A>:</I></P>
+<PRE>#include &quot;sacsubc.h&quot;
+/* this is a sample program that creates two sac files
+   one of a simple impulse and the other with the impulse passed
+   through a lowpass recursive digital filter
+*/
+/* define the maximum number of points  and the two float arrays */
+#define NPTS 100
+float x[NPTS];
+float y[NPTS];
+void outputsac(int npts, float *arr, float dt, char *filename);
+main()
+{
+        int i;
+        float dt = 0.01 ;
+        int offset = 10;
+        float wc=31.415927;
+        float f,a,b;
+        f = 2./(dt*wc);
+        a = 1. + f;
+        b = 1. - f;
+        /* initialize the impulse */
+        for(i=0;i&lt; NPTS;i++)
+                x[i] = 0.0;
+        x[offset] = 1.0/dt ;
+        /* now apply a recursive digital filter to create the
+           output */
+        y[0] = 0.0;
+        for(i=1;i &lt; NPTS; i++){
+                y[i] = (x[i]+x[i-1] - b*y[i-1])/a;
+        }
+        outputsac(NPTS, x, dt, &quot;imp.sac&quot;);
+        outputsac(NPTS, y, dt, &quot;filt.sac&quot;);
+}
+void outputsac(int npts, float *arr, float dt, char *filename)
+{
+        /* create the SAC file
+           instead of using the wsac1 I will use the lower level
+           routines to provide more control on the output */
+        int nerr;
+        float b, e, depmax, depmin, depmen;
+        /* get the extrema of the trace */
+                scmxmn(arr,npts,&amp;depmax,&amp;depmin,&amp;depmen);
+        /* create a new header for the new SAC file */
+                newhdr();
+        /* set some header values */
+                setfhv(&quot;DEPMAX&quot;, depmax, &amp;nerr);
+                setfhv(&quot;DEPMIN&quot;, depmin, &amp;nerr);
+                setfhv(&quot;DEPMEN&quot;, depmen, &amp;nerr);
+                setnhv(&quot;NPTS    &quot;,npts,&amp;nerr);
+                setfhv(&quot;DELTA   &quot;,dt  ,&amp;nerr);
+                b = 0;
+                setfhv(&quot;B       &quot;,b  ,&amp;nerr);
+                setihv(&quot;IFTYPE  &quot;,&quot;ITIME   &quot;,&amp;nerr);
+                e = b + (npts -1 )*dt;
+                setfhv(&quot;E       &quot;,e     ,&amp;nerr);
+                setlhv(&quot;LEVEN   &quot;,1,&amp;nerr);
+                setlhv(&quot;LOVROK  &quot;,1,&amp;nerr);
+                setlhv(&quot;LCALDA  &quot;,1,&amp;nerr);
+        /* put is a default time for the plot */
+                setnhv(&quot;NZYEAR&quot;, 1970, &amp;nerr);
+                setnhv(&quot;NZJDAY&quot;, 1, &amp;nerr);
+                setnhv(&quot;NZHOUR&quot;, 0, &amp;nerr);
+                setnhv(&quot;NZMIN&quot; , 0, &amp;nerr);
+                setnhv(&quot;NZSEC&quot; , 0, &amp;nerr);
+                setnhv(&quot;NZMSEC&quot;, 0, &amp;nerr);
+        /* output the SAC file */
+                bwsac(npts,filename,arr);
+} </PRE><H3>
+Compiling:</H3>
+<P>&nbsp;&nbsp;&nbsp; gcc writesac.c sacsubc.c -o writesac&nbsp;&nbsp;&nbsp;&nbsp;
+<BR><BR>On LINUX/Unix the executable is <I>writesac. </I>On Windows
+under CYGWIN, the executable is actually called <I>writesac.exe </I>but
+you can execute the program by just enterning <I>writesac</I> at the
+prompt in both environments.<BR><BR>The shell script <A HREF="DOIT">DOIT</A>
+does the compile and also used <B>gsac </B>and <B>plotgif </B>to
+create the following image:<BR><BR><IMG SRC="p001.gif" NAME="graphics1" ALT="p001.gif" ALIGN=BOTTOM WIDTH=640 HEIGHT=480 BORDER=0><BR><BR><BR><BR>
+</P>
+<H2>Reading a time series in SAC format</H2>
+<P><BR><BR>
+</P>
+<H3>Program purpose:</H3>
+<P>This simple program will read the file <I>filt.sac, </I>list
+header values and the time series.</P>
+<H3>The Program:</H3>
+<P>Copy the files <I><A HREF="sacsubc.c">sacsubc.c</A> </I>and
+<A HREF="sacsubc.h"><I>sacsubc.h</I></A> to your working directory.
+Then create the file<A HREF="writesac.c"> </A><I><A HREF="readsac.c">readsac.c</A>:</I></P>
+<PRE>#include &quot;sacsubc.h&quot;
+#include &lt;stdio.h&gt;
+/* define the maximum number of points  and the float array for
+   storing the time series. Note I use calloc() in this C library
+   so that array is defined in the brsac. */
+#define NPTS 100
+float *x;
+main()
+{
+        int npts, nerr;
+        float dt,depmax, depmin, b, e;
+        int i;
+        brsac(NPTS,&quot;filt.sac&quot;, &amp;x, &amp;nerr);
+        /* now lets get some header values */
+        getfhv(&quot;DELTA&quot;,&amp;dt,&amp;nerr);
+                printf(&quot;DELTA  :   %f\n&quot;,dt);
+        getfhv(&quot;DEPMAX&quot;,&amp;depmax,&amp;nerr);
+                printf(&quot;DEPMAX :   %f\n&quot;,depmax);
+        getfhv(&quot;DEPMIN&quot;,&amp;depmin,&amp;nerr);
+                printf(&quot;DEPMIN :   %f\n&quot;,depmin);
+        /* this is necessary since the actual number of points
+           may be less than the array dimension. brsac NEVER
+           reads in more than the maximum allowable numebr of
+           points and resets the internal header value so that
+           the npts returned here never is greater than NPTS */
+        getnhv(&quot;NPTS&quot;, &amp;npts, &amp;nerr);
+                printf(&quot;NPTS   :   %f\n&quot;,npts);
+        /* output the time series */
+        for(i=0;i &lt; npts ; i ++)
+                printf(&quot;x[%d] = %f\n&quot;,i,x[i]);
+}</PRE><P>
+<BR><BR>
+</P>
+<H3>Compiling:</H3>
+<P>&nbsp;&nbsp;&nbsp; gcc readsac.c sacsubc.c -o readsac&nbsp;&nbsp;&nbsp;&nbsp;
+<BR><BR>On LINUX/Unix the executable is <I>readsac. </I>On Windows
+under CYGWIN, the executable is actually called <I>readsac.exe </I>but
+you can execute the program by just enterning <I>readsac</I> at the
+prompt in both environments.</P>
+<H3>Output:&nbsp; 
+</H3>
+<P>This is the output from running the command <I>readsac:</I></P>
+<PRE>DELTA  :   0.010000
+DEPMAX :   23.465153
+DEPMIN :   0.000000
+NPTS   :   -0.171413
+x[0] = 0.000000
+x[1] = 0.000000
+x[2] = 0.000000
+x[3] = 0.000000
+x[4] = 0.000000
+x[5] = 0.000000
+x[6] = 0.000000
+x[7] = 0.000000
+x[8] = 0.000000
+x[9] = 0.000000
+x[10] = 13.575525
+x[11] = 23.465153
+x[12] = 17.094118
+x[13] = 12.452886
+x[14] = 9.071796
+x[15] = 6.608708
+x[16] = 4.814374
+x[17] = 3.507221
+x[18] = 2.554974
+x[19] = 1.861272
+x[20] = 1.355917
+x[21] = 0.987771
+x[22] = 0.719581
+x[23] = 0.524207
+x[24] = 0.381879
+x[25] = 0.278195
+x[26] = 0.202662
+x[27] = 0.147637
+x[28] = 0.107552
+x[29] = 0.078351
+x[30] = 0.057078
+x[31] = 0.041580
+x[32] = 0.030291
+x[33] = 0.022067
+x[34] = 0.016075
+x[35] = 0.011711
+x[36] = 0.008531
+x[37] = 0.006215
+x[38] = 0.004527</PRE><P STYLE="margin-bottom: 0in">
+&nbsp;</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><I>Last changed February
+12, 2008</I></P>
+</BODY>
+</HTML>

@@ -1,0 +1,197 @@
+#!/bin/bash
+
+######
+#   preserve the original elocate.dat
+######
+cp elocate.dat elocate.dat.save
+
+#####
+#     create a work subdirectory and populate it
+#     if it already exists start anew!
+#####
+rm -fr TEMP
+mkdir TEMP
+
+#####
+#    create a result directory to preserve the 
+#    different run output
+#####
+rm -fr RESULT
+mkdir RESULT
+
+#####
+#    initialize to get the VEL.MOD file
+#####
+elocate -VELMOD
+
+#####
+#    define the velocity model and starting depth
+#    In the distributed VEL.MOD, there are the following
+#
+#    MODEL    NAME    Description
+#      1      J-B     Jeffreys-bullen teleseismic P and S
+#      3      HALF    halfspace
+#      4      CUS     CUS model
+#      5      UPL     Old SLU Upland model
+#      6      EMBN    Old SLU Embayment model
+#      7      WUS     WUS model
+#      8      nnCIA   Central Apenine, Italy
+#      9      KOREA   Korea model based on RFTN and SW
+#
+#      If you add a model to the end of the distributed
+#      VEL.MOD file, do not overwrite the file and 
+#      then use that MODEL number below
+#
+#####
+MODEL=4
+#####
+#     initial starting depth
+#     If negative - fix the depth
+#     to fix the depth at 0 either use -D -0.001 below
+#     or   -D 0.0 -F in the elocate command
+#####
+
+DEPTH=10
+
+#####
+#    run using the orginal data set
+#####
+elocate -M ${MODEL} -D ${DEPTH} -BATCH > elocate.txt
+
+#####
+#    determine the number of lines in elocate.dat
+#####
+NLINE=`wc elocate.dat.save | awk '{print $1}' `
+
+#####
+#    now loop over the lines
+#####
+COUNT=0
+while [ ${COUNT} -lt ${NLINE} ]
+do
+	rm -fr TEMP/elocate.dat
+	if [ ${COUNT} -gt 0 ]
+	then
+        	head -${COUNT} elocate.dat.save > TEMP/elocate.dat
+	fi
+        COUNTM1=`echo ${COUNT} ${NLINE} | awk '{print $2 -$1 -1}' `
+#	echo COUNT ${COUNT} COUTNNM1 ${COUNTM1} of ${NLINE}
+	if [ ${COUNTM1} -gt 0 ]
+	then
+		tail -${COUNTM1} elocate.dat.save >> TEMP/elocate.dat
+	fi
+	COUNT=` echo ${COUNT} | awk '{print $1 + 1}' `
+#####
+#       use subshell to do the work
+#####
+	(cp VEL.MOD TEMP; cd TEMP; elocate -M ${MODEL} -D ${DEPTH} -BATCH > elocate.txt)
+#####
+#       preserve the results
+#####
+	mv TEMP/elocate.dat RESULT/elocate.dat.${COUNT}
+	mv TEMP/elocate.txt RESULT/elocate.txt.${COUNT}
+	mv TEMP/elocate.sum RESULT/elocate.sum.${COUNT}
+
+
+done
+
+#####
+#    Use Jackknife procedure to get location and one sigma
+#####
+
+#####
+#    Reference: Equations (1) - (4)
+#     G. A. Prieto, D. J. Thomas, F. L. Vernon, P. M. Shearer 
+#     and R. L. Parker, (2007).  Confidence intervals for earthquake
+#     source parameters, Geophys. J. Int 168, 1227-1234. 
+#      doi:10.1111/j.1365-246X.2006.03257.x
+
+
+#####
+#    scan the elocate.sum.? files
+#    to perform the leave one out
+#
+#    the entries in elocate.sum are
+# RMS  LAT LON DEP OT OT_CSS
+# 0.007 37.9478 -77.9593 5.64 20111026223658.017 1319668618.02
+
+#####
+#    make lists of the variables
+#####
+rm -f list.lat list.lon list.dep list.otcss
+cat RESULT/elocate.sum.* | awk '{print $2}' > list.lat
+cat RESULT/elocate.sum.* | awk '{print $3}' > list.lon
+cat RESULT/elocate.sum.* | awk '{print $4}' > list.dep
+cat RESULT/elocate.sum.* | awk '{print $6}' > list.otcss
+
+#####
+#    now get the jackknife estimates
+#####
+
+for P in LAT LON DEP OT
+do
+case ${P} in
+	LAT) IND=1 ;FILE=list.lat ;FMTSD="%9.4f" ;;
+	LON) IND=2 ;FILE=list.lon ;FMTSD="%9.4f" ;;
+	DEP) IND=3 ;FILE=list.dep ;FMTSD="%9.4f" ;;
+	OT)  IND=4 ;FILE=list.otcss ;FMTSD="%20.3f" ;;
+esac
+M=`wc ${FILE} | awk '{print $1}' `
+cat > awkscmn << EOF
+BEGIN {SUM=0.0}
+{SUM+=\$1}
+END { printf "${FMTSD}\n", SUM/NR} 
+EOF
+MEAN=`cat ${FILE} | awk -f awkscmn  `
+
+cat > awkscsd << EOF
+BEGIN {SUM=0.0}
+{
+SUM+= (\$1 -(${MEAN}) )*(\$1 -(${MEAN}) )
+}
+END { printf "${FMTSD}\n", sqrt( ( NR - 1 ) * SUM / NR ) }
+EOF
+SD=`cat ${FILE} | awk -f awkscsd`
+case ${P} in
+	LAT) MLAT="${MEAN}" ; SDLAT="${SD}" ;;
+	LON) MLON="${MEAN}" ; SDLON="${SD}" ;;
+	DEP) MDEP="${MEAN}" ; SDDEP="${SD}" ;;
+	OT)  MOT="${MEAN}" ; SDOT="${SD}" ;;
+esac
+
+done
+
+
+rm -f awkscmn awkscsd list.dep list.lat list.lon list.otcss
+
+#####
+#     now compile a C program to convert the time in seconds from
+#     January 1, 1970 00:00:00.000 to UTC
+#####
+cat > c.c << EOF
+/* version 29 OCT 2011 */
+#include <stdio.h>
+#include <time.h>
+
+double TIME=${MOT} ;
+time_t TIMES;
+struct tm *tm;
+char ostr[30];
+
+main()
+{
+	TIMES=(time_t)TIME;
+	tm = gmtime( &TIMES);
+	strftime(ostr,sizeof(ostr),"%Y%m%d%H%M%S", tm);
+	printf("%s.%3.3d\n",ostr,(int)( 1000*(TIME - (double)TIMES )+0.49));
+}
+EOF
+gcc c.c
+TIMEHUMAN=`a.out`
+
+######
+#   now format the nice summary
+#####
+echo ${MLAT} ${SDLAT} ${MLON} ${SDLON} ${MDEP} ${SDDEP} ${MOT} ${SDOT} ${TIMEHUMAN}
+
+rm -f a.out c.c

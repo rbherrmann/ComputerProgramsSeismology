@@ -1,0 +1,15 @@
+#!/bin/sh
+
+elocate -VELMOD
+elocate -M 7 -BATCH -D 10 > elocate.txt
+
+STK=320
+DIP=40
+RAKE=-80
+
+
+fmplot -S $STK -D $DIP -R $RAKE -F fmplot.tmp -tp
+plotnps -BGFILL -F7 -W10 -EPS -K < FMPLOT.PLT > t.eps
+
+# Use ImageMagick to convert EPS to PNG
+convert -trim t.eps slufm.png

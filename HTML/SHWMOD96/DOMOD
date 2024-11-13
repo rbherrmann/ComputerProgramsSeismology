@@ -1,0 +1,17 @@
+#!/bin/sh
+
+#####
+#   use shwmod96 to get VS.xy files for the nnCIA.mod CUS.mod and WUS.mod
+#####
+shwmod96 -S -XY *.mod
+
+cat > lcmdfil << EOF
+'nnCIA.mod.VS.xy' 1 0.02 'NO' 0.05 'nnCIA'
+'CUS.mod.VS.xy' 2 0.02 'NO' 0.05 'CUS'
+'WUS.mod.VS.xy' 4 0.02 'NO' 0.05 'WUS'
+EOF
+genplt -XMIN 0.0 -XMAX 50.0 -XDOWN -YMIN 1 -YMAX 9 -L lcmdfil -LPOS 'MR' -TX 'Depth (km)' -TY 'Vs (km/s) '
+mv GENPLT.PLT VSmodels.PLT
+plotnps -F7 -W10 -EPS -K < VSmodels.PLT > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off VSmodels.png
+rm t.eps

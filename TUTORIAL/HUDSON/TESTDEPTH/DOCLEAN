@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rm -f file96 hspec96.grn
+rm -f *.sac
+rm -f *.mod
+rm -fr ??
+rm -f *.eps *PLT
+rm -f PRS001.CTL

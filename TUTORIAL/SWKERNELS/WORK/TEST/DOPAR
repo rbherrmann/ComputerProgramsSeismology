@@ -1,0 +1,126 @@
+#!/bin/sh
+
+DELVP="-0.05"
+DELVS="-0.05"
+DELQAI="0.01"
+DELQBI="0.01"
+DELH="1.0"
+
+DONUM ${DELVP} ${DELVS} ${DELQAI} ${DELQBI} ${DELH}  > /dev/null 2>&1
+
+#####
+#    Run  Description
+#     0     base
+#     1     DVp  layer=2 = -0.25
+#     2     DVs  layer=2 = -0.25
+#     3     DQpi layer=2 = 0.01
+#     4     DQsi layer=2 = 0.01
+#     5     Dh   layer=2 = 1.0
+#####
+
+#####
+#    The 1.OUT etc have entries such as
+#      Mode        Period       Observed      Predicted Observed Sigma
+# L C    0     10.0000000      4.0000000      3.6880898      0.1000000
+# L U    0     10.0000000      4.0000000      3.4657164      0.1000000
+# R C    0     10.0000000      4.0000000      3.3338904      0.1000000
+# R U    0     10.0000000      4.0000000      3.1065819      0.1000000
+#      Mode        Period       Observed      Predicted Observed Sigma
+# L G    0     10.0000000 0.40000000E+01 0.27307303E-03 0.10000000E+00
+# R G    0     10.0000000 0.40000000E+01 0.26164428E-03 0.10000000E+00
+#####
+
+
+LC0=`grep "L C" 0.OUT | awk '{print $6}' `
+LU0=`grep "L U" 0.OUT | awk '{print $6}' `
+LG0=`grep "L G" 0.OUT | awk '{print $6}' `
+RC0=`grep "R C" 0.OUT | awk '{print $6}' `
+RU0=`grep "R U" 0.OUT | awk '{print $6}' `
+RG0=`grep "R G" 0.OUT | awk '{print $6}' `
+LG0a=`grep "L ga" 0.OUT | sort | uniq | awk '{print $6}' `
+LG0b=`grep "L gb" 0.OUT | sort | uniq | awk '{print $6}' `
+RG0a=`grep "R ga" 0.OUT | sort | uniq | awk '{print $6}' `
+RG0b=`grep "R gb" 0.OUT | sort | uniq | awk '{print $6}' `
+#echo LC=$LC0 LU=$LU0 LG=$LG0 RC=$RC0 RU=$RU0 RG=$RG0
+
+rm -f DOPAR.out
+
+for MOD in 1 2 3 4 5
+do
+case $MOD in
+	1) DEL="${DELVP}" ; TXT="da" ;;
+	2) DEL="${DELVS}" ; TXT="db" ;;
+	3) DEL="${DELQAI}" ; TXT="dQai" ;;
+	4) DEL="${DELQBI}" ; TXT="dQbi" ;;
+	5) DEL="${DELH}" ; TXT="dh" ;;
+esac
+LC=`grep "L C" ${MOD}.OUT | awk '{print $6}' `
+LU=`grep "L U" ${MOD}.OUT | awk '{print $6}' `
+LG=`grep "L G" ${MOD}.OUT | awk '{print $6}' `
+RC=`grep "R C" ${MOD}.OUT | awk '{print $6}' `
+RU=`grep "R U" ${MOD}.OUT | awk '{print $6}' `
+RG=`grep "R G" ${MOD}.OUT | awk '{print $6}' `
+LGa=`grep "L ga" ${MOD}.OUT | sort | uniq | awk '{print $6}' `
+LGb=`grep "L gb" ${MOD}.OUT | sort | uniq | awk '{print $6}' `
+RGa=`grep "R ga" ${MOD}.OUT | sort | uniq | awk '{print $6}' `
+RGb=`grep "R gb" ${MOD}.OUT | sort | uniq | awk '{print $6}' `
+
+#case $MOD in
+#	4)
+#	echo ${LU0} ${LU} ${DEL} 
+#	echo L dU ${TXT} $LU0 $LU $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '
+#	;;
+#esac
+
+
+echo L dc ${TXT} $LC0 $LC $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo L dU ${TXT} $LU0 $LU $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo L dg ${TXT} $LG0 $LG $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo L dga ${TXT} $LG0a $LGa $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo L dgb ${TXT} $LG0b $LGb $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo R dc ${TXT} $RC0 $RC $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo R dU ${TXT} $RU0 $RU $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo R dg ${TXT} $RG0 $RG $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo R dga ${TXT} $RG0a $RGa $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+echo R dgb ${TXT} $RG0b $RGb $DEL  | awk '{ printf "%s %s/%s = %11.3e\n", $1, $2, $3, ($5 -$4)/$6 } '  >> DOPAR.out
+
+done
+LDCDB=`grep 'L dc/db' DOPAR.out | awk '{print $4}' `
+LDUDB=`grep 'L dU/db' DOPAR.out | awk '{print $4}' `
+LDCDH=`grep 'L dc/dh' DOPAR.out | awk '{print $4}' `
+LDUDH=`grep 'L dU/dh' DOPAR.out | awk '{print $4}' `
+LDCDQBI=`grep 'L dc/dQbi' DOPAR.out | awk '{print $4}' `
+LDUDQBI=`grep 'L dU/dQbi' DOPAR.out | awk '{print $4}' `
+LDGDB=`grep 'L dg/db' DOPAR.out | awk '{print $4}' `
+LDGBDB=`grep 'L dgb/db' DOPAR.out | awk '{print $4}' `
+LDGDQBI=`grep 'L dgb/dQbi' DOPAR.out | awk '{print $4}' `
+LDGDH=`grep 'L dg/dh' DOPAR.out | awk '{print $4}' `
+RDCDA=`grep 'R dc/da' DOPAR.out | awk '{print $4}' `
+RDCDB=`grep 'R dc/db' DOPAR.out | awk '{print $4}' `
+RDUDA=`grep 'R dU/da' DOPAR.out | awk '{print $4}' `
+RDUDB=`grep 'R dU/db' DOPAR.out | awk '{print $4}' `
+RDCDH=`grep 'R dc/dh' DOPAR.out | awk '{print $4}' `
+RDUDH=`grep 'R dU/dh' DOPAR.out | awk '{print $4}' `
+RDCDQAI=`grep 'R dc/dQai' DOPAR.out | awk '{print $4}' `
+RDCDQBI=`grep 'R dc/dQbi' DOPAR.out | awk '{print $4}' `
+RDUDQAI=`grep 'R dU/dQai' DOPAR.out | awk '{print $4}' `
+RDUDQBI=`grep 'R dU/dQbi' DOPAR.out | awk '{print $4}' `
+RDGDA=`grep 'R dg/da' DOPAR.out | awk '{print $4}' `
+RDGADA=`grep 'R dga/da' DOPAR.out | awk '{print $4}' `
+RDGBDA=`grep 'R dgb/da' DOPAR.out | awk '{print $4}' `
+RDGDB=`grep 'R dg/db' DOPAR.out | awk '{print $4}' `
+RDGADB=`grep 'R dga/db' DOPAR.out | awk '{print $4}' `
+RDGBDB=`grep 'R dgb/db' DOPAR.out | awk '{print $4}' `
+RDGDQAI=`grep 'R dga/dQai' DOPAR.out | awk '{print $4}' `
+RDGDQBI=`grep 'R dgb/dQbi' DOPAR.out | awk '{print $4}' `
+RDGDH=`grep 'R dg/dh' DOPAR.out | awk '{print $4}' `
+echo '--------------------'    
+echo Love
+echo '-----------------------------------------------'
+echo '   dc/db       dU/db       dc/dh       dU/dh      dc/dQbi      dU/dQbi     dg/db       dg/dQbi     dg/dh'
+echo "${LDCDB}" "${LDUDB}" "${LDCDH}" "${LDUDH}" "${LDCDQBI}" "${LDUDQBI}" "${LDGDB}" "${LDGDQBI}" "${LDGDH}" | awk '{printf "%11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e\n", $1, $2, $3, $4, $5, $6, $7, $8, $9}'
+echo '-----------------------------------------------'
+echo Rayleigh
+echo '   dc/da       dc/db       dU/da       dU/db       dc/dh        dU/dh     dc/dQai      dc/dQbi    dU/dQai     dU/dQbi      dg/da       dg/db      dg/dQai     dg/dQbi       dg/dh'
+echo "${RDCDA}" "${RDCDB}" "${RDUDA}" "${RDUDB}" "${RDCDH}" "${RDUDH}" "${RDCDQAI}" "${RDCDQBI}" "${RDUDQAI}" "${RDUDQBI}" "${RDGDA}" "${RDGDB}" "${RDGDQAI}" "${RDGDQBI}" "${RDGDH}" | awk '{printf "%11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e %11.3e\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15}'
+echo '-----------------------------------------------'

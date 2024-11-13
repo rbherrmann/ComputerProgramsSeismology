@@ -1,0 +1,25 @@
+MG = 9.80E+11 dyne
+EVDP = 0.1 MXX = 8.130e+18 dyne-cm
+EVDP = 0.1 MYY = 8.130e+18 dyne-cm
+EVDP = 0.1 MZZ = 2.450e+19 dyne-cm
+EVDP = 0.1 MXX = 8.130e+18 dyne-cm
+EVDP = 0.1 MYY = 8.130e+18 dyne-cm
+EVDP = 0.1 MZZ = 2.450e+19 dyne-cm
+EVDP = 0.2 MXX = 4.065e+18 dyne-cm
+EVDP = 0.2 MYY = 4.065e+18 dyne-cm
+EVDP = 0.2 MZZ = 1.225e+19 dyne-cm
+EVDP = 0.2 MXX = 4.065e+18 dyne-cm
+EVDP = 0.2 MYY = 4.065e+18 dyne-cm
+EVDP = 0.2 MZZ = 1.225e+19 dyne-cm
+EVDP = 0.3 MXX = 2.710e+18 dyne-cm
+EVDP = 0.3 MYY = 2.710e+18 dyne-cm
+EVDP = 0.3 MZZ = 8.167e+18 dyne-cm
+EVDP = 0.3 MXX = 2.710e+18 dyne-cm
+EVDP = 0.3 MYY = 2.710e+18 dyne-cm
+EVDP = 0.3 MZZ = 8.167e+18 dyne-cm
+EVDP = 0.4 MXX = 2.032e+18 dyne-cm
+EVDP = 0.4 MYY = 2.032e+18 dyne-cm
+EVDP = 0.4 MZZ = 6.125e+18 dyne-cm
+EVDP = 0.4 MXX = 2.032e+18 dyne-cm
+EVDP = 0.4 MYY = 2.032e+18 dyne-cm
+EVDP = 0.4 MZZ = 6.125e+18 dyne-cm

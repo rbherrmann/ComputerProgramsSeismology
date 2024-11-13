@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Computer Programs in Seismology Validation</title>
+</head>
+<body blcolor="#FFFFFF">
+<h2>Isotropic model test</h2>
+The travel time routines actually use plane layered travel time
+techniques.&nbsp; The computations differ from those used for
+earthquake location because the source and receiver can be at an
+arbitrary depth in the velocity model. The travel time routines compute
+the first arrival time for the specific phase.&nbsp; Since the velocity
+model is very general, special cases must be considered:<br>
+<ol>
+  <li>direct arrival between source and receiver in the same layer</li>
+  <li>direct arrival between&nbsp; source and receiver in different
+layers. The travel time is determined by an iterative technique that
+searches for the ray parameter that describes the geometric ray.</li>
+  <li>refracted arrival from layers below or above both the source and
+the receiver.</li>
+</ol>
+The codes also permit a spherical velocity model. An Earth flattening
+approximation is applied.<br>
+<br>
+<h3>Test 1 - Comparison <br>
+</h3>
+We compare the program predictions for the "AK135" continental model to
+those from the <a href="http://seis.sc.edu/software/TauP/">TauP Toolkit</a>.
+The following files are used: <a href="DOTAUP">DOTAUP</a> (which
+invokes the Toolkit program taup_time), the Computer Program in
+Seismology AK135 velocity model file <a href="tak135sph.mod">tak135sph.mod</a>
+and the test script <a href="DOTT">DOTT</a>.&nbsp; The output is given
+in <a href="DOTTout.html">DOTT.out</a>. An extract of the output is<br>
+<br>
+<pre>GCARC  EVDP    P(taup)     P(CPS)                 S(taup)     S(CPS)<br>---------------------------------------------------------------------------------<br>    1    10      19.40      19.23 (      0.17)      32.61      32.24 (      0.37)<br>    2    10      33.83      33.76 (      0.07)      58.90      58.77 (      0.13)<br>    3    10      47.58      47.46 (      0.12)      83.58      83.34 (      0.24)<br>.................................................................................<br>   80    10     729.50     729.24 (      0.26)    1333.53    1333.05 (      0.48)<br>   90    10     779.71     779.45 (      0.26)    1432.65    1410.12 (     22.53)<br>  100    10      -1.00     825.11 (   -826.11)    1520.05    1463.68 (     56.37)<br>  110    10      -1.00     869.90 (   -870.90)      -1.00    1508.96 (  -1509.96)<br>  120    10      -1.00     914.70 (   -915.70)      -1.00    1547.15 (  -1548.15)<br>  130    10      -1.00     959.49 (   -960.49)      -1.00    1578.60 (  -1579.60)<br>  140    10      -1.00    1004.29 (  -1005.29)      -1.00    1603.67 (  -1604.67)<br>---------------------------------------------------------------------------------<br></pre>
+<p>
+The columns are great circle arc (degrees), source depth (km),
+taup_time P-wave travel time for a surface receiver, the CPS <b>time96</b>
+P-wave travel time. the difference between the two, followed by similar
+columns for the S-wave time.
+The comparison is very good. At larger distances the CPS OP-time is
+actually Pdiff and the S-wave time is SKS.
+</p>
+<h3>Test 2 - Travel times of direct P and S<br>
+</h3>
+The next test focuses on the use of a reference depth in the
+computations.&nbsp; The reference depth concept was introduced to
+facilitate placing an atmosphere on top of an elastic Earth
+model.&nbsp; If the initial layer thickenesses are negative, the layers
+are assumed to be above the zero-depth datum.&nbsp; With this approach
+one can continue to have the specification <span
+ style="font-style: italic;">-HS 0</span> to represent a receiver at
+the surface.&nbsp; The script <a href="DOTREFDEP">DOTREFDEP</a>
+compares the <span style="font-weight: bold;">time96</span> travel
+time predictions fo P, SV and SH for the models <a href="tak135sph.mod">tak135sph.mod</a>
+(continental AK135h model), <a href="Tak135sph.mod">Ttak135sph.mod</a>
+(AK135h with a very thick first layer), <a href="Fak135sph.mod">Fak135sph.mod</a>
+(the AK135h model, but with the model treated as a flat-Earth rather
+than a spherical Earth; this model serves to test the progrma for a
+flat model, and <a href="FTak135sph.mod">FTak135sph.mod</a> (the
+Fak135sph.mod to test the reference depth).&nbsp; The results are given
+in <a href="DOTREFDEPout.html">DOTREFDEP.out</a> <br>
+<br>
+The first few lines of output of this script are<br>
+<br>
+<pre>Model: tak135sph.mod<br>GCARC  EVDP    TP(sec) p(P)(s/km)      T*(P)   TSV(sec) p(SV)(s/km)    T*(SV)   TSH(sec) p(SH)(s/km)    T*(SH)<br>--------------------------------------------------------------------------------------------------------------<br>    1   700      80.56       0.02       0.33     146.21       0.03       0.98     146.21       0.03       0.98<br>    2   700      83.11       0.03       0.34     150.86       0.05       1.01     150.86       0.05       1.01<br>    3   700      87.18       0.04       0.36     158.26       0.08       1.06     158.26       0.08       1.06<br>   30   700     316.88       0.08       0.73     569.80       0.14       2.06     569.80       0.14       2.06<br>   60   700     542.59       0.06       1.00     984.57       0.11       2.85     984.57       0.11       2.85<br>   90   700     707.88       0.04       1.33    1273.61       0.05       2.81    1303.85       0.08       3.82<br>--------------------------------------------------------------------------------------------------------------<br>Model: Ttak135sph.mod<br>GCARC  EVDP    TP(sec) p(P)(s/km)      T*(P)   TSV(sec) p(SV)(s/km)    T*(SV)   TSH(sec) p(SH)(s/km)    T*(SH)<br>--------------------------------------------------------------------------------------------------------------<br>    1   700      80.56       0.02       0.33     146.21       0.03       0.98     146.21       0.03       0.98<br>    2   700      83.11       0.03       0.34     150.86       0.05       1.01     150.86       0.05       1.01<br>    3   700      87.18       0.04       0.36     158.26       0.08       1.06     158.26       0.08       1.06<br>   30   700     316.88       0.08       0.73     569.80       0.14       2.06     569.80       0.14       2.06<br>   60   700     542.59       0.06       1.00     984.57       0.11       2.85     984.57       0.11       2.85<br>   90   700     707.88       0.04       1.33    1273.61       0.05       2.81    1303.85       0.08       3.82<br>--------------------------------------------------------------------------------------------------------------<br><br></pre>
+<p>
+The columns here are the P, SV and SH travel time, ray parameter and T*
+(assuming a frequency independent T* operator). You will notice that
+the SV time at 90 degrees is actually that of SKS which that of SH is
+actually S
+<br>
+</p>
+<h3>Test 3 - Travel times of pP and sP<br>
+</h3>
+The next test focuses on the use of a reference depth in the
+computations.&nbsp; The reference depth concept was introduced to
+facilitate placing an atmosphere on top of an elastic Earth
+model.&nbsp; If the initial layer thickenesses are negative, the layers
+are assumed to be above the zero-depth datum.&nbsp; With this approach
+one can continue to have the specification <span
+ style="font-style: italic;">-HS 0</span> to represent a receiver at
+the surface.&nbsp; The script <a href="pPDOTREFDEP">pPDOTREFDEP</a>
+compares the <span style="font-weight: bold;">time96</span> travel
+time predictions fo P, SV and SH for the models <a href="tak135sph.mod">tak135sph.mod</a>
+(continental AK135h model), <a href="Tak135sph.mod">Ttak135sph.mod</a>
+(AK135h with a very thick first layer), <a href="Fak135sph.mod">Fak135sph.mod</a>
+(the AK135h model, but with the model treated as a flat-Earth rather
+than a spherical Earth; this model serves to test the progrma for a
+flat model, and <a href="FTak135sph.mod">FTak135sph.mod</a> (the
+Fak135sph.mod to test the reference depth).&nbsp; The results are given
+in <a href="pPDOTREFDEPout.html">pPDOTREFDEP.out</a> <br>
+<br>
+The first few lines of output of this script are
+<p>
+</p>
+<pre>Model: tak135sph.mod<br>GCARC  EVDP   TpP(sec) p(pP)(s/km)    T*(pP)   TsP(sec) p(sP)(s/km)    T*(sP)<br>---------------------------------------------------------------------------------<br>   30   700  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00<br>   40   700     509.97       0.08       1.68     589.12       0.08       2.20<br>   60   700     671.66       0.07       1.73     744.85       0.06       2.33<br>   90   700     854.06       0.04       1.96     922.24       0.04       2.60<br>---------------------------------------------------------------------------------<br>Model: Ttak135sph.mod<br>GCARC  EVDP   TpP(sec) p(pP)(s/km)    T*(pP)   TsP(sec) p(sP)(s/km)    T*(sP)<br>---------------------------------------------------------------------------------<br>   30   700  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00<br>   40   700     509.97       0.08       1.68     589.12       0.08       2.20<br>   60   700     671.66       0.07       1.73     744.85       0.06       2.33<br>   90   700     854.06       0.04       1.96     922.24       0.04       2.60<br>---------------------------------------------------------------------------------<br>Model: Ftak135sph.mod<br>GCARC  EVDP   TpP(sec) p(pP)(s/km)    T*(pP)   TsP(sec) p(sP)(s/km)    T*(sP)<br>---------------------------------------------------------------------------------<br>   30   700  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00<br>   40   700     542.28       0.09       1.86     625.95       0.09       2.34<br>   60   700     741.83       0.09       2.03     822.90       0.09       2.56<br>   90   700    1023.82       0.08       2.33    1101.69       0.08       2.91<br>---------------------------------------------------------------------------------<br>Model: FTtak135sph.mod<br>GCARC  EVDP   TpP(sec) p(pP)(s/km)    T*(pP)   TsP(sec) p(sP)(s/km)    T*(sP)<br>---------------------------------------------------------------------------------<br>   30   700  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00  -12345.00<br>   40   700     542.28       0.09       1.86     625.95       0.09       2.34<br>   60   700     741.83       0.09       2.03     822.90       0.09       2.56<br>   90   700    1023.82       0.08       2.33    1101.69       0.08       2.91<br>---------------------------------------------------------------------------------<br><br>The -12345 indicates that there is no depth phase at the distance for the given source depth.</pre>
+</body>
+</html>

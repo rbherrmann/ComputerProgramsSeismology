@@ -1,0 +1,37 @@
+
+<html>
+	<head><title>Computer Programs in Seismology - Receiver function sensitivity to shallow seidment</title></head>
+	<body>
+		<h2>Introduction</h2>
+		The objective of this example is to examine the effect of shallow low velocity sediments on the receiver function. A halfspace and a simple crustal model are considered.
+	        <h2>Download</h2>
+	        Download the package  <A href="RFTN3.tgz">RFTN3.tgz</a>. Then do the following:
+				        <PRE>
+gunzip -c RFTN3.tgz | tar xvf -
+cd RFTN3
+./DOIT
+</pre>
+The script will create the figures shown below. The script requires  CPS programs <b> hrftn96, gsac</b> and <b>plotnps</b> and the ImageMagick package program <b>convert</b> to transform the EPS files to a PNG image.
+<h2>Discussion</h2>
+<table>
+	<tr>
+		<td><img src="P001.png"><br>Halfspace model for ALP=1.0</td>
+		<td><img src="P002.png"><br>Halfspace model for ALP=2.5</td>
+		<td><img src="P003.png"><br>Halfspace model for ALP=5.0</td>
+	</tr>
+	<tr>
+		<td><img src="P004.png"><br>Crustal  model for ALP=1.0</td>
+		<td><img src="P005.png"><br>Crustal  model for ALP=2.5</td>
+		<td><img src="P006.png"><br>Crustal  model for ALP=5.0</td>
+	</tr>
+	<tr>
+		<td><img src="PRS001.png"><br>Overlay of halfspace (red) and crustal (blue) base models  for ALP=1.0</td>
+		<td><img src="PRS002.png"><br>Overlay of halfspace (red) and crustal (blue) base models  for ALP=2.5</td>
+		<td><img src="PRS003.png"><br>Overlay of halfspace (red) and crustal (blue) base models  for ALP=5.0</td>
+	</tr>
+</table>
+<p>
+<center>Last changed April 18, 2012</center>
+	</body>
+
+</html>

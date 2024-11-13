@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#####
+#	overlay trace segments
+#####
+
+DEP=010
+DEG=090
+MCH=SS
+for TRACE in Z R T
+do
+gsac << EOF
+r TEST.${DEP}.${DEG}/${MCH}*/*${TRACE}
+xlim o 700 o 3400
+color list red blue
+fileid name
+transfer from none to none freqlimits 0.001 0.002 0.06 0.10
+bg plt
+p overlay on
+plotgif -C16 -K -F7 -W10 < P001.PLT > ${TRACE}.gif
+xlim o 2200 o 3400
+p
+plotgif -C16 -K -F7 -W10 < P002.PLT > ${TRACE}w.gif
+xlim o 2800 o 3000
+p
+plotgif -C16 -K -F7 -W10 < P003.PLT > ${TRACE}ww.gif
+quit
+EOF
+
+done
+mv ?.gif ??.gif ???.gif HTML
+rm -f P00?.PLT
+

@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Computer Programs in Seismology Tutorials</title>
+</head>
+<body>
+<h2>Introduction</h2>
+This example considers the effect of shallow sedimentary deposits on
+the observed motions.&nbsp; this effect is especially strong on the
+radial components, and hence will strongly influence the computed
+receiver function.<br>
+<br>
+<h2>Example</h2>
+<h3><span style="font-weight: bold;">Models</span></h3>
+The following figure compares the two surface models.&nbsp; The
+CUSMOD.mod is a typical upper crustal model, while the CUSEMB.mod has
+the upper 1 km replaced by low velocity sediment as a approximation to
+the velocity structure at Memphis, Tennessee.&nbsp; The figures are<br>
+<br>
+<img style="width: 592px; height: 464px;"
+ alt="Velocity model comparison" src="shwmod96.png"><br>
+<br>
+<h3>Teleseismic P-wave Signal</h3>
+The first run creates a broadband teleseismic signal for a 600 km deep
+source recorded at an arc distance of 50 degrees. This signal has the
+effect of the source model above the source, the geometrical spreading
+and attenuation of the teleseismic signal, and the effect of the
+receiver crust structure.<br>
+<br>
+<img style="width: 648px; height: 468px;" alt="teleseismic signal"
+ src="p001.png"><br>
+<h3>Receiver Structure Response</h3>
+By using the <span style="font-style: italic;">-NOTEL -NOSRC </span>command
+line flags, the effect of the sediment structure can be seen <br>
+<br>
+<img style="width: 613px; height: 468px;"
+ alt="Receiver structure response" src="p002.png"><br>
+<br>
+<br>
+<h3><span style="font-weight: bold;"></span></h3>
+</body>
+</html>

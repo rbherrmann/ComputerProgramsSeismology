@@ -1,0 +1,53 @@
+<HTML>
+<HEAD><TITLE>Computer Programs in Seismology Tutorials - Effect of Moho Gradient</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+	<h2>Introduction</h2>
+Receiver functions and surface-wave dispersion provide information about shallow Earth structure. However, when inverting observations, the question arises as to the number off layers to be used in the inversion. This is critical when the receiver function cannot be fit by a small number of layers.
+<p>
+The object of this exercise is to examine the sensitivity of surface wave dispersion and the receiver functions on a gradational Moho rather than a sharp Moho.
+To accomplish this, different velocity models are created as follow:
+<ul>
+	<li> Start with a simple single layer over a halfspace model</li>
+	<li> Introduce an equal number of layers above and below the Moho for which the layer parameters are selected so that the total vertical P-wave travel time from the base of themodel to the surface is constant.</li>
+</ul>
+
+	<h2>Download</h2>
+	Download the package  <A href="RFTN2.tgz">RFTN2.tgz</a>. Then do the following:
+	<PRE>
+gunzip -c RFTN2.tgz | tar xvf -
+cd RFTN2
+./DOIT
+</pre>
+	The script will create the figures shown below. The script requires the FORTRAN compiler <b>gfortran</b>, the CPS programs <b>sprep96, sdisp96, sregn96, slegn96, sdpegn96, hrftn96, gsac</b> and <b>plotnps</b> and the ImageMagick package program <b>convert</b> to transform the EPS files to a PNG image.
+	
+<h2>Discussion</h2>
+<p>
+The first figure shows the velocity models considered.
+<table>
+	<tr><td><img src="SHWMOD96.png"></td></tr>
+</table>
+<p>In the figure the colors indicate the progression from a sharp Moho to a gradational Moho.
+<p>
+The next set of figures use the same color scheme to show the Love and Rayleigh, phase (C) and group (U) velocity dispersion for the different models. <BR>There is little sensitivity to the different models, except at the group velocity minima. Note that the maximum change is at a period of 20-30 sec, for which the signal wavelength is about 60-100 km for models which differ at depths on the order of one-third to one-half a wavelength.
+<P>
+<table>
+	<tr><td><img src="DISP.png"></td></tr>
+</table>
+<p>
+The final set of figures show the receiver functions for a ray parameter of 0.07 sec/km for two Gaussian filter parameters, ALP=1.0 and ALP=2.5. The receiver functions are very sensitive to the nature of the Moho. The first "bump" does not change since its amplitude is only a function of the properties at the surface. However, the second "bump", corresponding to a PS is affected. The increasing width indicates that the top and bottom of the transition affect the signal. The last two arrivals, PPPS and PPSS+PSPS, are strongly affected since these involve reflections from the Moho, and gradients do not reflect well for near-vertical incidence.
+<p>
+These figures indicate that one can quickly look at a receiver function and judge whether the Moho is sharp.
+<table>
+	<tr><td><img src="P001.png"><br>Receiver functions for ALP=1.0</td></tr>
+	<tr><td><img src="P002.png"><br>Receiver functions for ALP=2.5</td></tr>
+</table>
+
+<P>
+This example shows how synthetics can provide a sense of how sub-surface structure affects the observed receiver functions and dispersion. One can also perform similar studies that investigate the effect of using other values of the Gaussian filter parameter, ALP, layer thickness.
+<p>
+An interesting exercise would be to consider a low velocity surface layer which is due to sediments or ice.
+<p>
+	<CENTER>Last Changed April 18, 2012</CENTER>
+</BODY>
+</HTML>

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <title>prfmod96</title>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body>
+    <h2>Introduction</h2>
+    The source code for <b>prfmod96</b> was modified to permit the
+    placement of a velocity bar next to the profile plot.
+    The test code is given in <a href="PRFMODTEST.tgz">PRFMODTEST.tgz</a>.
+    To run the test do the following after downloading this tile:
+    <p>
+    </p>
+    <pre>gunzip -c P
+PRFMODTEST.tgz | tar xf -
+cd PRFMODTEST
+DOIT
+</pre>
+    <h2>Examples</h2>
+    <p>
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <td><img src="NONE.png"><br>
+            <br>
+            prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX 35 -C mad1 -LAT1
+            -23.712 -LON1 43.59 -LAT2 -21.1389 -LON2 47.3825 -W 35 -KA
+            ka_file -KV kv_file<br>
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="TOP.png"><br>
+            <br>
+            prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX 35 -C mad1 -LAT1
+            -23.712 -LON1 43.59 -LAT2 -21.1389 -LON2 47.3825 -W 35 -KA
+            ka_file -KV kv_file -BT -BO 1.0<br>
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="BOTTOM.png"><br>
+            <br>
+            prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX 35 -C mad1 -LAT1
+            -23.712 -LON1 43.59 -LAT2 -21.1389 -LON2 47.3825 -W 35 -KA
+            ka_file -KV kv_file -BB <br>
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="LEFT.png"><br>
+            <br>
+            prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX 35 -C mad1 -LAT1
+            -23.712 -LON1 43.59 -LAT2 -21.1389 -LON2 47.3825 -W 35 -KA
+            ka_file -KV kv_file -BL -BO 1.5 <br>
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="RIGHT.png"><br>
+            <br>
+            prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX 35 -C mad1 -LAT1
+            -23.712 -LON1 43.59 -LAT2 -21.1389 -LON2 47.3825 -W 35 -KA
+            ka_file -KV kv_file -BR <br>
+            <hr>
+            <h2>DOIT test scripts</h2>
+            <pre>#!/bin/sh
+set -x
+#####
+#    cleanup
+#####
+rm -f *.PLT *.png                              <b><font color="#ff0000">CLEAN UP PREVIOUS RUN</font></b>
+
+mod="mod00"
+ZMAX=35 		                       <font color="#ff0000"><b>PLOT MODELS DOWN TO A DEPTH OF 35 KM</b></font>										
+WIDTH=35                                       <font color="#ff0000"><b>A PROFILE FROM (LAT1,LON1) to (LAT2,LON2) is made and all models within WIDTH are included</b></font>
+#define contour values
+cat &gt; kv_file &lt;<eof 2.0="" 2.5="" 3.0="" 3.25="" 3.5="" 3.75="" 4.0="" 4.25="" 4.5="" 4.7="" 5.0="" eof="" #define="" contour="" values="" to="" be="" annotated="" cat=""> ka_file &lt;&lt; EOF                 </eof><eof 2.0="" 2.5="" 3.0="" 3.25="" 3.5="" 3.75="" 4.0="" 4.25="" 4.5="" 4.7="" 5.0="" eof="" #define="" contour="" values="" to="" be="" annotated="" cat=""><font color="#ff0000"><b>THESE ARE THE CONTOUR VALEUS FOR THE PLOT - EACH WILL HAVE A UNIQUE COLOR. FOR EXAMPLE,</b></font>
+2.0                                            <font color="#ff0000"><b>A VALUE OF 2.7 WILL BE PLOTTED WITH A COLOR ASSOCIATED WITH 3.0</b></font>
+2.5<br>3.0<br>3.25<br>3.5<br>3.75<br>4.0<br>4.25<br>4.5<br>4.7<br>5.0
+EOF<br>cat &gt; ka_file &lt;&lt;EOF                            <b><font color="#ff0000">THESE CONTOUR VALUES ARE LABELED. NOTE THE 3.25 IS NOT LABELED</font></b><br>2.0<br>2.5<br>3.0<br>3.5<br>4.0<br>4.25<br>4.5<br>5.0<br>EOF<br>&nbsp;cat &gt; mad1 &lt;&lt; EOF                             <b><font color="#ff0000">THESE ARE THE MODEL. THEIR LOCATION NAME and FILE NAME ARE GIVEN</font></b>
+-23.612 43.59 'ORIGIN' '$mod.000.000'
+-23.2382 44.024 'MS03' '$mod.000.000'
+-23.1050 44.2198 'MS04' '$mod.000.001'
+-22.9060 44.4638 'MS05' '$mod.000.002'
+-22.8124 44.8289 'MS07' '$mod.000.003'
+-22.7548 45.1131 'MS08' '$mod.000.004'
+-22.4826 45.3982 'MS09' '$mod.000.005'
+-22.4736 45.5668 'MS10' '$mod.000.006'
+-22.4374 45.915 'MS12' '$mod.000.007'
+-22.3575 46.0879 'MS13' '$mod.000.008'
+-22.0855 46.4091 'MS15' '$mod.000.009'
+-21.9357 46.543 'MS16' '$mod.000.010'
+-21.4093 47.1029 'MS19' '$mod.000.011'
+-21.3316 47.2715 'MS20' '$mod.000.012'
+-21.2389 47.3825 'MS21' '$mod.000.013'
+EOF
+LL='-LAT1 -23.712 -LON1 43.59 -LAT2 -21.1389 -LON2 47.3825'           <b><font color="#ff0000">A SHORTHAND DESCRIPTION OF THE PROFILE DIRECTION</font></b>
+prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX ${ZMAX} -C mad1  ${LL} \
+ -W ${WIDTH} -KA ka_file -KV kv_file
+mv PRFMOD96.PLT NONE.PLT
+
+prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX ${ZMAX} -C mad1  ${LL} \
+ -W ${WIDTH} -KA ka_file -KV kv_file -BL -BO 1.5
+mv PRFMOD96.PLT LEFT.PLT
+
+prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX ${ZMAX} -C mad1  ${LL} \
+ -W ${WIDTH} -KA ka_file -KV kv_file -BR 
+mv PRFMOD96.PLT RIGHT.PLT
+
+prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX ${ZMAX} -C mad1  ${LL} \     <font color="#ff0000"><b>WHEN PLOTTING THE BAR AT THE TOP ADD MORE SPACE</b></font>
+ -W ${WIDTH} -KA ka_file -KV kv_file -BT  -BO 1.0
+mv PRFMOD96.PLT TOP.PLT
+
+prfmod96 -X0 1.75 -XLEN 5.7 -YLEN 3 -ZMAX ${ZMAX} -C mad1  ${LL} \
+ -W ${WIDTH} -KA ka_file -KV kv_file -BB  
+mv PRFMOD96.PLT BOTTOM.PLT
+
+#####
+#    convert PLT to PNG               <b><font color="#ff0000">USE ImageMagick TO CONVERT EPS to PNG</font></b>
+######
+
+for i  in *.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K &lt; $i &gt; t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done
+
+</eof></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

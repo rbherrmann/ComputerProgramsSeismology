@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>sacrmsl</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body>
+    <h1>Wavenumber  integration tests</h1>
+<h2>Introduction</h2>
+<p>This set of tests uses the CPS program sequence <b>hprep96</b>, <b>hspec96</b>,  <b>hpulse9</b> and <b>f96tosac</b> to create complete synthetics.
+</p>
+<p>We consider the the case of a source at a depth of 10km and epicentral distances of 1, 2, 3, 10 and 20 km.
+<p>The two models are
+<br>
+<table>
+<tr><td>Rock model</td><td>Soil model </td><tr>
+<tr>
+<td>
+<pre>
+Rock halfspace
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+ 20.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1<td>
+</pre>
+</td>
+<td>
+<pre>
+MODEL.01
+Soil model with Q overlying a halfspace
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP      QS  ETAP  ETAS  FREFP  FREFS
+  0.0100  1.5     0.3     2.0         0.05   0.10   0    0      1       1
+  0.0100  1.5     0.6     2.0         0.03   0.06   0    0      1       1
+  0.0200  1.6     0.8     2.0         0.025  0.05   0    0      1       1
+  0.0200  3.0     1.5     2.2         0.01   0.02   0    0      1       1
+  0.1000  5.0     2.5     2.5         0.005  0.01   0    0      1       1
+  0.0     6.0     3.5     2.7         0.000  0.000  0    0      1       1
+</pre>
+</td>
+</tr>
+</table>
+</p>
+<p>
+The processing script for this angle of incidence is <a href="CPSWK/DOIT">DOIT</a> which calls the script <a href="CPSWK/DODIST">DODIST</a>. These3 scripts is annotated with comments that describe the operations. Note that the
+shell script <b>DOPLTPNG</b> is used to convert the CPS PLT files to a png file using the ImageMagick convert. If ImageMagick is not installed, do something like
+<br>
+<pre>
+plotnps -F7 -W10 -EPS -K < P001.PLT > P001.eps
+</pre>
+and then use some other code to convert the Encapsulated PostScript <i>P001.eps</i> to a useful format. The <b>DOPLTPNG</b> script is given below.
+</p> 
+<p>The <b>DODIST</b> invokes <b>sacampl</b> with the <i>-TXT</i> flag and the angle is defined as the arc tangent of (epicentral distance/source depth).
+This means that the ASCII file <i>sacsampl_distance.txt</i> will be available. As an aside, if one wishes to compare the synthetics response to the output of <b>sacampl</b>, then use <b>gsac</b> to create a CSV file.
+</p>
+<p>
+Running the <b>DOIT</b> creates 8 PNG files. Three compare the time domain seismograms as a function of epicentral distance for the R, T and Z components.
+The remaining five compare the Soil/Rock spectra ratios as a function of distance.
+</p>
+<p>The plots are
+<table>
+<tr><td><img src="CPSWK/RSS.png"><br>Comparison of the radial component traces for the Rock (red) and Soil (blue) traces as a function of epicentral distance. </td></tr>
+</p>
+<tr><td><img src="CPSWK/TSS.png"><br>Comparison of the transverse component traces for the Rock (red) and Soil (blue) traces as a function of epicentral distance. </td></tr>
+<h2>DOPLTPNG</h2>
+<tr><td><img src="CPSWK/ZSS.png"><br>Comparison of the vertical component traces for the Rock (red) and Soil (blue) traces as a function of epicentral distance. </td></tr>
+</teble>
+<br>
+The arrival between P and S at 20 km on the rock trace is an artifact of the wavenumebr integration and can be controlled by effectively making the &Delta;k smaller. The waveforms are simpler in appearance since we are3 essentially looking at the direct P and S rays from the source. The traces for the soil model
+show some reverberations.
+</p>
+<p>The next step was to window the traces on the S wave, take the Fourier transform and then save the amplitude spectra.
+At each distance a spectral ratio was obtained and the ration for each component were compared to the quarter-wavelength formula.
+The plots for the five distances are as follow:
+<br>
+<table>
+<tr><td><img src="CPSWK/Ratio_01.png"><br> Site effect ratios at an epicentral distance of 1.0 km.</td></tr>
+<tr><td><img src="CPSWK/Ratio_02.png"><br> Site effect ratios at an epicentral distance of 2.0 km.</td></tr>
+<tr><td><img src="CPSWK/Ratio_03.png"><br> Site effect ratios at an epicentral distance of 3.0 km.</td></tr>
+<tr><td><img src="CPSWK/Ratio_10.png"><br> Site effect ratios at an epicentral distance of 10.0 km.</td></tr>
+<tr><td><img src="CPSWK/Ratio_20.png"><br> Site effect ratios at an epicentral distance of 20.0 km.</td></tr>
+</table>
+<br>
+</p>
+<p>
+The spectral ratios at 1, 2 and 3 km look very similar to the plane wave results. The quarter-wavelength formula seems to fit the horizontal R and T components. 
+</p>
+<p>
+At a distance of 10km the amplification on the radial component increases, while at 20 km, this amplification becomes very large, although the rations of the Z and T components seem to behave well.
+</p>
+
+<h2>DOPLTPNG</h2>
+<br>
+<pre>
+#!/bin/sh
+
+for i 
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done
+</pre>
+<br>
+  </body>
+</html>

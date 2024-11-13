@@ -1,0 +1,74 @@
+#!/bin/sh
+set -x
+
+#####
+# clean up
+#####
+
+rm -f *.eps
+rm -f *.png
+rm -f *.[ZRT]??
+rm -f *[ZRT]??.sac
+
+#####
+#    compute the distance file for receivers
+#####
+
+cat > dfile << EOF
+ 00.0     0.125   1024    -1.0 6.0
+ 10.0     0.125   1024    -1.0 6.0
+ 20.0     0.125   1024    -1.0 6.0
+ 30.0     0.125   1024    -1.0 6.0
+ 40.0     0.125   1024    -1.0 6.0
+ 50.0     0.125   1024    -1.0 6.0
+ 60.0     0.125   1024    -1.0 6.0
+ 70.0     0.125   1024    -1.0 6.0
+ 80.0     0.125   1024    -1.0 6.0
+ 90.0     0.125   1024    -1.0 6.0
+100.0     0.125   1024    -1.0 6.0
+110.0     0.125   1024    -1.0 6.0
+120.0     0.125   1024    -1.0 6.0
+130.0     0.125   1024    -1.0 6.0
+140.0     0.125   1024    -1.0 6.0
+150.0     0.125   1024    -1.0 6.0
+160.0     0.125   1024    -1.0 6.0
+170.0     0.125   1024    -1.0 6.0
+180.0     0.125   1024    -1.0 6.0
+190.0     0.125   1024    -1.0 6.0
+200.0     0.125   1024    -1.0 6.0
+EOF
+
+#####
+#    define a halfspace model
+#####
+cat > model.d << EOF
+MODEL
+TEST MODEL
+e0SOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+HR      VP      VS  RHO QP  QS  ETAP ETAS FREFP FREFS
+40.     6.0     3.5 2.8 0.0 0.0 0.0  0.0  1.0   1.0
+00.     8.0     4.7 3.3 0.0 0.0 0.0  0.0  1.0   1.0
+EOF
+
+  now run the VOLIX codes
+#####
+cprep96 -M model.d -d dfile -HS 100 -XS 100 -HR 0 -DOALL  -DOCONV
+
+cseis96 -R > cseis96.out
+
+cpulse96 -V -p -l 4 -EXF -DELAY 10 -PMIN 0.08 -PMAX 0.10  | f96tosac -B
+
+cray96 -XMIN -50 -XMAX 250 -ZMIN 0 -ZMAX 150
+
+#####
+#    only keep the REX and ZEX Green's functions
+#####
+

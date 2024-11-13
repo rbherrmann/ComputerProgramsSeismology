@@ -1,0 +1,78 @@
+#!/bin/sh
+
+#####
+#    get the A0 and ellipticity from the TRUNC/SREGN.ASC and ORIG/SREGN.ASC
+#####
+# SREGN.ASC
+#  RMODE NFREQ    PERIOD(S) FREQUENCY(Hz)  C(KM/S)      U(KM/S)       AR          GAMMA(1/KM)  ELLIPTICITY
+#    0     1   0.10000       10.000       3.3869       3.3814      0.81972E-01  0.20280E-01  0.67126    
+#    0     2   0.10476       9.5456       3.3868       3.3814      0.78247E-01  0.19358E-01  0.67126    
+#    0     3   0.10975       9.1116       3.3867       3.3814      0.74689E-01  0.18478E-01  0.67126
+#####
+CNT=0
+CNTMAX=100
+
+rm -f t.txt
+while [ $CNT -lt $CNTMAX ]
+do
+	CNT=`echo $CNT | awk '{print $1 + 1}' `
+	PER=`grep "  ${CNT}  " ORIG/SREGN.ASC | awk '{print $3}' `
+	C=`grep "  ${CNT}  " ORIG/SREGN.ASC | awk '{print $5}' `
+	AR=`grep "  ${CNT}  " ORIG/SREGN.ASC | awk '{print $7}' `
+	E=`grep "  ${CNT}  " ORIG/SREGN.ASC | awk '{print $9}' `
+	PERH=`grep "  ${CNT}  " TRUNC/SREGN.ASC | awk '{print $3}' `
+	CH=`grep "  ${CNT}  " TRUNC/SREGN.ASC | awk '{print $5}' `
+	ARH=`grep "  ${CNT}  " TRUNC/SREGN.ASC | awk '{print $7}' `
+	EH=`grep "  ${CNT}  " TRUNC/SREGN.ASC | awk '{print $9}' `
+	echo $CNT $PER $AR $E $PERH $ARH $EH  $C $CH>> t.txt
+done
+
+cat > t.f << EOF
+ 1000   continue
+        read(5,*,end=2000)i,per,ar,e,perh,arh,eh,c,ch
+        ratior = (e/eh)*sqrt(ar/arh)
+        ratioz = sqrt(ar/arh)
+        ratiotr = (e/eh)*sqrt((c*ar)/(ch*arh))
+        ratiotz =        sqrt((c*ar)/(ch*arh))
+        write(6,*)i,per,ar,e,perh,arh,eh,ratior,ratioz,ratiotz,ratiotr
+        go to 1000
+ 2000   continue
+        end
+EOF
+gfortran t.f 
+a.out < t.txt > t.out
+rm a.out
+
+cat t.out | awk '{print $2, $8}' > r.xy
+cat t.out | awk '{print $2, $9}' > z.xy
+cat t.out | awk '{print $2, $7}' > eh.xy
+cat t.out | awk '{print $2, $4}' > e.xy
+cat t.out | awk '{print $2, $10}' > tz.xy
+cat t.out | awk '{print $2, $11}' > tr.xy
+cat > lcmdfil << EOF
+'r.xy' 2 0.01 'CI' 0.03 'Ur/Ur0'
+'z.xy' 1 0.01 'CI' 0.03 'Uz/Uz0'
+'e.xy' 4 0.01 'CI' 0.03 'E'
+'eh.xy' 1025 0.05 'NO' 0.05 'Eh'
+'tz.xy' 1055 0.05 'NO' 0.05 'Tz'
+'tr.xy' 1075 0.05 'NO' 0.05 'Tr'
+EOF
+genplt -XMIN 0.1 -XMAX 10 -XLOG -YMIN -40 -YMAX 40 -L lcmdfil -TX 'Period (s)' -TY ' ' -LPOS 'BL'
+mv GENPLT.PLT AMP.PLT
+
+#####
+#  plot absolute values
+#####
+cat t.out | awk '{if($8 < 0) print $2, -1*$8; else print $2, $8}' > r.xy
+cat t.out | awk '{if($7 < 0) print $2, -1*$7; else print $2, $7}' > eh.xy
+cat t.out | awk '{if($4 < 0) print $2, -1*$4; else print $2, $4}' > e.xy
+cat t.out | awk '{if($10 < 0) print 1./$2, -1*$4; else print 1./$2, $10}' > tz.xy
+cat t.out | awk '{if($11 < 0) print 1./$2, -1*$4; else print 1./$2, $11}' > tr.xy
+cat > lcmdfil << EOF
+'tz.xy' 1020 0.05 'NO' 0.05 "Uz'/Uz"
+'tr.xy' 1080 0.05 'NO' 0.05 "Ur'/Ur"
+EOF
+genplt -XMIN 0.1 -XMAX 10 -XLOG -YMIN -0 -YMAX 30 -L lcmdfil -TX 'Frequency (Hz)' -TY ' ' -LPOS 'BL'
+mv GENPLT.PLT ABSAMP.PLT
+
+DOPLTPNG AMP.PLT ABSAMP.PLT

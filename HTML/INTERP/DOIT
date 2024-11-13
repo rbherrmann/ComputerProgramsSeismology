@@ -1,0 +1,31 @@
+#!/bin/sh
+
+gsac << EOF
+cut a -10 a 120
+r RDMU*T
+rtr
+hp c 0.02 n 3
+lp c 0.06 n 3
+br c 0.12 0.25 n 4 p 2
+w filt.sac
+interpolate delta 0.25
+w interp.sac
+cut off
+cut a -20 a 140
+cuterr fillz
+r filt.sac interp.sac
+color list red blue
+fileid name
+
+bg plt
+xlim 125 145
+p overlay on
+xlim 0 40
+p
+q
+EOF
+
+plotnps -BGFILL -F7 -W10 -EPS -K < P001.PLT > t.eps
+plotnps -BGFILL -F7 -W10 -EPS -K < P002.PLT > u.eps
+convert -trim t.eps RDMU_1.png
+convert -trim u.eps RDMU_2.png

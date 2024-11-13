@@ -1,0 +1,27 @@
+#!/bin/sh
+
+plotnps -BGFILL -F7 -W10 -EPS -K -S0.5 < DISP.PLT > disp.eps
+convert -trim disp.eps disp.png
+ 
+# love is N.cor.rev`
+sdpegn96 -X0  5.10 -Y0  1.50 -XLEN  4.00 -YLEN  4.00 -XMIN  0.250E-01 -XMAX   5.00     -YMIN  0.00 -YMAX  1.00 -PER  -L -U -NOBOX -XLOG -YLIN -K 1100 -W 0.01
+cat MFT96love.PLT SLEGNU.PLT | plotnps -F7 -W10 -EPS -K -BGFILL > loveu.eps
+convert -trim loveu.eps loveu.png
+ 
+sdpegn96 -X0  5.10 -Y0  1.50 -XLEN  4.00 -YLEN  4.00 -XMIN  0.250E-01 -XMAX   5.00     -YMIN  0.00 -YMAX  1.00 -PER  -L -C -NOBOX -XLOG -YLIN -K 1100 -W 0.01 
+cat PHV96love.PLT SLEGNC.PLT | plotnps -F7 -W10 -EPS -K -BGFILL > lovec.eps
+convert -trim lovec.eps lovec.png
+
+#---
+
+# rayl is Z.cor.rev`
+sdpegn96 -X0  5.10 -Y0  1.50 -XLEN  4.00 -YLEN  4.00 -XMIN  0.250E-01 -XMAX   5.00     -YMIN  0.00 -YMAX  1.00 -PER  -R -U -NOBOX -XLOG -YLIN -K 1100 -W 0.01
+cat MFT96rayl.PLT SREGNU.PLT | plotnps -F7 -W10 -EPS -K -BGFILL > raylu.eps
+convert -trim raylu.eps raylu.png
+ 
+sdpegn96 -X0  5.10 -Y0  1.50 -XLEN  4.00 -YLEN  4.00 -XMIN  0.250E-01 -XMAX   5.00     -YMIN  0.00 -YMAX  1.00 -PER  -R -C -NOBOX -XLOG -YLIN -K 1100 -W 0.01  
+cat PHV96rayl.PLT SREGNC.PLT | plotnps -F7 -W10 -EPS -K -BGFILL > raylc.eps
+convert -trim raylc.eps raylc.png
+
+#---
+

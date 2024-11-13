@@ -1,0 +1,33 @@
+#!/bin/sh
+
+
+#####
+#    annotate the Sac file with sP pP PP and PcP picks
+#####
+
+for i in *.[ZRT]??
+do
+
+GCARC=`saclhdr -GCARC $i`
+EVDP=`saclhdr -EVDP $i`
+
+taup_time -H ${EVDP} -deg ${GCARC} -ph "S,sS,SS,ScS" -mod ak135 > j 2>&1
+
+echo DOANNOTATE $GCARC $EVDP
+#####
+#    now get the phase times
+#####
+sS=`grep " sS " j | awk '{print $4}' | head -1 | tail -1 `
+SS=`grep " SS " j | awk '{print $4}' | head -1 | tail -1`
+ScS=`grep " ScS " j | awk '{print $4}' | head -1 | tail -1`
+gsac << EOF
+rh $i
+ch KT4 sS T4 ${sS}
+ch KT5 SS T5 ${SS}
+ch KT6 ScS T6 ${ScS}
+wh
+quit
+EOF
+done
+
+rm -f j

@@ -1,0 +1,150 @@
+#!/bin/sh
+
+#####
+#    make a plot of signal for angle 10 degrees for all source depths
+#####
+if [ ! -d FIGURES ]
+then
+	mkdir FIGURES
+fi
+cd FIGURES
+
+gsac << EOF
+cd ../Sac
+bg plt
+r 000340*.PEX
+TITLE ON L BOTTOM SIZE Medium Text "PEX"
+prs evdp   reverse vl -2 6
+r 000340*.PSS
+TITLE ON L BOTTOM SIZE Medium Text "PSS"
+prs evdp   reverse vl -2 6
+r 000340*.PDS
+TITLE ON L BOTTOM SIZE Medium Text "PDS"
+prs evdp   reverse vl -2 6
+r 000340*.PDD
+TITLE ON L BOTTOM SIZE Medium Text "PDD"
+prs evdp   reverse vl -2 6
+mv PRS00?.PLT ../FIGURES
+q
+EOF
+
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS001.PLT > PEX.eps 
+convert -trim PEX.eps PEX.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS002.PLT > PSS.eps 
+convert -trim PSS.eps PSS.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS003.PLT > PDS.eps 
+convert -trim PDS.eps PDS.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS004.PLT > PDD.eps 
+convert -trim PDD.eps PDD.png
+
+#####
+#   just make a plot showing amplitudes
+#####
+
+gsac << EOF
+r ../Sac/*00340*.PEX
+bg plt
+title on l top size medium text "PEX"
+p
+q
+EOF
+plotnps -BGFILL -F7 -W10 -EPS -K < P001.PLT > AbsPEX.eps
+convert -trim AbsPEX.eps AbsPEX.png
+
+#####
+#   look at all angles for sources at a depth of 1 km
+#   note that the order is important to get the captions, e.g,
+#   title at the end
+#####
+
+gsac << EOF
+cd ../Sac
+bg plt
+r *0010.PEX
+TITLE ON L TOP SIZE Medium Text "PEX"
+prs sa 0.0 user1 title 'Angle (deg)' 
+mv PRS001.PLT ../FIGURES
+r *0010.PSS
+TITLE ON L TOP SIZE Medium Text "PSS"
+prs sa 0.0 user1 title 'Angle (deg)'  
+mv PRS002.PLT ../FIGURES
+r *0010.PDS
+TITLE ON L TOP SIZE Medium Text "PDS"
+prs sa 0.0 user1 title 'Angle (deg)'  
+mv PRS003.PLT ../FIGURES
+r *0010.PDD
+TITLE ON L TOP SIZE Medium Text "PDD"
+prs sa 0.0 user1 title 'Angle (deg)'  
+mv PRS004.PLT ../FIGURES
+q
+EOF
+
+# A is for absolute amplitude
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS001.PLT > APEX.eps 
+convert -trim APEX.eps APEX.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS002.PLT > APSS.eps 
+convert -trim APSS.eps APSS.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS003.PLT > APDS.eps 
+convert -trim APDS.eps APDS.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS004.PLT > APDD.eps 
+convert -trim APDD.eps APDD.png
+
+
+
+gsac << EOF
+cd ../Sac
+bg plt
+r *0010.PEX
+TITLE ON L TOP SIZE Medium Text "PEX"
+prs user1 title 'Angle (deg)' 
+mv PRS001.PLT ../FIGURES
+r *0010.PSS
+TITLE ON L TOP SIZE Medium Text "PSS"
+prs user1 title 'Angle (deg)'  
+mv PRS002.PLT ../FIGURES
+r *0010.PDS
+TITLE ON L TOP SIZE Medium Text "PDS"
+prs user1 title 'Angle (deg)'  
+mv PRS003.PLT ../FIGURES
+r *0010.PDD
+TITLE ON L TOP SIZE Medium Text "PDD"
+prs user1 title 'Angle (deg)'  
+mv PRS004.PLT ../FIGURES
+q
+EOF
+
+# R is for relative amplitude
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS001.PLT > RPEX.eps 
+convert -trim RPEX.eps RPEX.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS001.PLT > RPSS.eps 
+convert -trim RPSS.eps RPSS.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS001.PLT > RPDS.eps 
+convert -trim RPDS.eps RPDS.png
+plotnps -BGFILL -F7 -W10 -K -EPS < PRS001.PLT > RPDD.eps 
+convert -trim RPDD.eps RPDD.png
+
+#####
+#    compare the pressure fields for a 1 km deep source 
+#    at angles of 10 and 40 degrees
+# 10) R=19.696155 ; HR=-3.472964 ;;
+# 40) R=15.320889 ; HR=-12.855753 ;;
+#####
+gsac << EOF
+cd ../Sac
+ylim all
+r 00196*010.P??
+fileid name
+TITLE ON LOC TOP SIZE MEDIUM TEXT "Comparison of absolute pressure"
+bg plt
+p
+r 00153*010.P??
+p
+mv P001.PLT P002.PLT ../FIGURES
+q
+EOF
+plotnps -BGFILL -F7 -W10 -K -EPS < P001.PLT > CMP10.eps 
+convert -trim CMP10.eps CMP10.png
+plotnps -BGFILL -F7 -W10 -K -EPS < P002.PLT > CMP40.eps 
+convert -trim CMP40.eps CMP40.png
+
+

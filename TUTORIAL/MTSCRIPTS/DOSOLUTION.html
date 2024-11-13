@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <style type="text/css">
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;text-align: left; }
+        </style>
+    <style>
+table, th, td,  tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+</style>
+    <title>Moment Tensor Inversion Scripts - DOSETUP</title>
+  </head>
+  <body link="#0000EE" vlink="#551A8B" text="#000000" bgcolor="#ffffff"
+    alink="#EE0000">
+    <h2>Introduction</h2>
+    <h2>Discussion of script</h2>
+<p>
+The script is given below. It is will commented. The only difference between this version and that for GMT Versions 5 and up is that DOSOLUTION is replaced by DOSOLUTION5.
+</p>
+<p>
+<pre>
+#!/bin/bash
+#####
+#	set up directory structure for an event that we get from the IRIS
+#####
+
+
+#####
+#	test usage
+#####
+
+if [ $# -ne 16 ]
+then
+echo DOSOLUTION YEAR MO DY HR MN SC MSC  LAT    LON    DEP  MAG REG NEIC FELTID STATE MYPWD
+echo DOSOLUTION 2006 02 05 08 17 04 000 66.25 -143.02 18.60 5.1 CUS iuae Xiuae_06 Alaska /backup/rbh/MOMENT_TENSOR/MECH.NA
+	echo $*
+	exit 0
+fi
+
+
+#####
+#	define internal variables: the quotes are required since some fields can have 
+#       blank spacing within"
+#####
+YEAR="${1}"
+MO="${2}"
+DY="${3}"
+HR="${4}"
+MN="${5}"
+SEC="${6}"
+MSEC="${7}"
+LAT="${8}"
+LON="${9}"
+DEP="${10}"
+MAG="${11}"
+REG="${12}"
+NEIC="${13}"
+FELTID="${14}"
+STATE="${15}"
+MYPWD="${16}"
+
+cd ${MYPWD}
+#####
+#       now define the directory name
+#####
+DIR=${YEAR}${MO}${DY}${HR}${MN}${SEC}
+
+
+#####
+#	Waveform inversion
+#####
+cd ${MYPWD}/${DIR}/GRD.REG
+DOGRD
+DODELAY
+DOPLTSAC
+DOCLEANUP
+
+#####
+#	in the future do the documentation here
+#####
+cd ${MYPWD}/${DIR}/HTML.REG
+DOHTML
+</pre>
+</p>
+    <p align="center">Last changed May 21, 2022<br>
+    </p>
+  </body>
+</html>

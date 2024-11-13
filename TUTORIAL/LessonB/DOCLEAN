@@ -1,0 +1,18 @@
+#!/bin/sh
+
+
+#####
+#	clean up
+#####
+rm -f *.sac
+rm -fr POM*
+rm -f SLEGN*
+rm -f SREGN*
+rm -f dfile
+rm -f disp.d
+rm -f simple.mod
+rm -f *egn
+rm -f sdisp96*
+rm -f *.dsp
+rm -f cmdfil 
+rm -f pom96*

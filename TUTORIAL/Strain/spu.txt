@@ -1,0 +1,101 @@
+ spulse96strain:Help
+USAGE: 
+spulse96strain -d Distance_File [ -t -o -p -i ] [-a alpha]
+    -l L [ -D|-V |A]  [-F rfile ] [ -m mult] [-STEP|-IMP]
+    [-STRESS  -STRAIN -ROTATE -GRN] [-FUND] [-HIGH] [-Z] 
+    [-LAT] [-2] [ -M mode ] [-LOCK] -FMT ifmt 
+    [-M0 moment ] [-MW mw] [-STK stk -DIP dip -RAKE rake]
+    [-FX fx -FY fy -FZ fz] 
+    [-XX Mxx ... -ZZ Mzz] [-?] [-h]
+ TIME FUNCTION SPECIFICATION
+  -t           Triangular pulse of base 2 L dt
+  -p           Parabolic Pulse of base  4 L dt
+                  -p -l 1 recommended
+  -l L         (default 1 )duration control parameter
+  -o           Ohnaka pulse with parameter alpha
+  -i           Dirac Delta function
+  -a alpha     Shape parameter for Ohnaka pulse
+  -F rfile     User supplied pulse
+  -m mult      Multiplier (default 1.0)
+  -STEP        (default)
+  -IMP         
+              By default the source time function is 
+              steplike. -IMP forces impulse like. -D -IMP is Green s function
+ OUTPUT FILE NAME
+  The format for the name of the binary output attempts to
+  give information on epicentral distance (km), 
+  source depth (km), and receiver depth(km). The options are
+  -FMT 1      DDDDDd_HHHh_ZZZz.cmp
+              e.g. 005001_1234_0045.Uz
+  -FMT 2      DDDDDddd_HHHhhh_ZZZzzz.cmp
+              e.g. 00500123_123456_004578.Erf
+  -FMT 3      DDDDDdHHHh.grn(default)
+              e.g. 0050010041.ZVF
+  -FMT 4      DDDDdHHHh.grn
+              e.g. 050010045.Srz
+  -FMT 5      DDDdddHhhh.grn
+              e.g. 5001234578.Err
+  where D is for epicentral distance, H source depth, and
+  Z receiver depth. The lower case indicates the digits 
+  to the right of the decimal place.  The examples above
+  are for an epicentral distance is 500.123 km, source
+  depth 123.456 km and receiver depth 4.578 km.
+ OUTPUT TIMESERIES FOR SOURCE as Ur, Ut, Uz components with strain, stress optional
+  -D           Output is ground displacement        (m)
+  -V           Output is ground velocity (default) (m/s)
+  -A           Output is ground acceleration       (m/s^2)
+  -STRESS (default .false. ) output stress for mechanism
+    units are Pa, with suffix Srr, Srf, Srz, Stt, Sfz, Szz
+  -STRAIN (default .false. ) output strain for mechanism
+       with suffix, Err, Erf, Erz, Eff, Efz, Ezz
+  -ROTATE (default .false. ) output rotation for mechanism
+       with suffix, Wfz, Wrz, Wrf
+  -GRN    (default false) Output Green;s functions
+    spulse96strain -STEP -V -p -l 1 -GRN -FMT 4  is same as
+     spulse96 -V -p -l 1 | f96tosac -G . For KM,KM/S,GM/CM^3
+     model, output will be CM/S for moment of 1.0e+20 dyne-cm
+     of force of 1.0e+15 dyne
+  -TEST1  (default .false.) output CPS Green functions ,e.g.,
+       ZDS RDS ... RHF THF for use with moment tensor codes
+       and gsac MT command. This is equivalent to 
+       spulse96 -V -p -l 1 | f96tosac -G if -FMT 4 is used 
+       with strainspulse96
+ COMPUTATIONS
+  -d Distance_File {required}    Distance control file 
+   This contains one of more lines with following entries
+   DIST(km) DT(sec) NPTS T0(sec) VRED(km/s) 
+            first time point is T0 + DIST/VRED
+            VRED=0 means do not use reduced travel time, e.g.
+            500.0 0.25 512 -23.33 6.0
+            500.0 0.25 512  60    0.0 
+            both have first sample at travel time of 60s
+  -LAT       (default false) Laterally varying eigenfunctions
+  -2         (default false) Use double length  internally
+  -M  nmode  (default all) mode to compute [0=fund,1=1st]
+  -Z         (default false) zero phase triangular/parabolic pulse
+  -FUND       (default all) fundamental modes only  
+  -HIGH       (default all) all higher modes only  
+  -LOCK       (default false) locked mode used  
+ SOURCE MECHANISM SPECIFICATION
+  -DIP dip               dip of fault plane
+  -STK Strike            strike of fault plane
+  -RAKE Rake              slip angle on fault plane
+  -M0 Moment (def=1.0) Seismic moment in units of dyne-cm
+  -MW mw            Moment Magnitude  
+            moment (dyne-cm) from log10 Mom = 16.10 + 1.5 Mw
+            For strike,dip,rake source mw or Moment must be specified
+  -EX                  Explosion
+  -AZ Az                Source to Station Azimuth
+  -BAZ Baz               Station to Source azimuth
+  -fx FX -fy Fy -fZ fz  Point force amplitudes  (N,E,down) in  dynes
+  -XX Mxx -YY Myy -ZZ Mzz  Moment tensor elements in units of
+  -XY Mxy -XZ Mxz -YZ Myz    dyne-cm
+ The moment tensor coordinates are typically X = north Y = east and Z = down
+ If by accident more than one source specification is used,
+ the hierarchy is Mij > Strike,dip,rake > Explosion > Force
+ --------------------------------------------------------------
+ NOTE: The output units are related tot he model specification.
+ To have the desired units the model must be in KM, KM/S  and GM/CM^3
+ --------------------------------------------------------------
+  -?           Write this help message
+  -h           Write this help message

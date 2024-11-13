@@ -1,0 +1,98 @@
+<HTML>
+<HEAD><Title>QA 0001 - Computer Programs in Seismology</TITLE></HEAD>
+<BODY>
+<PRE>
+Yesterday was a very busy day for me. So I will attempt to answer your questions.
+> Dear Dr. Herrmann
+>
+> I am a student from Institute of Geophysics, University of Tehran, Iran.
+> At present, I am working on instrument responses. I use yor approach to
+> remove the response using CPS (GSAC). I have encountered some problems and
+> I would be grateful if you could help me. Firstly, Having the seismogram
+> with its response the ordinate is in Counts (Suppose we use -u flag as
+> 'vel'). How can we measure the ground velocity ?. What should we do if we
+> suppose -u flag as 'disp' or 'acc' and how can we mesure displacement and
+> acceleration respectively. Secondly, when we remove the instrument
+> response using the series of commands in your tutorial ( evalresp and
+> eval) what is the ordinate of an instrument corrected seismogram? Do we
+> need to do other things to obtain the result in velocity, disp or acc. 
+
+Instrument response is very important, but can easily have mistakes.
+
+If you obtain the response in a SEED volume, someone has taken the time to carefully think about the response.
+However, this is not always true. For example about one year ago the response for the GE station EIL was in error by a factor of 31!
+
+Personally I prefer the SEED approach. The response is carefully derived from first principles, e.g., ground motion (meters) -> sensor -> Volts -> electronics -> volts -> Analog-to-digital converter -> counts -> digital filters -> counts.  This is all given in the SEED metadata (metadata gives station location and instrument characterisitics).
+
+When you use the program 'rdseed' to read the SEED volume, you have two choices for the output response - either a RESP file which contains the digital filter information or a SAC pole-zero file which does not.  For the SAC pole-zero file format, 'rdseed' ensures that the response is couts/meters, e.g., meters of ground motion input is seen as counts for output.  In the version of 'rdseed' that I have in my programs, I put comments into the pole-zero file so that use knows this:
+
+    * ****
+    * NETWORK (KNETWK): NM
+    * STATION (KSTNM ): FVM
+    * COMPONENT (KCMPNM): LHZ
+    * LOCATION (KHOLE ):
+    * START : 2003,260,00:00:00.0000
+    * END : 2007,194,17:00:00.0000
+    * INPUT UNIT : METER
+    * OUTPUT UNIT : COUNT
+    * LATITUDE (DEG) : 37.98120
+    * LONGITUDE (DEG) : -90.42730
+    * ELEVATION (M) : 137.00000
+    * DEPTH (M) : 0.00000
+    * DIP (DEG) : -90.00000
+    * AZIMUTH (DEG) : 0.00000
+    * INSTRUMENT COMMENT: (null)
+    * CHANNEL_FLAG : (null)
+    * ****
+    ZEROS 5
+    867.0800 904.7790
+    867.0800 -904.7790
+    POLES 4
+    -0.1480 0.1480
+    -0.1480 -0.1480
+    -314.1590 202.3190
+    -314.1590 -202.3190
+    CONSTANT 6.874310e+07
+
+The other option is to use 'evalresp' to read the RESP file and to provide tables of amplitude and phase as a function of frequency.  
+The manual states that the response is in  counts/m/sec if you use the -u vel command flag.  Personally I prefer the 'evalresp' response 
+since this includes thedigital filters and will provides better control near the Nyquist frequency.
+
+You may ask why I deconvolve to ground velocity.  Numerically the worst thing that one can do is to subtract numebrs of the same size and 
+divide by zero.  First, some comments: Seismic data has noise, both from the ground but also from the instrument.  Modern seismic broadband seismic sensors have a 
+flat response to ground velocity in the passband. Finally, integration is difficult because slight errors in DC offset lead to linear trends in the integrated time 
+series.  Since I am usually interested in regional earthquakes and wish to look at the signal in the 0.02 - 0.10 Hz band, where the instrument response is usually 
+flat to velocity, reducing the ground motion to ground velocity and modeling the ground velocity is reasonable.  In addition my synthetics are very good in 
+terms of ground velocity but will suffer from the same problems as with real data when integrated to displacement. I also wish to invert
+signal using a wide frequency range so that I can also judge the appropriateness of the velocity model used.
+
+As you can tell, I really worry about absolute instrument response
+
+> My
+> last question is about the identification of frequencies in 'freqlimits'
+> option. What is the criteria to do that ?
+In the scripts that I use for deconvolution, e.g., the script in the tutorials and not those in the PDF documentation, I base the
+'freqlimits' on the data stream as follows:
+
+First I get the sample rate from the SAC file
+
+    DELTA=`saclhdr -DELTA $i`
+
+then I compute the Nyquist frequency and 1/2 the Nyquist frequenty
+
+    FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+    FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+
+Then within 'gsac' I do the following:
+
+    transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE             FREQLIMITS 0.002 0.004 ${FHL} ${FHH}
+
+Here I am using the evalresp ouput.  The theoretical response at the Nyquist frequency should be zero or very small. The upper frequency limits ensures that we never divide by zero.  The two lower limits basically say that I want the ground velocity between 0.004 Hz and FHL. Normally I only use the 0.02 - 0.10 Hz band for regional source inversion, but by deconvolving in this way, I can use the same script to deconvolve the instrument response when I study large earthquakes and teleseisms.
+
+Note that GSAC is smart - it places 250 seconds and 1/FHL into the headers of the SAC file in positions USER2 and USER1. respectively,  so that other programs know the pass-band. When you use do_mft for group velocity analysis, these settings will not permit you to get dispersion at periods longer than USER2 or shorter than USER1 - this protects the user from making mistakes
+> Thanks in advance for your kind help and I am looking forward to hearing
+> from you.
+
+</PRE>
+</BODY>
+</HTML>

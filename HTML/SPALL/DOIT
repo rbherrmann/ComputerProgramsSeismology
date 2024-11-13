@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#####
+#    make regional synthetics at distances of 
+#    10 and 200 km
+####
+DOITREGIONAL*
+
+####
+# plot the synthetics at a distance of 10 km
+#####
+DOD2
+DOD2a
+
+####
+# plot the synthetics at a distance of 200 km
+#####
+DOD4
+
+for i in *.eps
+do
+EPSTOPNGWHITE  $i
+done
+
+rm hspec96* *.PLT

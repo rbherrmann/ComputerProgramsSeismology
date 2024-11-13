@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=utf-8">
+  <title>Computer Programs in Seismology - Phase velocity using
+regional network and telseismic signals</title>
+  <meta name="GENERATOR" content="OpenOffice.org 3.0  (Linux)">
+  <meta name="CREATED" content="0;0">
+  <meta name="CHANGEDBY" content="Robert Herrmann">
+  <meta name="CHANGED" content="20081120;8533700">
+</head>
+<body dir="ltr" bgcolor="#ffffff" lang="en-US">
+<h2>Introduction</h2>
+<p>This exercise shows how to estimate phase velocities beneath a
+network from a teleseismic surface wave signal observed by all
+stations.&nbsp; The concept is to assume that the Earth structure
+beneath the seismic network is uniform and that the incident
+wavefront from the distance source follows a great circle path so
+that the signal arrivals at two stations at the same distance at the
+same time. The analysis essentially projects the observed waveforms
+onto a linear array in the center of the network and the p-omega
+stacking is then performed.<br>
+<br>
+In order to do this, data
+processing must account for the requirements of the stacking program
+<b>sacpom96 </b>(which is called by the GUI <b>do_pom</b>). First the
+traces must be of the same length, second, the traces must be
+resampled to a lower sample rate for efficiency in the stacking (to
+make the fast Fourier transforms faster because the number of points
+is smaller), the fundamental mode surface wave must be isolated for a
+good stack (using the GUI <b>do_mft </b>which calls <b>sacmft96</b>
+to determine the group velocity dispersion and then <b>sacmat96</b>&nbsp;
+to isolate the fundamental mode. Finally <b>do_pom </b>cat be run.</p>
+<h2>Data Set</h2>
+<p>The data set used for this tutorial is <a href="Sac.tgz">Sac.tgz</a>
+<br>
+Download this file and unpack is using the command</p>
+<pre style="margin-bottom: 0.2in;"> gunzip -c Sac.tgz | tar xvf - </pre>
+<p>This will create a subdirectory Sac and place the waveform forms in
+that directory.<br>
+<br>
+Since these SAC files are coming from an Intel
+machine, you must make sure that the files are in the correct byte
+order by performing the commands</p>
+<pre style="margin-left: 0.42in;">cd Sac<br>for i in *Sac<br>do<br>        saccvt -I &lt; $i &gt; tmp<br>        mv tmp $i<br>done</pre>
+<p style="margin-left: 0.42in;">Now you can work with the data</p>
+<h2>Data Preparation</h2>
+<p>You must put the event information into the trace headers. you can
+do this using <b>gsac</b> as follows (I assume that you are in the
+Sac directory)</p>
+<pre style="margin-left: 0.42in;">gsac<br>GSAC - Computer Programs in Seismology [V1.1.21 13 SEP 2007]<br>       Copyright 2004, 2005, 2006, 2007 R. B. Herrmann<br>GSAC&gt; <font
+ color="#ff0000"><b>r *Z.Sac</b></font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; <font
+ color="#ff0000"><b>ch evla 6.898 evlo 126.579 evdp 33</b></font>
+GSAC&gt; <font
+ color="#ff0000"><b>ch ocal 2001 01 01 06 57 01 172</b></font>
+GSAC&gt; <font
+ color="#ff0000">wh</font>
+GSAC&gt;<font color="#ff0000"> quit   </font>       </pre>
+<p style="margin-left: 0.42in;">Since I assume that the trace headers
+already had the station
+latitude and longitude fields set (STLA and STLO), the trace headers
+will now have the DIST, GCARC, AZ and BAZ fields set.<br>
+<br>
+If I
+have GMT installed, I can do the following from within gsac</p>
+<pre style="margin-left: 0.42in;">GSAC&gt; <font color="#ff0000">r *Z.Sac</font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; <font
+ color="#ff0000">map r on</font>
+r on
+Execute using the command: sh map.sh
+GSAC&gt; <font
+ color="#ff0000">sh map.sh</font>
+sh map.sh
+pscoast: Working on block #   301
+pscoast: Adding Borders...
+GSAC&gt;   </pre>
+<p>The file <i><b>map.eps </b></i>is created and you can view it
+using
+<i>gs, display </i>or other PostScript viewers. You will see the
+following: <a href="map.html%22">map.png </a>
+</p>
+<p>The next step is to view the traces and to examining the header
+for the sample interval since the analysis requires that all traces
+have the same sample interval, DELTA, and the same number of points.
+<i>Note that these traces are the original digital data. The
+instrument response has not been removed. Normally deconvolution is
+necessary, but if the instruments have identical response, then
+deconvolution is not necessary. Such is the case for these data.</i></p>
+<pre style="margin-left: 0.42in;"><i>G</i>SAC&gt; <font color="#ff0000">r *Z.Sac</font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; <font
+ color="#ff0000">sort up dist</font>
+Sorting on DIST in ascending order
+GSAC&gt; <font
+ color="#ff0000">lh delta npts</font>
+SOGBHZ.Sac (6):
+         NPTS                 6601        DELTA                  0.2
+KWJBHZ.Sac (3):
+         NPTS                 6601        DELTA                  0.2
+PUSBHZ.Sac (4):
+         NPTS                 6601        DELTA                  0.2
+HDBBHZ.Sac (1):
+         NPTS                80001        DELTA                 0.05
+TAGBHZ.Sac (7):
+         NPTS                 6601        DELTA                  0.2
+TEJBHZ.Sac (8):
+         NPTS                 6601        DELTA                  0.2
+TJNBHZ.Sac (9):
+         NPTS                80001        DELTA                 0.05
+SEOBHZ.Sac (5):
+         NPTS                 6601        DELTA                  0.2
+ULLBHZ.Sac (10):
+         NPTS                 6601        DELTA                  0.2
+KANBHZ.Sac (2):
+         NPTS                 6601        DELTA                  0.2
+CHUBHZ.Sac (0):
+         NPTS                 6601        DELTA                  0.2
+<i>GSAC&gt; p</i></pre>
+<p>You will not the different sampling intervals and the different
+number of points, The command "<i>p</i>" plots the
+traces:<br>
+<br>
+<img src="P001.png" name="graphics1" alt="P001.png" align="bottom"
+ border="0" height="474" width="648"></p>
+<p>We use this figure to design the cut to isolate the signal and
+then we resample to a DELTA=0.5 sec with the following commands</p>
+<pre style="margin-left: 0.42in;">GSAC&gt; <font color="#ff0000">r *Z.Sac</font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; <font
+ color="#ff0000">rtr</font>
+GSAC&gt; <font color="#ff0000">w</font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; <font
+ color="#ff0000">synchronize o</font>
+GSAC&gt; <font color="#ff0000">wh</font>
+GSAC&gt; <font
+ color="#ff0000">cuterr fillz</font>
+GSAC&gt; <font color="#ff0000">cut o 300 o 1800</font>
+cut o 300 o 1800
+O 300.000000 O 1800.000000
+GSAC&gt; <font
+ color="#ff0000">r *Z.Sac</font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; <font
+ color="#ff0000">lp c 1 n 2 p 2</font>
+LP: corner fc 1.000000  npoles 2 pass 2 Butterworth
+GSAC&gt; <font
+ color="#ff0000">interpolate delta 0.5</font>
+delta 0.5
+GSAC&gt; <font
+ color="#ff0000">cd ..</font>
+Current directory is /home/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/TUTORIAL/POMEGA
+GSAC&gt; <font
+ color="#ff0000">mkdir GOOD</font>
+mkdir GOOD
+GSAC&gt; <font
+ color="#ff0000">cd GOOD</font>
+Current directory is /home/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/TUTORIAL/POMEGA/GOOD
+GSAC&gt; <font
+ color="#ff0000">w</font>
+CHUBHZ.Sac HDBBHZ.Sac KANBHZ.Sac KWJBHZ.Sac PUSBHZ.Sac SEOBHZ.Sac SOGBHZ.Sac TAGBHZ.Sac TEJBHZ.Sac TJNBHZ.Sac ULLBHZ.Sac
+GSAC&gt; pwd
+pwd
+/home/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/TUTORIAL/POMEGA/GOOD
+GSAC&gt;                                                                                </pre>
+<p>This is what was done.&nbsp; Read the traces and remove and linear
+trend, and then write the traces out. Reset the time reference as the
+origin time using <i>synchronize. </i>Then plot the trace and see
+that the surface wave is in the window 300 to 1800 seconds after the
+origin time. Reread and add zeros to the beginning and end of traces
+if necessary. The low pass filter with a zero phase filter at 1.0 Hz,
+and finally interpolate to a sample of 0.5 seconds.&nbsp; <br>
+<br>
+Since
+I do not want to destroy the original data, I create a new directory
+parallel to the Sac directory with the SHELL command <i>cd ..&nbsp;
+</i>followed by <i>mkdir GOOD.</i> We then move from the current
+directory to that new directory and write the traces there.&nbsp; If
+I read these new traces in I see the following with a <i>lh npts
+delta</i> </p>
+<pre>GSAC&gt; lh npts delta<br>SOGBHZ.Sac (6):<br>         NPTS                 3001        DELTA                  0.5<br>KWJBHZ.Sac (3):<br>         NPTS                 3001        DELTA                  0.5<br>PUSBHZ.Sac (4):<br>         NPTS                 3001        DELTA                  0.5<br>HDBBHZ.Sac (1):<br>         NPTS                 3001        DELTA                  0.5</pre>
+<p>and the plot<br>
+<img src="P002.png" name="graphics2" alt="p002.png" align="bottom"
+ border="0" height="474" width="648"></p>
+<h2>Isolation of Fundamental Mode</h2>
+<p><font face="monospace">In the GOOD directory, issue the command</font></p>
+<pre style="margin-left: 0.42in; margin-bottom: 0.2in;">do_mft *Z.Sac</pre>
+<p>Then select one trace, TAG, for example, and run do_mft and select
+the dispersion curve. Since this is a large earthquake, I instruct
+<b>do_mft</b> to look at periods between 4 and 300 seconds. I select
+dispersion between 20 and 200 seconds:<br>
+<img src="mft1.png" name="graphics3" alt="mft1.png" align="bottom"
+ border="0" height="636" width="796"></p>
+<p><font face="Times New Roman, Times, serif">Now hit the <i><b><big>Match</big>
+</b></i>button. on the next page, select <big><i><b>Match </b></i></big>and
+then<span style="font-weight: bold;">
+</span><i style="font-weight: bold;">Fund </i>for the fundamental
+mode. Then select <i><b>No </b></i>and
+then <i><b>Quit</b></i></font></p>
+<p><font face="Times New Roman, Times, serif">If you look at the
+console, you will see the following command when <b>do_mft </b>started
+the phase match filter program <b>sacmat96</b><br>
+</font><br>
+<br>
+</p>
+<pre style="margin-left: 0.42in; margin-bottom: 0.2in;">/home/rbh/PROGRAMS.310t/PROGRAMS.330/bin/sacmat96 -F TAGBHZ.Sac -D disp.d -AUTO</pre>
+<p>We will use this as a prototype to phase match all traces through a
+SHELL script. The reason for doing it this way is that there is no
+certainty that all traces will have the<br>
+same range of dispersion
+periods for and individual phase match filter.&nbsp; So create the
+script DOIT. make it executable and run in the GOOD&nbsp; directory
+which also has the <i><b>disp.d</b></i> dispersion file. Here is DOIT</p>
+<pre style="margin-left: 0.42in;">#!/bin/sh<br>for i in *Z.Sac<br>do<br>sacmat96 -F $i -D disp.d -AUTO<br>done</pre>
+<p>No after you execute it you see the following files in the GOOD
+directory</p>
+<pre style="margin-left: 0.42in;">CHUBHZ.Sac   disp.out     KANBHZ.Sacr  mft96.ctl   PUSBHZ.Sac   SOGBHZ.Sac   TEJBHZ.Sac   ULLBHZ.Sac<br>CHUBHZ.Sacr  DOIT*        KANBHZ.Sacs  mft96.disp  PUSBHZ.Sacr  SOGBHZ.Sacr  TEJBHZ.Sacr  ULLBHZ.Sacr<br>CHUBHZ.Sacs  HDBBHZ.Sac   KWJBHZ.Sac   mft96.ods   PUSBHZ.Sacs  SOGBHZ.Sacs  TEJBHZ.Sacs  ULLBHZ.Sacs<br>disp.d       HDBBHZ.Sacr  KWJBHZ.Sacr  MFT96.PLT   SEOBHZ.Sac   TAGBHZ.Sac   TJNBHZ.Sac<br>disp.dp      HDBBHZ.Sacs  KWJBHZ.Sacs  P001.PLT    SEOBHZ.Sacr  TAGBHZ.Sacr  TJNBHZ.Sacr<br>disp.dv      KANBHZ.Sac   MFT96CMP     P002.eps    SEOBHZ.Sacs  TAGBHZ.Sacs  TJNBHZ.Sacs</pre>
+<p>The files ending in <i><b>.Sacs</b></i> are the isolated
+fundamental
+mode. The sum of the traces <i><b>.Sacs </b></i>and <i><b>.Sacr</b></i>
+gives the original trace.&nbsp; If you read the *Z.Sacs and plot
+under <b>gsac</b> you will see<br>
+<img src="P003.png" name="graphics4" alt="P003.png" align="bottom"
+ border="0" height="474" width="648"><br>
+Notice
+how the body waves and scatter surface waves have been removed.</p>
+<h2>Phase velocity analysis </h2>
+<p>In the directory GOOD run the command</p>
+<pre style="margin-left: 0.42in; margin-bottom: 0.2in;">do_pom  *Z.Sacs</pre>
+<p>Hit the commands <b>SelectAll</b>, <b>Do Pom</b>&nbsp; on page 1,
+then select <b>4 </b>and <b>200 </b>for the period limits, <b>Shade
+on</b>, <b>Type Rayleigh</b>, <b>Nray 250</b>,&nbsp; and <b>Length 4</b>
+followed by <b>Do Pom</b> on page 2, and wait.&nbsp; You will then be
+presented with a editing screen to select the phase velocities. Then
+save the dispersion by clicking on <b>Exit </b>and then <b>Yes</b>.
+The output dispersion is in the file disp.d which is in a surf96
+dispersion format.&nbsp; The dispersion plot with selected dispersion
+is<br>
+<br>
+<img src="pom.png" name="graphics5" alt="pom.png" align="bottom"
+ border="0" height="636" width="796"><br>
+<br>
+<br>
+<br>
+<br>
+&nbsp;Here
+are some of the dispersion points</p>
+<pre style="margin-left: 0.42in;">SURF96 R C X  0       86.23     4.21690     0.24200    10.7102<br>SURF96 R C X  0       80.31     4.22890     0.19760    10.7777<br>SURF96 R C X  0       84.45     4.22890     0.22800    10.7340<br>SURF96 R C X  0       81.92     4.24100     0.20980    10.7623<br>SURF96 R C X  0         128     4.28920     0.49920    10.4922<br>SURF96 R C X  0         130     4.33730     0.52780    10.4752<br>SURF96 R C X  0       132.1     4.38550     0.55780    10.4582<br>SURF96 R C X  0       134.3     4.42170     0.58610    10.4410<br>SURF96 R C X  0       136.5     4.46990     0.61910    10.4236<br>SURF96 R C X  0       138.9     4.51810     0.65350    10.4064<br>SURF96 R C X  0       141.2     4.55420     0.68550    10.3900</pre>
+<p>You will notice that the dispersion is not perfectly uniform. This
+may be due to the fact that the path from the earthquake to each
+station may have slightly different propagation which violated our
+assumption of circular wavefronts.&nbsp; <br>
+<br>
+Perform this
+operation for a numebr of earthquakes, from different regions, so
+that you get a good sampling of the dispersion.<br>
+<br>
+<br>
+<br>
+</p>
+<hr>
+<p style="margin-bottom: 0in;" align="center">Last changed March 11,
+2009<br>
+</p>
+<p style="margin-bottom: 0in;"><br>
+</p>
+</body>
+</html>

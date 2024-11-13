@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Computer Programs in Seismology Tutorials - Workign with Seed</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8470300">
+	<STYLE TYPE="text/css">
+	<!--
+		P { color: #000000 }
+		H2 { color: #000000 }
+		PRE { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" TEXT="#000000" BGCOLOR="#ffffff" DIR="LTR">
+<H2>Introduction</H2>
+<P>The purpose of this tutorial is work with a SEED data volume,
+which is usually obtained from the IRIS DMC or the Orfeus Data
+Center. 
+</P>
+<P>For this tutorial, you will unpack a SEED volume into SAC files,
+enter the earthquake source parameters into the SAC headers, remove
+the instrument response to yield ground velocity in units of <I>m/s</I>,
+and finally rotate the traces to vertical, radial and transverse
+components of ground motion. 
+</P>
+<P>These shell scripts required are <A HREF="IDOEVT">IDOEVT</A>,&nbsp;
+<A HREF="IDOROT">IDOROT</A> and <A HREF="IDODEC">IDODEC</A> 
+</P>
+<P>You will work with the SEED volume <A HREF="20020618.5710">20020618.5710</A>
+</P>
+<H2>Running the scripts</H2>
+<P>Read the scripts carefully to see what they do. Similar scripts
+are used in the Receiver function tutorial. 
+</P>
+<PRE>mkdir Sac
+cd Sac
+rdseed -f ../20020618.5710 -R -d -o 1
+../IDOEVT
+cd ../GOOD
+../IDOROT
+cd ../FINAL.DEC
+cd ..
+mkdir MFT
+cd MFT
+do_mft ../FINAL/*</PRE><P>
+We first create a location for unpacking the SEED volume. The program
+<I>rdseed</I> is used for the unpacking. The result are the response
+files in <I>evalresp</I> format as well as the sac files. The script
+puts the event information into the headers of the sac files, removes
+the instrument response, and places these files into the parallel
+directory <I>GOOD</I>. This is where the traces are review to see if
+they are OK. The script <I>IDOROT</I> performs the rotation and
+places the rotated traces into the parallel directory <I>FINAL</I>.
+The script <I>IDODEC</I> resamples the trace to 0.25 seconds for use
+with he multiple filter analysis program (long period surface-wave
+analysis does not require 20 or 40 Hz sampling rates. The decimated
+versions are placed into the parallel directory FINAL.DEC. Finally a
+multiple filter analysis directory is created and group velocity
+analysis is started. 
+</P>
+</BODY>
+</HTML>

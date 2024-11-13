@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo cleaning up
+
+rm -fr [0123456]?00
+rm -f hspec96.grn
+rm -f file96
+rm -f hudsonsrc.mod hudsonrec.mod
+rm -f *.PLT

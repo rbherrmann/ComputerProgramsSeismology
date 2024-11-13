@@ -1,0 +1,1080 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Unix)">
+	<META NAME="AUTHOR" CONTENT="Robert Herrmann">
+	<META NAME="CREATED" CONTENT="20111204;12505500">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20111204;18085500">
+	<STYLE TYPE="text/css">
+	<!--
+		P { margin-bottom: 0.08in }
+		H1 { margin-bottom: 0.08in }
+		TD P { margin-bottom: 0in }
+		PRE.cjk { font-family: "DejaVu Sans", monospace }
+		H2 { margin-bottom: 0.08in }
+		H2.western { font-family: "Arial", sans-serif; font-size: 14pt; font-style: italic }
+		H2.cjk { font-size: 14pt; font-style: italic }
+		H2.ctl { font-size: 14pt; font-style: italic }
+		A:link { so-language: zxx }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1 ALIGN=CENTER>Receiver Function Processing</H1>
+<P ALIGN=CENTER>R. B. Herrmann, December 4, 2011</P>
+<P ALIGN=CENTER>Saint Louis University Earthquake Center</P>
+<P ALIGN=CENTER><A HREF="http://www.eas.slu.edu/eqc/">http://www.eas.slu.edu/eqc/</A></P>
+<P ALIGN=CENTER><BR><BR>
+</P>
+<H1>1. Introduction</H1>
+<P>This is a detailed tutorial on how to determine teleseismic P-wave
+receiver functions. All steps are described in detail, and sample
+data sets are provided in Section 3. 
+</P>
+<P>You can go directly to Section 3 to perform the processing if you
+already know how to get SEED volumes for your data set.</P>
+<P>A PDF version of this page can be obtained by download the link
+<A HREF="rftntut.pdf" NAME="rftntut.pdf">rftntut.pdf</A></P>
+<P>Note that the inversion of receiver functions is described in
+another tutorial.</P>
+<H1>2. Getting seismograms from IRIS</H1>
+<P>This example will use the Wilber II web page 
+<A HREF="http://www.iris.edu/dms/wilber.htm">http://www.iris.edu/dms/wilber.htm</A>
+ to select the earthquake and seismograms.</P>
+<P>We will look for larger earthquakes that have a very sharp P-wave
+arrival in the 30<FONT FACE="Times New Roman, serif">° to 90°
+hypocentral distance range.  The reason for this requirement  is that
+at shorter distances the upper mantle triplication causes arrivals
+from rays with different ray parameters in the normal P-wave arrival
+interval.  At larger distances we worry about interference with the
+PcP arrival.</FONT></P>
+<P><FONT FACE="Times New Roman, serif">The initial web page look like
+that in Figure 2.1:</FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_16f1e333.png" NAME="graphics2" ALIGN=LEFT WIDTH=703 HEIGHT=528 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.1. Initial Wilber II page</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">After selecting the time
+window and search radius, click on the earthquake(s) of interest.
+Here we are interested on an earthquake near Nicaragua. After
+clicking, we get Figure 2.2. We will select the earthquake on
+2011/11/07.</FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_3cbba577.png" NAME="graphics1" ALIGN=LEFT WIDTH=699 HEIGHT=525 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.2. Earthquake selection page.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">The next page gives a list of
+recording networks (Figure 2.3).  We will select the NM (New Madrid)
+and TA (Transportable Array) networks by clicking in the appropriate
+box. After selecting the networks, scroll to the bottom of the page
+and click on the box marked “Proceed” to take us to Figure 2.4.</FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_m55698380.png" NAME="graphics3" ALIGN=LEFT WIDTH=695 HEIGHT=522 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.3. Selection of networks providing waveforms.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_2423ddfe.png" NAME="graphics4" ALIGN=LEFT WIDTH=703 HEIGHT=528 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.4. Selection of stations.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">At this stage the stations of
+the selected networks are organized by default in  order of
+increasing distance. To further refine the selection, I  will select
+the Channel “B??”, the Distance from 30 to 35 deg and then “Apply
+Filter”.  You will note that many boxes no longer have the
+selection mark “</FONT><FONT FACE="Times New Roman, serif"><B>√</B></FONT><FONT FACE="Times New Roman, serif">”
+ There will now be just 123 stations selected. (note for the data set
+included with this tutorial, only 10 stations will be selected so
+that the SEED volume is small in size). After selection scroll to the
+bottom  to set the time window, data format and request name (Figure
+2.5). You will see that we only select the time window that would
+have the P wave, and that we wish to receive a full SEED volume.</FONT></P>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_595a3806.png" NAME="graphics5" ALIGN=LEFT WIDTH=703 HEIGHT=528 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.5.  Selection of time window and unique identification
+			for the requested SEED volume.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">Be careful that proper
+channels are selected.</FONT></P>
+<P><FONT FACE="Times New Roman, serif">After clicking on the “Process
+Request” button, the request will be processed by the IRIS DMC.  If
+the amount of data requested is small, the response will be rapid. 
+The initial display screen indicates the request submitted (Figure
+2.6).</FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_m58bc9688.png" NAME="graphics6" ALIGN=LEFT WIDTH=703 HEIGHT=528 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.6. Request submitted to the IRIS DMC.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">When the request is completed,
+the following screen will be seen (Figure 2.7):</FONT></P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_21ecaba3.png" NAME="graphics7" ALIGN=LEFT WIDTH=703 HEIGHT=528 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.7. Completion of request.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">Now click on the link, which
+will take one to the FTP directory for download.  We see the
+following (Figure 2.8):</FONT></P>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=2 CELLSPACING=0 RULES=NONE STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_m5d79afd7.png" NAME="graphics8" ALIGN=LEFT WIDTH=703 HEIGHT=528 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 2.8. FTP download page:</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Times New Roman, serif">Recall that our request was
+names “20111107” and the the User ID was RBHerrmann.  We see that
+the SEED volume is named “20111107.seed”.  From the browser
+“right click” to “Save link as” to download the file to the
+local machine.</FONT></P>
+<H1><FONT FACE="Times New Roman, serif">3. Receiver function setup</FONT></H1>
+<P><FONT FACE="Times New Roman, serif">For this tutorial “right
+click” and then “Save link as” the following two files:</FONT>
+<A HREF="20111107.seed" NAME="20111107.seed">20111107.seed</A>
+and <A HREF="rftn.tgz" NAME="rftn.tgz">rftn.tgz</A></P>
+<P>Unpack the “rftn.tgz” file using the command:</P>
+<P>	gunzip -c rftn.tgz | tar xvf -</P>
+<P>The result of unpacking will create a new directory with name
+“RFTN” and contents similar to the following:</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>RFTN</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2>0XXXRFTN</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>DORFTN1</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+└── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>DORFTN2</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2>DOIRISRFTN</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2>DOISETUPRFTN</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>DOMAP</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2>DOSETUPRFTN</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>PROTO.I</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDODEC</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDODIST</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOEVTNONE</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOEVTPZ</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOEVTRESP</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOGCARC</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOMERGE</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOQC</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOQCTEL</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDORAWQC</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOROTNONE</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOROTPZ</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+└── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>IDOROTRESP</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">└── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2>rftn.sh</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in"><BR><BR>
+</P>
+<P>Before we start processing, we must locate shell interpreter
+“bash”</P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-left: 0.49in"> rbh&gt; which bash</P>
+<P STYLE="margin-left: 0.49in">/bin/bash</P>
+<P STYLE="margin-left: 0.49in"><BR><BR>
+</P>
+<P>Now examine the first line of the file “rftn.sh” using the
+command 
+</P>
+<P STYLE="margin-left: 0.49in">rbh&gt; head -5 rftn.sh</P>
+<P STYLE="margin-left: 0.49in">#!/bin/bash</P>
+<P STYLE="margin-left: 0.49in"></P>
+<P STYLE="margin-left: 0.49in">#####</P>
+<P STYLE="margin-left: 0.49in">#	this program interactively asks for
+the input to run</P>
+<P STYLE="margin-left: 0.49in">#	DOCWBREG or IDOREG</P>
+<P><BR><BR>
+</P>
+<P><I><B>If the location of “bash” shown the first line of
+“rftn.sh” does not agree with the result of the “which”
+command, then edit the “rftn.sh” to make them the same.</B></I></P>
+<H1>4. Event processing</H1>
+<P>We are now ready to determine the receiver function using the SEED
+volume that we downloaded above. 
+</P>
+<P>Before processing we require the hypocentral parameters of the
+earthquake. For the example used here we have the following
+information:</P>
+<P><BR><BR>
+</P>
+<PRE CLASS="western" STYLE="margin-left: 0.49in"><U><B>DATE       TIME        SOURCE MAG    LAT     LON  DEPTH DESCRIPTION                    </B></U>
+<FONT COLOR="#000000"><A HREF="http://www.iris.edu/cgi-bin/wilberII/wilberII_page3.pl?evname=20111107_223527.2.spyder&amp;qtrxyrad=current/154/194/15" ONCLICK="javascript:showEvent('showevent','20111107_223527.2.spyder','current/154/194/15')">2011/11/07 22:35:27.2</A> SPYDER® 5.9  11.63  -85.80 183.40 NICARAGUA</FONT></PRE><H2 CLASS="western" STYLE="font-style: normal">
+<FONT FACE="Thorndale, serif">4.1 Creating the DO file</FONT></H2>
+<P>The processing will be initiated by a script “DO”  /until you
+can edit and existing “DO” script, you will use the menu program
+“rftn.sh” to correctly enter the information to make the DO
+script, so at the prompt, enter the command</P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>rbh&gt;
+rftn.sh</FONT></FONT></P>
+<P>where the “rbh&gt;” is the shell prompt.</P>
+<P>The program <B>rftn.sh</B> is a shell based menu system built upon
+the <B>dialog</B> program, which is installed as part of Computer
+Programs in Seismology.  By using keys, one can select an entry. Then
+use  the ENTER key to enter a sub-menu, where you can enter the
+parameter (note that you cannot cut-and-paste to make entries.</P>
+<P>The initial menu is show in Figure 4.1. Figure 4.2 shows the
+sub-menu for entering the year. Figure 4.3 shows detail on the entry
+for the deconvolution type (DECON_TYPE), and Figure 4.4 shows the
+fully completed menu. When the cursor in on the “Q”  or “OK”
+and you hit the ENTER, the file “DO” will be created.</P>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_10eb50c0.png" NAME="graphics9" ALIGN=LEFT WIDTH=497 HEIGHT=401 BORDER=0><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.1. Initial menu.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P>Figure 4.2 shows the sub-menu for entering the year.</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_30f7e0da.png" NAME="graphics10" ALIGN=LEFT WIDTH=497 HEIGHT=401 BORDER=0><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.2 Sub-menu for entering the year. After the proper
+			number is entered, finish using the ENTER key.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_20d4ae85.png" NAME="graphics11" ALIGN=LEFT WIDTH=497 HEIGHT=401 BORDER=0><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.3. Sub-menu for DECON_TYPE</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_m37443820.png" NAME="graphics12" ALIGN=LEFT WIDTH=497 HEIGHT=401 BORDER=0><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+			<P><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.4. Completed menu</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P>The selection of the deconvolution method provided three choice:
+the use of the pole-zero response file obtained using the command
+(DECONPZ)</P>
+<P STYLE="margin-left: 0.49in">rdseed -f 20111107.seed -p  -d -o 1</P>
+<P>or the RESP file (DECONRESP) 
+</P>
+<P>	rdseed -f 20111107.seed -R -d -o 1</P>
+<P>and no deconvolution (DECONNONE).</P>
+<P>When performing a moment tensor inversion or when determining an
+inter-station Greens function, the instrument response must be
+removed. However if the instrument response is the same for all three
+components, which is true for modern instruments, and if we wish to
+obtain a receiver function, no deconvolution is required and the
+DECONNONE is a adequate option.  Use this if you are note certain
+about the correctness of the instrument response files.</P>
+<P>The resultant “DO” file created is the following:</P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#!/bin/sh
+</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#####</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#
+valid regions</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#
+REG    Region             FELTID  VELOCITY_MODEL</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#
+PK     Pakistan            ous       WUS  (to 69 km deep)</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#####</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#
+Command syntax:</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#DOCWBREG
+YEAR MO DY HR MN SC MSC  LAT     LON    DEP  MAG REG  NEIC FELTID
+STATE/COUNTRY DECON_TYPE</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>#####</B></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 6pt"><B>DOIRISRFTN
+&quot;2011&quot; &quot;11&quot; &quot;07&quot; &quot;22&quot; &quot;35&quot;
+&quot;27&quot; &quot;200&quot; &quot; 11.6300&quot; &quot; -85.8000&quot;
+&quot;183.4&quot; &quot; 5.90&quot; &quot;RFTN&quot; &quot;NONE&quot;
+&quot;NONE&quot; &quot;Nicaragua&quot; &quot;DECONNONE&quot;</B></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P>When comfortable with the format of the DO file, this can be
+edited using any editor.</P>
+<H2 CLASS="western"><FONT FACE="Thorndale, serif"><SPAN STYLE="font-style: normal">4.2
+Creating the processing structure</SPAN></FONT></H2>
+<P><FONT FACE="Thorndale, serif"><SPAN STYLE="font-style: normal">Now
+execute the command “DO”</SPAN></FONT></P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="Thorndale, serif"><SPAN STYLE="font-style: normal">rbh&gt;
+DO</SPAN></FONT></P>
+<P><FONT FACE="Thorndale, serif"><SPAN STYLE="font-style: normal">This
+command creates subdirectories and copies all processing files to the
+proper location. Fro this example an event directory with name
+20111107223727 is created and the following contents:</SPAN></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">20111107223527/</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">20111107223527</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">DORFTN1</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">DORFTN2</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">evt.proto</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDODEC</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDODIST</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOEVT</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOEVTNONE</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOEVTPZ</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOEVTRESP</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOGCARC</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOMERGE</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOQC</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOQCTEL</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDORAWQC</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOROT</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOROTNONE</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOROTPZ</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">IDOROTRESP</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">MERGE</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">MFT</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">Orig</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+├── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">Sac</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">│&nbsp;&nbsp;
+└── <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">toadd</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">├──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">html.tmp</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">└──
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal">VMODEL.used</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><BR>
+</P>
+<P><SPAN STYLE="font-style: normal">The screen output of the “DO”
+command is the following:</SPAN></P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">-----------------------------------------------------------------------</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">To
+complete the processing perform the following steps:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">01:
+Place the full SEED volume in the directory
+/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/RFTN/20111107223527/20111107223527</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">    <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">cp
+SEED_VOLUME
+/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/RFTN/20111107223527/20111107223527</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">02.
+UNPACK the SEEDFILE  as follows</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">    <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">cd
+
+/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/RFTN/20111107223527/20111107223527/Orig</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">    <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">rdseed
+-f ../SEED_FILE -p -R -d -o 1 </SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">       <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">You
+may have to enclose the name in quotes for this to work in the shell</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">03.
+Return to the top level directory where you started:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">    <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">cd
+/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/RFTN</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">04.
+enter the command:</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">    <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">DOFINISHRFTN</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">05.
+Review the results are in the directory</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">   
+<FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">/backup/rbh/PROGRAMS.310t/PROGRAMS.330.fixups/RFTN/20111107223527/20111107223528/RFTN</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in">    <FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">you
+can use gsac to view these files</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=1 STYLE="font-size: 8pt"><SPAN STYLE="font-style: normal">-----------------------------------------------------------------------</SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P><SPAN STYLE="font-style: normal">In this example, the PATHS are
+specific to the local machine. If you run this example, the paths
+will be modified in the part before RFTN.</SPAN></P>
+<P><SPAN STYLE="font-style: normal">Following this example, we place
+the SEED volume file “20111107.seed” in the subdirectory indicate
+by instruction 01. Next we unpack the SEED volume in the Orig
+subdirectory as indicated by instruction 02 using the command</SPAN></P>
+<P STYLE="margin-left: 0.49in"><SPAN STYLE="font-style: normal">rdseed
+-f ../20111107.seed -p -R -d -o 1</SPAN></P>
+<P><BR><BR>
+</P>
+<P><SPAN STYLE="font-style: normal">This command unpacks the SEED
+volume, creates the pole-zero files “-p”, the RESP files “-R”
+and Sac binary data files “-d -o 1”</SPAN></P>
+<P><SPAN STYLE="font-style: normal">Finally we return to the top
+level (Instruction 03) and then run the final script DOFINISHRFTN .</SPAN></P>
+<P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">The
+ DOFINISHRFTN script performs the following steps:</SPAN></FONT></FONT></P>
+<OL>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">First
+	go to the Orig directory and connect trace segments into a single
+	file for each channel. The results are placed into the sub-directory
+	named MERGE.  This is necessary since some telemetry
+	transmission,receiving systems may not connect the files into a
+	single continuous data stream. This is performed using the IDOMERGE
+	script.</SPAN></FONT></FONT></P>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Next
+	the merged data files in the directory MERGE are examined for data
+	quality.  This is necessary because there could be data gaps in the
+	original data stream, and such traces MUST NOT be used for analysis.
+	Figure 4.5 shows the interactive screen.</SPAN></FONT></FONT></P>
+</OL>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">To
+apply the quality control (QC), just click, using any mouse key, on a
+trace that does not have data gaps and which has a clear signal. You
+must click on all components.  When you click there will be a red '+'
+sign plotted at the left side of the trace window. If you make a
+mistake, you can hit the 'r' key to reject. You can go to a previous
+page by entering 'b'.  Figure 4.5 shows the selection make.  </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">After
+you are done, enter 'n' to go to the next page.</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Note
+that if the LH channels were included, this is the first chance that
+you will have to NOT  use these files. If you enter 'r' or do
+nothing, these files will not be used.</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">The
+result of this operation is that the selected Sac files will be
+placed into the Sac subdirectory.</SPAN></FONT></FONT></P>
+<OL START=3>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Next
+	the original data files are deconvolved using the pole-zero or
+	response files, or not deconvolved, according to the original menu
+	selection for this example, there is no deconvolution. This work is
+	by the script IDOEVT which is created from the IDOEVTNONE, IDOEVTPZ
+	or IDOEVTRESP prototypes. The resulting waveforms are placed in the
+	sub-directory GOOD.</SPAN></FONT></FONT></P>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">The
+	script IDOROT (created from the IDOROTNONE, IDOROTPZ or IDOROTRESP
+	prototypes) rotates the traces into a vertical (Z), radial (R ) or
+	transverse ( T) coordinate system with respect to the great circle
+	path. The resulting rotated waveforms are placed in the
+	sub-directory FINAL</SPAN></FONT></FONT></P>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">The
+	script IDOGCARC examines the waveforms in the FINAL sub-directory
+	and copies those woith great-circle arc distances between 28 and 95
+	degrees to the Sub-directory FINALRF.QC</SPAN></FONT></FONT></P>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Now
+	the script DORFTN1 is run for the final QC before the receiver
+	function determination. A good set of traces has  the P-wave motion
+	on the Z and R traces.  </SPAN></FONT></FONT>
+	</P>
+</OL>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">The
+interactive screen can be used to reject a set of traces by entering
+the 'r' key to reject a trace – you must reject all. </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">In
+addition this is the time to pick mark the P-wave arrival. Use the
+two 'x' entries to expand the trace (the '+', '-'. 'o' and 'space'
+can be used to reposition the trace). To select the P-arrival move
+the cursor to a point just prior to the P-wave arrival and hit the
+'p' on the keyboard. You will see a P marker on all three traces
+displayed.  (Figure 4.6).</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Hit
+'n' to go to the next page.  </SPAN></FONT></FONT>
+</P>
+<P STYLE="margin-left: 0.5in"><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Continue
+this until there are no more traces to process.</SPAN></FONT></FONT></P>
+<OL START=3>
+	<LI><P><FONT FACE="Times New Roman, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal">Finally
+	the DORFTN2 script is run to compute the receiver function.</SPAN></FONT></FONT></P>
+</OL>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_m4938a398.png" NAME="graphics13" ALIGN=LEFT WIDTH=695 HEIGHT=560 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.5. Sample screen for the raw quality control screen.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_43d70402.png" NAME="graphics14" ALIGN=LEFT WIDTH=695 HEIGHT=560 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.6. Result of running DORFTN1 showing the P-wave first
+			arrival pick.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<H2 CLASS="western"></H2>
+<H2 CLASS="western"><FONT SIZE=4><FONT FACE="Thorndale, serif"><SPAN STYLE="font-style: normal">4.2
+Final plots</SPAN></FONT></FONT></H2>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">The
+sub-directory RFTN contains the compute receiver functions. For this
+example these files are as follow:</SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M38ABHZ20113112235.0.5
+ R.N59ABHZ20113112235.2.5  T.M54ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M38ABHZ20113112235.1.0
+ R.O33ABHZ20113112235.0.5  T.M54ABHZ20113112235.2.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M38ABHZ20113112235.2.5
+ R.O33ABHZ20113112235.1.0  T.N35ABHZ20113112235.0.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M39ABHZ20113112235.0.5
+ R.O33ABHZ20113112235.2.5  T.N35ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M39ABHZ20113112235.1.0
+ R.O34ABHZ20113112235.0.5  T.N35ABHZ20113112235.2.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M39ABHZ20113112235.2.5
+ R.O34ABHZ20113112235.1.0  T.N36ABHZ20113112235.0.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M40ABHZ20113112235.0.5
+ R.O34ABHZ20113112235.2.5  T.N36ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M40ABHZ20113112235.1.0
+ R.T25ABHZ20113112235.0.5  T.N36ABHZ20113112235.2.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M40ABHZ20113112235.2.5
+ R.T25ABHZ20113112235.1.0  T.N59ABHZ20113112235.0.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M54ABHZ20113112235.0.5
+ R.T25ABHZ20113112235.2.5  T.N59ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M54ABHZ20113112235.1.0
+ T.M38ABHZ20113112235.0.5  T.N59ABHZ20113112235.2.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.M54ABHZ20113112235.2.5
+ T.M38ABHZ20113112235.1.0  T.O33ABHZ20113112235.0.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N35ABHZ20113112235.0.5
+ T.M38ABHZ20113112235.2.5  T.O33ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N35ABHZ20113112235.1.0
+ T.M39ABHZ20113112235.0.5  T.O33ABHZ20113112235.2.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N35ABHZ20113112235.2.5
+ T.M39ABHZ20113112235.1.0  T.O34ABHZ20113112235.0.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N36ABHZ20113112235.0.5
+ T.M39ABHZ20113112235.2.5  T.O34ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N36ABHZ20113112235.1.0
+ T.M40ABHZ20113112235.0.5  T.O34ABHZ20113112235.2.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N36ABHZ20113112235.2.5
+ T.M40ABHZ20113112235.1.0  T.T25ABHZ20113112235.0.5</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N59ABHZ20113112235.0.5
+ T.M40ABHZ20113112235.2.5  T.T25ABHZ20113112235.1.0</FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2>R.N59ABHZ20113112235.1.0
+ T.M54ABHZ20113112235.0.5  T.T25ABHZ20113112235.2.5</FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">The
+naming convention is that the first character, 'R' or 'T', indicates
+whether this is the P-wave receiver function for the radial or
+transverse component. For a plane-layered velocity model and no
+noise, the 'T' should be zero. If it is not small this indicates that
+the original data were bad, or that the structure is not
+plane-layered and isotropic.</SPAN></FONT></FONT></P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">The
+next part of the file name gives the station and component, the eyar,
+the day of the year, hour and second.</SPAN></FONT></FONT></P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">The
+end of the file indicates the Gaussian filter parameter, e.g., 0.5,
+1.0 or 2.5.  The Gaussian filter is a low-pass filter, and these
+correspond to roughly 0.2, , 0.3 and 1.0 Hz corner frequencies.  I
+typically use 1.0 and 2.5.</SPAN></FONT></FONT></P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal">To
+compare the receiver functions, just do the following with </SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><B>gsac</B></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+(GSAC&gt; is the gsac command prompt – you just enter the commands
+to the right of the prompt.</SPAN></SPAN></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">GSAC&gt;
+r RFTN/R*.1.0</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">GSAC&gt;
+fileid name</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">GSAC&gt;
+xlim b b 40</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">GSAC&gt;
+p</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
+plot is shown in Figure 4.7.</SPAN></SPAN></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">[To
+make this plot, I used the following commands with the non-CPS
+fromate conversion programs from GraphicsMagick or Image Magick:</SPAN></FONT></FONT></I></P>
+<P><BR><BR>
+</P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	GSAC&gt;
+r RFTN/R*.1.0</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	GSAC&gt;
+fileid name</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	GSAC&gt;
+xlim b b 40</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	GSAC&gt;
+bg plt</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	GSAC&gt;
+p</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">and
+then</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	plotnps
+-F7 -W10 -EPS -K &lt; P001.PLT &gt; t.eps  [P001.PLT is created by
+gsac which will indicate the name of the file created]</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	gm
+convert -trim t.eps example.png    [if using Graphicksmagick]</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">or</SPAN></FONT></FONT></I></P>
+<P><I><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-weight: normal">	convert
+-trim t.eps example.png  [if using ImageMagick]</SPAN></FONT></FONT></I></P>
+<P><BR><BR>
+</P>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0 STYLE="page-break-inside: avoid">
+	<COL WIDTH=256*>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P><IMG SRC="rftntut_html_mf6ca49b.png" NAME="graphics15" ALIGN=LEFT WIDTH=613 HEIGHT=468 BORDER=0><BR>
+			</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH=100% VALIGN=TOP>
+			<P>Fig. 4.7. Plot of P-wave radial component receiver functions.</P>
+		</TD>
+	</TR>
+</TABLE>
+<P><BR><BR>
+</P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
+red line on the receiver function indicates zero lag.  For simple
+structures, this should be at the center of the first pulse. 
+Experience with synthetics created using </SPAN></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><B>hrftn96</B></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+will give an idea of what is acceptable.</SPAN></SPAN></FONT></FONT></P>
+<P><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">If
+you get the help command for </SPAN></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><B>saciterd</B></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+or </SPAN></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><B>saciterdc
+ </B></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">you
+will see that the </SPAN></SPAN></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><I><SPAN STYLE="font-weight: normal">USER5</SPAN></I></FONT></FONT><FONT FACE="Thorndale, serif"><FONT SIZE=4><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">
+field in the Sac header indicates a percentage fit. For these files,
+we have:</SPAN></SPAN></FONT></FONT></P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">GSAC&gt;
+lh user5</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.M38ABHZ20113112235.1.0
+(0):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            84.51762</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.M39ABHZ20113112235.1.0
+(1):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            97.66653</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.M40ABHZ20113112235.1.0
+(2):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+             89.4223</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.M54ABHZ20113112235.1.0
+(3):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            97.16866</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.N35ABHZ20113112235.1.0
+(4):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            91.47628</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.N36ABHZ20113112235.1.0
+(5):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            92.93056</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.N59ABHZ20113112235.1.0
+(6):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            95.67019</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.O33ABHZ20113112235.1.0
+(7):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            94.02173</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.O34ABHZ20113112235.1.0
+(8):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+            92.43146</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">RFTN/R.T25ABHZ20113112235.1.0
+(9):</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in">        <FONT FACE="Courier 10 Pitch"><FONT SIZE=2><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">USER5
+             81.5244</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-left: 0.49in; margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Thorndale, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">The
+meaning of this parameter is as follows. Given the original vertical
+'Z' trace and a low pass filtered version of the radial component
+'R', the receiver function is the filter which predicts the low-pass
+filtered radial trace. The “fit” is an indication of  the ability
+of this filter to predict the low-pass filtered radial trace. In this
+case the RFTN/R.T25ABHZ20113112235.1.0  fit the lowest.  If you have
+a large number of receiver functions, then you can just use those
+with at least a 90% fit.</SPAN></SPAN></FONT></FONT></P>
+<P STYLE="margin-bottom: 0in"><BR>
+</P>
+<P STYLE="margin-bottom: 0in"><FONT FACE="Thorndale, serif"><FONT SIZE=3><SPAN STYLE="font-style: normal"><SPAN STYLE="font-weight: normal">A
+second editing take place during the inversion for Earth structure
+when the criteria would be whether the receiver function is
+compatible with synthetics for a flat-layered velocity model. </SPAN></SPAN></FONT></FONT>
+</P>
+</BODY>
+</HTML>

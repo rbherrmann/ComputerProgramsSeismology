@@ -1,0 +1,18 @@
+29 JAN 2008 - R B Herrmann modified minos_bran.f
+
+The instance of  
+      dimension x(20),det(20),qx(3,20),wrk(60),wt(*),ichar(4)
+      data tol/1.d-9/,itmax/15/,ichar/' s',' t',' s',' c'/
+
+
+was changed to
+
+      dimension x(20),det(20),qx(3,20),wrk(60),wt(*),kchar(4)
+      character*2 kchar
+      data tol/1.d-9/,itmax/15/,kchar/' s',' t',' s',' c'/
+
+BECAUSE:
+	1. ichar is a reserved function in FORTRAN90
+	2. ichar was not defined as a character string.
+
+        

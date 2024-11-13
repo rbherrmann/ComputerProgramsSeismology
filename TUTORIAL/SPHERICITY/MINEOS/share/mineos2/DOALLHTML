@@ -1,0 +1,19 @@
+#!/bin/sh
+
+MYPWD=`pwd`
+export PATH=:${MYPWD}:$PATH
+for DEP in 010 100 700
+do
+	for ARC in 030 060 090
+	do
+		cd TEST.${DEP}.${ARC}
+		for MECH in SS DS DD
+		do
+			${MYPWD}/DOCMP ${DEP} ${ARC} ${MECH}
+		done
+		cd ${MYPWD}
+	done
+done
+
+ cp TEST.???.???/TEMP??/*.gif HTML
+

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Earth Flattening</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8460100">
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<H2>Introduction</H2>
+<P>This is a comparison between&nbsp;<A HREF="http://geodynamics.org/cig/software/packages/seismo/mineos/">mineos</A>
+and earth-flattened wavenumber integration synthetics (<A HREF="../../../eqccps.html">Computer
+Programs in Seismology - 3.30</A> ) for the <A HREF="http://wwwrses.anu.edu.au/seismology/ak135/intro.html">AK-135f</A>
+continental model <BR><BR>I use the same model for both sets of
+synthetics, except that the wavenumber integration model does not
+have an inner core [The reason for this is that my formulation for
+wavenumber integration only permits fluid layers at the top or at the
+bottom of the elastic stack but not sandwiched between two solid
+layers.</P>
+<P>The program used for the conversion is&nbsp;<A HREF="AK135/conv.f">conv.f</A>
+and the starting model for an AK135-F continental is <A HREF="AK135/ak135-f">ak135-f</A>.
+Running the program as&nbsp; 
+</P>
+<P STYLE="margin-left: 0.42in; margin-bottom: 0in">g77 conv.f<BR>a.out
+&lt; ak135-f</P>
+<P>creates the files tak135-f.txt for <I><B>mineos </B></I>and
+tak135sph.mod for the <I><B>CPS </B></I>programs. <BR><BR>This
+reformatting program does the following:</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">converts Q(kappa) Q(mu) used in
+	free-oscillation code to Q(P) and Q(S) used in wavenumber
+	integration code 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">reorders the AK-135-F model for
+	<I><B>mineos</B></I> order, by converting from model as a function
+	of increasing depth to one of increasing radius, and also converts
+	from km, km/s, gm/cm<SUP>3</SUP> to meters. m/s and kg/m<SUP>3 </SUP>
+	</P>
+	<LI><P>replaces the gradient model of AK-135 by discrete layers. The
+	layer velocity is obtained from the average of the slownesses at the
+	depth points.&nbsp; A sharp velocity discontinuity is preserved.&nbsp;
+	In effect this says that the slowness variation between two depths
+	points is linear.&nbsp; 
+	</P>
+</UL>
+<P>The model used for the wavenumber integration code is
+<A HREF="AK135/tak135sph.mod">tak135sph.mod</A> and the model used
+for mineos is <A HREF="AK135/tak135-f.txt">tak135-f.txt</A>.&nbsp;
+<I><B>[Note on your browser, you may have to right-click and save-as
+for the files ending with .mod, since the browser may think that the
+file is a MOD music file].</B></I></P>
+<P>The earth flattening mapping used in the <I><B>CPS </B></I>programs
+starts with the <I>tak135sph.mod </I>model and then internally
+performs the&nbsp; following steps, using the symbolism&nbsp; <I>a
+</I>for the radius of the Earth and <I>r</I> for the distance from
+the center of the Earth to a spherical shell.</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in">Convert radius of a layer boundary
+	to a depth using the transformation&nbsp; <I>z = a ln(a/r)</I> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">Layer thicknesses are determined
+	from the difference in <I>z</I> values for neighboring <I>r</I>
+	values 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">The mid-layer radius is used for
+	the velocity mapping, as&nbsp; <I>vel(flat) = vel(sph)* ( a /
+	(r0+r1)/2 )</I> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in">The density mapping for P-SV
+	potentials is&nbsp; <I>rho(flat) = rho(sph) </I>* <I>( a / (r0+r1)/2
+	) ^ -2.275 </I>(Biswas)</P>
+	<LI><P STYLE="margin-bottom: 0in">The density mapping for SH
+	potentials is&nbsp; <I>rho(flat) = rho(sph) </I>* <I>( a / (r0+r1)/2
+	) ^ -5&nbsp;&nbsp; </I>(Biswas and Knopoff)</P>
+	<LI><P>Flat earth synthetics are multiplied by the scale factor
+	sqrt[(dist/a)/sin(dist/a)] so that high frequency ray theory is
+	satisfied for the geometrical spreading. 
+	</P>
+</UL>
+<P>David Harkrider assisted with the density mapping for the P-SV
+problem.&nbsp; He demonstrated that the 2.275 was appropriate for the
+fundamental mode.&nbsp; This exercise focused on the entire waveform,
+which effectively tests the appropriateness for higher modes.</P>
+<H2>Program Installation</H2>
+<UL>
+	<UL>
+		<UL>
+			<LI><H3>Computer Programs in Seismology&nbsp; 
+			</H3>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in">&nbsp;I assume that you already
+		have Computer Programs in Seismology installed and that the PATH
+		variable includes the absolute path to PROGRAMS.330/bin. 
+		</P>
+		<UL>
+			<LI><H3><A HREF="MINEOS/HTML/index.html">MINEOS</A></H3>
+		</UL>
+	</UL>
+</UL>
+<H2>Tests</H2>
+<P>The tests performed consisted of comparing travel times,
+free-oscillation synthetics to wavenumber-integration synthetics that
+used Earth flattening, and a comparison of phase and group velocity
+dispersion between the free oscillation and plane-layer codes.</P>
+<UL>
+	<UL>
+		<UL>
+			<LI><H3><A HREF="TIME96/index.html">Isotropic Travel Time Tests</A></H3>
+			<LI><H3><A HREF="NORMAL_MODE">Normal Mode vs Earth Flattening
+			Synthetics</A></H3>
+			<LI><H3><A HREF="Dispersion/index.html">Dispersion Tests</A></H3>
+		</UL>
+	</UL>
+</UL>
+<P><BR><BR>
+</P>
+<P><BR><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in">Last changed February 2,
+2008</P>
+</BODY>
+</HTML>

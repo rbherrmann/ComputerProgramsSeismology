@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Cerveny Ray Theory Modeling</title>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+}
+</style>
+  </head>
+  <body>
+    <h1>Introduction</h1>
+    <p>During a long career,&nbsp; V. Červený&nbsp; contributed much to
+      seismic ray theory. The initial impetus was for the determination
+      of crustal structure from refraction profiles. Initial codes were
+      for a 2-D model with corrections to represent 3-D propagation. One
+      program was named <b>seis81</b> which is encapsulated in the
+      Computer Programs in Seismology (Herrmann, 2013)&nbsp; program <b>cseis96.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </b>The techniques are described n a number of publications
+      (Červený et al, 1977; Červený, 1985; Červený, 2010;&nbsp; Červený
+      and Pšenčík. 2011).<br>
+    </p>
+    <p><b>cseis96 </b>differs from the original <b>seis81 </b>in that
+      the radiation patterns from point force and moment tensor sources
+      was corrected and in&nbsp;&nbsp; revised&nbsp; output formats. The
+      significant difference in making synthetics is that the formtion
+      of the time series is make by the program <b>cpulse96</b> after <b>cseis96</b>
+      is run.&nbsp; The program <b>cprep96</b> is a front end that
+      simplifies the preparation input for <b>seis81</b>. However&nbsp;
+      <b>cseis96 </b>can run more complicated models if the input data
+      set is created manually. The documentation for this is in <i>PROGRAMS.330/VOLIX/DOC/seis81.txt.<br>
+      </i></p>
+    <p>As mentioned, <b>seis81</b> was developed to interpret
+      refraction line observations. The codes use asymptotic ray theory
+      to make synthetics. The implication is that the codes cannot model
+      phenomena such as the classical refraction or a Rayleigh wave.
+      This tutorial investigates the use of these codes to make
+      synthetics that can be used to model teleseismic P-wave receiver
+      functions which assume a plane wave incident to the base of the
+      structure. <br>
+    </p>
+    <p>In the process of testing this use, updates were made on November
+      1, 2022&nbsp; to the source codes in <i>PROGRAMS.330/VOLIX/src</i>,
+      specifically to <b>cprep96, </b><b>cseis96</b> and <b>cpulse96</b>.
+      Changes were made in format statements since the testing required
+      placing the source at a great depth to be able to approximate an
+      incident plane wave. The numerical integration to define the ray
+      path in <b>cseis96</b> was upgraded to use double precision since
+      there were significant problems in shooting a ray to a given
+      receiver position when using very large source depths to
+      approximate incident plane waves. In addition, changes were made
+      to <b>cpulse96</b> to permit a new way to define the time of the
+      first sample and to restrict the rays contributing to the
+      seismogram by specifying a range of acceptable ray parametes.<br>
+    </p>
+    <p>The ray tracing code works by shooting a set of rays through the
+      structure until a pair is found that bracket the horizontal
+      position of the receiver. At this point the angle of the ray
+      leaving the source is refined so that the ray hits the receiver
+      within a given accuracy. The ray so defined uses Snell's law
+      locally at each interface. The final step is to account for the
+      reflection and transmission at each interface and the geometrical
+      spreading. &nbsp; <br>
+    </p>
+    <p>The program <b>cpulse96 </b>was initially written assuming that
+      the source is to the left of the profile and waves propagate to
+      the right in the +x direction. Thus the&nbsp; RDD, RDS, RSS,. REX,
+      RVF and RHF&nbsp; Green's functions will be such that the motion
+      of a P wave incident at the surface will be up on the vertical
+      component and positive on the radial component or down and
+      negative if the&nbsp; initial motion is a dilation.&nbsp; As will
+      be show below, if the source is to the right of the array, then
+      the horizontal&nbsp; motion will be reversed.&nbsp; Although the
+      Green's fucntions have 'R' in their name, e.t., REX, the&nbsp;
+      motions should be interpreted as motions with respect to the
+      direction of the horizontal x-axis rather as radial with respect
+      to the source.&nbsp; This means that computation of receiver
+      functions for observations at distances less than the source
+      position (e.g., in the negative x-direction), must have the R
+      Green's function reversed, or if not, then the receiver function
+      inverted.<br>
+    </p>
+    <p>For ease of making profiles, the Sac header variables STLA and
+      EVLA will be undefined, e.g., -12345.0. STLO and EVLO will be the
+      horizontal positions of the receiver and source. The distance DIST
+      is defined at STLO - EVLO. Thus for sources to the right (more in
+      +x direction) representing ways in the negative x-direction, the
+      distance will be negative. Again this is for use in plotting. The
+      parameter LCALDA= false int he Sac header so that the distances
+      are nor recomputed from used int given latitudes and longitudes.<br>
+    </p>
+    <p>Given these header values, it is possible to use the <b>gsac</b>
+      commands <i>prs STLO</i> or <i>prs DIST</i> to make record
+      section profiles. in the examples below for the modeling of
+      observations above a subduction zone, <i>prs STLO </i>is used.<br>
+    </p>
+    <p>Since this tutorial is directed toward modeling teleseismic
+      P-wave receiver functions, only the EX Green's functions will be
+      used since these only emit P waves at the source.<br>
+      <i> </i></p>
+    <h1>Codes and scripts</h1>
+    <p>The scripts for the examples below are contained in the file <a
+        href="Cerveny.tgz">Cerveny.tgz</a>. Download this file and
+      unpack using the command <br>
+    </p>
+    <pre> 
+gunzip -c Cerveny.tgz | tar xf - 
+</pre>
+    <br>
+    This will create a directory structure, such as
+    <pre>Cerveny---
+         |--/Layer1-----
+         |              |--/DOIT  
+         |              |--/DOPLT<br>         |              |--/DOCLEANUP<br>        &nbsp;| 
+         |--/Layer------ 
+         |              |--/DOIT 
+         |              |--/DOPLT <br>         |              |--/DOCLEANUP
+         | 
+        ... 
+</pre>
+    Note the names of the subdirectories. These will be the headings of
+    each of the examples given below. Thus if an example has the heading
+    <b>Layerb</b>, then the computational scripts will be in <i>Cerveny/Layerb<b>.</b></i>
+    <p></p>
+    <p> Since the objective of this tutorial is to model teleseismic
+      P-wave receiver functions for observations above a subduction
+      zone. There are some caveats. <br>
+    </p>
+    <p> First <b>cseis96 </b>is 2-D code. Thus a subduction zone is
+      modeled as an&nbsp; infinitely long 2-D structure and the source
+      and receivers are on a line perpendicular to strike. If this were
+      not true, then 3-D code would be required. The next limitation is
+      that the receiver function analysis assumes a plane wave incident
+      at the base of the structure while <b>cseis96</b> uses a point
+      source. If the point source is placed deep enough, then the
+      incident wave field may be assumed to approximate a plane wave.
+      However some experimentation is required to test this assumption.</p>
+    <p>The following sections consider a suite of models, ranging from a
+      single layer over a halfspace model&nbsp; to a complex subduction
+      zone. For&nbsp; the&nbsp; &nbsp; plane layered halfspace models,
+      the synthetics and receiver functions can be compared to more
+      exact synthetics derived using the <b>hspec96</b> and <b>rftn96</b>
+      codes.&nbsp; The receiver functions computed&nbsp; using <b>hrftn96
+
+
+      </b>can be compared to those obtained by running <b>saciterd </b>with
+
+      the horizontal and vertical component synthetics derived
+      from&nbsp; <b>cseis96.</b> <b><br>
+      </b></p>
+    <p>The user has a choice when trying to model teleseismic waves
+      incident from the right or the left of the structure.&nbsp; One
+      can fi the structure and make separate computations for with
+      sources to the left and the right, or one can have the source to
+      the left, but two models, were are reflections of the other.&nbsp;
+      Some experimentation in defining the source position for receiver
+      function analysis, since one is interested in a certain set of ray
+      parameters from the source (s/km) that reach the station. This
+      will be illustrated in the examples.</p>
+    <p>in the examples below for the subduction model, the model extends
+      down to about 300 km, but the source depth is 16000 km. Because of
+      the different vertical extents, it is acceptable to ignore the
+      upper structure to define the horizontal offset of the source in
+      order for a given ray parameter to "hit" the receiver. A simple
+      program <b>ptoradian</b> is provided to give an acceptable range
+      of angles that <b>cseis96</b> should use for efficient
+      computations.<br>
+      <b> </b></p>
+    <h2>cprep96<br>
+    </h2>
+    <p>The program <b>cprep96 </b>prepares the data set for the <b>cseis96
+
+
+
+      </b>program by creating the file <i>cseis96.dat.</i> The format
+      of that file is given in <i>PROGRAMS.330/VOLIX/DOC/seis81.txt.</i>&nbsp;
+
+
+
+
+      The command line flags are seen by the command <b>cprep96 -h</b><br>
+    </p>
+    <pre> Usage: cprep96 -M model  [-DOP] [-DOSV] [-DOSH] [-DOALL] [-DOCONV] [-DOREFL]  [-DOTRAN] [-DEBUG] [-DENY deny ]<br>  [-R reverb] [-N maxseg] [-HS sourcez] [-XS sourcex] -d dfile<br> -M model  (default none )  Earth model file name<br> -N nseg   (default 12   )  Maximum number of ray segments <br> -DOP      (default false)  Generate P ray description<br> -DOSV     (default false)  Generate SV ray description<br> -DOSH     (default false)  Generate SH ray description<br> -DOALL    (default false)  Generate P, SV, SH ray description<br> -DOCONV   (default false)  Permit P-SV conversions<br> -DOREFL   (default false)  P-SV conversions on  reflection<br> -DOTRAN   (default false)  P-SV conversions on  transmission<br> -DENY     (default none )  file with layer conversion denial<br> -R reverb (default none )  file with maximum number of multiples in layer<br> -HS sourcez(default 0.0  )  source depth <br> -XS sourcex(default 0.0  )  source x-coordinate <br> -d dfile  (default none )  distance file <br>    dfile contains one of more lines with following entries<br>        DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)<br>            first time point is T0 + DIST/VRED<br>            VRED=0 means infinite velocity though<br> -?        (default none )  this help message <br> -h        (default none )  this help message <br></pre>
+    <p><br>
+      The importance of the <i>-XS sourcex</i> command line flag is
+      illustrated in Figure 1. This figure shows the ideal ray paths to
+      each receiver associated with an incident plane wave. Since <b>cseis96</b>
+      can only use point sources, it is assumed that the point source
+      (red circle) is at a depth such that the wavefront is effectively
+      planar.&nbsp; To preserve the ray geometry, the source must be
+      moved horizontally as the receiver position changes.<br>
+      <br>
+    </p>
+    <div align="center"><img moz-do-not-send="true" src="Fig1.png"
+        alt="Fig1.png" width="497" height="124"><br>
+    </div>
+    <div align="center"> <br>
+      Fig. 1. Sketch showing receiver and effective source positions.
+      Left) plane wave incident on 2-D structure. <br>
+      Center and right) point source locations to preserve the angle of
+      incidence at the receiver.<br>
+    </div>
+    <p></p>
+    <p>The <i>-R reverb </i>is useful to reduce the number of rays
+      considered. The format is simple, a list of layer number - bounce
+      pairs, e.g.,</p>
+    <pre>1 3<br>2 3<br>3 3<br>4 1<br></pre>
+    <p>which means, for example that at most 3 ray segments are
+      permitted in layer 2. For P-SV waves this would permit<br>
+      8 rays, e.g., PPP, PPS, PSP, PSS, SSS, SSP, SPS and
+      SPP.&nbsp;&nbsp; If this option is not ste the <b>cprep96</b> may
+      generate a lot of rays, perhaps 40,000 for a 4 layer model.<br>
+    </p>
+    <p>The format for <i>cseis96.dat&nbsp; </i>is given in the
+      aforementioned <i>seis81.txt</i>. Just before the ray description
+      there is a line created by <b>cprep96</b> which reads<br>
+    </p>
+    <pre>    1.0000    3.1416   -0.0628   -3.1416   -3.1416    0.0628    3.1416    0.0010<br></pre>
+    <p>The documentation for this line is</p>
+    <pre>     12) One card, quantities that control the basic system of initial<br>c         angles in the two-point ray tracing,etc.<br>c         dt,amin1,astep1,amax1,amin2,astep2,amax2,ac    format(8f10.5)<br>c           dt...     time step in the integration of the ray-tracing<br>c                     system. dt should be greater than zero.<br>c                     If dt.lt.0.00001, then dt=1.<br>c           amin1,astep1,amax1... determine the system of initial<br>c                     angles for primary reflected waves (and possibly<br>c                     for other manually generated elementary waves,the<br>c                     first element of which strikes the interface situ-<br>c                     ated below the source)<br>c           amin2,astep2,amax2... determine the system of initial angles<br>c                     for the direct waves (and possibly for other manually<br>c                     generated elementary waves,the first element of<br>c                     which strikes the interface above the source).<br>c           ac...     required accuracy of integration of the ray tracing<br>c                     system. Recomended values: 0.0001 - 0.001.<br></pre>
+    <p>You may wonder why the limits in the example line are π to -π and
+      -π to π. The code permits velocity gradients. Thus if velocity
+      increases with depth and one wanst a ray from the source to a
+      receiver above the source, the ray will go upward&nbsp; at short
+      distances&nbsp; and downward for large horizontal distances. The
+      range given here covers all possibilities. However examining all
+      possibilities is time consuming. For the purpose of modeling
+      teleseismic P waves, this line will be changed to make the
+      computations more efficient<br>
+    </p>
+    <p>Following this is the ray description for each ray<br>
+    </p>
+    <pre>    0    2    2    1<br>    0    2   -2    1<br>    0    2    2   -1<br>    0    2   -2   -1<br></pre>
+    which represent the rays P<sub>2</sub>P<sub>1</sub>, S<sub>2</sub>P<sub>1</sub>,
+    P<sub>2</sub>S<sub>1</sub> and S<sub>2</sub>S<sub>1</sub>,
+    respectively. In this notation the <i>0</i> indicates that an
+    acceptable ray can go up or down from the source, the initial <i>2</i>
+    says that there are two ray segments, which is followed by a layer
+    number and whether the ray of P (positive) or S (negative).<br>
+    <br>
+    Note again that the number of rays can quickly become large if
+    conversions between P and SV are permitted.&nbsp; For example if
+    there is a single layer over a halfspace, then there will be 2 rays
+    in the halfspace, 4 direct rays reaching the surface, as in the
+    example above. If the first set of multiples are permitted in the
+    layer, then there will be 16 rays, e.g., P<sub>2</sub>S<sub>1</sub>S<sub>1</sub>P<sub>1&nbsp;</sub>
+    . This is easily understood if one writes the ray type for each
+    segment in binary, using 0 for P and 1 for S. Thus one would have 0
+    or 1&nbsp; for the halfspace, and then 0 or 1 for each segment in
+    the layer. Thus this example may be written as 0 ro the halfspace
+    and 110 for the layer.&nbsp; If there are many layers, it will be
+    possible to have 10's of thousands of rays/.<sub> </sub><br>
+    <br>
+    <h2>cseis96<br>
+    </h2>
+    <p>The next program that is executed is <b>cseis96</b>. Its command
+      lines are obtained by executing <b>cseis96 -h </b>which gives<br>
+    </p>
+    <pre> Usage cseis96 [-v] [-P] [-?] [-h]<br>  -v    (default false) verbose output<br>  -R    (default false) generate file for CRAY96<br>  -?    (default false) this help screen<br>  -h    (default false) this help screen<br></pre>
+    <p>The output of this program consists of the file <i>cseis96.amp </i>which
+
+
+
+      is used by <b>cpulse96 </b>and <i>cseis96.trc </i>if <b>cseis96
+
+
+
+        -R&nbsp; </b>flag is run.&nbsp; The <i>cseis96.try </i>is
+      used by <b>cray96.</b><br>
+    </p>
+    <h2>cray96<br>
+    </h2>
+    <p>The program <b>cray96 </b>plots the structure and the
+      individual rays, with colors indicating P or S segments.&nbsp;
+      This requires the use of the <i>-R </i>flag with&nbsp; <b>cseis96</b>.
+      As will be seen below, such a plot can be very complicated, and it
+      is recommended that only one receiver position be considered. This
+      used the output contained in the file <i>cseis96.trc</i>, whh can
+      be very largeThe command line defines the boundaries for the plot.<br>
+    </p>
+    <pre> Usage: cray96 -XMIN xmin -XMAX xmax -ZMIN zmin -ZMAX zmax -v <br>  -XMIN [xmin]    (default 0)       : Minimum X for plot<br>  -XMAX [xmax]    (default=400.0)   : Maximum X for plot<br>  -ZMIN [zmin]    (default=0.0)     : Minimum Z for plot<br>  -ZMAX [zmax]    (default = 50.0)  : Maximum Z for plot<br>  -v      (default = false) : verbose output<br>  -?      (default = false) : This help screen<br>  -h      (default = false) : This help screen<br></pre>
+    This program is very informative if there is only one distance
+    plotted. If there are many distances, then one will get&nbsp; a idea
+    of the range of ray paths that reach the stations.<br>
+    <br>
+    <h2>cpulse96<br>
+    </h2>
+    <p>Finally the program <b>cpulse96 </b>uses the <i>cseis96.amp </i>file
+
+
+
+      created by <b>cseis96 </b>to make the synthetics.&nbsp; The
+      command line options of this program are seen by executing the
+      command<br>
+      <b>cpulse96 -h. </b>The output of this program the in the ASCII <i>file96</i>
+      format which can be converted to Sac files using <b>f96tosac -B.<br>
+      </b></p>
+    <pre> USAGE: cpulse96 [ -v  ] [ -t -o -p -i ] -a alpha -l L [ -D -V -A]  [-F rfile ] [ -m mult]  [ -OD -OV -OA ] [-Z]   <br>      [-Q] [-DELAY delay [-EQEX -EXF -ALL] [ -PMIN pmin -PMAX pmax ]  [-?] [-h]<br>  -v          Verbose output<br>  -t          Triangular pulse of base 2 L dt<br>  -p          Parabolic Pulse of base  4 L dt<br>  -l L        (default 1 )duration control parameter<br>  -D          Output is ground displacment<br>  -V          Output is ground velocity (default)<br>  -A          Output is ground acceleration<br>  -F rfile    User supplied pulse<br>  -m mult     Multiplier (default 1.0)<br>  -OD         Output is ground displacement<br>  -OV         Output is ground velocity<br>  -OA         Output is ground acceleration<br>  -Q          (default false) do causal Q<br>  -DELAY delay (default use t=t0+x/vred for first sample,<br>              else use delay seconds before the first arrival<br>  -EXF        (default) Explosion/point force green functions<br>  -EQEX       Earthquake and double couple green functions<br>  -ALL        Earthquake, Explosion and Point Force <br>  -Z          (default false) zero phase triangular/parabolic pulse<br>  -PMIN pmin -PMAX pmax<br>              If pmin and pmax have the same sign, then rays <br>              with ray parameter |pmin|&lt;= p &lt;=|pmax| are  used.<br>              A positive sign means a ray from source <br>              propagates in the  +x direction, and a negative<br>              in the -x direction<br>  -?          Write this help message<br>  -h          Write this help message<b><br></b></pre>
+    <p></p>
+    <p>As mentioned above,&nbsp; the trace header fields have
+      LCALDA=false, STLA=-12345, STLO=-12345, STLO= station
+      x-coordinate, EVLO= station x-coordinate. Thus one can plot a
+      record section of receiver positions in <b>gsac</b> using the
+      command <i>prs stlo </i>. </p>
+    <p> The code update of November 1, 2022 added the <i>-DELAY delay </i>and
+
+      <i>-PMIN pmin -PMAX&nbsp; pmax </i>command line flags.&nbsp; The
+      reason for the&nbsp; <i>-DELAY delay&nbsp; </i>is as follows.
+      The specification of desired horizontal distances in the <i>dfile&nbsp;
+
+      </i>used by <b>cprep96</b> consists of lines containing the
+      following</p>
+    <pre>DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)<br>            first time point is T0 + DIST/VRED<br></pre>
+    an example of which is<br>
+    <pre> 00.0     0.125   1024   -10.0 6.0<br> 10.0     0.125   1024   -10.0 6.0<br> 20.0     0.125   1024   -10.0 6.0<br></pre>
+    For the emulation of the teleseismic arrival, which will be
+    approximated by placing the point source at a large depth, one would
+    have to manually change the TO so some large value and have VRED=
+    0.0.&nbsp; The <i>-DELAY delay </i>option says to start the
+    synthetics <i>delay&nbsp; </i>seconds before the first arrival.<br>
+    <br>
+    <br>
+    The resulting output of <b>cseis96</b> is; the file cseis96.amp
+    which looks like the following. <br>
+    <pre>model.d<br> 10<br>   0.00000 200.00000   0.00000  10.00000                        <u><font color="#ff0000"><b>Source is at (0,200)</b></font></u><br>  0.1000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01  <b> 	</b><b><font color="#ff0000">Distance 1</font></b><br>  0.2000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01	<b><font color="#ff0000">Distance 2</font></b>
+  0.3000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.4000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.5000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.6000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.7000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.8000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.9000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.1000E+03  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>    1   10 0.3727E+02 0.4561E-02 0.7823E-02 0.3142E+01 0.0000E+00-0.1107E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01<br>    1    9 0.3655E+02 0.4284E-02 0.8160E-02 0.3142E+01 0.0000E+00-0.1148E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01<br>    1    8 0.3590E+02 0.3963E-02 0.8487E-02 0.3142E+01 0.0000E+00-0.1190E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01<br><b><font color="#ff0000">The output here are <br>	ray number             - ray one<br>	distance number        - 10 means here means the 10'th distance entry, which is  100 km here<br>	horizontal amplitude   - these are used to make the synthetic<br>	vertical amplitude<br>	horizontal phase<br>	vertical phase<br>	pnew                   - For the first entry this is -1.107 radians, or and angle of 63.44 degrees measured upward<br>                                 from the horizontal. This is equivalent to an incident angle of 90 - 64.44 = 25.56 degrees (true is 26.56)<br>                                 There is a rounding error in the presentation of </font></b><b><font color="#ff0000">-0.1107E+01. 
+	mwave                    1 means ray leaves the source as P<br>	ros                      Source density is 2.8 gm/cm<sup>3</sup><br>	vels                     Velocity of ray type, e.g., P, at source is 6.00 km/s<br>	sumtq<br>	rsrf                     Density at receiver 2.8 </font></b><font color="#ff0000"><u><b><font color="#ff0000">gm/cm<sup>3</sup></font></b></u><u><b>
+</b></u><b>	vsrf                     Velocity at receiver to this ray is 6.00 km/</b><b>s<br><br></b></font></pre>
+    This output does not have any information about the ray identified
+    by the ray number. That information is contained in the file <i>cseis96.dat</i><i>,.<br>
+    </i><br>
+    <br>
+    <br>
+    Lets consider a receiver function for the observation at a distance
+    of 100 km. Since this is a halfspace, the angle of incidence at the
+    surface is atan ( 100/200) = 26.56 degrees and the ray parameter is
+    p = sin(26.56)/6.0 = 0.0745 s/km. The seismograms to be used are
+    0010002000.ZEX and 0010002000.REX. Now run <b>saciterd <br>
+      <br>
+    </b>
+    <pre><b>saciterd -FN 0010002000.REX -FD 0010002000.ZEX -RAYP 0.0745 -D 10 -ALP 1.0<br></b><br></pre>
+    which creates the Sac file <i>decon.out. </i>Also compute the
+    theoretical using <b>hrftn96 </b>with the command<br>
+    <pre><b>hrftn96 -M model.d -NSAMP 1024 -DT 0.125 -ALP 1.0 -P -RAYP 0.0745 -D 10</b><br></pre>
+    <br>
+    which creates the Sac file<i> hrftn96.sac</i>.<br>
+    <br>
+    <br>
+    <h1>Test Cases</h1>
+    The following test cases were designed to learn how to adapt the
+    code for the purpose of modeling teleseismic P-wave receiver
+    functions. The sequence of tests<br>
+    leading to the images shown in this tutorial can be obtained&nbsp;
+    by executing the following commands in order:<br>
+    <br>
+    <pre>(cd Layer1; DOIT;DOPLT;DOCLEANUP)<br>(cd Layer2;DOIT; DOPLT;DOCLEANUP)<br>(cd Layer3;DOIT; DOPLT;DOCLEANUP)<br>(cd NsubductionReverbF/;DOIT;DOPLT;DOSACITERD;DOREC)<br>(cd NsubductionReverbR/;DOIT;DOPLT;DOSACITERD;DOREC)<br>(cd DOCMPRFTN;DOCMP)<br></pre>
+    <br>
+    <h2>Layer1</h2>
+    <p>This discusses running the code and also addresses the ability of
+      this ray tracing code to approximate incident plane waves.<br>
+      Everything is in <a moz-do-not-send="true"
+        href="Layer1/Layer1.html">Layer1</a><br>
+    </p>
+    <h2>Layer2</h2>
+    <p>Here the ability to filter rays by ray parameter is done by
+      modifying the <i>cseis96.dat</i> file.<br>
+      Everything is in <a moz-do-not-send="true"
+        href="Layer2/Layer2.html">Layer2</a><br>
+    </p>
+    <p>Compared to the Layer3 example, these computations are faster
+      since only a few rays are computed. In the Layer3 example, all
+      rays are computed using <b>cseis96</b> and the results are
+      filtered. </p>
+    <h2>Layer3</h2>
+    <p>Here the ability to filter rays by ray parameter is done by the
+      command line of <b>cpulse96.</b><br>
+      Everything is in&nbsp;<a moz-do-not-send="true"
+        href="Layer3/Layer3.html">Layer3</a></p>
+    <h2>Initial subduction model</h2>
+    <p> The initial test model is based on the image image from <a
+        moz-do-not-send="true"
+href="https://www.chegg.com/homework-help/questions-and-answers/figure-56-generalized-east-west-profile-center-nazca-plate-eastern-side-andes-mountains-ho-q52257549">https://www.chegg.com/homework-help/questions-and-answers/figure-56-generalized-east-west-profile-center-nazca-plate-eastern-side-andes-mountains-ho-q52257549</a></p>
+    . The model used here is shown in the next figure <br>
+    <center>
+      <table>
+        <tbody>
+          <tr>
+            <td><img src="NsubductionReverbF/SubMod.png"></td>
+          </tr>
+        </tbody>
+      </table>
+    </center>
+    <br>
+    The P velocities in the layers are 6.0, 8.0, 6.0, 8.0 and 8.5 km/s
+    from top to bottom. The layer boundaries on the right side of the
+    model are at 0, 40, 200, 207 and 300 km. (The lower boundary at
+    about 600 km is inserted to that the source is oin a layer).
+    <p></p>
+    <p> The layer boundaries use a simple format that is described in
+      the tutorial at <i>PROGRAMS.330/DOC/OVERVIEW.pdf/cps330o.pdf</i>.
+      Thus the layering consists of linear segments. </p>
+    <p> <b>NOTE:</b> This is not a restriction of <b>cseis96</b>. The
+      layering can be specified to be smoother by uaing cubic splines -
+      see the documantation at <i>PROGRAMS.330/VOLIX/DOC/seis81.txt</i>.
+    </p>
+    <p> To create synthetics to emulate teleseismic arrivals and for
+      computational efficiency, the processing scripts will select a
+      target x-coordinate, x<sub>rec</sub>, for the station. It will
+      then be neceasary to specifiy the source location, e.g., (x<sub>src</sub>,
+      z<sub>src</sub>) where the z<sub>src</sub> is much larger than the
+      structure thickness. In this case a&nbsp; simple approximation is
+      that the horizontal offset from the source will be <i>x<sub>offset</sub>
+        =z<sub>src</sub> tan ( p V)</i> where&nbsp; <i>p</i> is the ray
+      parameter of&nbsp; the teleseismic arrival and <i>V</i> is the
+      P-velocity at the source depth. If the ray is propagating in the <i>+x</i>
+      direction, then x<sub>src</sub> = x<sub>rec</sub> - x<sub>offset</sub>.
+      If&nbsp; the ray is propagating in the <i>-x</i> direction, e.g.,
+      a reverse profile, then x<sub>src</sub> = x<sub>rec</sub> + x<sub>offset</sub>.
+    </p>
+    To facilitate the specification of the range of acceptable angles
+    for the Cerveny code, a simple Fortran program was written. If the
+    source depth or velocity change, just modify in the definitions at
+    the beginning of the code. The code, ptoradian.f , compilation and
+    output are as follow:
+    <p></p>
+    <p> </p>
+    <pre>      program ptoradian
+c-----
+c     This program considers at range of teleseismic
+c     ray parameters typically observed. It then 
+c     converts the ray parameters to angles in radians
+c     for use with the Cerveny code. In addiiton
+c     it gives the horizontal offset for a given source
+c     depth.
+c
+c     It is assumed tha tht source depth is much greater than 
+c     the thickness of the structure being modeled.
+c-----
+c     define the velocity of the P wave at
+c     the source depth
+c-----
+      vel=8.5
+c-----
+c     define the source depth deemed sufficient for a plane-wave
+c     approximation
+c-----
+      depth = 16000.0
+      call bdoit(0.045,0.055,vel,depth,.true.)
+      call bdoit(0.055,0.065,vel,depth,.false.)
+      call bdoit(0.065,0.075,vel,depth,.false.)
+      end
+
+      subroutine bdoit(plow,phgh,vel,depth,lprinthead)
+      real plow, phgh, vel, depth
+      logical lprinthead
+      real anglow, anghgh, angmid, thetamid
+      real xoff
+      real pi2
+
+      if(lprinthead)then
+        write(6,1)depth,vel
+      endif
+    1 format('    Mapping of ray parameter range to horizontal offset ',
+     1'and ray angles in radians'/
+     2'    for source depth of',f10.2,' and velocity of ',f10.3,' km/s'/
+     3'  p range (s/km)  Theta   Xoffset            Forward Rays (+x) ',
+     4'             Reverse Rays (-x)')
+
+      pi2 = 3.1415927/2.0
+      call getang(plow,vel,anglow)
+      call getang(phgh,vel,anghgh)
+      angmid = 0.5*(anghgh + anglow)
+      thetamid = angmid * 180.0 / 3.1415927
+c-----
+c     the horizontal offset is x=depth*tan(angmid)
+c-----
+      xoff = depth*tan(angmid)
+c-----
+c     get the angles in radians for the forward and reverse
+c     profiles
+c     The Cerveny code measures angles with respect to the
+c     horizontal. Upward rays are negative. 
+c     Rays in the +x direction, the forward direction, will
+c     have angles in the range [0, -pi/2]. 
+c     Rays in the -x direction, the reverse direction, will 
+c     have angles oin the range [-pi/2, -pi]
+c-----
+      flow = -pi2 + anghgh
+      fhgh = -pi2 + anglow
+      rlow = -pi2 - anglow
+      rhgh = -pi2 - anghgh
+      write(6,2)plow,phgh,thetamid,xoff,flow,fhgh,rlow,rhgh 
+    2 format('[',f6.3,' to',f6.3,']',f7.3,f10.3,5x,
+     1      2('[',f10.4,'  to',f10.4,']',5x))
+      return
+      end
+
+      subroutine getang(p,vel,ang)
+      real p, vel, ang
+      real pi2
+      pi2 = 3.1415927/2.0
+      ang = asin(p*vel)
+      return
+      end
+
+</pre>
+    <p></p>
+    <p> </p>
+    <pre>gfortran ptoradian.f
+a.out
+
+    Mapping of ray parameter range to horizontal offset and ray angles in radians
+    for source depth of  16000.00 and velocity of      8.500 km/s
+  p range (s/km)  Theta   Xoffset            Forward Rays (+x)              Reverse Rays (-x)
+[ 0.045 to 0.055] 25.180  7522.338     [   -1.0843  to   -1.1783]     [   -1.9633  to   -2.0573]
+[ 0.055 to 0.065] 30.705  9502.150     [   -0.9854  to   -1.0843]     [   -2.0573  to   -2.1562]
+[ 0.065 to 0.075] 36.572 11870.596     [   -0.8795  to   -0.9854]     [   -2.1562  to   -2.2620]
+
+</pre>
+    <p></p>
+    <p><br>
+      In the examples that follow, the 0.055-0.065 range of ray
+      parameter is considered. </p>
+    <p><br>
+      By default <b>cprep96</b> will compute all ray conversions, which
+      will create a huge number of rays. The <i>-R reverb</i> option to
+      <b>cprep96</b> is used to restrict the number of boundings in the
+      layers of the model to 3,3,1 and 1, respectively. the <i>3</i>
+      means that ion a given leyer, PPP, PPS, PSP, PSS, SSS, SSP, SPP
+      and SPP are considered, which should be sufficient for this study.
+    </p>
+    <p><br>
+      The following tutorials consider wave propagation with receiver
+      positions from 50 to 8000 km along the surface of the model above.
+      At 800 km, for the the forward model, the way interaction should
+      approximate what would be expected for a single layer over a
+      halfspace, which can be compared to the output of <b>hrftn96</b>
+      to test the code. This is why <b>cseis96</b> computations were
+      extended to double precision when computing the ray from the
+      soruce to the receiver. </p>
+    <h3>Forward profile</h3>
+    <p>The synthetics for a forward profile are computed. In addition <b>saciterd</b>
+      is created to make a p-wave receiver function profile as a
+      function of the station longitude. Everything is in <a
+        moz-do-not-send="true"
+        href="NsubductionReverbF/NsubductionReverbF.html">Forward
+        profile</a><br>
+    </p>
+    <h3>Reversed profile</h3>
+    <p> </p>
+    <p>The synthetics for a forward profile are computed. In addition <b>saciterd</b>
+      is created to make a p-wave receiver function profile as a
+      function of the Everything is in <a moz-do-not-send="true"
+        href="NsubductionReverbR/NsubductionReverbR.html">Reversed
+        profile</a><br>
+    </p>
+    <h3>Discussion</h3>
+    <p> As expected the synthetics and receiver function show the effect
+      of the 2-D structure. It us useful to compare the RFTN plots
+      side-by-side: <br>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center>Forward Profile (+x)</center>
+              <br>
+              <img src="NsubductionReverbF/RFTN.png"></td>
+            <td>
+              <center>Reversed Profile (-x)</center>
+              <br>
+              <img src="NsubductionReverbR/RFTN.png"></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      First note that the RFTN's for the reverse profile are reversed in
+      sign. This is because the REX Green's function does not show
+      radial displacements, but displacements that are positive in the
+      (-x) direction. This plot could be flipped by multiplying the
+      traces by -1! </p>
+    <p></p>
+    <p> The traces look different in the 0 - 200 km range for the
+      station position. For this reversed profile one sees the arrivals
+      trapped within the wedge. The only disturbing feature is the shape
+      of the receiver function at about 20 sec after the first "bump".
+      To understand the difference, the following figure compares the
+      receiver functions generated by <b>hrftn96</b> for the simple
+      single-layer over a halfspace (Simple.sac) and for a five layer
+      flat model (Layered.sac) corresponding to the flat subduction
+      structure at the right of the model. Finally the receiver
+      functions corresponding to the 2-D forward model at receiver
+      position 600 km are given in Forward600.sac while Reverse600.sac
+      is for the reversed profile. In performing this comparison the
+      reverse profile receiver function were multiplied by (-1) for
+      comparison, thus converting modtion in the (-x) direction to
+      radial with respect to the source. <br>
+    </p>
+    <table>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td><img src="DOCMPRFTN//RFTNcmp.png"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    This comparison shows that the difference at about 20s on the plot
+    is due to the multiplayer structure. Comparing the arrival at about
+    72s of the Layered.sac and Reverse600.sac, shows an initial
+    agreement. The differences may be due to the need for the model to
+    be wider (?), or the need for more bounding rays in the Cerveny
+    simulation. Recall that only 3 reverberations were permitted in the
+    upper layers.
+    <p></p>
+    <h1>Final thoughts</h1>
+    <p> Additional model studies can be performed. These synthetics show
+      structural features well because of the small number of layers and
+      the sharp velocity contrasts. If there are gradients, then
+      features will become less obvious. </p>
+    <p></p>
+    <h1>Notes</h1>
+    <p>Charles Langston has a paper in the Bulletin, Seismological
+      Society of America in 1977 on receiver functions in the Pacific
+      Northwest of the U.S. This may be a good early reference.<br>
+    </p>
+    <h1>References</h1>
+    <p>Červený, V., I. A. Molotkov, and I. Pšenčík, 1977, Ray Method in
+      Seismology. Praha: Universita Karlova.</p>
+    <p>Červený, V. (1985). Seismic Ray Theory, DOI:&nbsp;
+      10.1007/0-387-30752-4_134<br>
+    </p>
+    <p>Červený, V. (2010). Seismic Ray Theory, Cambridge University
+      Press,<a moz-do-not-send="true"
+        href="https://doi.org/10.1017/CBO9780511529399">
+        https://doi.org/10.1017/CBO9780511529399</a><br>
+    </p>
+    <p>Červený, V. and I. Pšenčík (2011). Seismic ray theory, <a
+        moz-do-not-send="true"
+        href="http://sw3d.cz/papers.bin/r20vc1.pdf">http://sw3d.cz/papers.bin/r20vc1.pdf</a>,
+      24pp.</p>
+    <p>Herrmann, R. B. (2013) Computer programs in seismology: An
+      evolving tool for instruction and research, Seism. Res. Lettr. 84,
+      1081-1088, doi:10.1785/0220110096<br>
+    </p>
+    <p>Langston, C. A. (1977). The effect of planar dipping structure on
+      source and receiver responses for a constant ray parameter, Bull.
+      Seism. Soc. Am. <b>67</b>, 1029-1050,&nbsp; <a
+        moz-do-not-send="true"
+        href="https://doi.org/10.1785/BSSA0670041029">https://doi.org/10.1785/BSSA0670041029</a><br>
+    </p>
+    <p>
+      <meta charset="utf-8">
+    </p>
+    <br>
+    <p> </p>
+    <table>
+    </table>
+    <p></p>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Computer Programs in Seismology Tutorials</title>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials -</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h2> DOITSW </h2>
+    <p> This script executes the surface wave codes to create the
+      theoretical dispersion curves for the five different water
+      thicknesses. The initial appearance of the <i>OCEAN_SW</i>
+      directory is<br>
+    </p>
+    <pre>&gt; ls -F<br>DOITSW*		OCEAN_1.0.mod	OCEAN_2.0.mod	OCEAN_3.0.mod	OCEAN_4.0.mod	OCEAN_5.0.mod <br></pre>
+    <p>After executing the <b>DOITSW</b> command this directory will
+      appear as<br>
+    </p>
+    <pre>&gt;ls -F<br>LLL.PLT	DOITSW*  OCEAN_2.0.mod	OCEAN_4.0.mod	swDIR_1.0/	swDIR_3.0/	swDIR_5.0/<br>ALLR.PLT	 OCEAN_1.0.mod	OCEAN_3.0.mod	OCEAN_5.0.mod	swDIR_2.0/	swDIR_4.0/<br></pre>
+    <p>The subdirectories, such as <i>swDIR_3.0</i> for the 3.0km water
+      thickness will have the following files:<br>
+    </p>
+    <pre>&gt; ls -F<br>L.PLT		R.PLT		SLEGNC.PLT	SREGN.dsp	SREGNU.PLT	sdisp96.lov	slegn96.egn<br>OCEAN_3.0.mod	SLEGN.dsp	SLEGNU.PLT	SREGNC.PLT	sdisp96.dat	sdisp96.ray	sregn96.egn<br></pre>
+    <p>The <i>sdisp96.dat </i>is created by the program <b>sprep96</b>,
+      <i>sdisp96.lov</i> and <i>sdisp96.ray</i> are created by <b>sdisp96</b>,
+      <i>sregn96.egn</i> by <b>sregn96 </b>and <i>slegn96.egn</i> by
+      <b>sleg</b><b>n96</b>. The program <b>sdpegn96</b> creates
+      the group (U) and pahase (C) velocity plots for Love (L) and
+      Rayleigh (R) dispersion. Finally the <b>-S </b>flag to <b>sdpegn96</b>
+      will create the theoretical dispersion files <i>SLEGN.dsp</i> and
+      <i>SREGN.dsp </i>for use with the inversion program <b>surf96 </b>or
+
+      for user defined purposes. The <i>surf96 </i>dispersion format
+      is described in the CPS distribution at <i>PROGRAMS.330/DOC/OVERVIEW.pdf/cps330o.pdf.<br>
+      </i></p>
+    <p>For the purpose of this particular tutorial, the group and phase
+      velocity plots are combined for each wave type to create the
+      composite <i>L.PLT</i> and <i>R.PLT</i>. Because this is done by
+      a simple <i>cat</i> command the Y-axis label will be messy.
+      However the phase velocity is plotted as a solid curve and the
+      group velocity as a dashed curve. Two modes are displayed
+      since the synthetic waveforms show a strong first higher mode for
+      some Green's functions.<br>
+    </p>
+    <p>The last thing that the script does is to combine the <i>L.PLT </i>files
+
+      for each water depth to make the top level plot file <i>ALLL.PLT</i>
+
+      Similarly all of the Rayleigh wave dispersion plots are
+      combined to create the <i>ALLR.PLT</i>. The result
+      are <i>messy</i> files whose only purpose to to show the effect
+      of the water thickness on the Love (none) and Rayleigh (a lot)
+      waves.<br>
+    </p>
+    <p>To use this enter a command as<br>
+    </p>
+    <pre> DOITSW 
+
+</pre>
+    <p> The <i>DOITSW</i> shell script is </p>
+    <pre>#!/bin/sh
+
+for D in 1.0 2.0 3.0 4.0 5.0
+do
+	case $D in
+		0.5) KOLOR=1000 ;;           <font color="#ff0000">These are CALPLOT colors. See the Appendix of the PDF's in the documentation </font>
+		1.0) KOLOR=1020 ;;
+		2.0) KOLOR=1040 ;;
+		3.0) KOLOR=1060 ;;
+		4.0) KOLOR=1080 ;;
+		5.0) KOLOR=1100 ;;
+	esac
+crea
+	if [ ! -d swDIR_${D} ]               <font color="#ff0000">Create a unique directory for each model</font> 
+	then
+		mkdir swDIR_${D}
+	fi
+	cp OCEAN_${D}.mod swDIR_${D}
+	#  run in a sub shell
+	(
+		cd swDIR_${D}
+		sprep96 -PMIN 1 -PMAX 150 -M OCEAN_${D}.mod -NMOD 2 -L -R  <font color="#ff0000">Execute the surface wave codes to get dispersion for</font>
+		sdisp96                                                    <font color="#ff0000">fundamental and first high modes</font>
+		sregn96
+		slegn96
+set -x
+		sdpegn96 -R -C -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0
+		sdpegn96 -R -U -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0 -DT "short"
+		sdpegn96 -L -C -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0
+		sdpegn96 -L -U -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0 -DT "short"
+		cat SREGN[CU].PLT &gt; R.PLT
+		cat SLEGN[CU].PLT &gt; L.PLT
+	)
+done
+
+cat */R.PLT &gt; ALLR.PLT
+cat */L.PLT &gt; ALLL.PLT
+</pre>
+    <br>
+    <div style="text-align: center;">Last Changed November 8, 2024<br>
+    </div>
+  </body>
+</html>

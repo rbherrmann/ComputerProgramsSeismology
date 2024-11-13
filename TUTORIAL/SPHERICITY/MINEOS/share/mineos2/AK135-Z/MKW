@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#####
+#	read the distance from the SAC FILE and
+#	use it to get the distance and the file name
+#####
+
+for i in *.ZSS
+do
+B=`basename $i .ZSS`
+D=`echo $B | awk '{printf "%6.6d", $1/10000}' `
+DT=`saclhdr -DELTA $i`
+NPTS=`saclhdr -NPTS $i`
+T0=`saclhdr -B $i`
+VRED=0
+H=`saclhdr -EVDP $i`
+DIRNAME=`echo ${H} | awk '{printf "%4.0f",  $1 * 10}' | awk '{printf "%4.4d", $1}' `
+DIST=`saclhdr -DIST $i`
+echo $DIST $DT $NPTS $T0 $VRED ${DIRNAME} $B
+done

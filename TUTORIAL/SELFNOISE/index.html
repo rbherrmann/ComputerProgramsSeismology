@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Determination of Instrument Self Noise from Cross-correlation</title>
+</head>
+<body>
+<h2>Introduction</h2>
+This tutorial shows how to determine the self noise of an instrument
+though the comparison of the output of two instruments operating
+side-by-side.<br>
+<br>
+This is an implementation of the work by G. Holcomb at the USGS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp; Holcomb, G. L. (1989).<br>
+&nbsp;&nbsp;&nbsp;&nbsp; A Direct Method for Calculating Instrument
+Noise Levels in Side-by-Side Seismometer Evaluations,<br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="ofr89-214.pdf">USGS Open-File Report
+89-214</a> <br>
+<br>
+The concept is that the output of an instrument consists of both the
+effect of actual ground motion and internal instrumental noise. If two
+isntruments are operated side-by-side, then one has sufficient
+information to separate the ground motion and the two instrumental
+components.<br>
+<br>
+<h2>Software</h2>
+All codes and sample data sets are contained in the tar-ball 
+<A HREF="selfnoise.tgz">selfnoise.tgz</A>
+<br>
+Download this file and unpack using the command<br>
+&nbsp;&nbsp;&nbsp; gunzip -c selfnoise.tgz | tar xf - <br>
+This will create a directory SELFNOISE with the following contents <a
+ href="filelist.txt"> (file listing)</a> <br>
+<br>
+The most important file is the <a href="00README.txt">00README</a>
+which tells you how to compile
+and run the programs.<br>
+<br>
+<h2>Test Data Sets</h2>
+Two data sets are provided which compare the 00 and 01 data stream for
+the LHZ component at ANMO&nbsp; and the LHZ, LHN and LHE components at
+KMI.&nbsp; The are contained in the directories ANMO.TEST and
+KMI.TEST.&nbsp; Each directory has a SEED volume for 24 hours of
+continuoous data from the stations. The SEED volumes were obtained from
+IRIS.<br>
+<br>
+The shell script DOCROSS does the following:<br>
+&nbsp;&nbsp;&nbsp; 1, unpacks the SEED volume<br>
+&nbsp;&nbsp;&nbsp; 2. applies the technique to the LHZ for ANMO and
+LHZ, LHN and LHE for KMI<br>
+&nbsp;&nbsp;&nbsp; 3. plots the results:<br>
+<br>
+<h3>ANMO</h3>
+<br>
+This compares two instruments. For each sensor, the figures give the
+gound noise esitmate (triangle), total noise estimate (light blue line,
+the instrument self noise (red circles) and the low and high noise
+model bounds.&nbsp; For this day we can compare the total noise
+estiamte of sensor 2 (location code 10) to the plots available from
+USGS/IRIS as a check on our code. <br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">Sensor 1<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;">Sensor 2<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;">Coherency<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="1"
+ src="ANMOTEST/PLOTLHZ20101.220.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="2"
+ src="ANMOTEST/PLOTLHZ20102.220.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 658px; height: 498px;" alt="coher"
+ src="ANMOTEST/CPLOTLHZ2010.220.PLT.png"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3><img style="width: 550px; height: 440px;" alt="USGS PDF"
+ src="ANMOTEST/pdf_E2010.220_S2010.220_cBHZ_l10_nIU_sANMO.png"><br>
+</h3>
+<h3><br>
+</h3>
+<h3>KMI</h3>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: center;">Sensor 1<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;">Sensor 2<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;">Coherency<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="Z1"
+ src="KMITEST/PLOTLHZ20101.027.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="Z1"
+ src="KMITEST/PLOTLHZ20102.027.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 658px; height: 498px;" alt="zcoher"
+ src="KMITEST/CPLOTLHZ2010.027.PLT.png"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="n1"
+ src="KMITEST/PLOTLHN20101.027.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="N2"
+ src="KMITEST/PLOTLHN20102.027.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 658px; height: 498px;" alt="zcoher"
+ src="KMITEST/CPLOTLHN2010.027.PLT.png"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="E1"
+ src="KMITEST/PLOTLHE20101.027.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 490px; height: 498px;" alt="E2"
+ src="KMITEST/PLOTLHE20102.027.PLT.png"><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img
+ style="width: 658px; height: 498px;" alt="zcoher"
+ src="KMITEST/CPLOTLHE2010.027.PLT.png"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+</body>
+</html>

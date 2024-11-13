@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Computer Programs in Seismology - Network QC</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
+	<META NAME="CHANGED" CONTENT="20081120;8574100">
+	<STYLE TYPE="text/css">
+	<!--
+		TD P { color: #000000 }
+		H1 { color: #000000 }
+		P { color: #000000 }
+		PRE { color: #000000 }
+		H2 { color: #000000 }
+		H3 { color: #000000 }
+		H4 { color: #000000 }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" TEXT="#000000" BGCOLOR="#ffffff" DIR="LTR">
+<P ALIGN=CENTER><FONT SIZE=5><B>Seismic Network QC through Teleseism
+Modeling</B></FONT></P>
+<H1 ALIGN=LEFT>Introduction</H1>
+<P ALIGN=LEFT>The purpose of this package is to compare synthetic
+seismograms to observations for teleseismic P, SV and SH in the
+distance range of 30 - 95 degrees. Observed waveform are acquired
+from data centers, deconvolved, rotated, selected for quality. Using
+a given focal mechanism defined by strike, dip, rake, moment
+magnitude and source depth, synthetics are compared to the observed
+waveforms. A web page is created providing all information on the
+processing. Traces are flagged with show a significant departure
+between the observed and synthetic waveforms.&nbsp; The flagged
+traces may result from incorrect specifications of the instrument
+response or from problems with the field instrumentation.<BR><BR>This
+QC package was easily created by modifying the existing procedure for
+inverting teleseismic waveforms for earthquake source
+parameters.<BR><BR>The recent effort to calibrate the Green's
+functions against free oscillation code (<A HREF="../SPHERICITY/index.html">Synthetics
+for a Spherical Earth</A>) suggest the possibility of modifying the
+scripts in the current package to also permit a comparison of the
+long period mantle surface-waves.</P>
+<H1 ALIGN=LEFT>Green's Functions</H1>
+<P ALIGN=LEFT>The suggested location of the Green's functions are in
+the directory ${GREENDIR} where the SHELL variable GREENDIR is
+defined in the user's <I>~/.bashrc file</I>.&nbsp; On my system I
+define this as</P>
+<PRE STYLE="margin-bottom: 0.2in; text-align: left">   export GREENDIR=/backup/rbh/GREEN</PRE><P ALIGN=LEFT>
+If you use CSHELL then you will do something similar in your <I>.login</I>
+or <I>.cshrc</I> file. The reason for specifying the PATH in the
+startup file, is that the scripts use the ${GREENDIR}, which means
+that the Green's functions can be moved around the file system, only
+the definition of GREENDIR changes, and the processing scripts do not
+have to be changed.<BR><BR>On my system there are two subdirectories
+of teleseismic Green's functions:&nbsp; GREEN.AK135 and AK135.TEL.&nbsp;
+The GREEN.AK135 is the older set of Green's functions which may be on
+some user systems.&nbsp; The AK135.TEL are those resulting from the
+comprehensive test of Earth flattening referenced above.&nbsp; In the
+Scripts below OAK135&nbsp; will refer to the old version and AK135
+will refer to the current, preferred version of Green's functions.
+There is also a subdirectory Models which has the ASCII files
+AK135sph.mod (used for the old Green's functions) and tak135sph.mod
+(used for the current, preferred Green's functions).</P>
+<H1 ALIGN=LEFT>The Package</H1>
+<P ALIGN=LEFT>The processing package is obtained at <A HREF="../MECHQC.TEL/mechqctel.tgz">mechqctel.tgz</A>.&nbsp;
+Download this file and unpack using the command</P>
+<PRE STYLE="margin-left: 0.42in; text-align: left">gunzip -c mechqctel.tgz | tar xvf - 
+ </PRE><P ALIGN=LEFT>
+This will create the directory MECHQC.TEL with the following contents</P>
+<PRE STYLE="text-align: left">MECHQC.TEL
+|-- 0XXXTEL
+|   |-- 00README
+|   |-- DAT.TEL
+|   |-- GRD.TEL
+|   |-- HTML.TEL
+|   |-- MT.TEL
+|   |-- MTD.TEL
+|   |-- PGRD.TEL
+|   |-- PMTD.TEL
+|   |-- SYN.TEL
+|   `-- USGSMT
+|       `-- 00README
+|-- DO
+|-- DOCWBQC
+|-- DOWILQC
+|-- DOWILQCORFEUS
+|-- PROTO.CWB
+|   |-- CWBDODAT
+|   |-- CWBDODEC
+|   |-- CWBDOEVT
+|   |-- CWBDOGCARC
+|   |-- CWBDOPREV
+|   |-- CWBDOQC
+|   |-- CWBDOQCBBD
+|   `-- CWBDOROT
+`-- PROTO.IU
+    |-- IDODAT
+    |-- IDODEC
+    |-- IDOEVT
+    |-- IDOGCARC
+    |-- IDOPREV
+    |-- IDOQC
+    `-- IDOROT</PRE><P ALIGN=LEFT>
+<BR><BR>
+</P>
+<H2 ALIGN=LEFT>Getting Data</H2>
+<P ALIGN=LEFT STYLE="margin-bottom: 0in">There are many ways to get
+waveform data for teleseisms.&nbsp; For my purposes, it is sufficient
+to obtain the data from the&nbsp;<A HREF="http://www.iris.edu/cgi-bin/wilberII_page1.pl">WilberII</A>
+interface at IRIS, the <A HREF="http://www.orfeus-eu.org/Earthquakes/recentquakes.html">Orfeus
+data request</A> or from the Internal USGS Continuous Wave Buffer
+(CWB).&nbsp; The processing script discussed below is tailed to each
+of these sources, e.g., use the DOWILQCORFEUS&nbsp; if you obtain
+waveforms data from Orfeus.&nbsp; <BR><BR>After selecting the
+earthquake of interest at the IRIS Wilber II or the Orfeus page, you
+will see a set of menus that will lead you to the data stream.<BR><BR>In
+this tutorial I will display the screens for the event:<BR><BR>&nbsp;&nbsp;&nbsp;
+</P>
+<TABLE CELLPADDING=2 CELLSPACING=3>
+	<TR>
+		<TD>
+			<P><A HREF="http://www.orfeus-eu.org/cgi-bin/wilberII/wilberII_page3.pl?evid=25574" TARGET="_top"><FONT COLOR="#ff0000">2008-03-03
+			14:11:15 </FONT></A>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><FONT COLOR="#ff0000">13.4 </FONT>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=RIGHT><FONT COLOR="#ff0000">125.7 </FONT>
+			</P>
+		</TD>
+		<TD>
+			<P ALIGN=CENTER><FONT COLOR="#ff0000">24 </FONT>
+			</P>
+		</TD>
+		<TD WIDTH=40>
+			<P ALIGN=CENTER><FONT COLOR="#ff0000">6.9 </FONT>
+			</P>
+		</TD>
+		<TD WIDTH=40>
+			<P ALIGN=CENTER><FONT COLOR="#ff0000">Mw </FONT>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT COLOR="#ff0000">NEIC-BQ </FONT>
+			</P>
+		</TD>
+		<TD>
+			<P><FONT COLOR="#ff0000">Philippine Islands region</FONT></P>
+		</TD>
+	</TR>
+</TABLE>
+<H3 ALIGN=LEFT>IRIS Wilber II</H3>
+<P ALIGN=LEFT>From the IRIS page I will select only the II and IU
+networks.&nbsp; There are too many stations for my screendump. At the
+bottom of the page I click <B>Proceed </B>to go to the next page.</P>
+<CENTER>
+	<TABLE BORDER=3 CELLPADDING=15 CELLSPACING=15>
+		<TR>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="iris1.png"><IMG SRC="siris1.png" NAME="graphics1" ALT="Page 1" ALIGN=BOTTOM WIDTH=410 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 1: Select networks. Here IU and
+				II (click to enlarge)</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="iris2.png"><IMG SRC="siris2.png" NAME="graphics2" ALT="Page 2" ALIGN=BOTTOM WIDTH=410 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 2: Select distance range and
+				components&nbsp; (and then Apply filter). This is the top of the
+				page (click to enlarge)</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="iris3.png"><IMG SRC="siris3.png" NAME="graphics3" ALT="Page 3" ALIGN=BOTTOM WIDTH=410 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 3: (bottom of selection). Select
+				format, time window, provide UserName and Request Label and the
+				Proceed (click to enlarge)</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="iris4.png"><IMG SRC="siris4.png" NAME="graphics4" ALT="Page 4" ALIGN=BOTTOM WIDTH=410 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 4: Initial display of request
+				showing processing status. (click to enlarge)</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="iris5.png"><IMG SRC="siris5.png" NAME="graphics5" ALT="Page 5" ALIGN=BOTTOM WIDTH=410 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 5: Processing complete. the
+				location of the FTP directory with the SEED volume is provided.
+				(click to enlarge)</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="iris6.png"><IMG SRC="siris6.png" NAME="graphics6" ALT="Page 6" ALIGN=BOTTOM WIDTH=498 HEIGHT=167 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 6:&nbsp; Contents of the FTP
+				directory (click to enlarge)</FONT></P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<P ALIGN=LEFT><BR><BR>
+</P>
+<H3 ALIGN=LEFT>Orfeus Wilber II</H3>
+<P ALIGN=LEFT>I will select only the GEOSCOPE and GEOFON networks for
+this example</P>
+<CENTER>
+	<TABLE BORDER=2 CELLPADDING=15 CELLSPACING=15>
+		<TR>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="orfeus1.png"><IMG SRC="sorfeus1.png" NAME="graphics7" ALT="Page 1" ALIGN=BOTTOM WIDTH=510 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 1: Select networks, here the
+				GEOFON and GEOSCOPE networks are requested (click for a larger
+				image).</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="orfeus2.png"><IMG SRC="sorfeus2.png" NAME="graphics8" ALT="Page 2" ALIGN=BOTTOM WIDTH=510 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 2: Select traces, components
+				(B??), format, time window, UserName and Request Label (click to
+				enlarge)</FONT></P>
+			</TD>
+			<TD>
+				<P ALIGN=CENTER STYLE="margin-bottom: 0in"><A HREF="orfeus3.png"><IMG SRC="sorfeus3.png" NAME="graphics9" ALT="Page 3" ALIGN=BOTTOM WIDTH=448 HEIGHT=400 BORDER=0></A></P>
+				<P ALIGN=LEFT><FONT SIZE=3>Page 3: After the volume is completed,
+				the directory on the FTP server&nbsp; with the SEED files is
+				indicated. (click to enlarge)</FONT></P>
+			</TD>
+		</TR>
+	</TABLE>
+</CENTER>
+<P ALIGN=LEFT><BR><BR><BR><BR><BR>On this Page 2,&nbsp; I select the
+stations in the 30 - 95 degree epicentral distance range, state that
+I want everything in SEED, that I want a time window from 2 minutes
+before P to 20 minutes after P.&nbsp; Note the User Name and the
+Request Label.&nbsp; This must be entered exactly in the <B>DO </B>script
+below.&nbsp; The <B>DO </B>script will start the script <B>DOWILQCORFEUS</B>
+which will know that the individual trace SEED volumes will be at the
+Orfeus ftp site in the specific area <BR>&nbsp;&nbsp;&nbsp; <BR>&nbsp;&nbsp;&nbsp;
+ftp://www.orfeus-eu.org/pub/wilberII/userdata/RBHerrmann/20080303141115<BR><BR>with
+names such as</P>
+<TABLE CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD>
+			<P><FONT COLOR="#3333ff"><U>GE_CSS__BHE.2008.063.14.11.15.seed</U></FONT></P>
+		</TD>
+		<TD>
+			<P>64 KB</P>
+		</TD>
+		<TD>
+			<P>03/12/2008</P>
+		</TD>
+		<TD>
+			<P>02:58:00 PM</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><FONT COLOR="#3333ff"><U>GE_CSS__BHN.2008.063.14.11.15.seed</U></FONT></P>
+		</TD>
+		<TD>
+			<P>64 KB</P>
+		</TD>
+		<TD>
+			<P>03/12/2008</P>
+		</TD>
+		<TD>
+			<P>02:58:00 PM</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><FONT COLOR="#3333ff"><U>GE_CSS__BHZ.2008.063.14.11.15.seed</U></FONT></P>
+		</TD>
+		<TD>
+			<P>64 KB</P>
+		</TD>
+		<TD>
+			<P>03/12/2008</P>
+		</TD>
+		<TD>
+			<P>02:58:00 PM</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><FONT COLOR="#3333ff"><U>GE_HLG__BHE.2008.063.14.11.15.seed</U></FONT></P>
+		</TD>
+		<TD>
+			<P>96 KB</P>
+		</TD>
+		<TD>
+			<P>03/12/2008</P>
+		</TD>
+		<TD>
+			<P>02:58:00 PM</P>
+		</TD>
+	</TR>
+	<TR>
+		<TD>
+			<P><FONT COLOR="#3333ff"><U>GE_HLG__BHN.2008.063.14.11.15.seed</U></FONT></P>
+		</TD>
+		<TD>
+			<P>96 KB</P>
+		</TD>
+		<TD>
+			<P>03/12/2008</P>
+		</TD>
+		<TD>
+			<P>02:58:00 PM</P>
+		</TD>
+	</TR>
+</TABLE>
+<P ALIGN=LEFT><BR><BR><BR><BR>
+</P>
+<H2 ALIGN=LEFT>Scripts</H2>
+<H4 ALIGN=LEFT>DO</H4>
+<P ALIGN=LEFT>This script starts everything.&nbsp; 
+</P>
+<PRE STYLE="text-align: left">#!/bin/sh
+#####
+#####
+#./DO..QC.. YEAR MO DY HR MN SC MSC  LAT(o) LON(o) H(km) MAG MT_DEPTH(km) STRIKE DIP RAKE Mw USERNAME FILE_NAME EVID MODEL
+# H(km) is the location depth
+# MT_DEPTH(km) is the moment tensor depth
+# FILE_NAME is the Identifier given when using the Wilbur II menu - note that the
+#####
+./DOWILQCORFEUS 2008 03 03 14 11 15 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141115 pdbs AK135
+./DOWILQC       2008 03 03 14 11 16 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141116 pdbs AK135
+./DOCWBQC       2008 03 03 14 11 14 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141116 pdbs AK135</PRE><P ALIGN=LEFT STYLE="margin-bottom: 0in">
+This script actually defines the parameters for the scripts that do
+all the work.&nbsp; The only difference in the scripts is the data
+source. Normally only one<BR>data source is examined. I usually
+comment out the previous commands by placing an # sign at the
+beginning of the line.&nbsp; (Note in this example, I use a slightly
+different origin time for the different data streams so that the
+contents of each will be placed in different directories for this
+tutorial).<BR><BR>There must be exactly 20 entries after the
+DO.....&nbsp;&nbsp; These are<BR><BR>YEAR&nbsp;&nbsp; - year of
+earthquake<BR>MO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - month
+<BR>DY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+Day<BR>HR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+Hour<BR>MN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+Minute<BR>SC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+- Second<BR>MSC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Millisecond of
+origin time<BR>LAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - event
+latitude in degrees<BR>LON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+event longitude in degrees<BR>H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+- source depth from location - ONLY FOR REFERENCE<BR>MAG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+- network magnitude - ONLY FOR REFERENCE<BR>MT_DEPTH&nbsp; - depth of
+event from the moment tensor --- VERY ESSENTIAL<BR>STRIKE&nbsp;&nbsp;
+- NODAL PLANE STRIKE<BR>DIP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+- NODAL PLANE DIP<BR>RAKE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - NODAL PLANE
+RAKE<BR>MW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+MOMENT MAGNITUDE FROM MOMENT TENSOR<BR>USERNAME - UserName use int eh
+Wilber II request at IRIS or Orfeus. This is not used in the CWB but
+the entry must be here<BR>FILE_NAME&nbsp; - 
+</P>
+<P ALIGN=LEFT STYLE="margin-left: 0.42in; margin-bottom: 0in">Name of
+the data volume. The IRIS Wilber II creates a directory with this
+name and places the SEED volume in the directory with the name
+FILE_NAME.seed.&nbsp; The Orfeus WILBUR II, places the individual
+trace SEED volumes into a directory with this name.&nbsp; This is not
+used in the CWB but the entry is required</P>
+<P ALIGN=LEFT>EVID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - USGS
+Event ID --&nbsp; this is not used, put could be useful to get the
+arrival times and other information about the event. If you do now
+wish to use this, then enter the uppercase code&nbsp; EVID in this
+position.<BR>MODEL&nbsp;&nbsp; - the velocity model to use.&nbsp; The
+current choices are AK135 and OAK135, as discussed above.</P>
+<H4 ALIGN=LEFT>DOCWBQC</H4>
+<P ALIGN=LEFT>This script acquires waveforms and responses from the
+USGS Continuous Wave Buffer (Internal use only) through their query
+command.&nbsp; The traces are returned as SAC files, and the
+responses in units of counts/nanometer in a sac pole-zero format.&nbsp;
+After deconvolution and setting the event parameters with CWBDOROT,
+the processing is exactly the same as for the other two scripts.</P>
+<H4 ALIGN=LEFT>DOWILQC</H4>
+<P ALIGN=LEFT>This assumes that the waveforms are in the IRIS ftp
+area, that all traces are in a single SEED volume.&nbsp; The program
+<B>rdseed</B> is used to unpack the volume into SAC files while the
+response file is for use with the program <B>evalresp. </B>After
+deconvolution and setting the event parameters with IDOROT, the
+processing is exactly the same as for the other two scripts.</P>
+<H4 ALIGN=LEFT>DOWILQCORFEUS</H4>
+<P ALIGN=LEFT>This assumes that the waveforms are in the IRIS ftp
+area, which has one SEED volume for each trace. .&nbsp; The program
+<B>rdseed</B> is used to unpack the volumes into SAC files while the
+response file is for use with the program <B>evalresp. </B>After
+deconvolution and setting the event parameters with IDOROT, the
+processing is exactly the same as for the other two scripts.</P>
+<H2 ALIGN=LEFT>Processing 
+</H2>
+<P ALIGN=LEFT>The scripts run automatically. They get the waveforms
+from the archive, deconvolve traces to ground velocity in meters/sec,
+rotate to vertical, radial and transverse components, create
+synthetics using the given focal mechanism parameters, and finally
+create the web page for review.&nbsp; <BR><BR>If the event is denoted
+by 20080303141114 then the documentation is in the
+directory<BR><BR>MECHQC.TEL/20080303141114/HTML.TEL - you will see
+the organization pattern in the Results links below.&nbsp; The main
+page of the documentation is the <I>index.html</I> file, which the
+browser will open by default.<BR><BR>Initially there are no plots for
+the moment tensor solution as seed in the pages.&nbsp; To get these
+you must perform two steps:</P>
+<UL>
+	<LI><P ALIGN=LEFT>put the printer plots of the mechanisms into files
+	in the directory MT.OTHER. The script DOHTML in HTML.TEL&nbsp; looks
+	for files with the names <I>usgsmt, usgscmt, cmt, gcmt </I>and <I>bat
+	</I>to represent moment tensors from the current USGS CMT, the USGS
+	body-wave moment tensor, the Lamont global CMT (either the <I>cmt </I>or
+	gcmt ) and the broadband array in Taiwan.&nbsp; By editing the
+	master script in MECHQC.TEL/0XXXTEL/HTML.TEL/DOHTML&nbsp; one can
+	permit other sources.&nbsp; For the example here, the files are in
+	MECHQC.TEL/20080303141114/MT.OTHER 
+	</P>
+	<P ALIGN=LEFT>I just go to my email or to a web page, and copy the
+	text to the file.&nbsp; This is a pure text representation and the
+	lower-case file name is essential</P>
+	<LI><P ALIGN=LEFT>Go to the HTML.TEL directory and run DOHTML again,
+	to update the documentation.</P>
+</UL>
+<H2 ALIGN=LEFT>Results</H2>
+<P ALIGN=LEFT>The following pages show the results for the various
+data sources. Note that the USGS CMT solution did not fit the
+teleseismic P-wave signal as well as the USGS Body Wave moment
+tensor. I used those parameters for the forward synthetics<BR><BR><A HREF="20080303141114/HTML.TEL/index.html">DOCWBQC
+- USGS Internal Waveform Buffer</A><BR><BR><A HREF="20080303141116/HTML.TEL/index.html">DOWILQC
+- Data from IRIS DMC</A><BR><BR><A HREF="20080303141115/HTML.TEL/index.html">DOWILQCORFEUS
+- Data from the Orfeus Data Center</A><BR><BR><BR><BR><BR>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0in"><I><BR>Last Changed March
+12, 2008</I></P>
+</BODY>
+</HTML>

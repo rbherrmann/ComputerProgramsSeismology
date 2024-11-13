@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <style type="text/css">
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;text-align: left; }
+        </style>
+    <style>
+table, th, td,  tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+</style>
+    <title>Moment Tensor Inversion Scripts - DOSETUP</title>
+  </head>
+  <body link="#0000EE" vlink="#551A8B" text="#000000" bgcolor="#ffffff"
+    alink="#EE0000">
+    <h2>Introduction</h2>
+    <h2>Discussion of script</h2>
+<p>
+The script is given below. It is will commented. The only difference between this version and that for GMT Versions 5 and up is that DOSOLUTION is replaced by DOSOLUTION5.
+</p>
+<p>
+<pre>
+#!/bin/bash
+set -x
+#####
+#	set up directory structure for an event that we get from the IRIS
+#####
+
+
+#####
+#	test usage
+#####
+
+if [ $# -ne 16 ]
+then
+echo DOSETUP YEAR MO DY HR MN SC MSC  LAT    LON    DEP  MAG REG NEIC FELTID STATE MYPWD
+echo DOSETUP 2006 02 05 08 17 04 000 66.25 -143.02 18.60 5.1 CUS iuae Xiuae_06 Alaska /backup/rbh/MOMENT_TENSOR/MECH.NA
+	echo $*
+	exit 0
+fi
+
+
+#####
+#	define internal variables: the quotes are required since some fields can have 
+#       blank spacing within"
+#####
+YEAR="${1}"
+MO="${2}"
+DY="${3}"
+HR="${4}"
+MN="${5}"
+SEC="${6}"
+MSEC="${7}"
+LAT="${8}"
+LON="${9}"
+DEP="${10}"
+MAG="${11}"
+REG="${12}"
+NEIC="${13}"
+FELTID="${14}"
+STATE="${15}"
+MYPWD="${16}"
+
+cd ${MYPWD}
+if [ "${FELTID}" != "NONE" ]
+then
+	ISFELT="y"
+else
+	ISFELT="NO"
+fi
+
+#####
+#    now run three scripts that set up everything
+#    DOSETUP - sets up the directory structure for the inversion
+#####
+
+#####
+#	define the DefaultVelocity Model
+#####
+case ${REG} in
+	WUS)  GMODEL="WUS.REG";VMODEL="WUS";FIDREG="imw";REGIONTEXT=" West " ;;
+	CUS)  GMODEL="CUS.REG";VMODEL="CUS";FIDREG="cus";REGIONTEXT="Central and Southeastern US" ;;
+	GSKAN)   GMODEL="GSKAN.REG";VMODEL="GSKAN";FIDREG="ok" ;REGIONTEXT="S. KansasS" ;;
+	*) 
+	echo Improper REGION specification 
+	echo Select on of CA PNW IMW AK NE CUS ECAN 
+	echo DOSETUP YEAR MO DY HR MN SC MSC  LAT    LON    DEP  MAG REG NEIC FELTID STATE/COUNTRY
+	echo DOSETUP 2006 02 05 08 17 04 000 66.25 -143.02 18.60 5.1 CUS iuae Xiuae_06 "Yukon"
+	  ;;
+esac
+
+echo ${REG} ${GMODEL} ${VMODEL} ${FIDREG} ${REGIONTEXT}
+
+echo $*
+
+XXXDIR="${MYPWD}/0XXXREG"
+echo $MYPWD $PROTODIR ${XXXDIR}
+#####
+#	now define the directory name
+#####
+DIR=${YEAR}${MO}${DY}${HR}${MN}${SEC}
+
+echo DIR $DIR
+echo PROTODIR $PROTODIR
+echo 0XXXDIR $XXXDIR
+
+#####
+#       Create and populate the directory structure
+#####
+if [ ! -d ${DIR} ]
+then
+mkdir ${DIR}
+fi
+
+#####
+#    indicate the Velocity model in a file
+#####
+echo ${VMODEL} > ${MYPWD}/${DIR}/VMODEL.used
+
+cd ${XXXDIR}
+	cp -pr * ${MYPWD}/${DIR}
+cd ${MYPWD}
+
+#####
+#	NOW THIS IS VERY VERY SPECIFIC - MODIFY THE SCRIPTS FOR THIS REGION
+#####
+#	get correct model into the scripts
+#####
+cd  ${MYPWD}/${DIR}
+for i in */DOSTA */DOGRID 
+do
+echo Editing $i
+ed $i << EOH
+g/GMODEL/s//${GMODEL}/gp
+w
+q
+EOH
+done
+
+for i in */DOHTML */DOPLTRAD
+do
+echo Editing $i
+ed $i << EOH
+g/VMODEL.mod/s//${VMODEL}.mod/gp
+g/GMODEL/s//${GMODEL}/gp
+g/VMODEL/s//${VMODEL}/gp
+w
+q
+EOH
+done
+
+#####
+#	go to the HTML directory to define the processing parameters
+#####
+
+cd  ${MYPWD}/${DIR}/HTML.REG
+cat > html.tmp << EOF
+REGION="${FIDREG}"
+FELTEVID="${FELTID}"
+TITLE=""
+EVID="${NEIC}"
+DATE="${YEAR}/${MO}/${DY}"
+TIME="${HR}:${MN}:${SEC}"
+LAT="${LAT}"
+LON="${LON}"
+DEPTH="${DEP}"
+MAG="${MAG}"
+FELT="${ISFELT}"
+DIR="${DIR}"
+STATE="${STATE}"
+YEAR="${YEAR}"
+MO="${MO}"
+DY="${DY}"
+HR="${HR}"
+MN="${MN}"
+SEC="${SEC}"
+MSEC="${MSEC}"
+
+EOF
+set -x
+ed DOHTML << EOF
+/IDHERE/
+.r html.tmp
+w
+q
+EOF
+
+
+
+echo Processing ${DIR}
+
+
+</pre>
+</p>
+    <p align="center">Last changed May 21, 2022<br>
+    </p>
+  </body>
+</html>

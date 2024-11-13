@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Finite Fault Synthetics -Computer Programs in Seismology
+      Tutorials</title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <a name="TOP"></a>
+    <p>
+    </p>
+    <ul>
+      <li><a href="#SEC01">Introduction</a></li>
+      <li><a href="#SEC02">Theory</a></li>
+      <li><a href="#SEC03">Download</a></li>
+      <li><a href="#SEC04">Setting up the test runs</a></li>
+      <li><a href="#SEC05">Requirements</a></li>
+      <li><a href="#SEC06">DOIT</a></li>
+      <li><a href="#SEC07">Example </a></li>
+      <li><a href="#SEC08">Discussion of solutions<br>
+      <li><a href="#SEC09">Pseudo time series<br>
+        </a></li>
+    </ul>
+    <a name="SEC01"></a>
+    <h2>Introduction</h2>
+    The USGS NEIC provides Finite Fault Models for larger earthquakes.
+    An example of this is at <a
+href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php">http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php</a>.
+    <p> This tutorial shows how to use the Computer Programs in
+      Seismology codes to compute the static deformation for a given
+      finite fault model.<br>
+    </p>
+    <a name="SEC02"></a>
+    <h2>Theory</h2>
+    <p>The solution for static deformation in a wholespace, halfspace
+      and a layer isotropic media are given in the file <a
+        href="static.pdf">static.pdf</a>.<br>
+      Two program are used: <b>hsanal96</b> and <b>hstat96</b>. The
+      first is used for the special problem of an observation point
+      anywhere within an isotropic halfspace or at the surface of an
+      isotropic halfspace. The program is an implementation of the
+      close-form solutions given in the PDF document. The second
+      program, <b>hstat96</b>, is much more general and will permit a
+      source and observation point anywhere within a stack of isotropic
+      layers with boundary conditions of halfspace, free or rigid at the
+      top and bottom interfaces. <b>hstat96</b> is essentially the
+      limiting case of <b>hspec96</b> as angular frequency goes to
+      zero. Because of its generality, the execution time of&nbsp; <b>hstat96</b>
+      is greater because of the multiplication of propagator matrices and
+      the numerical integration over wavenumber.<br>
+    </p>
+    <p>The sequence of running these two programs is as simple as
+      running&nbsp;&nbsp; <b>hspec96</b>:<br>
+    </p>
+    <blockquote>
+      <blockquote>
+        <pre><b>hprep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH<br>hsanal96<br><br>hprep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH<br>hstat96<br></b><br></pre>
+      </blockquote>
+    </blockquote>
+    which is the sequence same sequence as for running <b>hspec96</b>.
+    There are two differences though. First the <b>hspec96</b>&nbsp;creates
+    the output file hspec96.grn which is then convolved with the source
+    time function to create the ASCII file in the file96 format, e.g.,<br>
+    <blockquote>
+      <blockquote>
+        <pre><b>hpulse96 -p -V -l 1 &gt; file96</b><br></pre>
+      </blockquote>
+    </blockquote>
+    Since the static deformation is just a single point, the <b>hstat96</b>
+    and <b>hsanal96</b>&nbsp; directly create an output named <i>file96</i>.
+    The other difference is that both programs accept a <i>-V </i>command
+    line flag. The interesting part of the output is the following:<br>
+    <br>
+    <table cellpadding="2" cellspacing="2" width="100%" border="1">
+      <tbody>
+        <tr>
+          <td align="center" valign="top"><b>hsanal96</b><br>
+          </td>
+          <td align="center" valign="top"><b>hstat96</b><br>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top">
+            <pre> TSTATIC:           1 ZDD           1 -1.41254714E-06<br> TSTATIC:           2 RDD           2 -2.82509382E-06<br> TSTATIC:           3 ZDS           3 -4.84096199E-06<br> TSTATIC:           4 RDS           4 -9.68192307E-06<br> TSTATIC:           5 TDS          13 -1.31267000E-13<br> TSTATIC:           6 ZSS           5  2.73420915E-06<br> TSTATIC:           7 RSS           6  9.77280888E-06<br> TSTATIC:           8 TSS          14 -1.92498214E-06<br> TSTATIC:           9 ZEX           7  2.01586749E-06<br> TSTATIC:          10 REX           8  4.03173499E-06<br> TSTATIC:          11 ZVF           9 -1.71420732E-04<br> TSTATIC:          12 RVF          10 -7.14882117E-05<br> TSTATIC:          13 ZHF          11  9.19448121E-06<br> TSTATIC:          14 RHF          12  1.97109504E-04<br> TSTATIC:          15 THF          15 -1.35676630E-04<br></pre>
+          </td>
+          <td align="center" valign="top">
+            <pre> HSTATIC:           1 ZDD           1 -1.41254611E-06<br> HSTATIC:           2 RDD           2 -2.82509268E-06<br> HSTATIC:           3 ZDS           3 -4.84096336E-06<br> HSTATIC:           4 RDS           4 -9.68191762E-06<br> HSTATIC:           5 TDS          13  1.58707737E-13<br> HSTATIC:           6 ZSS           5  2.73421119E-06<br> HSTATIC:           7 RSS           6  9.77280979E-06<br> HSTATIC:           8 TSS          14 -1.92498396E-06<br> HSTATIC:           9 ZEX           7  2.01586795E-06<br> HSTATIC:          10 REX           8  4.03173590E-06<br> HSTATIC:          11 ZVF           9 -1.71379419E-04<br> HSTATIC:          12 RVF          10 -7.14995622E-05<br> HSTATIC:          13 ZHF          11  9.18313890E-06<br> HSTATIC:          14 RHF          12  1.97061323E-04<br> HSTATIC:          15 THF          15 -1.35628448E-04<br></pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The purpose of this output is to compare the analytic results on the
+    left to the numerical integration results on the right for each of
+    the basic Greens functions. This test case was for a source at a
+    depth of 20 km, a receiver at the surface and a distance of 20 km
+    for a halfspace model with Vp=6.15 km/s, Vs=3.55 km/s and density
+    2.8 gm/cc.<br>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC03"></a>
+    <h2>Download</h2>
+    To run the simulations, you will need the following:
+    <ul>
+      <li>A velocity model in the CPS model96 format. </li>
+      <li>the finite fault model given by a link at the bottom of the
+        USGS Finite Fault solution page</li>
+      , and
+      <li>the archive <a href="DOSTATIC.tgz"> DOSTATIC.tgz</a> </li>
+    </ul>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC04"></a>
+    <h2>Setting up the test runs</h2>
+    <p> Unpack the <i>DOSTATIC.tgz</i> using the commands: </p>
+    <p> </p>
+    <pre>	gunzip -c DOSTATIC.tgz | tar xvf -
+</pre>
+    <p> This will create the following directory structure: </p>
+    <pre>STATIC_TEST-|
+            |-FINITE_1
+            |
+            |-FINITE_2
+            |
+            |-FINITE_3
+            |
+            |-FINITE_4
+</pre>
+    In each sub-directory there will be an executable shell script named
+    DOIT. This shell script computes the static deformation of a finite
+    fault model and then plots a contour map.
+    <p> The individual test cases differ in the following way: </p>
+    <ul>
+      <li> Finite_1: Use a simple halfspace model and the analytic
+        solution for a halfspace (<b>hsanal96</b>)</li>
+      <li> Finite_2: Use a simple halfspace model and the general
+        wavenumber integration code (<b>hstat96</b>)</li>
+      <li> Finite_3: Use the WUS model and the general wavenumber
+        integration code (<b>hstat96</b>)</li>
+      <li> Finite_4: Use the upper 120 km of AK135 and the general
+        wavenumber integration code (<b>hstat96</b>)</li>
+    </ul>
+    <p>These cases test the code and also investigate the sensitivity of
+      the permanent displacements to the velocity model used. </p>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC05"></a>
+    <h2>Requirements</h2>
+    <ul>
+      <li> The latest version of Computer Programs in Seismology.
+        Specifically you will need <b>gsac</b>, <b>hstat96</b> and <b>hsanal96</b>.</li>
+      <li> The following GMT programs: <b>xyz2grd</b>, <b>surface</b>,
+        <b>grdcontour</b>, <b>pscoast</b>and <b>pstext</b>. You can
+        edit the script to remove the contour plotting if you do not
+        want to make plots. </li>
+    </ul>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC06"></a>
+    <h2>DOIT</h2>
+    <p>Each of the directories that are unpacked contain a script named
+      DOIT.&nbsp; Follow&nbsp; the link to an annotated discussion of
+      the script <a href="doit.html">DOIT</a>.<br>
+    </p>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC07"></a>
+    <h2>Example </h2>
+    <p>The example uses the finite fault solution for the <a
+href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_finite-fault">M7.7
+
+
+
+        - 83km E of Khash, Iran (2013-04-16 10:44:20 UTC) earthquake.</a>&nbsp;
+
+
+
+      We use the "Subfault Format" as the data file for the simulation.
+      The following three figures present the finite fault solution
+      (left) and the projection of the slip distribution onto topography
+      (center) and&nbsp; INSAR image (right).<br>
+    </p>
+    <p>
+      <table height="484" width="880">
+        <tbody>
+          <tr>
+            <td valign="top"><img alt="Slip distribution"
+                src="TEST0_FIG/b000g7x7_slip.png" height="419"
+                width="480"></td>
+            <td valign="top"><img alt="map view"
+                src="TEST0_FIG/b000g7x7_base.png" height="419"
+                width="384"></td>
+            <td valign="top"><img alt="map view"
+                src="TEST0_FIG/insar.png" height="419" width="384"></td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <h3> Test 1 <br>
+    </h3>
+    <p>The first test is whether the <b>hstat96</b> give the same
+      results as <b>hsanal96</b> for a halfspace. Only the Z component
+      predictions are compared. We will compare the results of using the
+      GMT commands <b>surface</b> and <b>xyz2grd</b>. The shell script
+      uses a finer sampling for <b>surface</b>.<br>
+    </p>
+    <table cellpadding="2" cellspacing="2" width="100%" border="1">
+      <tbody>
+        <tr align="center">
+          <td colspan="2" rowspan="1" align="left" valign="top">
+            <blockquote>
+              <blockquote>Vertical deformation (cm) for the halfspace
+                model. The left&nbsp; shows the result of using the
+                analytic solution <b>hsanal96</b> while<br>
+                the right column gives the solution using the propagator
+                matrices and numerical wavenumber integration using<br>
+                <b>hstat96</b>.&nbsp;&nbsp; The results are
+                identical.&nbsp; The upper and lower panels compare the
+                <b>xyz2grd </b>and <b>surface</b> output respectively.<br>
+                Because the grid sampling interval was 0.25 degrees in
+                latitude and longitude, for a 17 x 17 grid, the two
+                plots are very similar.<br>
+              </blockquote>
+            </blockquote>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img src="TEST1_FIG/Z_1.png"> </td>
+          <td valign="top"><br>
+            <img src="TEST1_FIG/Z_2.png"> </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img src="TEST1_FIG/Surf.Z_1.png"> </td>
+          <td valign="top"><br>
+            <img src="TEST1_FIG/Surf.Z_2.png"> </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Coarser Sampling<br>
+    </h3>
+    <p>To see the effect of sampling and the difference between the <b>xyz2grd
+
+
+      </b>and <b>surface</b> output compare the following two figures
+      to those above.&nbsp; In this case the grid interval in latitude
+      and longitude was 0.5 degrees, which yielded a 9x9 grid.&nbsp; The
+      program <b>surface</b>&nbsp; smooths to a 0.25 degree grid. The
+      difference in computational effort is roughly a factor of 4, e.g.,
+      (17x17)/(9x9), the number of grid locations.<br>
+    </p>
+    <table cellpadding="2" cellspacing="2" width="100%" border="1">
+      <tbody>
+        <tr>
+          <td colspan="2" rowspan="1" align="center" valign="top">Vertical
+
+            deformation (cm) determined using a coarser sampling grid <br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img src="TEST1_FIG/Z_0.png"> </td>
+          <td valign="top"><br>
+            <img src="TEST1_FIG/Surf.Z_0.png"> </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <h3>Test 2</h3>
+    <p>The second test is to investigate the sensitivity of the finite
+      fault solution to the velocity model used.<br>
+      Here we will compare the computed displacements in the N (north) E
+      (east) and Z (up directions). In the case of the Z comparison<br>
+      we are able to compare the results to INSAR estimates.<br>
+    </p>
+    <p><br>
+    </p>
+    <table cellpadding="2" cellspacing="2" width="100%" border="1">
+      <tbody>
+        <tr>
+          <td colspan="2" rowspan="1" align="left" valign="top">
+            <blockquote>
+              <blockquote>Comparison of vertical component deformation
+                (cm) for the SCM, WUS and upper AK135 velocity models.
+                These are compared <br>
+                to the INSAR image of the source region. Note that the
+                maximum deformation for the synthetics seems to be about
+                10 km<br>
+                to the northwest of the depression indicated by the
+                INSAR image. This offset is on the order of the
+                teleseismic location error.<br>
+                The SCM model produces the largest surface displacements
+                since the S-wave velocity at the source depth is much
+                lower than<br>
+                for the other two models. </blockquote>
+            </blockquote>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/Z_2.png" height="729"
+              width="674"><br>
+            ` </td>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/Z_3.png" height="729"
+              width="674"><br>
+            ` </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/Z_4.png" height="729"
+              width="674"><br>
+            ` </td>
+          <td valign="top"><img src="TEST0_FIG/insar.png" alt="Insar
+              Image" height="735" vspace="20" width="680"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <table cellpadding="2" cellspacing="2" width="100%" border="1">
+      <tbody>
+        <tr>
+          <td colspan="2" rowspan="1" valign="top">
+            <blockquote>
+              <blockquote>
+                <div align="left">Comparison of north component
+                  deformation (cm) for the SCM, WUS and upper AK135
+                  velocity models.</div>
+              </blockquote>
+            </blockquote>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/N_2.png" height="729"
+              width="674"><br>
+          </td>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/N_3.png" height="729"
+              width="674"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/N_4.png" height="729"
+              width="674"><br>
+          </td>
+          <td valign="top"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <table cellpadding="2" cellspacing="2" width="100%" border="1">
+      <tbody>
+        <tr>
+          <td colspan="2" rowspan="1" valign="top">
+            <div align="center">
+              <blockquote>
+                <div align="left">Comparison of east component
+                  deformation (cm) for the SCM, WUS and upper AK135
+                  velocity models.</div>
+              </blockquote>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/E_2.png" height="729"
+              width="674"><br>
+          </td>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/E_4.png" height="729"
+              width="674"><br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top"><br>
+            <img alt="Insar Image" src="TEST2_FIG/E_4.png" height="729"
+              width="674"><br>
+          </td>
+          <td valign="top"><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC08"></a>
+    <h2>Discussion of solutions<br>
+    </h2>
+    <p> The obvious difference among the predicted static displacements
+      as a function of the velocity models is that the simple halfspace
+      model predicts the highest amplitudes. This is not surprising
+      since the theoretical amplitude is a function of the ratio
+      (seismic moment)/rigidity. The velocity at the source depth in the
+      simple model is the least, and hence the predicted amplitudes are
+      the greatest. </p>
+    <p> </p>
+    <p><a href="#TOP">Top of Page</a></p>
+    <a name="SEC09"></a>
+    <h2>Pseudo time series</h2>
+<p>
+Since we are discussing the static deformation due to a rupturing finite fault, an interesting question concerns how the static deformation builds  or when has the final static offset been achieved. As an approximation we assume here that the static offset is coincident with the first S-wave arrival. The link compares this assumption to a simulation that scales, shifts and adds complete regional seismograms. 
+<a href="doittime.html"> Comparison of displacement time histories</a>.
+</p>
+<p>Hopefully there may be some value in this presentation in addition to demonstrating how this can be done using these codes.</p>
+    <p><a href="#TOP">Top of Page</a></p>
+    <center>Last changed October 20, 2015</center>
+<p>Avinash Nayak found an error in this documentation.
+  </body>
+</html>

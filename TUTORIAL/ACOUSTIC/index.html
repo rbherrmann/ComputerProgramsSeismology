@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=ISO-8859-1">
+    <title>Acoustic modeling</title>
+  </head>
+  <body style=" background-color: rgb(255, 255, 255);">
+    <h2> Introduction</h2>
+    The velocity model format used in Computer Programs in Seismology
+    has long had the provision for conveniently incorporating a layered
+    atmosphere from the viewpoint of having the&nbsp; source or receiver
+    depth of 0 km be at the air-solid interface.&nbsp; This is
+    accomplished by the use of negative layer thicknesses to indicate
+    layering above a reference datum, usually the surface of the earth.<br>
+    <br>
+    The computational codes use a coordinate system with the z=0
+    corresponding to the top of the model, and positive z corresponds to
+    greater depth.&nbsp; With the convention of layers above the datum
+    used in the model formats, the synthetic seismogram codes does the
+    book keeping necessary to convert the user view to that required for
+    computation.<br>
+    <br>
+    As an interesting exercise, we will consider the wavefields
+    generated in the air (pressure field) and in the solid (velocities)
+    from point explosion sources in the air and solid. In addition the
+    pressure field in the atmosphere is also computed for various
+    dislocation sources.<br>
+    <br>
+    The positions of the sources (small red dots) and receivers (large
+    blue dots) are shown in Figure 1.&nbsp; Although in actuality
+    observations are made at the surface, the framework indicated here
+    could be used to drive detailed atmospheric models.&nbsp; To predict
+    pressure fields at large distances, ray theory may be the most
+    efficient technique for high frequency signals, since the
+    computational effort inherent in wave-number integration would be
+    too great.&nbsp; So the idea here is to prototype the expected
+    pressure signals on a hemisphere about the source, and then
+    eventually to use a representation theorem to uses these motions as
+    input to a ray theory or other numerical technique.<br>
+    <br>
+    The receivers in Figure 1 are at a distance of 20 km from the
+    coordinate system origin (the intersection of the vertical and
+    horizontal axes). For position in the air, only the pressure field
+    will be measurable, while at the surface, pressure and ground
+    motions can be determined.<br>
+    <br>
+    <table style="text-align: left; width: 100%;" border="1"
+      cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr align="center">
+          <td style="vertical-align: top;"><img style="width: 380px;
+              height: 349px;" alt="source" src="FIGURES/config.png"></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: top;">Fig. 1. Distribution of
+            receivers (blue) and sources.&nbsp; The receivers are at
+            radial distance of 20 km from origin. The sources are at
+            depths of -1, -0.5, 0, 0.5, 1, 2, 3, 4 and 5 km. The
+            negative source depth indicates a source in the air.&nbsp; <br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    The velocity model used is very simple:&nbsp; a single layer
+    atmosphere overlying a solid half-space.&nbsp; The <span
+      style="font-style: italic;">model96</span> file descript is given
+    in the file <span style="font-style: italic;">crust-atmos.mod</span>:<br>
+    <br>
+    <div style="margin-left: 40px;">
+      <pre>MODEL.01<br>Simple Crust Atmosphere model<br>ISOTROPIC<br>KGS<br>FLAT EARTH<br>1-D<br>CONSTANT VELOCITY<br>LINE08<br>LINE09<br>LINE10<br>LINE11<br>  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS<br>-40.0000  0.3000  0.0000  0.0012 0.00  0.00  0.00  0.00  1.00  1.00 <br> 40.0000  6.0000  3.5000  2.8000 0.00  0.00  0.00  0.00  1.00  1.00<br></pre>
+    </div>
+    Here you can see the use of the negative depth to indicate that a
+    user specification of a source depth of 1 km means that the depth in
+    the internal model will be 41 km from the top, or 1 km into the
+    solid.&nbsp; Note that this model is just used for testing. The
+    density of air at sea level is about 0.00129 gm/cc.<br>
+    <h2>Processing</h2>
+    The processing is performed with the script <a href="DOIT">DOIT</a>
+    and the graphics by the script <a href="FIGURES/DOFIG">DOFIG</a> in
+    the sub-directory FIGURES.<br>
+    <br>
+    The DOIT script treats the model as two halfspaces which means that
+    there will be no returns from the top and bottom inerfaces.<br>
+    <h2>Discussion</h2>
+    <br>
+    <h3>Effect of source depth</h3>
+    the first example considers the pressure field measured in the
+    atmosphere at an angle of 80 degrees measure from the horizontal.
+    The observation is at a distance of 3.473 km and an elevation of
+    19.696 km.&nbsp; The plots shown below present the Greens functions
+    for a moment of 1.0E+20 dyne-cm. A relative amplitude scale is used.<br>
+    <br>
+    Since dislocation sources cannot occur in the atmosphere, the plots
+    for the PSS, PDD and PDS Greens functions have no data for negative
+    receiver depths (e.g., in the air).<br>
+    <br>
+    Focus first on the PEX Green function.&nbsp; For atmospheric sources
+    the signal consists of two pulses, which are the direct signal and
+    the reflection from the solid surface.<br>
+    <br>
+    <br>
+    <br>
+    <table style="text-align: left; width: 100%;" border="1"
+      cellpadding="2" cellspacing="2">
+      <tbody>
+        <tr>
+          <td><a href="FIGURES/PEX.png"><img src="FIGURES/PEX.png"
+                height="100%" width="100%"></a></td>
+          <td><a href="FIGURES/PSS.png"><img src="FIGURES/PSS.png"
+                height="100%" width="100%"></a></td>
+        </tr>
+        <tr>
+          <td><a href="FIGURES/PDD.png"><img src="FIGURES/PDD.png"
+                height="100%" width="100%"></a></td>
+          <td><a href="FIGURES/PDS.png"><img src="FIGURES/PDS.png"
+                height="100%" width="100%"></a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+      If a absolute amplitudes were plotted, the observations for the
+      buried sources would appear as straight lines because the
+      amplitudes are so small compared to the wavefield due to an
+      atmosphere source (for an explosion).&nbsp; For the PEX Greens
+      functions the largest negative amplitudes are -0.07, -0.07,
+      -2.9E-07, -1.38E-07, -7.73E-08, -4.01E-08, -3.53E-08, -2.99E-08
+      and -2.73E-07 for source depths of -1, -0.5, 0, 1, 2, 3, 4 and 5
+      km. This lower amplitudes for the buried source can be understood
+      from ray theory for which the spectral amplitude should vary as<br>
+      &nbsp;&nbsp;&nbsp; Mo/[4 pi rho<sub>s</sub> alpha<sub>s</sub><sup>3
+      </sup>] [rho<sub>s</sub> alpha<sub>s / </sub>rho<sub>a</sub>
+      alpha<sub>a </sub>]<sup>1/2</sup>&nbsp; for an explosion source
+      in the solid observed in the atmosphere, and<br>
+      <br>
+      &nbsp;&nbsp;&nbsp; Mo/[4 pi rho<sub>a</sub> alpha<sub>a</sub><sup>3
+      </sup>] for an explosion source in the atmosphere and observed in
+      the atmosphere.&nbsp; The ratio of the amplitudes&nbsp; is just<br>
+      <br>
+      <br>
+      &nbsp;&nbsp;&nbsp; [ rho<sub>s</sub> alpha<sub>s</sub><sup>3&nbsp;</sup>
+      ]&nbsp; / [ rho<sub>a</sub> alpha<sub>a</sub><sup>3 </sup>&nbsp;
+      ] [rho<sub>a</sub> alpha<sub>a / </sub>rho<sub>s</sub> alpha<sub>s
+      </sub>]<sup>1/2</sup>&nbsp;&nbsp; which is factor of about 1.1E+6,
+      which is the difference in the amplitudes shown in the second
+      figure.<br>
+      <br>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <center> Absolute Pressure Plot</center>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="FIGURES/AbsPEX.png"><img
+                  src="FIGURES/AbsPEX.png"></a></td>
+          </tr>
+        </tbody>
+      </table>
+    </p>
+    <h2>Radiated pressure field of a 1 km deep source</h2>
+    This example considers the pressure field at all sensors in the
+    atmosphere, whose location is defined by the angle with respect to
+    the horizontal. An angle of 90 degrees indicates a receiver directly
+    above the source. In the following set of plots, all traces use the
+    same scale so that amplitudes can be compared.&nbsp; the larges
+    amplitude are above the source.<br>
+    <br>
+    For this set of examples we see two arrivals for small angles.
+    Focusing on the receiver closest to the surface, e.g., angle of 10
+    degrees, the first arrival at 14 sec travel time consists of the
+    P-wave propagating through the solid (about 3 seconds) which then
+    propagates 3.4 km in air (11 sec). The low frequency arrival at
+    about 68 sec is&nbsp; due to the air wave generated by the surface
+    deformation above the source. <br>
+    <br>
+    <table>
+      <tbody>
+        <tr>
+          <td><a href="FIGURES/APEX.png"><img src="FIGURES/APEX.png"
+                height="100%" width="100%"></a></td>
+          <td><a href="FIGURES/APSS.png"><img src="FIGURES/APSS.png"
+                height="100%" width="100%"></a></td>
+        </tr>
+        <tr>
+          <td><a href="FIGURES/APDD.png"><img src="FIGURES/APDD.png"
+                height="100%" width="100%"></a></td>
+          <td><a href="FIGURES/APDS.png"><img src="FIGURES/APDS.png"
+                height="100%" width="100%"></a></td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Comparison of excitation from 1 km deep sources</h2>
+    <p>
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <center>10 degree angle</center>
+          </td>
+          <td>
+            <center>40 degree angle</center>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="FIGURES/CMP10.png"><img src="FIGURES/CMP10.png"></a></td>
+          <td><a href="FIGURES/CMP40.png"><img src="FIGURES/CMP40.png"></a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p> </p>
+    <center>Last changed March 24, 2012</center>
+  </body>
+</html>

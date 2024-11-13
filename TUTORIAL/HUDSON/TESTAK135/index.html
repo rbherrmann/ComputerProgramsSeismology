@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Computer Programs in Seismology Tutorials</title>
+</head>
+<body>
+<h2>Introduction</h2>
+The purpose of this test is to compare the <span
+ style="font-weight: bold;">hudson96 </span>teleseismic P-wave
+synthetics for the AK135 model (<span style="font-style: italic;">tak135sph.mod</span>)
+to the wavenumber integration synthetics where are described in the <a
+ href="../../SPHERICITY/index.html">Synthetics
+for a Spherical Earth</a>&nbsp; tutorial.<br>
+The <span style="font-weight: bold;">hudson96 </span>synthetics are
+made for DT=0.1 sec, but are converted to be equivalent to the current
+AK135.TEL synthetics computed using DT=1.0 and a triangular source time
+function of width 4.0 sec by using the <span style="font-weight: bold;">gsac</span>
+commands<br>
+<br>
+<pre>triangle width 4<br>interpolate delta 1<br><br></pre>
+To assist in the comparison <span style="font-weight: bold;">gsac&nbsp;
+</span>is used to subtract the <span style="font-weight: bold;">hspec96
+</span>from the <span style="font-weight: bold;">hudson96 </span>synthetic.&nbsp;
+The traces are also annotated with the predicted arrival <br>
+times of AK135 for pPm sP, PP and PcP&nbsp; using the University of
+South Carolina <span style="font-weight: bold;">taup_time </span>code.&nbsp;
+The purpose of the annotation<br>
+is to focus on those parts of the&nbsp; <span
+ style="font-weight: bold;">hudson96</span>&nbsp; synthetics that
+differ significantly form the complete synthetics, which are typically
+the PP and PcP phases.<br>
+<br>
+The comparison is orders in columns by the Green's function for the
+vertical component ground velocity: the DD, DS, SS and EX
+sources.&nbsp; <br>
+Although a 600 km deep center of expansion source is not realistic, the
+Green's function is required&nbsp; to describe the full moment tensor.<br>
+<br>
+For each of the two depths considered, 10 and 600 km, there is a row
+for arc distances of 30, 50 70 and 90 degrees.<br>
+<br>
+<h2>Discussion</h2>
+Although a discussion is normally at the end, the figures require a lot
+of screen space.<br>
+The conclusions of the comparison are<br>
+<br>
+<ul>
+  <li>The P, pP and sP protions of the&nbsp; <span
+ style="font-weight: bold;">hudson96</span>&nbsp; synthetics agree well
+with the complete synthetics. Slight differences may be do to the
+sampling granularity</li>
+  <li>If the <span style="font-weight: bold;">hudson96</span>&nbsp;
+synthetics are used for broadband depth modeling, then car must be
+taken to avoid the PP arrivals. Thus the modeling window may have to be
+narrower at shorter epicentral distances than at large. PcP is a
+problem at larger distances, but not as severe a problem as PP</li>
+  <li>There are some problems with the pP amplitude for the 600 km deep
+source, both in terms of amplitude and arrival time. This may be due to
+the assumption that the ray parameter is the same for pP as for P.<br>
+  </li>
+</ul>
+<h2>Scripts<br>
+</h2>
+<h2>Comparison<br>
+</h2>
+<br>
+<table border="1">
+  <tbody>
+    <tr>
+      <td style="text-align: center;">ZDD</td>
+      <td style="text-align: center;">ZDS</td>
+      <td style="text-align: center;">ZSS</td>
+      <td style="text-align: center;">ZEX</td>
+    </tr>
+    <tr>
+      <td> <img src="30.0100.ZDD.gif"><br>
+Gcarc=30, HS=10 </td>
+      <td> <img src="30.0100.ZDS.gif"><br>
+Gcarc=30, HS=10 </td>
+      <td> <img src="30.0100.ZSS.gif"><br>
+Gcarc=30, HS=10 </td>
+      <td> <img src="30.0100.ZEX.gif"><br>
+Gcarc=30, HS=10 </td>
+    </tr>
+    <tr>
+      <td> <img src="50.0100.ZDD.gif"><br>
+Gcarc=50, HS=10 </td>
+      <td> <img src="50.0100.ZDS.gif"><br>
+Gcarc=50, HS=10 </td>
+      <td> <img src="50.0100.ZSS.gif"><br>
+Gcarc=50, HS=10 </td>
+      <td> <img src="50.0100.ZEX.gif"><br>
+Gcarc=50, HS=10 </td>
+    </tr>
+    <tr>
+      <td> <img src="70.0100.ZDD.gif"><br>
+Gcarc=70, HS=10 </td>
+      <td> <img src="70.0100.ZDS.gif"><br>
+Gcarc=70, HS=10 </td>
+      <td> <img src="70.0100.ZSS.gif"><br>
+Gcarc=70, HS=10 </td>
+      <td> <img src="70.0100.ZEX.gif"><br>
+Gcarc=70, HS=10 </td>
+    </tr>
+    <tr>
+      <td> <img src="90.0100.ZDD.gif"><br>
+Gcarc=90, HS=10 </td>
+      <td> <img src="90.0100.ZDS.gif"><br>
+Gcarc=90, HS=10 </td>
+      <td> <img src="90.0100.ZSS.gif"><br>
+Gcarc=90, HS=10 </td>
+      <td> <img src="90.0100.ZEX.gif"><br>
+Gcarc=90, HS=10 </td>
+    </tr>
+    <tr>
+      <td> <img src="30.6000.ZDD.gif"><br>
+Gcarc=30, HS=600 </td>
+      <td> <img src="30.6000.ZDS.gif"><br>
+Gcarc=30, HS=600 </td>
+      <td> <img src="30.6000.ZSS.gif"><br>
+Gcarc=30, HS=600 </td>
+      <td> <img src="30.6000.ZEX.gif"><br>
+Gcarc=30, HS=600 </td>
+    </tr>
+    <tr>
+      <td> <img src="50.6000.ZDD.gif"><br>
+Gcarc=50, HS=600 </td>
+      <td> <img src="50.6000.ZDS.gif"><br>
+Gcarc=50, HS=600 </td>
+      <td> <img src="50.6000.ZSS.gif"><br>
+Gcarc=50, HS=600 </td>
+      <td> <img src="50.6000.ZEX.gif"><br>
+Gcarc=50, HS=600 </td>
+    </tr>
+    <tr>
+      <td> <img src="70.6000.ZDD.gif"><br>
+Gcarc=70, HS=600 </td>
+      <td> <img src="70.6000.ZDS.gif"><br>
+Gcarc=70, HS=600 </td>
+      <td> <img src="70.6000.ZSS.gif"><br>
+Gcarc=70, HS=600 </td>
+      <td> <img src="70.6000.ZEX.gif"><br>
+Gcarc=70, HS=600 </td>
+    </tr>
+    <tr>
+      <td> <img src="90.6000.ZDD.gif"><br>
+Gcarc=90, HS=600 </td>
+      <td> <img src="90.6000.ZDS.gif"><br>
+Gcarc=90, HS=600 </td>
+      <td> <img src="90.6000.ZSS.gif"><br>
+Gcarc=90, HS=600 </td>
+      <td> <img src="90.6000.ZEX.gif"><br>
+Gcarc=90, HS=600 </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

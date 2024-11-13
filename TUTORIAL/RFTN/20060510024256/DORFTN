@@ -1,0 +1,155 @@
+#!/bin/sh
+
+#####
+#	script to prepare the receiver functions
+#####
+
+#####
+#	define the time window of the traces to be used
+#	for the receiver function relative to the P
+#	Here 10 seconds before P and 50 seconds after P
+#####
+
+TIMEBEFORE=10
+TIMEAFTER=50
+
+#####
+#	define the number of seconds before P that the receiver function begins
+#####
+DELAY=10
+
+#####
+#	make the receiver function directory
+#####
+
+DEST=RFTN
+if [ -d  ${DEST} ]
+then
+	echo ${DEST} exists
+else
+	mkdir ${DEST}
+fi
+
+#####
+#	make a temporary work directory
+#####
+if [ -d TEMP ]
+then
+	echo TEMP exists
+else
+	mkdir TEMP
+fi
+
+#####
+#	define the currect directory
+#####
+CURDIR=`pwd`
+#####
+#	now get the three component traces
+#####
+
+for Z in FINAL/*Z
+do
+
+#####
+#	get the station name and component name
+#####
+
+KSTNM=`saclhdr -KSTNM $Z`
+KCMPNM=`saclhdr -KCMPNM $Z`
+EVDP=`saclhdr -EVDP $Z`
+GCARC=`saclhdr -GCARC $Z`
+
+#####
+#	get the ray parameter for this distance using the
+#	Jeffreys - Bulley curves valid for 20 - 95 degrees
+#	Note EVDP is in kilometers
+#	Ray parameter is in sec/km
+#####
+RAYP=`udtdd -GCARC ${GCARC} -EVDP ${EVDP} `
+
+#####
+#	get the prototype for the component name
+#####
+case ${KCMPNM} in
+	BHZ) PROTO="BH" ;;
+	LHZ) PROTO="LH" ;;
+	HHZ) PROTO="HH" ;;
+	EHZ) PROTO="EH" ;;
+esac
+
+#####
+#	now use gsac to pick the P arrival
+#	read in three components, display three, pick the
+#	P on one trace using the P command, then Q to quit
+#	The program will then save the file, reread it using the cut,
+#	and save it again.
+# 	Interpolation is optional as is the high pass for stability
+#		The lp c 5 n 2 p 2 is to avoid aliasing
+#	synchronize o adjusts the reference time to be the
+#		origin time
+#	The hp c 0.01 n 2 p 2 is for stability of the RFTN
+#####
+gsac << EOF
+r FINAL/${KSTNM}${PROTO}Z FINAL/${KSTNM}${PROTO}R FINAL/${KSTNM}${PROTO}T
+rtr
+hp c 0.01 n 2 p 2
+ppk perplot 3 markall
+lp c 5 n 2 p 2
+interpolate delta 0.05
+w  TEMP/Z TEMP/R TEMP/T
+cut a -${TIMEBEFORE} a ${TIMEAFTER}
+r TEMP/Z TEMP/R TEMP/T
+synchronize o
+w TEMP/Z TEMP/R TEMP/T
+quit
+EOF
+
+#####
+#	now cd to the TEMP directory and perform the iterative deconvolution
+#
+#	Get the receiver functions for ALPHA = 0.5 1.0 and 2.5
+#	Get Radial and Transverse component receiver functions
+#	rename the receiver function and place in the ../RFTN
+#	directory with the name 
+#	R.SSSCCCYYYYDDDHHMMSS.ALP   where the leading R or T indicates the
+#		radial for transverse receiver function
+#	Note this naming is used to easily move the stations for many events 
+#		to a sinvle directory for a station, e.g., ULN located
+#		in the inversion area
+#####
+cd TEMP
+
+KSTNM=`saclhdr -KSTNM Z`
+KCMPNM=`saclhdr -KCMPNM Z`
+NZYEAR=`saclhdr -NZYEAR Z`
+NZJDAY=`saclhdr -NZJDAY Z`
+NZHOUR=`saclhdr -NZHOUR Z`
+NZMIN=`saclhdr -NZMIN Z`
+NZSEC=`saclhdr -NZSEC Z`
+
+for COMP in R T
+do
+	for ALP in 0.5 1.0 2.5
+	do
+
+#####
+#	to learn about saciterd, do saciderd -h
+#####
+saciterd -FN ${COMP} -FD Z -RAYP ${RAYP} -ALP ${ALP} -2 -D ${DELAY} -N 500
+	mv decon.out ../RFTN/${COMP}.${KSTNM}${KCMPNM}${NZYEAR}${NZJDAY}${NZHOUR}${NZMIN}${NSZEC}.${ALP}
+
+	done
+done
+
+#####
+#	return to the working directory
+#####
+cd ${CURDIR}
+
+
+
+#####
+#	end of loop for this station
+#####
+done

@@ -1,0 +1,10 @@
+<h2>Sections</h2>
+<a href="#MTCOMPARISON">Moment tensor comparison</a><br>
+<a href="#MAGNITUDES">Local magnitudes</a><br>
+<a href="#CONTEXT">Spatial context</a><br>
+<a href="#GRD.REG">Double couple grid search (wvfgrd96)</a><br>
+<a href="#MTD.REG">Deviatoric moment tensor linear inversion  (wvfmtd96)</a><br>
+<a href="#MT.REG">Full moment tensor linear inversion  (wvfmt96)</a><br>
+<a href="#MTGRD.REG">Grid search for full moment tensor (wvfmtgrd96)</a><br>
+<a href="#MTGRD.REG.DC">Grid search for double couple (wvfmtgrd96 -DC)</a><br>
+<a href="#MTGRD.REG.DEV">Grid search for deviatoric  moment tensor (wvfmtgrd96 -DEV)</a><br>

@@ -1,0 +1,72 @@
+#!/bin/sh
+
+#####
+#	create synthetics for each Z in the observed
+# 	Syntax:
+#	DOMKSYN DIRBIG STK DIP RAKE HS MW
+#####
+
+#####
+#	test usage
+#####
+if [ $# != 6 ]
+then
+	echo DOMKSYN DIRBIG STK DIP RAKE HS MW
+	echo you entered:
+	echo $*
+	exit 0
+fi
+
+#####
+#	define the internal parameters for the synthetic
+#####
+
+DIRBIG=$1
+STK=$2
+DIP=$3
+RAKE=$4
+HS=$5
+MW=$6
+
+if [ ! -d SYN ]
+then
+	mkdir SYN
+else
+	rm -fr SYN
+	mkdir SYN
+fi
+
+#####
+#	make synthetics
+#####
+
+for Ztrace in `ls ${DIRBIG}/*Z`
+do
+
+rm -fr *.[ZRT]
+
+GCARC=`saclhdr -GCARC ${Ztrace} `
+AZ=`saclhdr -AZ ${Ztrace}`
+KSTNM=`saclhdr -KSTNM ${Ztrace}`
+KCMPNM=`saclhdr -KCMPNM ${Ztrace}`
+
+echo GCARC $GCARC AZ $AZ
+MODEL=${GREENDIR}/Models/tak135sph.mod
+
+hudson96 -TEL ${MODEL} -HS ${HS} -P -GCARC ${GCARC} -NPTS 2048 -DT 0.20
+hpulse96 -p -V -l 4 | fmech96 -S ${STK} -D ${DIP} -R ${RAKE} -MW ${MW} -AZ ${AZ} -ROT | f96tosac -T
+mv *.Z SYN/${KSTNM}${KCMPNM}
+
+#####
+#	convert to m/s and set station component names
+#####
+gsac << EOF
+r SYN/${KSTNM}${KCMPNM}
+ch kstnm ${KSTNM}
+ch kcmpnm ${KCMPNM}
+div 100
+w
+q
+EOF
+
+done

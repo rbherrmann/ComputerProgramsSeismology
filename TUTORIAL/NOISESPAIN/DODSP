@@ -1,0 +1,9 @@
+#!/bin/sh
+
+MFTSRF ../MFT/*dsp > surf.disp
+sdpdsp96 -U -R -D surf.disp -XLOG -PER -XMIN 0.2 -XMAX 20.0 -YMIN 1.5 -YMAX 4.0
+sdpdsp96 -U -L -D surf.disp -XLOG -PER -XMIN 0.2 -XMAX 20.0 -YMIN 1.5 -YMAX 4.0
+plotnps -F7 -W10 -EPS -K < SRDSPU.PLT > srdspu.eps ; convert -trim srdspu.eps srdspu.png
+plotnps -F7 -W10 -EPS -K < SLDSPU.PLT > sldspu.eps ; convert -trim sldspu.eps sldspu.png
+rm srdspu.eps sldspu.eps SRDSPU.PLT SLDSPU.PLT
+

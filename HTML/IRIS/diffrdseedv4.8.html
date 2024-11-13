@@ -1,0 +1,561 @@
+<HTML>
+<HEAD>
+        <TITLE>Diff CPS/rdseedv4.8 vs IRIS_DISTRIBUTION/rdseedv4.8</TITLE>
+</HEAD>
+<BODY>
+<H2>rdseedv4.8</H2>
+<P>This details the differences between the IRIS distribution of <B>rdseedv4.8</B> the changes made for inclusi
+on in <B>Computer Programs in Seismology</B> (CPS).
+<P>
+<PRE>
+<BR>
+<B>diff Decoders/process_data.c ../rdseedv4.8/Decoders/process_data.c </B>
+940c940
+< 		Strupr(decode);	    /* make all upper case comparisons */
+---
+> 		strupr(decode);	    /* make all upper case comparisons */
+<BR>
+<B>diff Decoders/process_event_requests.c ../rdseedv4.8/Decoders/process_event_requests.c </B>
+41,42c41,42
+< 		Strupr(start_phase_point[i].name);
+< 		if (i < end_phase_count) Strupr(end_phase_point[i].name);
+---
+> 		strupr(start_phase_point[i].name);
+> 		if (i < end_phase_count) strupr(end_phase_point[i].name);
+175c175
+< 			strncpy(cbuf, type72->phasename, 30); cbuf[30] = '\0'; Strupr(cbuf);
+---
+> 			strncpy(cbuf, type72->phasename, 30); cbuf[30] = '\0'; strupr(cbuf);
+185c185
+< 					strncpy(cbuf, tmp72->phasename, 30); cbuf[30] = '\0'; Strupr(cbuf);
+---
+> 					strncpy(cbuf, tmp72->phasename, 30); cbuf[30] = '\0'; strupr(cbuf);
+<BR>
+<B>diff Include/rdseed.h ../rdseedv4.8/Include/rdseed.h </B>
+57c57
+< #define MAX_DATA_LENGTH	2000000		/* initial space allocation */
+---
+> #define MAX_DATA_LENGTH	20000000		/* initial space allocation */
+93,94c93
+< 
+< #define fprintf		myfprintf
+---
+> //  #define fprintf		myfprintf
+202,203c201,202
+< EXTERN FILE *outputfile;		/* Global output file */
+< EXTERN char 	css_filename[100];/* CSS file name from volume times */
+---
+> EXTERN FILE 	*outputfile;		/* Global output file */
+> EXTERN char 	css_filename[100];	/* CSS file name from volume times */
+212c211
+< EXTERN struct type10	type10;		/* type 010 blockette */
+---
+> EXTERN struct type10	type10;			/* type 010 blockette */
+214c213
+< EXTERN struct type12	type12;		/* type 012 blockette */
+---
+> EXTERN struct type12	type12;			/* type 012 blockette */
+236,237c235,236
+< 												/* other type 05x blockettes */
+< 												/* are subsumed under this */
+---
+> 						/* other type 05x blockettes */
+> 						/* are subsumed under this */
+254,257c253,256
+< EXTERN struct data_hdr	*data_hdr;				/* data header */
+< EXTERN struct time		last_time;				/* time of previous record */
+< EXTERN double			last_sample_rate;		/* sample rate, previous rcd */
+< EXTERN int				last_nsamples;			/* # samples, previous rcd */
+---
+> EXTERN struct data_hdr	*data_hdr;			/* data header */
+> EXTERN struct time	last_time;			/* time of previous record */
+> EXTERN double		last_sample_rate;		/* sample rate, previous rcd */
+> EXTERN int		last_nsamples;			/* # samples, previous rcd */
+260,269c259,268
+< EXTERN float		*seismic_data;				/* seismic data */
+< EXTERN float			*seismic_data_ptr;		/* ptr to above */
+< EXTERN char				decode[_DECODEKEY];		/* data decoder key */
+< 
+< EXTERN int				numitems;				/* number of sgms wanted */
+< EXTERN char				*item[_MAXSGMS];		/* list of sgms wanted */
+< EXTERN long int			start_record;			/* starting rec # of sgm */
+< EXTERN double sample_rate_accum;				/* average sample rate accum */
+< EXTERN int sample_rate_count;					/* count for average sample rate calc */
+< EXTERN double adj_tolerance;					/* tolerance adjust, read from enviornment */
+---
+> EXTERN float		*seismic_data;			/* seismic data */
+> EXTERN float		*seismic_data_ptr;		/* ptr to above */
+> EXTERN char		decode[_DECODEKEY];		/* data decoder key */
+> 
+> EXTERN int		numitems;			/* number of sgms wanted */
+> EXTERN char		*item[_MAXSGMS];		/* list of sgms wanted */
+> EXTERN long int		start_record;			/* starting rec # of sgm */
+> EXTERN double sample_rate_accum;			/* average sample rate accum */
+> EXTERN int sample_rate_count;				/* count for average sample rate calc */
+> EXTERN double adj_tolerance;				/* tolerance adjust, read from enviornment */
+276,286c275,287
+< void read_logical_record ();					/* process a logical rec */
+< int memncpy ();									/* cp, null-term. n chars */
+< void read_blockette ();							/* read a blockette */
+< void pagetop ();								/* top-of-page printer */
+< void allocation_error ();						/* memory allocation error */
+< int parse_int ();								/* parse an integer field */
+< long int parse_long ();							/* parse a long integer field */
+< double parse_double ();							/* parse a double field */
+< char *parse_nchar ();							/* parse n-char wide ASCII */
+< char *parse_varlstr ();							/* parse vbl-length ASCII */
+< struct time timeadd ();							/* add seconds to a time */
+---
+> char *alloc_linklist_element();
+> 
+> void read_logical_record ();			/* process a logical rec */
+> int memncpy ();					/* cp, null-term. n chars */
+> void read_blockette ();				/* read a blockette */
+> void pagetop ();				/* top-of-page printer */
+> void allocation_error ();			/* memory allocation error */
+> int parse_int ();				/* parse an integer field */
+> long int parse_long ();				/* parse a long integer field */
+> double parse_double ();				/* parse a double field */
+> char *parse_nchar ();				/* parse n-char wide ASCII */
+> char *parse_varlstr ();				/* parse vbl-length ASCII */
+> struct time timeadd ();				/* add seconds to a time */
+289,298c290,299
+< struct time timeadd_double ();						/* add double seconds to a time */
+< struct time timeaddphase ();							/* add seconds to a time */
+< int timecmp ();									/* compare two times */
+< double timedif ();								/* difference of two times */
+< void snoop ();									/* list block contents */
+< void snoop_data ();								/* sub for snoop for data */
+< unsigned long int swap_4byte ();				/* swap bytes in 4-byte words */
+< unsigned short int swap_2byte ();				/* swap bytes in 2-byte words */
+< int find_wordorder ();							/* determine word order */
+< struct optstruct *cmdlineproc ();				/* command line processor */
+---
+> struct time timeadd_double ();			/* add double seconds to a time */
+> struct time timeaddphase ();			/* add seconds to a time */
+> int timecmp ();					/* compare two times */
+> double timedif ();				/* difference of two times */
+> void snoop ();					/* list block contents */
+> void snoop_data ();				/* sub for snoop for data */
+> unsigned long int swap_4byte ();		/* swap bytes in 4-byte words */
+> unsigned short int swap_2byte ();		/* swap bytes in 2-byte words */
+> int find_wordorder ();				/* determine word order */
+> struct optstruct *cmdlineproc ();		/* command line processor */
+301,308c302,309
+< void process_volh ();							/* process volume header */
+< void parse_type10 ();							/* parse volume id blkette */
+< void parse_type11 ();							/* parse vol stn hdr index */
+< void parse_type12 ();							/* parse vol time span index */
+< void print_volh ();								/* print volume header */
+< void print_type10 ();							/* print volume id blkette */
+< void print_type11 ();							/* print vol stn hdr index */
+< void print_type12 ();							/* print vol time span index */
+---
+> void process_volh ();				/* process volume header */
+> void parse_type10 ();				/* parse volume id blkette */
+> void parse_type11 ();				/* parse vol stn hdr index */
+> void parse_type12 ();				/* parse vol time span index */
+> void print_volh ();				/* print volume header */
+> void print_type10 ();				/* print volume id blkette */
+> void print_type11 ();				/* print vol stn hdr index */
+> void print_type12 ();				/* print vol time span index */
+314,327c315,328
+< void process_abrvd ();							/* process abbreviation hdr */
+< void parse_type30 ();							/* parse type 30 blockette */
+< void parse_type31 ();							/* parse type 31 blockette */
+< void parse_type32 ();							/* parse type 32 blockette */
+< void parse_type33 ();							/* parse type 33 blockette */
+< void parse_type34 ();							/* parse type 34 blockette */
+< void parse_type35 ();							/* parse type 35 blockette */
+< void print_abrvd ();							/* print abbrev dictionaries */
+< void print_type30 ();							/* print type30 table */
+< void print_type31 ();							/* print type31 table */
+< void print_type32 ();							/* print type32 table */
+< void print_type33 ();							/* print type33 table */
+< void print_type34 ();							/* print type34 table */
+< void print_type35 ();							/* print type35 table */
+---
+> void process_abrvd ();				/* process abbreviation hdr */
+> void parse_type30 ();				/* parse type 30 blockette */
+> void parse_type31 ();				/* parse type 31 blockette */
+> void parse_type32 ();				/* parse type 32 blockette */
+> void parse_type33 ();				/* parse type 33 blockette */
+> void parse_type34 ();				/* parse type 34 blockette */
+> void parse_type35 ();				/* parse type 35 blockette */
+> void print_abrvd ();				/* print abbrev dictionaries */
+> void print_type30 ();				/* print type30 table */
+> void print_type31 ();				/* print type31 table */
+> void print_type32 ();				/* print type32 table */
+> void print_type33 ();				/* print type33 table */
+> void print_type34 ();				/* print type34 table */
+> void print_type35 ();				/* print type35 table */
+330,337c331,338
+< void parse_type41 ();							/* parse sym coefficients blkt */
+< void parse_type42 ();							/* parse polynomial blkt */
+< void parse_type43 ();							/* parse poles & zeroes blkt */
+< void parse_type44 ();							/* parse coefficients blkt */
+< void parse_type45 ();							/* parse rspns list blkt */
+< void parse_type46 ();							/* parse generic rspns blkt */
+< void parse_type47 ();							/* parse generic rspns blkt */
+< void parse_type48 ();							/* parse ch sensitivity */
+---
+> void parse_type41 ();				/* parse sym coefficients blkt */
+> void parse_type42 ();				/* parse polynomial blkt */
+> void parse_type43 ();				/* parse poles & zeroes blkt */
+> void parse_type44 ();				/* parse coefficients blkt */
+> void parse_type45 ();				/* parse rspns list blkt */
+> void parse_type46 ();				/* parse generic rspns blkt */
+> void parse_type47 ();				/* parse generic rspns blkt */
+> void parse_type48 ();				/* parse ch sensitivity */
+340c341
+< int process_stnh ();							/* process station headers */
+---
+> int process_stnh ();		/* process station headers */
+374,383c375,384
+< void process_timeh ();							/* process time span headers */
+< void parse_type70 ();							/* parse time span id blkt */
+< void parse_type71 ();							/* parse hypocenter id blkt */
+< void parse_type72 ();							/* parse event phases blkt */
+< void parse_type73 ();							/* parse t.s. data st index */
+< void print_timeh ();							/* print time span headers */
+< void print_type70 ();							/* print time span id blkt */
+< void print_type71 ();							/* print hypocenter id blkt */
+< void print_type72 ();							/* print event phases blkt */
+< void print_type73 ();							/* print t.s. data st index */
+---
+> void process_timeh ();			/* process time span headers */
+> void parse_type70 ();			/* parse time span id blkt */
+> void parse_type71 ();			/* parse hypocenter id blkt */
+> void parse_type72 ();			/* parse event phases blkt */
+> void parse_type73 ();			/* parse t.s. data st index */
+> void print_timeh ();			/* print time span headers */
+> void print_type70 ();			/* print time span id blkt */
+> void print_type71 ();			/* print hypocenter id blkt */
+> void print_type72 ();			/* print event phases blkt */
+> void print_type73 ();			/* print t.s. data st index */
+386,400c387,396
+< void process_data ();							/* process data blocks */
+< void init_data_hdr ();							/* initialize a data header */
+< void convert_seedhdr ();						/* parse fixed size data hdr */
+< void decode_asro ();							/* decode asro data */
+< void decode_cdsn ();							/* decode cdsn data */
+< void decode_dwwssn ();							/* decode dwwssn data */
+< void decode_steim ();							/* decode steim data */
+< void decode_sro ();								/* decode sro data */
+< void decode_32bit ();							/* decode 32-bit int data */
+< void output_data (); 							/* write output data */
+< 
+< /* Begin Change R B Herrmann November 24, 2007 */
+< void Strupr(char *string);
+< char *alloc_linklist_element (size_t size, char *caller);
+< /* End   Change R B Herrmann November 24, 2007 */
+---
+> void process_data ();			/* process data blocks */
+> void init_data_hdr ();			/* initialize a data header */
+> void convert_seedhdr ();		/* parse fixed size data hdr */
+> void decode_asro ();			/* decode asro data */
+> void decode_cdsn ();			/* decode cdsn data */
+> void decode_dwwssn ();			/* decode dwwssn data */
+> void decode_steim ();			/* decode steim data */
+> void decode_sro ();			/* decode sro data */
+> void decode_32bit ();			/* decode 32-bit int data */
+> void output_data (); 			/* write output data */
+<BR>
+<B>diff Include/sac.h ../rdseedv4.8/Include/sac.h </B>
+77c77
+< 	float	stdp;			/*  T station depth, m      */
+---
+> 	float	stdp;			/*  T station depth, m       */
+82c82
+< 	float	mag;			/*    event magnitude        */
+---
+> 	float	mag;			/*    event magnitude	     */
+113,152c113,152
+< 	int	nzyear;		/*  F zero time of file, yr  */
+< 	int	nzjday;		/*  F zero time of file, day */
+< 	int	nzhour;		/*  F zero time of file, hr  */
+< 	int	nzmin;		/*  F zero time of file, min */
+< 	int	nzsec;		/*  F zero time of file, sec */
+< 	int	nzmsec;		/*  F zero time of file, msec*/
+< 	int	internal4;	/*    internal use           */
+< 	int	internal5;	/*    internal use           */
+< 	int	internal6;	/*    internal use           */
+< 	int	npts;		/* RF number of samples      */
+< 	int	internal7;	/*    internal use           */
+< 	int	internal8;	/*    internal use           */
+< 	int	unused13;	/*    reserved for future use*/
+< 	int	unused14;	/*    reserved for future use*/
+< 	int	unused15;	/*    reserved for future use*/
+< 	int	iftype;		/* RA type of file          */
+< 	int	idep;		/*    type of amplitude      */
+< 	int	iztype;		/*    zero time equivalence  */
+< 	int	unused16;	/*    reserved for future use*/
+< 	int	iinst;		/*    recording instrument   */
+< 	int	istreg;		/*    stn geographic region  */
+< 	int	ievreg;		/*    event geographic region*/
+< 	int	ievtyp;		/*    event type             */
+< 	int	iqual;		/*    quality of data        */
+< 	int	isynth;		/*    synthetic data flag    */
+< 	int	unused17;	/*    reserved for future use*/
+< 	int	unused18;	/*    reserved for future use*/
+< 	int	unused19;	/*    reserved for future use*/
+< 	int	unused20;	/*    reserved for future use*/
+< 	int	unused21;	/*    reserved for future use*/
+< 	int	unused22;	/*    reserved for future use*/
+< 	int	unused23;	/*    reserved for future use*/
+< 	int	unused24;	/*    reserved for future use*/
+< 	int	unused25;	/*    reserved for future use*/
+< 	int	unused26;	/*    reserved for future use*/
+< 	int	leven;		/* RA data-evenly-spaced flag*/
+< 	int	lpspol;		/*    station polarity flag  */
+< 	int	lovrok;		/*    overwrite permission   */
+< 	int	lcalda;		/*    calc distance, azimuth */
+< 	int	unused27;	/*    reserved for future use*/
+---
+> 	long	nzyear;		/*  F zero time of file, yr  */
+> 	long	nzjday;		/*  F zero time of file, day */
+> 	long	nzhour;		/*  F zero time of file, hr  */
+> 	long	nzmin;		/*  F zero time of file, min */
+> 	long	nzsec;		/*  F zero time of file, sec */
+> 	long	nzmsec;		/*  F zero time of file, msec*/
+> 	long	internal4;	/*    internal use           */
+> 	long	internal5;	/*    internal use           */
+> 	long	internal6;	/*    internal use           */
+> 	long	npts;		/* RF number of samples      */
+> 	long	internal7;	/*    internal use           */
+> 	long	internal8;	/*    internal use           */
+> 	long	unused13;	/*    reserved for future use*/
+> 	long	unused14;	/*    reserved for future use*/
+> 	long	unused15;	/*    reserved for future use*/
+> 	long	iftype;		/* RA type of file          */
+> 	long	idep;		/*    type of amplitude      */
+> 	long	iztype;		/*    zero time equivalence  */
+> 	long	unused16;	/*    reserved for future use*/
+> 	long	iinst;		/*    recording instrument   */
+> 	long	istreg;		/*    stn geographic region  */
+> 	long	ievreg;		/*    event geographic region*/
+> 	long	ievtyp;		/*    event type             */
+> 	long	iqual;		/*    quality of data        */
+> 	long	isynth;		/*    synthetic data flag    */
+> 	long	unused17;	/*    reserved for future use*/
+> 	long	unused18;	/*    reserved for future use*/
+> 	long	unused19;	/*    reserved for future use*/
+> 	long	unused20;	/*    reserved for future use*/
+> 	long	unused21;	/*    reserved for future use*/
+> 	long	unused22;	/*    reserved for future use*/
+> 	long	unused23;	/*    reserved for future use*/
+> 	long	unused24;	/*    reserved for future use*/
+> 	long	unused25;	/*    reserved for future use*/
+> 	long	unused26;	/*    reserved for future use*/
+> 	long	leven;		/* RA data-evenly-spaced flag*/
+> 	long	lpspol;		/*    station polarity flag  */
+> 	long	lovrok;		/*    overwrite permission   */
+> 	long	lcalda;		/*    calc distance, azimuth */
+> 	long	unused27;	/*    reserved for future use*/
+<BR>
+<B>diff Main/ah_resp.c ../rdseedv4.8/Main/ah_resp.c </B>
+639c639
+< 			Strupr(t_34->description);
+---
+> 			strupr(t_34->description);
+<BR>
+<B>diff Main/output_css.c ../rdseedv4.8/Main/output_css.c </B>
+185c185
+< 				Strupr(temp);
+---
+> 				strupr(temp);
+<BR>
+<B>diff Main/output_resp.c ../rdseedv4.8/Main/output_resp.c </B>
+93,98d92
+<         /* Begin RBH 04 DEC 2009 */
+<         char sacpolezero_name[100];
+< 	struct time start;
+< 	struct time end;
+< 	void cnvt_end_time();
+<         /* End   RBH 04 DEC 2009 */
+109,157d102
+< /* ADDITION R B HERRMANN November 16, 2007
+<         to provide more information the dataless SEED about the stations
+<         modified 04 DEC 2009 to define the SAC Polezero file name
+< */
+< 	timecvt(&start, current_channel->start);
+< 	timecvt(&end, current_channel->end);
+< 	
+< 	cnvt_end_time(&end);
+< 
+< 
+< 
+< sprintf(sacpolezero_name,"SAC_PZs_%s_%s_%s_%s_%04d.%03d.%02d.%02d.%02d.%04d_%04d.%03d.%02d.%02d.%02d.%04d",
+<                                 current_station->network_code ?
+<                                                 current_station->network_code :
+<                                                 "NA",
+<                                 current_station->station,
+<                                 current_channel->channel,
+<                                 current_channel->location,
+<                                 start.year,
+<                                 start.day,
+<                                 start.hour,
+<                                 start.minute,
+<                                 start.second,
+<                                 start.fracsec,
+<                                 end.year,
+<                                 end.day,
+<                                 end.hour,
+<                                 end.minute,
+<                                 end.second, end.fracsec);
+< 
+< 
+< fprintf(stderr,"%3s %5s %2s %3s %25s %25s %10.6f %11.6f %7.1f %5.1f %5.1f %10.4g %s %s \n",current_station->network_code ? current_station->network_code : "**",
+< current_station->station,
+< (strlen(current_channel->location) != 0 ) ?  current_channel->location : "**",
+< current_channel->channel,
+< current_channel->start,
+< (current_channel->end != NULL) ?  current_channel->end : "99999,9999,00:00:00.0000",
+< current_channel->latitude,
+< current_channel->longitude,
+< current_channel->elevation,
+< current_channel->dip,
+< current_channel->azimuth,
+< current_channel->samplerate,
+< outfile_name,
+< sacpolezero_name);
+< 
+< /* END ADDITION R B HERRMANN November 16, 2007
+< */
+< 
+<BR>
+<B>diff Main/output_sac.c ../rdseedv4.8/Main/output_sac.c </B>
+1111,1118d1110
+< /* CHANGE R B HERRMANN NOVEMBER 16, 2007 
+<         IF one does a rdseed followed by a rdseed the SAC file is appended
+<         sac will not be able touse this file
+<         fptr = fopen(fname, "a");
+< */
+<         fptr = fopen(fname, "w");
+< /* END CHANGE R B HERRMANN NOVEMBER 16, 2007 
+< */
+1119a1112
+> 	fptr = fopen(fname, "a");
+1171,1202d1163
+<        /* RBH 13 SEP 2007 modified 12 JUN 2009 */
+<         fprintf(fptr,"* ****\n");
+<         fprintf(fptr,"* NETWORK   (KNETWK): %s\n",
+<                 current_station->network_code? current_station->network_code: "");
+<         fprintf(fptr,"* STATION   (KSTNM ): %s\n",current_station->station);
+<         fprintf(fptr,"* COMPONENT (KCMPNM): %s\n",current_channel->channel);
+<         fprintf(fptr,"* LOCATION  (KHOLE ): %s\n",
+<                 current_channel->location?  current_channel->location:"");
+<         fprintf(fptr,"* START             : %22s\n",current_channel->start);
+<         fprintf(fptr,"* END               : %22s\n",
+<                 current_channel->end? current_channel->end: "No Ending Time");
+<         fprintf(fptr,"* INPUT UNIT        : METER\n");
+<         fprintf(fptr,"* OUTPUT UNIT       : COUNT\n");
+< 	fprintf(fptr,"* SITE NAME         : %s\n",
+< 		current_station->name? current_station->name: "");
+<         fprintf(fptr,"* RATE (HZ)         : %f\n",current_channel->samplerate);
+< 	fprintf(fptr,"* OWNER             : ");
+< 		find_type33(fptr, current_station->owner_code);
+<         fprintf(fptr,"* LATITUDE  (DEG)   : %10.5f\n",current_channel->latitude);
+<         fprintf(fptr,"* LONGITUDE (DEG)   : %10.5f\n",current_channel->longitude);
+<         fprintf(fptr,"* ELEVATION (M)     : %10.5f\n",current_channel->elevation);
+<         fprintf(fptr,"* DEPTH     (M)     : %10.5f\n",current_channel->local_depth);
+<         fprintf(fptr,"* DIP       (DEG)   : %10.5f\n",current_channel->dip);
+<         fprintf(fptr,"* AZIMUTH   (DEG)   : %10.5f\n",current_channel->azimuth);
+<         fprintf(fptr,"* INSTRUMENT        :       ");
+< 	find_type33(fptr,current_channel->instrument_code);
+<         fprintf(fptr,"* INSTRUMENT COMMENT: %s\n",
+< 		current_channel->inst_comment? current_channel->inst_comment: "");
+<         fprintf(fptr,"* CHANNEL_FLAG      : %s\n",
+< 		current_channel->channel_flag? current_channel->channel_flag: "");
+<         fprintf(fptr,"* ****\n");
+<         /* RBH 13 SEP 2007 modified 12 JUN 2009 */
+<BR>
+<B>diff Main/rdseed.c ../rdseedv4.8/Main/rdseed.c </B>
+2151c2151
+<                         Strupr(location_point[location_count]);
+---
+>                         strupr(location_point[location_count]);
+2569c2569
+< 		Strupr(station_point[i]);
+---
+> 		strupr(station_point[i]);
+2613c2613
+< 		Strupr(channel_point[i]);
+---
+> 		strupr(channel_point[i]);
+2770c2770
+< /* SEED reader     |               Strupr              |    main program */
+---
+> /* SEED reader     |               strupr              |    main program */
+2773c2773
+< void Strupr(string)
+---
+> strupr(string)
+<BR>
+<B>diff Main/summary.c ../rdseedv4.8/Main/summary.c </B>
+649c649
+< 		Strupr(stn_ptr->ts_head->chn_list);
+---
+> 		strupr(stn_ptr->ts_head->chn_list);
+1208,1209c1208,1209
+< 	Strupr(chn_list);
+< 	Strupr(channel);
+---
+> 	strupr(chn_list);
+> 	strupr(channel);
+1240,1241c1240,1241
+<         Strupr(l);
+<         Strupr(location);
+---
+>         strupr(l);
+>         strupr(location);
+<BR>
+<B>diff Parsers/parse_50.c ../rdseedv4.8/Parsers/parse_50.c </B>
+56,57d55
+< 	int i;
+< 
+103,108d100
+< 	/* BEGIN R B Herrmann September 3, 2009
+< 		get rid of non-printing characters from the name */
+< 	for(i=0; i < strlen(type50.name); i++){
+< 		if(! isprint(type50.name[i])) type50.name[i] = '\0';
+< 	}
+< 	/* END  R B Herrmann September 3, 2009 */
+<BR>
+<B>diff Utilities/alloc_linklist_element.c ../rdseedv4.8/Utilities/alloc_linklist_element.c </B>
+77c77
+< size_t size;										/* number of byte to alloc */
+---
+> int size;										/* number of byte to alloc */
+<BR>
+<B>diff Utilities/get_date.c ../rdseedv4.8/Utilities/get_date.c </B>
+14,15c14
+< /* BEGIN R B Herrmann November 24,2007 
+< */
+---
+> #include <stdlib.h>
+17,18d15
+< #include <sys/time.h>
+< /* END   R B Herrmann November 24,2007 */
+25d21
+< 	struct timezone tz;
+28c24
+< 	gettimeofday(&tp, &tz);
+---
+> 	gettimeofday(&tp, (void *)NULL);
+<BR>
+<B>diff Ah/makefile ../rdseedv4.8/Ah/makefile </B>
+0a1
+> CC=gcc
+<BR>
+<B>diff Decoders/makefile ../rdseedv4.8/Decoders/makefile </B>
+0a1
+> CC=gcc
+<BR>
+<B>diff Parsers/makefile ../rdseedv4.8/Parsers/makefile </B>
+0a1
+> CC=gcc
+</PRE>
+<CENTER>Last changed December 20, 2009</CENTER>
+</BODY>
+</HTML>

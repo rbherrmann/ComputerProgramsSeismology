@@ -1,0 +1,93 @@
+#!/bin/sh
+DEST="/rrd0/home/rbh/DATA/FLOR"
+for YEAR in 2005
+do
+	if [ ! -d ${DEST}/${YEAR} ]
+	then
+		mkdir ${DEST}/${YEAR}
+	fi
+
+	for KSTNM in ASCB ACLR VELZ
+	do
+
+	case ${KSTNM} in
+	ASCB) STLO="-2.0057" ; STLA="37.8923" ;;
+	ACLR) STLO="-2.5822" ; STLA="37.1897" ;;
+	VELZ) STLO="-1.9880" ; STLA="37.5838" ;;
+	esac
+
+
+
+
+#####
+#	WINDOW SPECIFIC
+#####
+		for D in 01 02 03 04 05 06 07 08 09 \
+			10 11 12 13 14 15 16 17 18 19 \
+			20 21 22 23 24 25 26 27 28 29 \
+			30
+		do
+			for i in ${DEST}/RAW/${KSTNM}/2005-11-${D}-*
+			do
+			BASE=`basename $i`
+seiasc > /dev/null 2>&1 << EOF
+1
+$i
+
+EOF
+			seiascsacbin < seiasc.out > /dev/null 2>&1
+			mv ${KSTNM}_B__Z.sac ${BASE}Z.sac
+			mv ${KSTNM}_B__N.sac ${BASE}N.sac
+			mv ${KSTNM}_B__E.sac ${BASE}E.sac
+	
+			done
+
+#####
+#	make the day merge
+#####
+			for K in Z N E
+			do
+				case $K in
+					Z) CMPINC="0 " ; CMPAZ="0 " ; KCMPNM="BHZ" ;;
+					N) CMPINC="90" ; CMPAZ="0 " ; KCMPNM="BHN" ;;
+					E) CMPINC="90" ; CMPAZ="90" ; KCMPNM="BHE" ;;
+				esac
+set -x
+				gsac << EOF
+r *${K}.sac
+ch KSTNM ${KSTNM} KCMPNM ${KCMPNM} STLA ${STLA} STLO ${STLO} CMPINC ${CMPINC} CMPAZ ${CMPAZ}
+wh
+merge
+w
+r ${KSTNM}BH${K}
+rtr
+lp c 5 n 2 p 2
+interpolate delta 0.05
+w
+q
+EOF
+				DOY=`saclhdr -NZJDAY ${KSTNM}BH${K} | awk '{printf "%3.3d", $1}' `
+echo ${DOY} `saclhdr -NL -KSTNM -KCMPNM -DELTA -NPTS ${KSTNM}BH${K} ` ${DEST}${YEAR}/${DOY}
+				if [ ! -d ${DEST}/${YEAR}/${DOY} ]
+				then
+					mkdir ${DEST}/${YEAR}/${DOY}
+				fi
+				mv ${KSTNM}BH${K} ${DEST}/${YEAR}/${DOY}
+			#####
+			#	end of component
+			#####
+			done
+			rm *.sac
+		#####
+		#	end day of year/month
+		#####
+		done
+	#####
+	#	end station
+	#####
+	done
+#####
+#	end YEAR
+#####
+done
+

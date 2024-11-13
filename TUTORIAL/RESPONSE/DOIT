@@ -1,0 +1,91 @@
+#!/bin/sh
+
+rm -f SAC_PZs*
+rm -f RESP*
+rm -f *sac
+rm -f *.png
+
+rdseed -f PBMOout.seed -R
+rdseed.linux -f PBMOout.seed -p
+
+evalresp PBMO BHZ 2007 292 0.001 20 500 -u 'vel' -f RESP.NM.PBMO..BHZ
+
+gsac << EOF
+#####
+#	create an impulse with unit area
+#####
+fg impulse delta 0.05 npts 8192
+w imp.sac
+r imp.sac
+ch KSTNM PBMO
+ch KCMPNM BHZ
+wh
+#####
+#	obtain the velocity sensitivity
+#####
+transfer from none to eval subtype AMP.NM.PBMO..BHZ PHASE.NM.PBMO..BHZ
+w velcount.sac
+fft
+bg plt
+color list red
+psp fmin 0.01 fmax 20
+plotnps -F7 -W10 -EPS -K < P001.PLT > respplot.eps
+convert -trim respplot.eps respplt.png
+
+
+#####
+#	obtain the displacement sensitivity
+#####
+r imp.sac
+transfer from none to polezero subtype SAC_PZs_NM_PBMO_BHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
+w discount.sac
+fft
+color list blue
+psp fmin 0.01 fmax 20
+plotnps -F7 -W10 -EPS -K < P002.PLT > pzplot.eps
+convert -trim pzplot.eps pzplt.png
+quit
+EOF
+
+
+#####
+#	define the frequency limits for deconvolution
+#####
+DELTA=`saclhdr -DELTA velcount.sac`
+FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+
+
+#####
+#	now try a deconvolution with the FREQLIMITS
+#####
+gsac << EOF
+r velcount.sac
+transfer from eval subtype AMP.NM.PBMO..BHZ PHASE.NM.PBMO..BHZ to none freqlimits 0.005 0.01  ${FHL} ${FHH}
+w deconvelfl.sac
+quit
+EOF
+
+#####
+#	now plot upt the original and deconvolved
+#####
+gsac << EOF
+r imp.sac  deconvelfl.sac
+fileid name
+bg plt
+xlim 200 210
+p
+fft
+psp fmin 0.01 fmax 20
+plotnps -F7 -W10 -EPS -K < P001.PLT > decon.eps
+convert -trim decon.eps decon.png
+plotnps -F7 -W10 -EPS -K < P002.PLT > deconsp.eps
+convert -trim deconsp.eps deconsp.png
+quit
+EOF
+
+rm -f SAC_PZs*
+rm -f RESP*
+rm -f *sac
+rm -f *.eps
+rm -f *.PLT

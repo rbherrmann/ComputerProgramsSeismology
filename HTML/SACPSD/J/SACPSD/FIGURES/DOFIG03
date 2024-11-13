@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cat > listfile.03 << EOF
+mxy 1080 McNamara
+EOF
+
+sacpsd -f NMSLM__BHZ__.SAC -r AMP.NM.SLM..BHZ -L listfile.03
+plotnps -F7 -W10 -EPS -K < SACPSD.PLT > j.eps
+gm convert -trim j.eps Fig03.png
+rm j.eps SACPSD.PLT
+

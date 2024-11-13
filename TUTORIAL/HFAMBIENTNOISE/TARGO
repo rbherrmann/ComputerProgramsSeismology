@@ -1,0 +1,2 @@
+#!/bin/sh
+tar cf - HFAMBIENTNOISE.dist| gzip -c > HFAMBIENTNOISE.tgz

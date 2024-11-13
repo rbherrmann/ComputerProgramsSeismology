@@ -1,0 +1,108 @@
+#!/bin/sh
+set -x
+
+cat > S.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  4.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+  7.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+ 26.0000  6.0000  0.0000  2.7000 0 0 0 0 1 1
+   .0000  8.0000  0.0000  3.3000 0 0 0 0 1 1
+EOF
+HS=20
+cat > FHR << EOF
+0.0
+2.0
+4.0
+6.0
+8.0
+10.0
+12
+14
+16
+18
+20
+22
+24
+26
+28
+30
+EOF
+
+P=0.05
+DT=0.25
+cat > dfile << EOF
+ 10.0 ${DT} 256 0 0
+ 20.0 ${DT} 256 0 0
+ 30.0 ${DT} 256 0 0
+ 40.0 ${DT} 256 0 0
+ 50.0 ${DT} 256 0 0
+ 60.0 ${DT} 256 0 0
+ 70.0 ${DT} 256 0 0
+ 80.0 ${DT} 256 0 0
+ 90.0 ${DT} 256 0 0
+100.0 ${DT} 256 0 0
+EOF
+cat > dfile << EOF
+100.0 ${DT} 512 0 0
+EOF
+BC="-TF -BH"
+
+rm -fr FINAL.DIR
+mkdir FINAL.DIR
+
+MODEL=S.mod
+#################################
+hprep96 -M $MODEL -d dfile -FHR FHR -HS ${HS} ${BC} -ALL  -NDEC 1
+rm -f hspec96.grn
+time rspec96 > rspec.out 2>&1
+rm -f B*.sac
+hpulse96 -V -p -l 1 | f96tosac -B
+(cd FINAL.DIR
+for i in ../B*.sac; do STEL=`saclhdr -STEL $i | awk '{printf "%5.2f",$1}' `; KCMPNM=`saclhdr -KCMPNM $i`; FNAME=`echo ${KCMPNM} ${STEL} | awk '{printf "%s%sR",$1,$2}' `;mv $i ${FNAME}; done
+)
+rm -f hspec96.grn
+rm -f B*.sac
+
+#################################
+#################################
+
+MODEL=S.mod
+hprep96 -M $MODEL -d dfile -FHR FHR -HS ${HS} ${BC} -ALL  -NDEC 1
+rm -f hspec96.grn
+time hspec96 > hspec.out 2>&1
+rm -f B*.sac
+hpulse96 -V -p -l 1 | f96tosac -B
+(cd FINAL.DIR
+for i in ../B*.sac; do STEL=`saclhdr -STEL $i | awk '{printf "%5.2f",$1}' `; KCMPNM=`saclhdr -KCMPNM $i`; FNAME=`echo ${KCMPNM} ${STEL} | awk '{printf "%s%sa",$1,$2}' `;mv $i ${FNAME}; done
+)
+rm -f hspec96.grn
+rm -f B*.sac
+
+#################################
+#####
+#   make prs plots
+#####
+for GRN in ZDD RDD ZDS RDS ZSS RSS ZEX REX ZVF RVF ZHF RHF PDD PDS PSS PEX PHF PVF
+do
+gsac << EOF
+r FINAL.DIR/${GRN}*[02468][Ra]
+bg plt
+color list red blue
+prs sa 0 amp 0.2 stel reverse  vl -2 30
+q
+EOF
+mv PRS001.PLT ${GRN}.PLT
+DOPLTPNG ${GRN}.PLT
+done

@@ -1,0 +1,79 @@
+#!/bin/sh
+#set -x
+#####
+#	run three tests of quality
+#	P , SH SV
+#####
+#####
+#	create the DAT directory if it does not exist
+#####
+if [ ! -d ../DAT ]
+then
+	mkdir ../DAT
+fi
+
+#####
+#	move to the directory for QC
+#	then examine Z traces for P, T traces for SH and R traves for SV
+#	Note the theoretical arrival times have already been placed into
+#	the trace headers
+#####
+
+cd FINAL.QC
+
+gsac << EOF
+#####
+#	process P
+#####
+fileid name
+r *Z
+rtr
+hp c 0.01 n 2
+lp c 0.0833 n 2
+int
+xlim a -30 a 140
+ppk q relative perplot 4
+wh
+#####
+#	process SH
+#####
+r *T
+rtr
+hp c 0.01 n 2
+lp c 0.05 n 2
+int
+xlim t1 -100 t1 200
+ppk q relative perplot 4
+wh
+#####
+#	process SV
+#####
+r *R
+rtr
+hp c 0.01 n 2
+lp c 0.05 n 2
+int
+xlim t1 -100 t1 200
+ppk q relative perplot 4
+wh
+q
+EOF
+
+
+#####
+#	now move the selected traces to the processing area
+#####
+
+
+
+for i in *[ZRT]
+do
+IHDR20=`saclhdr -IHDR20 $i`
+ANS=`echo $IHDR20 | awk '{if( $1 < 1)print "NO";else if($1 >1)print "NO" ; else print "YES" }' `
+
+if [ $ANS = "YES" ]
+then
+echo $i $IHDR20 $ANS
+cp $i  ../../DAT
+fi
+done

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+
+
+for MOD in tak135sph.mod Ttak135sph.mod Ftak135sph.mod FTtak135sph.mod
+do
+echo Model: $MOD
+
+#for DEPTH in 10 40 100 200 300 400 500  600 700
+for DEPTH in  700 
+
+do
+echo \
+"GCARC  EVDP    TP(sec) p(P)(s/km)      T*(P)   TSV(sec) p(SV)(s/km)    T*(SV)   TSH(sec) p(SH)(s/km)    T*(SH)"
+#DDDDD DDDDD FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff FFFFFFF.ff
+echo "--------------------------------------------------------------------------------------------------------------"
+#for GCARC in 0.01 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 30 40 50 60 70 80 90 100 110 120 130 140
+#for GCARC in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 20 25 30 35 40 45 50 55 60 65 70 75 80 85 90 95 
+for GCARC in 1 2 3 30 60 90
+do
+
+
+export TP=`   time96 -GCARC $GCARC -EVDP $DEPTH -P  -T    -M $MOD`
+export TSV=`  time96 -GCARC $GCARC -EVDP $DEPTH -SV -T    -M $MOD`
+export TSH=`  time96 -GCARC $GCARC -EVDP $DEPTH -SH -T    -M $MOD`
+export RAYP=` time96 -GCARC $GCARC -EVDP $DEPTH -P  -RAYP -M $MOD`
+export RAYSV=`time96 -GCARC $GCARC -EVDP $DEPTH -SV -RAYP -M $MOD`
+export RAYSH=`time96 -GCARC $GCARC -EVDP $DEPTH -SH -RAYP -M $MOD`
+export TSP=`  time96 -GCARC $GCARC -EVDP $DEPTH -P  -TS   -M $MOD`
+export TSSV=` time96 -GCARC $GCARC -EVDP $DEPTH -SV -TS   -M $MOD`
+export TSSH=` time96 -GCARC $GCARC -EVDP $DEPTH -SH -TS   -M $MOD`
+
+echo ${GCARC} ${DEPTH}  ${TP} ${RAYP} ${TSP} ${TSV} ${RAYSV} ${TSSV} ${TSH} ${RAYSH} ${TSSH}  | awk '{printf "%5d %5d %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f %10.2f\n", $1, $2, $3, $4 , $5 , $6, $7 ,$8, $9, $10, $11}' 
+
+done
+echo "--------------------------------------------------------------------------------------------------------------"
+done
+
+done
