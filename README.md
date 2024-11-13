@@ -1,0 +1,1 @@
+Computer Programs in Seismology is a package of programs for making synthetic seismograms and for the inversion of seismic data. these programs were developed over a period of 50 years at Saint  Louis University
