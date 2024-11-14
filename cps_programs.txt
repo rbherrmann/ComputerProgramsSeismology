@@ -1,0 +1,262 @@
+-----------------------------------------------------
+Inversion for Velocity Model
+	Surface wave inversion
+		surf96
+			srfdis96
+			srfdrl96
+			srfdrr96
+			srfgph
+			srfinv96
+			srfphr96
+			srfphv96
+			srfpre96
+			srfrph
+			srfvph
+	Receiver function inversion
+		rftn96 - Receiver function inversion program
+			rftndr96
+			rftnpr96
+			rftnpv96
+			rftnvp
+	Joint surface wave and receiver function inversion
+		joint96
+			jntpre96
+	Joint inversion of surface wave dispersion and first
+              arrival times.  This needs a tutorial
+		shallow96
+		        shalpr96
+        Inversion of first arrival times
+		ttinv96
+                        ttinvdr96
+                        ttinvpr96
+                        ttinvpv96
+                        ttinvvp
+-----------------------------------------------------
+Surface wave kernels
+	srfker96 - This uses the output of surf96
+
+-----------------------------------------------------
+Generalize ray theory synthetics
+        gprep96
+        genray96
+        gpulse96
+-----------------------------------------------------
+Cerveny ray tracing synthetics
+	cprep96
+	cseis96
+	cpulse96
+	cray96
+-----------------------------------------------------
+Surface wave dispersion and synthetics
+        Isotropic model:
+        sprep96  - prepare a data set for dispersion computation
+        sdisp96  - get Love and Rayleigh pahse velocity  for isotropic media
+        scomb96  - fix disperiosn curves if a mode is skipped
+        slegn96  - compute Love wave eigenfunctions
+        sregn96  - compute Rayleigh wave eigenfunctions
+        spulse96 - make a synthetic by convolving with source pulse
+        sdpder96 - display depth dependent eigenfunctions
+        sdpdsp96 - plot observed data in same format as sdoegn96
+        sdpegn96 - display eigenvalues, phase roupd velocity, etc
+        sdprad96 - plot radiation patterns for a given double couple mechanism
+        sdpspc96 - plot theoretical spectra
+        sdpsrf96 - plot theoretical phase velocities from sdisp96
+  
+        Transverse isotropic model:
+        tprep96  - prepare a data set for disperison computation
+        tdisp96  - compute Love and Rayleigh wave phase velocities
+        tlegn96  - compute Love wave eigenfunctions
+        tregn96  - compute Rayleigh wave eigenfunctions
+        tpulse96 - make a synthetic by convolving with source pulse
+        tcomb96  - fix dispersion curves if a mode is skipped
+        tdpder96 - display depth dependent eigenfunctions
+        tdpegn96 - display eigenvalues, phase roupd velocity, etc
+        tdpsrf96 - plot theoretical phase velocities from tdisp96
+
+        slat2d96 - apply conservation of energy to fundamental model to
+                   estimate dispersion and synthetics for a laterally varying
+                   medium
+
+-----------------------------------------------------
+Wavenumber integration dispersion and synthetics
+	hprep96  - prepare the hspec96 run
+	hspec96  - make wavenumber integration sysnthetics
+	hprep96p - prepare the hspec96p run
+	hspec96p - make plane wave synthetics
+        hwhole96
+	hpulse96 - convolve with source time function and create a FILE96 file
+	hudson96 - Make teleseismic synthetics for layered structure at source 
+                   and receiver and ray tracing through the mantle
+	hrftn96  - make a P-wave receiver function for an isotrpic model
+        trftn96  - make a P-wave receiver function for a transverse isotropic model
+	hsanal96 - computes analytic permanent deformation Greens functions
+                   for a wholspace and halfspace for an isotropic model
+	hstat96  - compute static deformation Green's functions for a layer
+                   isotropic model
+        tspec96  - compute wavenumber integration synthetic for transverse isotropic media
+        tspec96p - compute plane wav e synthetics for transverse isotropic medium
+-----------------------------------------------------
+Utility
+	dialog - permits creation of menus from shell - This is not
+		a CPS program but is open source
+	elocate - location program. Requires sac2eloc to create
+		elocate.dat
+	udelaz   - compute great circle distance (km), arc distance (deg), azimuth
+                   and back azimuth
+	udtdd    - compute P-wave ray parameter for Jeffreys-Bullen model.
+                   Use time96 or ttime96 instead
+	stereo   - compute stereo nets using equal area or equal angle projection.
+        redodate - a date calculator. I use this to define a time 60 sec before
+                   origin time when I request data
+        mtinfo   - decomposes a general moment tensor into isotropic - deviatoric,
+                   isotropic - majour double couple - minor double couple, etc
+
+-----------------------------------------------------
+MODEL96 programs
+	shwmod96 - plot the isotropic model
+	tshwmod96 - plot the transverse isotropic model
+	time96  - compute first arrival time, ray parameter, T* for an isotropic
+                  MODEL96 model file for a given distance and depth
+	timmod96 - compute and plot first arrival times for an isotropic moedl
+	ttime96  - compute first arrival time, ray parameter, T* for a transverse
+                   isotropic MODEL96 model file for a given distance and depth
+	ttimmod96 compute first arrival time, ray parameter, T* for a transverse
+                  isotropic MODEL96 model file for a given distance and depth
+	mkmod96  - interactively create an isotropic velocity model in MODEL96 format
+	tmkmod96 - interactively create a transverse isotropic model in MODEL96 format
+	is2timod - convert isotropic model to transverse isotropic model format
+	ti2ismod - convert a transverse isotropic model to the best isotropic model
+                   (Dahlen)
+        refmod96 - make a nice plot or refraction and reflection arrivals. Each invocation
+                   of 'prs' in gsac will create a prototype shell script to
+                   present an overlay of travel times onto waveforms
+        prfmod96 - an attempt to display a sequence of 1-D isotropic velocity models
+                   as contours on a profile
+
+-----------------------------------------------------
+Graphics
+	calxvig - this is required by all interactive graphics programs
+	plotdbg - debug a PLTO file
+	plotnps - convert a PLTO file to PS or EPS
+	plotxvig - display a PLOT file on an X11 screen
+        reframe  - manipulate indivdual PLOT files to change position and to clip
+
+        genplt - a command line driven plot routine for making nice annotated plots
+	calplt - simple program that permits implementation of Calcomp calls
+		interactively
+	     ------- older codes -------
+	plot4014 - display a PLOT file on a Textronix terminal (OLD)
+	plotgif  - covert a PLTO file to a GIF image. (OLD) Use ImageMagick instead
+	xgotek - old code to force an xterm into interactive Tektronix mode
+	cltek  - old code to clear the Textronix terminal
+	tgotek - old code to cause a Tektronix terminal to go to interactive mode
+	trttek - old code to return from Tektronix interactive to terminal mode
+	xrttek - old code to return from Tektronix interactive to terminal mode
+
+-----------------------------------------------------
+Sac programs
+        gsac     - SLU alternative to sac
+	shwsac   - display contents of Sac header and plot the trace. This will show 
+                   the actual header. On the other hand, gsac will comptue some values,
+                   e.g., distance and azimuth, of possible.
+	saccvt   - convert binary Sac file byte order between big-endian and little endian.
+                   When getting Sac files, it is often necessary to
+                      saccvt -I < sac_file > tmp ; mv tmp sac_file
+                   before sac_file can be used on the lcoal machine.
+	asctosac - convert Sac ASCII to Sac binary
+	sactoasc - convert Sac binary to Sac ascii
+	saclhdr  - list contents of Sac header. This is used to get header information into
+                   a sac header.
+	sacpol   - make particle motion plots in 2D
+        sac2eloc - read station coordiantes and arrival time picks from Sac header
+                   to create the elocate.dat file
+        sacpsd   - computer power spectral density for noise
+        sacspc96 - plot spectra of Sac file
+        sactof96 - convert sacfile to FILE96 format
+	pltsac   - general utility for plotting sac trace. Use primarily to compare
+                   observed and predicted traces from source inversion
+        sacdecon - frequency domain water level deconvolution - use saciterd instead
+        sacevalr - filter a sacfile using frequency-pahse and frequency-amplitude files
+                 - Use gsac 'transfer' instead
+        sacfilt  - filter a sacfile using pole-zero file. 
+                 - Use gsac 'transfer' instead
+        saciterd - iterative time-domain deconvolution for receiver functions of 
+                   source time function determination
+        saciterdc - C version of saciterd
+
+-----------------------------------------------------
+Surface wave analysis
+ 	do_mft - GUI fron end to sacmft96 and sacmat96. This GUI calls
+                 sacmat96
+                 sacmft96
+	do_pom - GUI font end to sacpom96. this GUI calls
+                 sacpom96
+	MFTSRF - convert output of do_mft or do_pom to SURF96 format for inversion
+
+-----------------------------------------------------
+Source Inversion
+	Utilities
+		fmdfit - plot goodness of fit output of wvfgrd96 or wvfmtgrd96
+                         as a function of depth
+		fmmfit - plot outpuf of wvfgrd96 to show goodness of fit as function
+                         of strike, dip and rake
+		fmlpr
+		fmplot - plot focal mechanism, P sv or SH amplitudes, for double couple
+                         or moment tensor source
+		fmtp   - Given one set of strike, dip or rake, determine
+                         the parameters of the other nodal plane, or given P and T trend and 
+                         plunge, compute the nodal plane parameters
+	Surface wave spectral amplitude inversion
+		srfgrd96
+	Waveform inversion programs
+		wvfdly96 - reads the time delay in the wvfgrd96 and wvfmtgrd96 created
+			sac files to examine time shift as a function of azimuth
+			to estimate location error
+		wvfgrd96 - grid search for best double couple
+		wvfmch96 - creates a synthetic for a given double couple or moment tensor
+		wvfmt96  - linear inversion for full moment tensor - however the
+			time shift correction is not implemented well and the
+			program has been replaced by wvfmtgrd96
+		wvfmtd96  - linear inversion for deviatoric moment tensor - however the
+			time shift correction is not implemented well and the
+			program has been replaced by wvfmtgrd96
+		wvfmtgrd96 - Implemention of Zhu and Ben-Zion grid search for
+			best double couple, deviatoric moment tensor or full
+			moment tensor. The time shifting works well. The deviatoric search
+			takes longer than the double couple search, and the full moment tensor 
+			search takes longer than the deviatoric source, since there
+			at searches over 5, 4 and 3 parameters for the full, deviatoric and
+			double couple solutions, respectively
+
+-----------------------------------------------------
+Reformatting programs using the FILE96 format
+	f96tosac Converts file96 file to Sac
+	
+	Other programs:  May of these programs are not used since the functionality is in gsac
+	f96list  - List f96 header
+	fderiv96 - Take a derivative of the f96 traces 
+		 - Use 'dif' in gsac
+	ffilt96  - Apply a polezero filter to f96 traces 
+		 - Use 'transfer' in gsac
+	finteg96 - Integrate a f96 trace 
+		 - Use 'int' is gsac
+	fmech96  - Apply a mechanism to f96 Greens functions
+		 - Use 'mt' in gsac
+        tfmech96 - Apply a mechanism to a data fiels created for an isotropic or  transverse 
+                   isotropic model - eventually will replace fmech96
+	fplot396 - Plot sets of 3 traces. This was for use with the 3 component waveforms 
+		 - generated using fmech96
+		 - Use 'plot perplot 3' in gsac
+	fplot96  - This plotted traces
+		 - Use 'plot' in gsac
+	fplotg96 - Plot all Greens functions
+	fprof96  - Plot a record section
+		 - Use 'prs ' in gsac
+	fsel96   - select a Green function of distance
+	fspec96  - Plot spectra
+		 - Use 'psp' in gsac
+-----------------------------------------------------
+IRIS programs
+	evalresp
+        rdseed   - SLU modificaiton of IRIS rdseed to get more information from the dataless.
+                   this is used for network QC
