@@ -121,7 +121,7 @@ ch KT0 -12345
           users inversion code.&nbsp; This code was requested by a
           researcher who wanted to invert more than dispersion
           observations. A tutorial on the use of <b>srfpar96</b> is
-          given at <a href="/eqc/eqc_cps/TUTORIAL/SWKERNELS1">SWKERNELS1</a>
+          given at <a href="../TUTORIALS/SWKERNELS1/index.html">SWKERNELS1</a>
         </li>
         <li>Added makefiles to support LLVM compilers clang and flang.
           In addition Makefiles for older compilers and systems were
@@ -629,7 +629,7 @@ c-----
           <p style="margin-bottom: 0in"> Created a new program <b>sacampl</b>
             to compute the quarter-wavelength site response. This is
             documented n the tutorial <a
-              href="/eqc/eqc_cps/TUTORIAL/SACAMPL">SACAMPL</a> </p>
+              href="../TUTORIAL/SACAMPL/sacampl.html">SACAMPL</a> </p>
         </li>
       </ul>
       <h3>February 14, 2024</h3>
@@ -1062,11 +1062,11 @@ sprintf(n.evtime,"%2.2d:%2.2d:%2.2d.%1.1d",hour,minute,second,abs(((int)millisec
       <ul>
         <li>
           <p style="margin-bottom: 0in">Updated the documentation for
-            the <a href="/eqc/eqc_cps/TUTORIAL/SLAT2D">SLAT2D</a> </p>
+            the <a href="../TUTORIAL/SLAT2D/index.html">SLAT2D</a> </p>
         </li>
         <li>
           <p style="margin-bottom: 0in">Created the <a
-              href="/eqc/eqc_cps/TUTORIAL/SLAT2Dgrad">SLAT2Dgrad</a>
+              href="../TUTORIAL/SLAT2Dgrad/index.html">SLAT2Dgrad</a>
             tutorial which compares multimode synthetics created using <b>slat2d96</b>
             to Cerveny high frequency asymptotic ray tracing for a
             single dipping layer structure. The SH comparison is superb,
@@ -1696,7 +1696,7 @@ href="http://eqinfo.eas.slu.edu/eqc/eqc_cps/CPS/cpslisc.html"><span
             to the model thickness, then the incident P wavefront
             approximates the plane wave assumed for receiver function
             studies. To test the codes and to provide examples there is
-            a tutorial on <a href="/eqc/eqc_cps/TUTORIAL/Cerveny">the
+            a tutorial on <a href="../TUTORIAL/Cerveny/index.html">the
               use of Cerveny ray tracing for receiver function analysis.
             </a> </p>
         </li>
@@ -2317,41 +2317,7 @@ href="http://eqinfo.eas.slu.edu/eqc/eqc_cps/CPS/cpslisc.html"><span
             will be updated documentation in
             PROGRAMS.330/DOC/SOURCE.pdf/cps330s.pdf, and new on-line
             tutorial for source inversion that focuses on using a
-            synthetic data set at&nbsp;<a
-              href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/">http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/</a>&nbsp;.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            synthetic data set. at&nbsp;<a
             The impetus for this effort was the need to perform full
             moment tensor inversions for a mining collapse. To assist in
             characterizing a source, the resultant moment tensor is used
@@ -2588,7 +2554,7 @@ href="http://eqinfo.eas.slu.edu/eqc/eqc_cps/CPS/cpslisc.html"><span
             dilatation and rotation time series. The theory of how this
             was accomplished is described in <a
               href="STRAIN/strain.pdf">strain.pdf</a>. There is also a
-            tutorial at <a href="/eqc/eqc_cps/TUTORIAL/CPSstrain">/eqc/eqc_cps/TUTORIAL/CPSstrain</a>.
+            tutorial at <a href="../TUTORIAL/CPSstrain/index.html">../TUTORIAL/CPSstrain</a>.
           </p>
           <p>The <b>hspec96</b> and wavenumber integration codes and
             the isotropic media modal superposition codes were adapted
@@ -4962,8 +4928,7 @@ hpulse96 -V -p -l 1</pre>
                     pi/4 + omega*dist/U, where phase is the
                     instantaneous phase at the maximum of the envelope
                     and U is the corresponding group velocity. For the
-                    derivation of this refer to <a
-href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/EMPIRICAL_GREEN/MFT.pdf">http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/EMPIRICAL_GREEN/MFT.pdf</a>
+                    derivation of this refer to <a href="../TUTORIAL/EMPIRICAL_GREEN/MFT.pdf">../TUTORIAL/EMPIRICAL_GREEN/MFT.pdf</a>
                   </p>
                 </li>
                 <li>
@@ -5036,40 +5001,7 @@ sprintf(ostr,"%s -F %s -D disp.d -AUTO",pathname, fname);</pre>
         <li>
           <p style="margin-bottom: 0in">Corrected <b>spulse96</b> for
             use with <b>slat2d96</b>.&nbsp; The description in&nbsp;<a
-              href="/eqc/eqc_cps/TUTORIAL/SLAT2D/index.html">/eqc/eqc_cps/TUTORIAL/SLAT2D/index.html</a>&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              href="../TUTORIAL/SLAT2D/index.html">../TUTORIAL/SLAT2D/index.html</a>&nbsp;&nbsp;&nbsp;&nbsp;
             is correct. The implementation in <b>spulse96</b> was
             not.&nbsp; The problem was that there was a geometrical
             spreading term sqrt(wvno r)&nbsp;&nbsp; where the wvno must
@@ -7579,8 +7511,7 @@ lnA = a + bf : a=-9.279791 b=-1.345738 t*=0.428362  OK025GS00HHZ SMOOTH YES</pre
         <li>
           <p style="margin-bottom: 0in">Completed a tutorial on modeling
             static deformations from finite fault models. This is given
-            at <a
-href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE_STATIC/index.html">http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE_STATIC/index.html</a>
+            at <a href="../TUTORIAL/FINITE_STATIC/index.html">../TUTORIAL/FINITE_STATIC/index.html</a>
           </p>
         </li>
         <li>
@@ -8463,7 +8394,7 @@ cmdfil:
             files from <b>surf96</b> to list all partial derivatives as
             a function of depth.&nbsp; A tutorial on the use of this
             program is available at the tutorial web page <a
-              href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/SWKERNELS/">http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/SWKERNELS/</a>
+              href="../TUTORIAL/SWKERNELS/index.html">../TUTORIAL/SWKERNELS/index.html</a>
             . </p>
         </li>
         <li>
@@ -11630,40 +11561,7 @@ parse_30.c:96: warning: cast to pointer from integer of different size</pre>
         </li>
         <li>
           <p>Documentation for the <a
-              href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/STRUCT/index.html">Inversion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              href="../TUTORIAL/STRUCT/index.html">Inversion
               of Surface-Wave Dispersion and Receiver Functions for
               Structure</a> was corrected to show the correct use of the
             <i>-ZMAX</i> flag for <b>shwmod96 </b>[thanks to Wen-Jie
@@ -12655,7 +12553,7 @@ V10   3.758 24   7   0.000  9 102  -3.758 64 211   3.758 285 70  -80  78 22 -116
             code.&nbsp; These transformations were tested using <i>mineos</i>.
             A description of the current status of the Earth flattening
             studies is given at the following link.&nbsp;&nbsp; <a
-              href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/SPHERICITY">http://www.eas.slu.edu/TUTORIAL/SPHERICITY</a>
+              href="../TUTORIAL/SPHERICITY/index.html">../TUTORIAL/SPHERICITY</a>
           </p>
           <p>A detailed tutorial on teleseismic synthetics and source
             inversion must be prepared.<br>
@@ -12664,21 +12562,6 @@ V10   3.758 24   7   0.000  9 102  -3.758 64 211   3.758 285 70  -80  78 22 -116
               sregn96</b> and <b>slegn96</b> in
             PROGRAMS.330/VOLIII/src, <b>srfdis96,</b> <b>srfdrr96</b>
             and <b>srfdrl96</b> in PROGRAMS.330/VOLIV/src, and <b>hspec96
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </b>in PROGRAMS.330/VOLVI/src. Note <b>hspec96</b> was
             modified on January 14, 2008 to correctly handle the source
             and receiver depth insertion for the flattening. The use of
