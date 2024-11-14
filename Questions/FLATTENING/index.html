@@ -1,0 +1,352 @@
+<html>
+<head><title>Earth Flattening</title></head>
+<body>
+<h2>Introduction</h2>
+<p>
+Aubreya Adams noticed some problems in the inversion of a Rayleigh wave dispeersion data set. The resultant models were very different. This response is an attempt to define and understand the problems.
+<p>
+A spherical velocity model was reformatted into the CPS330 model96 format.
+In addition this model was then converted into am earth-flattened velocity model.
+There is no problem with this since the program <b>surf96</b> must convert a spehrical model to a flat model internally for computation.
+<p>
+The models tested are as follow:
+<ul>
+<li><a href="Models/start_cvlrad.vmod"> start_cvlrad.vmod </a> - Spherical model in model96 format</li>
+<li><a href="Models/start_cvl.vmod"> start_cvl.vmod </a> - Flattened velocity model provided by Aubreya</li>
+<li><a href="Models/flat.mod"> flat.mod </a> - Flattened velocity model using <a href="SRC/sphfla.f"> sphfla.f</a> which uses the same internal code as <b>surf96</b></li>
+</ul>
+<h2>Tests</h2>
+<p>
+The issue raised requires a number of test to focus on the earth flattening that Aubreya used, the ability of <b>surf96</b> to use spherical models, and of course the final inversion results.
+<h3>Earth flattening</h3>
+<p>
+I compiled the sphfla.f, copied the start_cvlrad.vmod to sph.mod and then ran sphfla to create a flat.mod.  I then compared the flattened models:
+<pre>
+ 
+        gfortran sphfla.f -o sphfla
+        cp start_cvlrad.vmod sph.mod
+        sphfla
+        shwmod96 -ZMAX 500 -VMIN 3  -VMAX 7 -LEGIN -K -1 flat.mod start_cvl.vmod
+	plotnps -BGFILL -F7 -W10 -EPS -K < SHWMOD96.PLT > t.eps
+	convert t.eps flat_compare.png #ImageMagick not part of CPS 
+</pre>
+to get the following figure:
+<table>
+<tr><td><img src="PNG/flat_compare.png"></td></tr>
+</table></br>
+<br>
+<b>The conclusion is that the start_cvl.vmod was properly flattened. The only difference is that the CPS version keeps the layering, and increases the layer thickness at the same time as the velocities are changed.  </b> I suppose the Aubreya flattended the piecewise continuous model, and then defined the layers.
+<h3>Test of surf96 use of equivalent models</h3>
+<p>I created two sub-directories: FLATTENED_MOD and SPH_MOD. These had the following files:
+<h4>FLATTENED_MOD</h4>
+sobs.d, disp.cvl, start_cvl.vmod
+<p>
+The control file <i>sobs.d</i> is
+<pre>
+  4.99999989E-03  4.99999989E-03   0.0000000      5.00000007E-02   0.0000000    
+    1    0    0    0    0    1    0    0    1    0
+start_cvl.vmod                                                                  
+disp.cvl
+</pre>
+<h4>SPH_MOD</h4>
+sobs.d, disp.cvl, start_cvlrad.vmod
+<p>
+The control file <i>sobs.d</i> is
+<pre>
+  4.99999989E-03  4.99999989E-03   0.0000000      4.99999989E-03   0.0000000    
+    1    0    0    0    0    1    0    0    1    0
+start_cvlrad.vmod                                                               
+disp.cvl
+</pre>
+<p>
+I then ran the following script in each of the directories (Note the last line
+naming the  PNG file is changed)
+<pre>
+#!/bin/sh
+
+#####
+#    clean up
+#####
+surf96 39
+
+#####
+#    calculate the prediction of the initial 
+#    velocity model
+#####
+surf96 1
+#####
+#    plot - since I want an actual graphic and since
+#    the command surf96 7 calls srfvph which calls 
+#    srfphv96 -V, I do this manually
+#####
+srfphv96 -V
+plotnps -F7 -W10 -EPS -K -BGFILL < SRFPHV96.PLT > t.eps
+convert -trim t.eps  FLAT_1.png
+
+</pre>
+<br>
+<table>
+<tr>
+<td>
+<center>SPH_MOD</center>
+<br>
+<img src="PNG/SPH_1.png">
+</td>
+<td>
+<center>FLAT_MOD</center>
+<br>
+<img src="PNG/FLAT_1.png">
+</tr>
+</table>
+<p>
+<b>Focusing on the predicted dispersion, we see that they are equivalent. The earth flattening was done correctly.</b> There may be a difference in the density since <b>surf96</b> applies a different density mapping to the Love and Rayleigh waves in going from a spherical to an internal flat model.
+<h3>Inverted models</h3>
+<P>
+The next step is to run ten iterations of the inversion to obtain the inverted models.
+<br>
+<table>
+<tr>
+<td>
+<center>SPH_MOD</center>
+<br>
+<img src="PNG/SPH_3.png">
+</td>
+<td>
+<center>FLAT_MOD</center>
+<br>
+<img src="PNG/FLAT_3.png">
+</tr>
+</table>
+<p>
+<b>This comparison is information in that the new mdoels (red) fit the dispersion between 20 and 200 sec equally well, if not identically. We see that the use of the initial flattened model has changed in velocity to 670 km, while the use of the initial spherical model only has changes in velocity down to the 440 discontinuity.</b>
+<p>
+In both cases the inversion leads to lower upper mantle velocities than the initial model. 
+<p>
+As a check, I used the FLAT_3.mod and SPH_3.mod derived after 10 iterations to predict dispersion. The final models worked well.
+<p>
+In order to really compare the two models, it is necessary that they be of the same type. So I again use the program sphfla to flatten the SPH_3.mod. I then compare the flattened SPH_3.mod to the FLAT_3.mod and to the original start_cvl.vmod.
+<br>
+<table>
+<tr><td><img src="PNG/Inv_flat.png"></td></tr>
+</table></br>
+<p>
+In this figure the <b>SPH_MOD/SPH_3_flat.mod</b> and the <b>FLATTENED_MOD/FLAT_3.mod</b>  both fit the observed dispersion.  We see that they agree to a depth of about 140 km. 
+<p>
+To learn what part of the dispersion if affected by these differences, I
+added some fake dispersion points at periods of 231, 281 and 331 seconds. I did not invert this new data set, but rather used the same trick shown above to get the predictions. The result is shown in the next figure:
+<table><tr><td>
+<img src="PNG/dodsp.png">
+</td></tr>
+</table>
+<p>
+We see that the differences at depth only affect the dispersion at very long periods.
+<h3>Examination of individual iteration steps</h3>
+<p>
+After seeing the significant difference in the final models, I then looked at the changes in the model at each step.  Basically the first iteration led to similar velocity changes in both models, but the next iteration showed different changes for the two models.
+<p>
+In the figures that follow, the spehrical will be on the left and the flattend on the right. First we will compare the model changes for each iteration.
+<p>
+To make the plots, I run the script
+<p>
+<pre>
+#!/bin/sh
+
+# look at initial partials
+# put in fkae group velocities
+
+RUN="SPH"
+
+cat > sobs.d << EOF
+  4.99999989E-03  4.99999989E-03   0.0000000      4.99999989E-03   0.0000000    
+    1    0    0    0    0    1    1    0    1    0
+start_cvlrad.vmod                                                               
+disp.cvl                                                                        
+EOF
+
+#####
+#    clean up
+#####
+surf96 39
+
+#####
+#     set of 10 iterations of the inversion
+#####
+surf96  1  2 
+# initial
+srfphv96 -V
+plotnps -F7 -W10 -EPS -K -BGFILL < SRFPHV96.PLT > t.eps
+convert -trim t.eps ${RUN}_6_0.png
+surf96 6 1 2
+# model 1
+srfphv96 -V
+plotnps -F7 -W10 -EPS -K -BGFILL < SRFPHV96.PLT > t.eps
+convert -trim t.eps ${RUN}_6_1.png
+surf96 6 1 2
+# model 2
+srfphv96 -V
+plotnps -F7 -W10 -EPS -K -BGFILL < SRFPHV96.PLT > t.eps
+convert -trim t.eps ${RUN}_6_2.png
+surf96 6 1 2
+# model 3
+srfphv96 -V
+plotnps -F7 -W10 -EPS -K -BGFILL < SRFPHV96.PLT > t.eps
+convert -trim t.eps ${RUN}_6_3.png
+shwmod96 -ZMAX 500 -VMIN 3 -VMAX 7 -K -1 -LEGIN tmpmod96.???
+plotnps -F7 -W10 -EPS -K -BGFILL < SHWMOD96.PLT > t.eps
+convert -trim t.eps ${RUN}_6_mod.png
+
+</pre>
+<p>
+<table>
+<tr>
+	<td>
+<center>SPH_MOD</center><br>
+<img src="PNG/SPH_6_mod.png">
+	</td>
+	<td>
+<center>FLAT_MOD</center><br>
+<img src="PNG/FLAT_6_mod.png">
+	</td>
+</tr>
+</table>
+<p>
+We see that the change in velocity between the initial model, tmpmod96.000 and the result of the first iteration, tmpmod96.001, is about the same. However for the next iteration, the FLAT_MOD exhibits a much larger change than the SPH_MOD, which seems to have converged.
+<p>
+To further investigate this, the script also produced the fit to the dispersion. My expectation, is that each iteration will better fit the data.
+<table>
+<tr>
+	<td>
+<center>SPH_MOD</center><br>
+<center>Initial Model</center><br>
+<img src="PNG/SPH_6_0.png">
+	</td>
+	<td>
+<center>Initial Model</center><br>
+<img src="PNG/FLAT_6_0.png">
+	</td>
+</tr>
+<tr>
+        <td>
+<center>Iteration 1 Model</center><br>
+<img src="PNG/SPH_6_1.png">
+	</td>
+	<td>
+<center>Iteration 1 Model</center><br>
+<img src="PNG/FLAT_6_1.png">
+	</td>
+</tr>
+<tr>
+       <td>
+<center>Iteration 2 Model</center><br>
+<img src="PNG/SPH_6_2.png">
+	</td>
+	<td>
+<center>Iteration 2 Model</center><br>
+<img src="PNG/FLAT_6_2.png">
+	</td>
+</tr>
+<tr>
+       <td>
+<center>Iteration 3 Model</center><br>
+<img src="PNG/SPH_6_3.png">
+	</td>
+	<td>
+<center>Iteration 3 Model</center><br>
+<img src="PNG/FLAT_6_3.png">
+	</td>
+</tr>
+</table>
+<p>
+This is what I see in the plots:
+<ul>
+<li>Inital model: the predicted dispersion is the same</li>
+<li>Iteration 1: the SPH_MOD fits well for periods greater than 30 sec. The FLAT_MOD is marginally better than the initial model. Also look at the model plots. The Initial in blue is the starting model. This model is the result of iteration one, the change is similar in each.</li>
+<li>Iteration 2: The FLAT_MOD model now starts to fit the dispersion, but we see that there was a chang ein the model as a result of the previous iteration.</li>
+<li>Iteration 3: There is not change from the previous model and the dispersion fits are similar<li>
+</ul>
+<P>So what happended that the prediction of the first iteration model are worse for the FLAT_MOD.  I verified that tha change is S-velocity is similar. (surf96 1 2 18 ).
+Then I noticed that there was a big change in the density at depth. Just run the following shell command 
+<p>
+<pre>
+for i in tmpmod96.00?
+do 
+	echo '-----' $i '-----' 
+	tail -60 $i | head -5 
+ done
+</pre>
+<p>to give </p>
+<pre>
+---- tmpmod96.000 -----
+    10.0000     9.5545     5.1571     3.0602   321.       143.      0.270      0.270       1.00       1.00    
+    10.0000     9.6059     5.1826     3.0542   321.       143.      0.270      0.270       1.00       1.00    
+    10.0000    10.0090     5.4220     3.2281   321.       143.      0.270      0.270       1.00       1.00    
+    10.0000    10.0590     5.4519     3.2264   321.       143.      0.270      0.270       1.00       1.00    
+    10.0000    10.1090     5.4818     3.2247   321.       143.      0.270      0.270       1.00       1.00    
+----- tmpmod96.001 -----
+    10.0000     9.4141     5.0813     3.8807  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.4688     5.1086     3.9002  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.8758     5.3498     4.0527  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.9290     5.3815     4.0677  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.9822     5.4131     4.0827  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+----- tmpmod96.002 -----
+    10.0000     9.1621     4.9453     3.8256  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.2187     4.9737     3.8475  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.6290     5.2161     4.0028  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.6849     5.2492     4.0230  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.7408     5.2822     4.0432  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+----- tmpmod96.003 -----
+    10.0000     9.1181     4.9215     3.7248  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.1750     4.9501     3.7475  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.5859     5.1928     3.9090  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.6423     5.2261     3.9303  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00    
+    10.0000     9.6987     5.2594     3.9515  0.312E-02  0.699E-02   0.00       0.00       1.00       1.00   
+</pre>
+<p>
+Near the surface, I get
+<pre>
+      H(KM)   VP(KM/S)   VS(KM/S) RHO(GM/CC)     QP         QS       ETAP       ETAS      FREFP      FREFS    
+    20.0000     5.8000     3.4955     2.6000   189.       84.0      0.270      0.270       1.00       1.00    
+    14.0000     6.5000     3.8900     3.3810   189.       84.0      0.270      0.270       1.00       1.00    
+     9.0000     8.0412     4.4500     3.3785   167.       74.0      0.270      0.270       1.00       1.00    
+     7.0000     8.0412     4.4550     3.3785   157.       69.0      0.270      0.270       1.00       1.00    
+----- tmpmod96.001 -----
+      H(KM)   VP(KM/S)   VS(KM/S) RHO(GM/CC)     QP         QS       ETAP       ETAS      FREFP      FREFS    
+    20.0000     5.6550     3.4081     2.6600  0.529E-02  0.119E-01   0.00       0.00       1.00       1.00    
+    14.0000     6.3516     3.8012     2.8500  0.529E-02  0.119E-01   0.00       0.00       1.00       1.00    
+     9.0000     7.8739     4.3574     3.3248  0.599E-02  0.135E-01   0.00       0.00       1.00       1.00    
+     7.0000     7.8653     4.3576     3.3248  0.637E-02  0.145E-01   0.00       0.00       1.00       1.00    
+----- tmpmod96.002 -----
+      H(KM)   VP(KM/S)   VS(KM/S) RHO(GM/CC)     QP         QS       ETAP       ETAS      FREFP      FREFS    
+    20.0000     5.7307     3.4537     2.6310  0.529E-02  0.119E-01   0.00       0.00       1.00       1.00    
+    14.0000     6.4217     3.8431     2.8055  0.529E-02  0.119E-01   0.00       0.00       1.00       1.00    
+     9.0000     7.9332     4.3902     3.2671  0.599E-02  0.135E-01   0.00       0.00       1.00       1.00    
+     7.0000     7.9048     4.3795     3.2642  0.637E-02  0.145E-01   0.00       0.00       1.00       1.00    
+----- tmpmod96.003 -----
+      H(KM)   VP(KM/S)   VS(KM/S) RHO(GM/CC)     QP         QS       ETAP       ETAS      FREFP      FREFS    
+    20.0000     5.7736     3.4795     2.6461  0.529E-02  0.119E-01   0.00       0.00       1.00       1.00    
+    14.0000     6.4614     3.8669     2.8265  0.529E-02  0.119E-01   0.00       0.00       1.00       1.00    
+     9.0000     7.9671     4.4089     3.2873  0.599E-02  0.135E-01   0.00       0.00       1.00       1.00    
+     7.0000     7.9281     4.3924     3.2776  0.637E-02  0.145E-01   0.00       0.00       1.00       1.00
+</pre>
+<p>
+We see that there was an increase in the density at depth as a result of the first iteration. The partial derivative of Rayeigh wave phase velocity with density is negative at the surface, zero at some depth on the order of the period, and then positive at deeper depths. Thus the net effect will be that the increase of density at depth will increase the velocity and that the S-wave velocity must decrease in order to counteract that effect. This big difference in density only occurs after the first iteration.
+<p>
+So how is density handled?
+<p>
+The inversion program determines the change in S-wave velocity. A new S-wave velocity is then created. The P-wave velocity is derived using the inital Vp/Vs ratio (P can be fixed in the inversion). Finally the density is estimated from the P-wave velocity.
+<p>
+For initial spherical models, the earth model is flattened. Then a change in the flat-earth S-velocity is determined. This is then mapped back into the proper spherical velocity. The spherical S-wave velocity is updated, then the P-velocity and then the density. These are actual Earth velocities and the Nafe-Drake (?) mapping of P-velocity to density is appropriate.
+<p>
+For the flattened model, the S-velocity was changed, the P-velocity updated, and then this P-velocity was used to give the density for this flattened earth, which will typically increase with depth. On the other hand the flattening requires the density to decrease with depth. We cannot compute the dispersion for the spherical earth using flattening unless the density decreases with depth. This is where the process went astray.
+<p>
+
+
+<h2>Discussion</h2>
+<p>Although flattening a model independendly of surf96 can lead to the correct dispersion, this model should not be iterated on.
+
+<h2>Code changes</h2>
+As a result of this exercise I updated the subroutines gtrofa and gtaofr to work with P velocitys up to 12 km/s instead of the previous 10 km/s. This will ensure that the code works with models down to 900 km.
+
+,center>Last Changed August 15, 2013</center>
+</body>
+</html>

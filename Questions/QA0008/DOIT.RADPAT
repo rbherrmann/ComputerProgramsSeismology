@@ -1,0 +1,21 @@
+#!/bin/sh
+
+rm -f *.PLT
+#####
+#  make theoretical surface wave radiation pattern at 20 sec
+#####
+sdprad96 -STK 196 -DIP 72 -RAKE 92 -MW 6.4 -HS 12 -L -DMIN 1000 -DMAX 1001 -PER 20 -M 0 -PATH $GREENDIR/CUS.REG/SW/
+sdprad96 -STK 196 -DIP 72 -RAKE 92 -MW 6.4 -HS 12 -R -DMIN 1000 -DMAX 1001 -PER 20 -M 0 -PATH $GREENDIR/CUS.REG/SW/
+fmplot -FMPLMN -S 196 -D 72 -R 92 
+
+for i in *.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K < $i > t.eps
+
+#####
+#   convert is from the ImageMagick package
+#####
+convert -trim t.eps -background white -alpha remove ${B}.png
+rm t.eps
+done

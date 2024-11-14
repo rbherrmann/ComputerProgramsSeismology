@@ -1,0 +1,4 @@
+#!/bin/sh
+
+
+scp -r $* rbh@mnw.eas.slu.edu:/net/eqinfo/home/eq/Earthquake_Center/CPS/Questions

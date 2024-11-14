@@ -1,0 +1,39 @@
+#!/bin/sh
+
+gsac << EOF
+bg plt
+fg impulse delta 0.025 npts 8192
+transfer from none to polezero subtype sac.pz
+echo This is the displacement sensitivity in counts/meter
+title on l t S M Text "Displacement sensitivity in counts/meter"
+fft
+psp
+fg impulse delta 0.025 npts 8192
+transfer from vel to polezero subtype sac.pz
+echo This is the velocity sensitivity in counts/meter/sec
+title on l t S M Text "Velocity sensitivity in counts/meter/sec"
+fft
+psp
+quit
+EOF
+
+for i in P001 P002
+do
+plotnps -F7 -W10 -EPS -K < $i.PLT > t.eps
+convert -trim t.eps $i.png
+done
+
+gsac << EOF
+r 20080529_1600z.sac
+transfer from polezero subtype sac.pz to vel freqlimits 0.004 0.005 10 20
+r vel.sac
+ch stla 0 stlo 0
+ch evla 63.92 evlo -21.17
+ch ocal 2008 05 29 15 46 6 200
+ch lcalda true lovrok true
+w vel.sac
+lp c 1 n 3
+interpolate delta 0.25 
+w dvel.sac
+q
+EOF

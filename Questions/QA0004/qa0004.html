@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Seisan (GSE) files to sac</title>
+</head>
+<body bgcolor="#ffffff">
+<h2>Introduction</h2>
+<p>
+Seisan can be used to create response files in GSE format and waveforms
+in sac files. This response addresses the practical issue of how to
+convert the GSE response information to a format for use with sac or <b>gsac</b>
+</p>
+<p>The documentation for the GSE2.1 format is found at <br>
+<a href="http://www.seismo.ethz.ch/autodrm/autodrm_doc.html">http://www.seismo.ethz.ch/autodrm/autodrm_doc.html</a>
+<br>
+and then clicking on the documetation for the <i>provisional_GSE2.1.pdf</i>
+file.
+</p>
+<h2>Files</h2>
+<p>
+The files sent to me are the following:
+<br>
+<a href="20080529_1600z.sac">20080529_1600z.sac</a> which is the
+waveform file in Intel binary format
+<br>
+<a href="C214_B__Z.2007-01-01-0000_GSE">C214_B__Z.2007-01-01-0000_GSE</a>
+which is the GSE response information
+<br>
+<a href="C214_B__Z.2007-01-01-0000_SEI">C214_B__Z.2007-01-01-0000_SEI</a>
+which is some file created by seisan which I do not need or understand.
+</p>
+<h2>Instrument response</h2>
+<p>
+Let us look at the GSE response file:
+<br>
+</p>
+<pre>CAL2 C214  B_Z      CMG-6    0.12E-01      1.   40.00000 2007/01/01 00:00                       <br>PAZ2  1 V  0.20000000E-05                 2   3 Laplace transform                               <br> -0.14660765E+00  0.14956973E+00<br> -0.14660765E+00 -0.14956973E+00<br>  0.00000000E+00  0.00000000E+00<br>  0.00000000E+00  0.00000000E+00<br>  0.00000000E+00  0.00000000E+00<br>DIG2  2  0.66475240E+07    40.00000 CD24E1                                                      <br></pre>
+<p>
+According the GSE documentation, the CAL2 line (page 76) indicates that
+the
+system response is 0.12E-01 coutns/nanometer at a period of 1.0
+seconds.
+</p>
+<p>The PAZ2 entries indicate that the normalization constant is 0.2E-5,
+that there are two poles and 3 zeros in the response. The input to the
+stage is nanometers and the output is Volts.
+</p>
+<p>The DIG2 entry indicates that there are 0.664E+7 counts output for
+each Volt of input to this stage.
+</p>
+<p>This information can be converted to the sac pole-zereo file given
+next.
+</p>
+<p>The final pole-zero file in sac format is <a href="sac.pz">sac.pz</a>
+which is also listed here:
+<br>
+</p>
+<pre>* ****<br>* NETWORK   (KNETWK): <br>* STATION   (KSTNM ): <br>* COMPONENT (KCMPNM): <br>* LOCATION  (KHOLE ):<br>* START             : <br>* END               :<br>* INPUT UNIT        : METER<br>* OUTPUT UNIT       : COUNT<br>* LATITUDE  (DEG)   : <br>* LONGITUDE (DEG)   :<br>* ELEVATION (M)     :<br>* DEPTH     (M)     :<br>* DIP       (DEG)   :<br>* AZIMUTH   (DEG)   :<br>* INSTRUMENT COMMENT:<br>* CHANNEL_FLAG      : <br>* GSE 0.6647E+7 counts/nm at 40 sec<br>* constant is the product of the GSE scale 0.20000000E-05<br>* and the digitizer constant 0.66475240E+07 = 13.295 counts/nanometer<br>* This is equivalent to 1.3296E+10 for counts/meter<br>* ****<br>ZEROS 3<br>  0.00000000E+00  0.00000000E+00<br>  0.00000000E+00  0.00000000E+00<br>  0.00000000E+00  0.00000000E+00<br>POLES 2<br> -0.14660765E+00  0.14956973E+00<br> -0.14660765E+00 -0.14956973E+00<br>CONSTANT 1.3296E+10<br></pre>
+<p>
+To test this file, use gsac to create a unit area impulse <i>(Note
+that if you use sac, then you must divide by delta to create a unit
+area impulse)</i>
+</p>
+<pre>
+GSAC&gt; fg impulse delta 0.025 npts 8192
+GSAC&gt; transfer from none to polezero subtype sac.pz
+GSAC&gt; echo This is the displacement sensitivity in counts/meter
+GSAC&gt; title on l t S M Text "Displacement sensitivity in counts/meter"
+GSAC&gt; fft
+GSAC&gt; psp
+GSAC&gt; fg impulse delta 0.025 npts 8192
+GSAC&gt; transfer from vel to polezero subtype sac.pz
+GSAC&gt; echo This is the velocity sensitivity in counts/meter/sec
+GSAC&gt; title on l t S M Text "Velocity sensitivity in counts/meter/sec"
+GSAC&gt; fft
+GSAC&gt; psp
+</pre>
+<p>
+The result of these commands are two plots:<br>
+</p>
+<hr>
+<p><br>
+</p>
+<p><img src="P001.png">
+<br>
+<b>Displacment sensitivity in counts/meter<br>
+</b></p>
+<hr>
+<p><br>
+</p>
+<p><img src="P002.png">
+<br>
+<b>Velocity sensitivity in counts/meter/sec<br>
+</b></p>
+<hr>
+<p><br>
+</p>
+<p>The student provided the following information about the system:
+</p>
+<pre>The sac file was generated from a Guralp GCF format and the response file was produced with RESP program of Seisan using the following parameters:<br><br>Seismometer natural period = 30s<br><br>Seismometer damping ratio = 0.7<br><br>Sensor loaded generator constant = 2000 V/m/s<br><br>Recording media gain = 419430.4 Count/V<br><br>Amplifier gain = 24 DB<br><br>Digitiser sample rate = 40 Sample/s<br><br> <br><br>Our seismometer is CMG-EDU based on CMG-6 technology while the digitizer model is CD24E1 <br></pre>
+<p>
+This means that the response of the system is as follows
+</p>
+<p>This means that the response of the system is as follows
+<br>
+1 meter/sec -&gt; Seismometer -&gt; 2000 Volts (in the passband, e.g.,
+1 Hz)
+<br>
+1 Volt -&gt; amplifier -&gt; 15.85 Volts
+<br>
+1 Volt -&gt; digitizer -&gt; 419430.4 Counts.
+</p>
+<p>Therefore the system outputs 1.3295E+10 counts/meter/second at 1 Hz.
+To obtain the displacment sensitivity at 1 Hz, we recall that 1
+meter/sec at 1 Hz is equivalent to 1/6.2831853 meters. Thus the
+sensitivity is 8.3535E+10 counts/meter or 83.535 counts/nanometer or
+equivalently 0.01197 nanometers/count which is the number given on the
+CAL2 line.
+</p>
+<p>Now that the polezero response used is correct since we see these
+values on the plots.
+<br>
+</p>
+<h2>Getting ready for do_mft</h2>
+<P>
+Removing the instrument response:
+<P>
+Because modern broadband instruments have a flat response to ground velocity in the passband, I prefer to reduce reduce the gorund motion to units of <I>meters/sec</I> in the following manner for this data file:
+<BR>
+<PRE>
+GSAC&gt; r 20080529_1600z.sac 
+GSAC&gt; transfer from polezero subtype sac.pz to vel freqlimits 0.004 0.005 10 20
+GSAC&gt; w vel.sac
+</PRE>
+<P>
+In order to study group velocities you must place the event coordinates and origin time and the station coordinates into the sac file. As an example I will use the Iceland event for this time period and I will assume that your station is at latitude 0 and longitude 0: <I>(you must use your actual station and event information)</I>
+<BR>
+<PRE>
+GSAC&gt; r vel.sac
+GSAC&gt; ch stla 0 stlo 0
+GSAC&gt; ch evla 63.92 evlo -21.17
+GSAC&gt; ch ocal 2008 05 29 15 46 6 200
+GSAC&gt; ch lcalda true lovrok true
+GSAC&gt; wh 
+</PRE>
+<P>
+note that the <I>ch ocal</I> is a <B>gsac</B> command.  For Sac you must use
+<I>ch o gmt 2009 150 15 46 6 200</I>. 
+<BP>
+The <I>lcalda</I> and <I>lovrok</I> header variables must be set so that otehr programs can use the computed distances. To see if the header was properly set 
+we can list the header contents:
+<BR>
+<PRE>
+GSAC&gt; lh
+vel.sac (0):
+         NPTS               144000            B                    0
+            E             3599.975        DELTA                0.025
+       DEPMAX         2.584191e-06       DEPMIN        -2.779191e-06
+       DEPMEN         6.959091e-09       NZYEAR                 2008
+       NZJDAY                  150       NZHOUR                   16
+        NZMIN                    0        NZSEC                    0
+       NZMSEC                    0       KZDATE   May 29 (150), 2008
+       KZTIME         16:00:00.000            O               -833.8
+        KSTNM             C214           KCMPNM             B_Z
+         STLA                    0         STLO                    0
+         EVLA                63.92         EVLO               -21.17
+         DIST             7301.042           AZ             156.6483
+          BAZ             349.9096        GCARC             65.65807
+        USER1                  0.1        USER2                  200
+        CMPAZ                    0       CMPINC                    0
+        NVHDR                    6       IFTYPE             ITIME
+       LPSPOL                FALSE       LOVROK                 TRUE
+       LCALDA                 TRUE        LHDR5                FALSE
+</PRE>
+<BR>
+You will see that hte origin time is set <I>O</I>, the station an event coordinates are entered, and the distances and back azmiuths computed.
+<h2>do_mft</h2>
+<P>
+When you are studying teleseismic surface waves, you are note interested in frequencies greater than 1 Hz.  If you resample, the time series will be smaller, and the computations will be much faster since the length of the Fast Fourier transforms will be shorter. To do this I lowpass filter and then interpolate:
+<BR>
+<PRE>
+GSAC&gt; r vel.sac
+GSAC&gt; lp c 1 n 3
+GSAC&gt; interpolate delta 0.25 
+GSAC&gt; w dvel.sac
+GSAC&gt; quit
+</PRE>
+<BR>
+Running <B>do_mft</B> gives the following image:
+<BR>
+<IMG SRC="1.png">
+<BR>
+The surface wave dispersion is seen at the top. Note that since the station coordinates are INCORRECT the velocities will be incorrect.
+
+
+</body>
+</html>

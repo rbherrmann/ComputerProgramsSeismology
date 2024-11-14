@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#####
+#    apply a two station techique to get phase velocity for the
+#    two stations on the same great circle path
+#####
+#    the steps are as follow
+#    1. Measure the group velocity dispersion from the two traces
+#       and then save the one which is better defined and which 
+#       has the greatest range of periods
+#       do_mft -G *BHZ
+#       a) pick the dispersion
+#       b) click on the "Match"
+#          The screen output will show how sacmat96 is called, e.g.,
+#          /Users/rbh/PROGRAMS.310t/PROGRAMS.330/bin/sacmat96 -F 2015.171.021121.G.COYC.BHZ -D disp.d -AUTO
+#          we will not use the match dispersion, jus the command line
+#          We need to use the same command for both stations. We are really interested in the disp.d file
+
+do_mft -G *BHZ
+#####
+#   when Match is selected in do_mft, a command line is printed on the terminal
+#   showing the syntax for executing sacmat96. We apply the disp.d to
+#   all traces of the same time so that all are processed with the
+#   same range of periods
+#####
+for TRACE in *BHZ
+do
+	sacmat96 -F ${TRACE} -D disp.d -AUTO
+done
+
+#####
+#    as a result of this the hase matched traces will have an 's' appended 
+#    to the file name
+#####
+
+#####
+#    Before determining the phase velocities, we cut the waveforms from
+#    the original length because this 'hack' is required to get do_pom to 
+#    work properly, and because sacpom96 requires the number of points
+#    to use the same power of 2 when zero filled
+#####
+gsac << EOF
+cut b b 1000
+rh *HZ*s
+w append  .cut
+q
+EOF
+
+#####
+#    now run do_pom
+#####
+do_pom *HZs.cut
+
+mv POM96.PLT Z_POM96.PLT
+mv POM96CMP  Z_POM96CMP

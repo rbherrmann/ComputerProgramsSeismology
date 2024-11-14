@@ -1,0 +1,249 @@
+<html>
+<head><title> Two station technique for phase velocity</title></head>
+<body bgcolor="FFFFFF">
+<h2>Introduction</h2>
+The problem to be addressed is the determination of surface-wave phase velocity between two stations in Argentina. Figure 1 shows the location of the two stations and the earthquake.
+<table>
+<tr><td><img src="map.png"><p>Fig 1. Location of earthquake (star) and the two stations 
+to be used in the two station technique for getting phase velocity.
+</td></tr>
+</table>
+<p>
+The assumptions of a two-station technique are that 
+<br>
+(a) a single surface mode is observed at both stations, 
+<br>
+(b) that both stations be on the same great circle path which means that the contribution of the source phase to the observed phase is the same, and
+<br>
+that there be good signal-to-noise in the observed signal, which requires that the path from the source to the stations not be one of low amplitude.
+<p>
+The event selected is that of 2015/06/20 02:10 in Central Chile. The GCMT solution for this earthquake was
+<br>
+<pre>
+201506200210A NEAR COAST OF CENTRAL CH
+
+  Date: 2015/ 6/20   Centroid Time:  2:10:13.4 GMT
+  Lat= -36.35  Lon= -74.10
+  Depth= 12.0   Half duration= 3.9
+  Centroid time minus hypocenter time:  6.3
+  Moment Tensor: Expo=25  2.940 0.058 -3.000 -1.190 -4.100 -0.713 
+  Mw = 6.4    mb = 0.0    Ms = 6.4   Scalar Moment = 5.25e+25
+  Fault plane:  strike=9    dip=18   slip=84
+  Fault plane:  strike=196    dip=72   slip=92
+</pre>
+<p>
+The azimuth from the source to each station was
+<pre>
+2015.171.021121.G.COYC.BHZ (0):
+           AZ             172.4544
+2015.171.021317.AI.DSPA.BHZ (1):
+           AZ             169.3566
+</pre>
+<p>
+To test whether there was sufficient amplitude at the source, I used the program <b>sdprad96</b> and the CUS velocity model (this is just a sensitivity test and the model should not be too important) to create the theoretical radiation patterns at a period of 20 seconds. The result of executing the shell script <a href="DOIT.RADPAT"> DOIT.RADPAT</a> is given in Figure 2.
+<br>
+<table>
+<tr>
+<td><img src="FMPLOT.png"><p>Fig. 2a. Predicted first motion plot for the GCMT mechanism</td>
+<td><img src="SRADR.png"><p>Fig. 2b. Predicted radiation pattern for the 20 second, fundamental mode Rayleigh wave</td>
+<td><img src="SRADL.png"><p>Fig. 2c. Predicted radiation pattern for the 20 second, fundamental mode Love wave</td>
+</tr>
+</table>
+<br>
+<p>
+This indicates that the path to the stations is not nodal, but that there might be lower amplitudes. Note that the Rayleigh wave pattern usually changes shape more with period than the Love wave pattern.
+<p>
+The reason for the interest in the radiation pattern was prompted by a plot of the instrument corrected ground motion in Figure 3.
+<p>
+<table>
+<td><td><img src="ZRTzrt.png"><p>Fig. 3. Comparison of ground motions at COYC (distance of 1033 km) to those at DSPA (distance of 2001 km). The BHR, BHT and BHZ represent the radial, transverse and vertical motions.</td></td>
+<table>
+<p>
+The Love wave ont he transverse component is well developed, while the Rayleigh wave is not as nice. More importantly, the amplitude at the more distant station is significantly larger that that at the shorter station. The opposite should be true. The long duration or oca may be indicative of multipathing. The great circle path is mostly continental, but there is a possibility of signals going down the coast of Chile an then refracting in the the station. 
+<P>
+There may be some problem with the instrument responses used for deconvolution. However we only have to be certain of the phase response for the analysis.
+<h2>Data processing</h2>
+<h3>Stage 1</h3>
+<ul>
+<li>Remove the instrument response</li>
+<li>rotate recorded motion to form Z, R and T (vertical, radial and transverse) compinents</li>
+<li>Low pass filter and resample:
+<br>
+<pre>
+rtr
+taper w 0.01
+lp c 2 n 2 p 2
+interpolate delta 0.1
+</pre>
+<br>
+The resampling is required because the maximum time series permitted by <b>sacmat96</b>, <b>sacmft96</b> or <b>sacpom96</b> is 132000 points, because processing is faster if the time series is not as long because of the need to take Fourier transforms, and finally we are interested in periods greater than 1 second for fundamental mode surface wave studies.</li>
+</ul>
+<h3>Two-station method</h3>
+The two station method could be implemented using several techniques, e.g.,
+a) cross-correlating the signals and then analyzing the result using a modified version of <b>sacmft96</b>; b) applying <b>sacmat96</b> to each of the waveforms and then using the dispersion file output by each to compute differential travel times; c) processing both traces using <b>sacpom96</b>.
+<p>
+This example will use <b>sacpom96</b>.  In running this code, we found that the contour graphics routines used does not work if the time series is too long because a limit on the number of contours in a image cell was exceeded. The error message still appears, but processing can be done by turning the option "Shade" to "None" on the second menu page. However, by making the time series shorter, <b>sompom96</b> will run as expected.
+<h3>sacpom96</h3>
+Given the interpolated traces, the scripts <a> href="DOITZ"> DOITZ</a> and <a href="DOITT"> DOITT</a> were used. These are listed here:
+<table>
+<tr>
+<td>DOITZ for the Rayleigh wave</td>
+<td>DOITT for the Love wave</td>
+</tr>
+<tr>
+<td><pre>
+#!/bin/bash
+
+#####
+#    apply a two station techique to get phase velocity for the
+#    two stations on the same great circle path
+#####
+#    the steps are as follow
+#    1. Measure the group velocity dispersion from the two traces
+#       and then save the one which is better defined and which 
+#       has the greatest range of periods
+#       do_mft -G *BHZ
+#       a) pick the dispersion
+#       b) click on the "Match"
+#          The screen output will show how sacmat96 is called, e.g.,
+#          /Users/rbh/PROGRAMS.310t/PROGRAMS.330/bin/sacmat96 -F 2015.171.021121.G.COYC.BHZ -D disp.d -AUTO
+#          we will not use the match dispersion, jus the command line
+#          We need to use the same command for both stations. We are really interested in the disp.d file
+
+do_mft -G *BHZ
+#####
+#   when Match is selected in do_mft, a command line is printed on the terminal
+#   showing the syntax for executing sacmat96. We apply the disp.d to
+#   all traces of the same time so that all are processed with the
+#   same range of periods
+#####
+for TRACE in *BHZ
+do
+	sacmat96 -F ${TRACE} -D disp.d -AUTO
+done
+
+#####
+#    as a result of this the hase matched traces will have an 's' appended 
+#    to the file name
+#####
+
+#####
+#    Before determining the phase velocities, we cut the waveforms from
+#    the original length because this 'hack' is required to get do_pom to 
+#    work properly, and because sacpom96 requires the number of points
+#    to use the same power of 2 when zero filled
+#####
+gsac << EOF
+cut b b 1000
+rh *HZ*s
+w append  .cut
+q
+EOF
+
+#####
+#    now run do_pom
+#####
+do_pom *HZs.cut
+
+mv POM96.PLT Z_POM96.PLT
+mv POM96CMP  Z_POM96CMP
+</pre></td>
+<td><pre>
+#!/bin/bash
+
+#####
+#    apply a two station techique to get phase velocity for the
+#    two stations on the same great circle path
+#####
+#    the steps are as follow
+#    1. Measure the group velocity dispersion from the two traces
+#       and then save the one which is better defined and which 
+#       has the greatest range of periods
+#       do_mft -G *BHT
+#       a) pick the dispersion
+#       b) click on the "Match"
+#          The screen output will show how sacmat96 is called, e.g.,
+#          /Users/rbh/PROGRAMS.310t/PROGRAMS.330/bin/sacmat96 -F 2015.171.021121.G.COYC.BHZ -D disp.d -AUTO
+#          we will not use the match dispersion, jus the command line
+#          We need to use the same command for both stations. We are really interested in the disp.d file
+
+do_mft -G *BHT
+#####
+#   when Match is selected in do_mft, a command line is printed on the terminal
+#   showing the syntax for executing sacmat96. We apply the disp.d to
+#   all traces of the same time so that all are processed with the
+#   same range of periods
+#####
+for TRACE in *BHT
+do
+	sacmat96 -F ${TRACE} -D disp.d -AUTO
+done
+
+#####
+#    as a result of this the hase matched traces will have an 's' appended 
+#    to the file name
+#####
+
+#####
+#    Before determining the phase velocities, we cut the waveforms from
+#    the original length because this 'hack' is required to get do_pom to 
+#    work properly, and because sacpom96 requires the number of points
+#    to use the same power of 2 when zero filled
+#####
+gsac << EOF
+cut b b 1000
+rh *HT*s
+w append  .cut
+q
+EOF
+
+#####
+#    now run do_pom
+#####
+do_pom *HTs.cut
+
+mv POM96.PLT T_POM96.PLT
+mv POM96CMP  T_POM96CMP
+</pre></td>
+</tr>
+<tr>
+<td><img src="Z_POM96.png"><p>Image for Rayleigh wave</td>
+<td><img src="T_POM96.png"><p>Image for Love wave</td>
+</tr>
+</table>
+<h3>Discussion on the phase velocity images</h3>
+The images defined by <b>do_pom</b> (really created by <b>sacpom96</b>) show many possible dispersion values at the black dots. The reason is that there is an unknown multiples of 2&pi; radians. Thus other information is required to select the proper curve.  If stations are closer together, then these curves will be better separated.
+<p>
+The graphics for the logarithmic period axis lacks labels. This is an easily corrected problem in the <i>PROGRAMS.330/SUBS/grphsubf.f</i> routines that currently only annotate the powers of 10. Currently the only indication is that the 50 second period "tic" is slightly longer. The Rayleigh disperison is vigen from about 15 to 70 seconds which the Love dispersion plot is from about 15 to 90 seconds.
+<p>
+The final thing to note is the "kink" in the Rayleigh dispersion indicates that some other arrival is present, e.g., the phase match filter picked up on noise or some other higher mode.
+<h3>Truth?</h3>
+Until there is confidence from processing other data sets, we need some way to select the proper phase velocity curve, and more importantly as a reality check, since we made assumptions about instrument response and great circle paths.
+<p>
+Fortunately the program <b>sacpom96</b> creates a shell script that permits an overlay of dispersion onto the file <i>POM96.PLT</i>. For example the outpur for the
+Love wave exercise created <i>POM96CMP</i> which the shell script <i>DOITT</i> renamed <i>T_POM96CMP</i>:
+<pre>
+#!/bin/sh
+ 
+sdpegn96 -X0  2.00 -Y0  1.00 -XLEN  6.00 -YLEN  6.00 -XMIN   17.0     -XMAX   91.0     -YMIN  2.00 -YMAX  5.00 -PER  -L -C -NOBOX -XLOG -YLIN 
+</pre>
+If the eigenfunction file <i>slegn96.egn</i> is in the current directory, this will create the plot file <i>SLEGNC.PLT</i> that can be plotted on top of the <i>T_POM96.PLT</i>.  We would like to overlay some independent dispersion instead. To do this we
+modify the shell script to read as sollows:
+<pre>
+#!/bin/sh
+ 
+sdpdsp96 -X0  2.00 -Y0  1.00 -XLEN  6.00 -YLEN  6.00 -XMIN   17.0     -XMAX   91.0     -YMIN  2.00 -YMAX  5.00 -PER  -L -C -NOBOX -XLOG -YLIN -K 0 -S 0.05 -D GDM52.dsp
+</pre>
+to create the file <i>SLDSPC.PLT</i>. The dispersion gile <i>GDM52.dsp</i> is from a modified form of Ekstrom's GDM52 distribution. the resultant figures are as follow:
+<table>
+<tr>
+<td><img src="Z_DSP.png"><p> Overlay of Ekstrom's global dispersion onto the output of <b>do_pom96</b> for the Rayleigh wave fundamental mode.</td>
+<td><img src="T_DSP.png"><p> Overlay of Ekstrom's global dispersion onto the output of <b>do_pom96</b> for the Love wave fundamental mode.</td>
+</table>
+<p>
+<b>Note that I used Ekstrom's code to get the dispersion between the two stations, which is only approimate. I should have obtained the dispersion between the epicenter and the two stations, and then estimated the dispersion between the two great circle distances, which is what <b>do_pom96</b> does.
+
+<p>
+<center>Last changed October 30, 2017</center>
+</body>
+</html>

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+
+tar cf - $* \
+        | ( cd  /home/rbh/mnwdir/net/eqinfo/home/eq/Earthquake_Center/CPS/Question ; tar xvf - )

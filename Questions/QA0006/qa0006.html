@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Use of freqlimits in <b>sac/gsac</b> transfer command</title>
+  </head>
+  <body style=" background-color: rgb(255, 255, 255);">
+    <h2>Introduction</h2>
+<i>
+    The following Email was received from Somasish Bose on March 21,
+    2011 <br>
+    <br>
+    I shall find the surface wave dispersion curve for the events with
+    epicentre distance 25 to 90 degree with sample rate 1, so the
+    delta(sample interval ) is also 1 .
+    <br>
+    <br>
+    Now to remove the instrument response i have used the following
+    command...
+    <br>
+    <br>
+    transfer from polezero subtype POLEZEROFILE to none frequency f1 f2
+    f3 f4
+    <br>
+    <br>
+    i am confuse to select f1, f2, f3, f4 .....so i used only the
+    following command <br>
+    <br>
+    transfer from polezero subtype POLEZEROFILE to none
+    <br>
+    <br>
+    please help me to select f1, f2, f3, f4
+    <br>
+    looking forward for your valuable reply .....
+</i>
+    <br>
+    <br>
+<h2> Response</h2>
+To respond, we will consider the earthquake of 2012/10/28 03:04:11.0
+56.769N 131.927W Mw=7.7 recorded on the vertical component sensors
+at MGMO (37.154N 92.269W).&nbsp; <br>
+<br>
+My purpose in examining this event is to <br>
+<ul>
+  <li>test the performance of the broadband system which creates the
+    trace NMMGMO_HHZ__.SAC</li>
+  <li>test the performance of the accelerometer which creates the
+    trace NMMGMO_HNZ__.SAC</li>
+  <li>test the instrument response component of the metadata
+    description of each channel.</li>
+</ul>
+If the instruments are performing correctly and if the given
+instrument responses are correct, then<br>
+the deconvolved ground motions must be the same.<br>
+<h3>Sample data</h3>
+The next figures show the raw traces and also their Fourier amplitude spectrum. I have only applied the
+command <b>rtr</b> to remove the linear trend for the plot. This is
+very useful for the HNZ channel.<br>
+<br>
+<img src="P001.png">
+<br>
+<img src="P002.png">
+<br>
+There are several thing to note.  First the HHZ channel is a measure of gound velocity in the instrument
+passband, while the HNZ channel is proportional to ground acceleration. Thus the spectra should differ
+by a factor of 2&pi;f. This difference is seen in the frequency range from 0.1 to 1.0 Hz.  A careful examination
+indicates that there are significant differences in the spectra at low and high frequencies than cannot be
+accounted for by the factor of 2&pi;f.
+<p>
+The instrument responses are compared in the next figure. The units are in <b>counts/micron</b>.
+<br>
+<table>
+<tr>
+<td><img src="P003.png"></td>
+<td><img src="P004.png"></td>
+</tr>
+</table>
+<br>
+I know the response because the polezero files have many informative comments. These comments are written by the IRIS and the SLU modified <b>rdseed</b> programs. For your information, the important parts of the polezero files are as follow:
+<br>
+<table>
+<tr>
+<td valign="top">
+<pre>
+* CHANNEL(NSCL)NMMGMO HHZ
+* NETWORK      NM
+* STATION      MGMO
+* COMPONENT    HHZ
+* LOCATION
+* INPUT UNIT   NM
+* OUTPUT UNIT  COUNT
+* DESCRIPTION  Mountain Grove, MO
+* RATE (HZ)    100.0
+* OWNER        Cooperative New Madrid Seismic Network
+* COORD(SEED)  NM MGMO:  37.1540  -92.2687  453.0
+* ORIENTATION  NM MGMO  -- HHZ:     0.0 -90.0    0.0
+* LAT-SEED     37.154
+* LONG-SEED    -92.2687
+* ELEV-SEED    453.0
+* INSTRMNTTYPE Trillium40=0577=40Sec=Q330HR=2631
+* INSTRMNTCMNT Mountain Grove, MO^Cooperative New Madrid Seismic Network^^
+* ****
+CONSTANT              2.7815E+05
+ZEROS   6
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+        -6.8800E+01   0.0000E+00
+        -3.2300E+02   0.0000E+00
+        -2.5300E+03   0.0000E+00
+POLES   7
+        -1.1030E-01   1.1110E-01
+        -1.1030E-01  -1.1110E-01
+        -8.6300E+01   0.0000E+00
+        -2.4100E+02   1.7800E+02
+        -2.4100E+02  -1.7800E+02
+        -5.3500E+02   7.1900E+02
+        -5.3500E+02  -7.1900E+02
+</pre>
+</td>
+<td valign="top">
+<pre>
+* CHANNEL(NSCL)NMMGMO HNZ
+* NETWORK      NM
+* STATION      MGMO
+* COMPONENT    HNZ
+* LOCATION
+* INPUT UNIT   NM
+* OUTPUT UNIT  COUNT
+* DESCRIPTION  Mountain Grove, MO
+* RATE (HZ)    100.0
+* OWNER        Cooperative New Madrid Seismic Network
+* COORD(SEED)  NM MGMO:  37.1540  -92.2687  453.0
+* ORIENTATION  NM MGMO  -- HNZ:     0.0 -90.0    0.0
+* LAT-SEED     37.154
+* LONG-SEED    -92.2687
+* ELEV-SEED    453.0
+* INSTRMNTTYPE ES-T=3303=2.0g=Q330SR=2631
+* INSTRMNTCMNT Mountain Grove, MO^Cooperative New Madrid Seismic Network^^
+* ****
+CONSTANT              1.0536E+10
+ZEROS   2
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+POLES   4
+        -9.8100E+02  -1.0090E+03
+        -9.8100E+02   1.0090E+03
+        -3.2900E+03  -1.2630E+03
+        -3.2900E+03   1.2630E+03
+</pre>
+</td>
+</tr>
+</table>
+
+
+<h3>freqlimits option</h3>
+The <b>sac/gsac</b> command <b>transfer</b> has the option <i>freqlimits f1 f2 f3 f4</i>.
+This option applied a zero phase filter to the transfer process. This filter has the form
+<blockquote>
+<table>
+<tr> <td> 0 <td><td> for f < f1</td></tr>
+<tr> <td> cosine taper between 0 and 1  <td><td> for  f1 < f < f2</td></tr>
+<tr> <td> 1 <td><td> for f2 < f < f3</td></tr>
+<tr> <td> cosine taper between 1 and 0  <td><td> for  f3 < f < f4</td></tr>
+<tr> <td> 0 <td><td> for  f > f4</td></tr>
+</table>
+</blockquote>
+<p>
+To illustrace the taper operation, I ran the following commands (the italics are comments):
+<blockquote>
+r imp.sac    <i>read a time series consisting of an impulse</i>
+transfer from none to polezero subtype NMMGMO_HHZ__.SAC.pz freqlimits 0.01 0.02 1 2
+fft
+psp         <i>plot the spectra</i>
+</blockquote>
+<p>
+the following plots overlay the original plot obtained without the <i>freqlimits</i> in black
+and the one using the freqlimits in red. From this plot you can understand how the <i>freqlimits</i>
+option works
+<table>
+<tr>
+<td><img src="P005.png"></td>
+<td><img src="P006.png"></td>
+</tr>
+</table>
+<h3>Deconvolution</h3>
+<p>In the next examples, we will deconvolve the traces to ground velocity using two different
+<i>freqlimits</i> options. To avoid too much text here, I will indicate what was done for the HHZ channel.
+Exactly the same was done for the HNZ channel. The commands used were as follow:
+<blockquote>
+r NMMGMO_HHZ__.SAC
+rtr
+transfer from polezero subtype  NMMGMO_HHZ__.SAC.pz to vel freqlimits 0.005 0.01 40 50
+w NMMGMO_HHZ__.SAC_0.005_0.01_40_50
+</blockquote>
+<br>and in the second example
+<blockquote>
+r NMMGMO_HHZ__.SAC
+rtr
+transfer from polezero subtype  NMMGMO_HHZ__.SAC.pz to vel freqlimits 0.050 0.10 5 10
+w NMMGMO_HHZ__.SAC_0.050_0.10_5_10
+</blockquote>
+<p>
+The results are compared in the next set of figures. The file name shows in the image 
+indicates the values of the <i>freqlimits</i> parameters used.
+<table>
+<tr>
+<td><img src="P007.png"></td>
+<td><img src="P008.png"></td>
+</tr>
+</table>
+<p>
+Recall that the ground motion <b>must</b> be the same.  When using the very low frequencies, we see that there is noise before the P-wave arrival, however at later simes, g.,d about 800 sec into the trace, there is a good correspondence. This tells me that the accelerometer will provide a good indication of low frequency ground motion if the ground motion is large compared to noise.
+<p>
+The conclusion that I obtain is that 
+<ul>
+<li> The instruments are functioning correctly</li>
+<li> The given instrument responses are correct</li>
+</ul>
+<h2>Recommendations</h2>
+<p>The next question addresses the choise for the parameters of the <i>freqlimits</i> option. 
+<p>The simple answer is that the passband must include the signal that you are interested in.
+<p>When I perform regional moment tensor inversion, I run the following commands in a bash shell script.  Assume the
+the shell variable TRACE provides the name of the waveform.
+<blockquote>
+<pre>
+#####
+#    Use Computer Programs in Seismology <b>saclhdr</b> to get values from the trace header
+#####
+KSTNM=`saclhdr -KSTNM $TRACE`
+KCMPNM=`saclhdr -KCMPNM $TRACE`
+DELTA=`saclhdr -DELTA $TRACE`
+FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+#####
+#    FHH is the Nyquist frequency and FHL is 1/2 the Nyquist frequency
+#    This step is performed so that the filtering is valid for all
+#    sample rates
+#####
+
+gsac << EOF
+r ${TRACE}
+transfer from polezero subtype ${TRACE}.pz  TO VEL FREQLIMITS 0.002 0.003 ${FHL} ${FHH}
+w deconvolved_trace.sac
+q
+EOF
+</pre>
+</blockquote>
+<center>Last changed March21, 2014</center>
+</body>
+</html>
+

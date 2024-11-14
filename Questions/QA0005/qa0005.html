@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=ISO-8859-1">
+    <title>synthetics for shallow exploration</title>
+  </head>
+  <body style=" background-color: rgb(255, 255, 255);">
+    <h2>Introduction</h2>
+    The following Email was received from Shan Dou on July 5, 2012: <br>
+    <br>
+    <div style="margin-left: 40px;"><font color="#000000"><font><font
+            face="georgia,serif">Hi Prof. Herrmann, <br>
+            <br>
+            I have a couple of questions about spulse96.<br>
+            <br>
+            (1) For user-specified source time function (specified with
+            the "-F" option), what type of file format should I use? A
+            two-column ascii, a file96 format ascii, or a sac file? <br>
+            <br>
+            (2) I did a simple set of test with a two layer + half space
+            model, and the output seismograms are compared against
+            finite difference calculation results. I attached a PDF file
+            in this email to show a couple of differences that can be
+            seen in the results. I marked my questions in blue color,
+            would you please take a look at them? It would be great if I
+            can get some suggestions from you about those questions!<br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thank you very much!<br>
+            <br>
+            <br>
+            Best Wishes,<br>
+            Shan<br clear="all">
+          </font></font></font><span style="font-family: georgia,serif;">******************************<wbr>******************************<wbr>*******<br>
+        <br>
+        <br>
+      </span><br>
+    </div>
+    <h2> Response</h2>
+    <p style="margin-left: 40px;">(1) The format for the "-F rfile"
+      option to <span style="font-weight: bold;">spulse96</span> and <span
+        style="font-weight: bold;">hpulse96</span> is found in the
+      respective source code, e.g., PROGRAMS.330/VOLIII/src/spulse96.f
+      and PROGRAMS.330/VOLVI/src/hpulse96.f&nbsp; in <span
+        style="font-style: italic;">subroutine pulud</span>. The data
+      format in the spulse96.f&nbsp; has the following code:<br>
+    </p>
+    <div style="margin-left: 40px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+
+      read(4,*)np,dtt<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(4,*)(d(i),i=1,np)<br>
+      <br>
+      I have just modified the hspec96.f to use the same list directed
+      IO input. This will be available in <span style="font-weight:
+        bold;">hpulse96</span> with the next update.<br>
+      <br>
+      (2) The PDF document concerning this question is <a
+        href="CPS_E3D_syntheticSeismograms_Comparison-2.pdf">
+        CPS_E3D_syntheticSeismograms_Comparison-2.pdf</a> . <br>
+      <br>
+      To respond to the many questions I created a velocity model file
+      and created synthetics using both modal superposition and the
+      wavenumebr integration techniques.<br>
+      <br>
+      The scripts to run both the wavenumber integration and modal
+      superposition is given in <a href="t.tgz"> t.tgz</a>. <br>
+      Unpack and run using the commands:<br>
+      <div style="margin-left: 80px;"> gunzip -c t.tgz DOALL </div>
+      <br>
+      Assuming that you have ImageMagick installed on your computer, you
+      will then file the image files Shandou1/WK.png and
+      ShanDou2/SW.png, which are compared in the next figure (note that
+      each traces is scaled differently and that this is not a true
+      amplitude plot):
+      <table>
+        <tbody>
+          <tr>
+            <td>Wavenumber Integration - WK.png<br>
+              <img src="WK.png"></td>
+            <td>Modal Superposition -SW.png<nr><img src="SW.png"></nr></td>
+          </tr>
+        </tbody>
+      </table>
+      <p> </p>
+    </div>
+    <div style="margin-left: 40px;">Note that the graphics is performed
+      using gsac. Note also that this is slightly different from the
+      CPS-E3D...pdf in that the sample interval is 6.25E-05 instead of
+      6.20E-05<br>
+      <br>
+      Before answering the questions in the PDF, I note that Shan Dou
+      actually made synthetics with a source time function with a
+      duration of 4*40*6.20E-05 sec (0.0992 sec).&nbsp; The small sample
+      interval requires a lot of computation time. To test the program
+      results, I used the "-NDEC 16" flag on <span style="font-weight:
+        bold;">hprep96</span> to effectively change the sample interval
+      to 0.001 sec, and to make the computations a factor fo 256
+      faster.&nbsp; To accomplish the same with the surface-wave codes,
+      I change the sample interval to 0.001 sec and decreased the number
+      of data points a factor of 16 to 512.&nbsp; <br>
+      I also begtan the synthetic -0.01 sec before the origin time and I
+      also did not make a synthetic at zero distance, since this is very
+      unstable numerically.<br>
+      <br>
+      Several questions were asked in the PDF:<br>
+      <br>
+      a. The high frequency &#8220;glitches&#8221; that are superimposed on the
+      longer period signal: <span style="color: rgb(51, 51, 255);">(Q1:
+        What</span><br style="color: rgb(51, 51, 255);">
+      <span style="color: rgb(51, 51, 255);">causes these series of
+        glitches?)</span><br>
+      <br>
+      <span style="color: rgb(255, 0, 0);">When adding modes, you must
+        be very careful that the dispersion curves are correctly
+        followed and that there is no mode jumping. "This will be a big
+        problem for low-velocity layers.<br>
+        <br>
+        Your text indicated the use of the "-LOCK" flag in spulse96. Did
+        you modify the lower part of the model to actually make locked
+        modes. <br>
+        <br>
+        Adding mode will only provide arrival with phase velocities less
+        than the highest S-wave velocity in the model. If you did not
+        add a high velocity layer at depth, you model will only provide
+        arrivals with phase velocities less than 2800 m/a, which means
+        that near vertical reflections will not be modeled correctly.<br>
+        <br>
+      </span>b. The very long period signal that are present before the
+      first-P arrivals, which make the time<br>
+      series appear to be acausa; <span style="color: rgb(51, 51,
+        255);">(Q2: What are the causes of these arrivals? Could
+        inadequate</span><br style="color: rgb(51, 51, 255);">
+      <span style="color: rgb(51, 51, 255);">amount of summed modes be
+        the lead cause?)</span><br>
+      <br>
+      <span style="color: rgb(255, 0, 0);">When adding modes, you will
+        nefver get the complete synthetic because you are actually
+        phase-velocity filtering everything in an acausal manner. By
+        make in the synthetics start before the origin time, and by NOT
+        using a acausal Ricker wavelet, you can see the P-arrival in the
+        WK synthetics.<br>
+        <br>
+        If you want to use a Ricker wavelet, then in gsac apply the
+        commands dif, mul -1, and then ricker f 80, which will provide
+        something similar to your E3D synthetics<br>
+        <br>
+      </span>c. Long period signals are also quite strong in later
+      portion of the synthetic seismograms. Would<br>
+      this be caused by inadequate amount of summed modes as well?<br>
+      <br>
+      <span style="color: rgb(255, 0, 0);">I do not see this
+        problem.&nbsp; However in your E3D synthetics there is a strange
+        bifurcation (splitting) starting at time 0.12 sec at trace
+        number 40</span>. It is not that extreme in the WK.png
+      synthetic.<br>
+      <br>
+      <br>
+    </div>
+    <h2>Final comment</h2>
+    There will always be a problem with the suface wave modal
+    superposition because I assume that velocity increases with depth.
+    This means that the eigenfunctions corresponding to the evanescent
+    waves decrease with depth.&nbsp; For a model with a low velocity
+    zone, there will be cases of low pahse velocity in which the
+    eigenfunctions oscillate in the low velocity region but must
+    exponentially decay in both directions away from this zone. In you
+    problem this would require an exponential decay toward the surface,
+    whereas I actually will compute an expoential increase toward the
+    surface. This problem is worse at higher freuqnecies, or as the
+    thickness of the top layer increases.&nbsp; Beware!!<br>
+    <h2>See Also</h2>
+    <a href="/eqc/eqc_cps/TUTORIAL/RICKER/index.html"> Synthetics for
+      seismic exploration</a> <br>
+    <br>
+  </body>
+</html>

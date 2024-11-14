@@ -1,0 +1,108 @@
+#!/bin/sh
+
+#####
+#    create an impulse
+#####
+gsac << EOF
+fg imp delta 0.01 npts 32000
+w imp.sac
+EOF
+
+#####
+#    various decons
+#####
+for D in 01 02
+do
+case $D in
+	01) F1=0.005 ; F2=0.01 ; F3=40 ; F4=50 ;;
+	02) F1=0.050 ; F2=0.10 ; F3=5  ; F4=10 ;;
+esac
+for T in NMMGMO_HHZ__.SAC NMMGMO_HNZ__.SAC
+do
+gsac << EOF
+r $T
+rtr
+transfer from polezero subtype ${T}.pz to vel freqlimits $F1 $F2 $F3 $F4
+w ${T}_${F1}_${F2}_${F3}_${F4}
+q
+EOF
+done
+done
+
+
+
+gsac << EOF
+r NMMGMO_HHZ__.SAC NMMGMO_HNZ__.SAC
+rtr
+fileid name
+qdp 10
+bg plt
+#####
+#    show traces 
+#####
+p
+fft
+#####
+#    show raw spectra
+#####
+psp
+w
+#####
+#    compare the spectra
+#####
+r imp.sac
+transfer from none to polezero subtype NMMGMO_HHZ__.SAC.pz
+w HHZresp.sac
+r HHZresp.sac
+fft
+psp amax 2000 amin 2.0e-4
+r imp.sac
+transfer from none to polezero subtype NMMGMO_HNZ__.SAC.pz
+w HNZresp.sac
+r HNZresp.sac
+fft
+psp amax 2000 amin 2.0e-4
+#####
+#    show the effect of a taper
+#####
+r imp.sac
+transfer from none to polezero subtype NMMGMO_HHZ__.SAC.pz freqlimits 0.01 0.02 1 2
+w HHZresp_taper.sac
+r  HHZresp.sac HHZresp_taper.sac
+fft
+color list black red
+psp amax 2000 amin 2.0e-4 overlay on
+r imp.sac
+transfer from none to polezero subtype NMMGMO_HNZ__.SAC.pz freqlimits 0.01 0.02 1 2
+w HNZresp_taper.sac
+r HNZresp.sac HNZresp_taper.sac
+fft
+color list black red
+psp amax 2000 amin 2.0e-4 overlay on
+color off
+#####
+#     deconvolution 
+#####
+color list blue red
+r NMMGMO_HHZ__.SAC_0.005_0.01_40_50 NMMGMO_HNZ__.SAC_0.005_0.01_40_50
+ylim all
+p 
+r NMMGMO_HHZ__.SAC_0.050_0.10_5_10 NMMGMO_HNZ__.SAC_0.050_0.10_5_10
+p 
+q
+
+EOF
+
+
+for i in *.PLT
+do
+B=`basename $i .PLT`
+plotnps -BGFILL -F7 -W10 -EPS -K < $i > t.eps
+convert -trim t.eps $B.png
+done
+
+
+rm *.PLT t.eps *resp*
+
+rm NMMGMO_HHZ__.SAC_0.005_0.01_40_50 NMMGMO_HHZ__.SAC_0.050_0.10_5_10 NMMGMO_HNZ__.SAC_0.005_0.01_40_50 NMMGMO_HNZ__.SAC_0.050_0.10_5_10
+rm imp.sac

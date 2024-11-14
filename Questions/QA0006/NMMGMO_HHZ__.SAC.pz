@@ -1,0 +1,51 @@
+* CHANNEL(NSCL)NMMGMO HHZ
+* NETWORK      NM
+* STATION      MGMO 
+* COMPONENT    HHZ
+* LOCATION       
+* CREATED      2012/10/29 00:09:50.23
+* EFFECTIVE    2009-03-25 18:15:00.0
+* ENDDATE      2037-12-31 23:59:59.0
+* PARSE FLAGS 0x0 
+* INPUT UNIT   NM
+* OUTPUT UNIT  COUNT
+* DESCRIPTION  Mountain Grove, MO
+* RATE (HZ)    100.0
+* OWNER        Cooperative New Madrid Seismic Network
+* COORD(NEIC)  NM MGMO:  37.1540  -92.2687  453.0
+* COORD(SEED)  NM MGMO:  37.1540  -92.2687  453.0
+* ORIENTATION  NM MGMO  -- HHZ:     0.0 -90.0    0.0
+* LAT-SEED     37.154
+* LONG-SEED    -92.2687
+* ELEV-SEED    453.0
+* DEPTH        0.0
+* DIP          -90.0
+* AZIMUTH      0.0
+* INSTRMNTTYPE Trillium40=0577=40Sec=Q330HR=2631
+* INSTRMNTCMNT Mountain Grove, MO^Cooperative New Madrid Seismic Network^^
+* INSTRMNTGAIN 1.5000E03
+* INSTRMNTUNIT V
+* SENS-SEED    2.5195E09
+* SENS-CALC    2.5166E09
+* A0-SEED      1.1040E05
+* A0-CALC      1.1049E05
+* SEEDFLAGS    
+* ****
+CONSTANT              2.7815E+05
+ZEROS   6
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+         0.0000E+00   0.0000E+00
+        -6.8800E+01   0.0000E+00
+        -3.2300E+02   0.0000E+00
+        -2.5300E+03   0.0000E+00
+POLES   7
+        -1.1030E-01   1.1110E-01
+        -1.1030E-01  -1.1110E-01
+        -8.6300E+01   0.0000E+00
+        -2.4100E+02   1.7800E+02
+        -2.4100E+02  -1.7800E+02
+        -5.3500E+02   7.1900E+02
+        -5.3500E+02  -7.1900E+02
+* <EOE>
+* <EOR>

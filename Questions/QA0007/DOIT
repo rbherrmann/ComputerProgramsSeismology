@@ -1,0 +1,92 @@
+#!/bin/sh
+
+set -x
+
+cat > whole.mod << EOF
+MODEL.01
+simple wholespace model
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  9.0000  6.1000  3.5200  2.7300 0.160E-02 0.363E-02 0.00  0.00  1.00  1.00 
+EOF
+
+cat > dfile << EOF
+10.0 0.05 128  0.0 0.0
+EOF
+
+HS=5
+HR=0
+hprep96 -M whole.mod -HS $HS -HR $HR -d dfile -EXF
+hwhole96
+hpulse96 -p -V -p 1 | f96tosac -G
+
+#####
+#    for this combination of distance and source depth, the Green's functions
+#    have the name 001000000
+#####
+
+for AZ in 000 030 060 090 120 150 180
+do
+gsac << EOF
+mt to ZNE AZ ${AZ} FN 1.0 FILE 001000050
+w
+#####
+#    rename the output
+#####
+mv T.N ${AZ}.N
+mv T.E ${AZ}.E
+mv T.Z ${AZ}.Z
+#####
+#    run again to get ZRT
+#####
+mt to ZRT AZ ${AZ} FN 1.0 FILE 001000050
+mv T.R ${AZ}.R
+mv T.T ${AZ}.T
+w
+q
+EOF
+done
+
+#####
+#   now plot the traces in true ampliude
+#   az a function of azimuth
+#####
+
+gsac << EOF
+r ???.Z 
+bg plt
+ylim all
+fileid name
+p
+r ???.N
+p
+r ???.E
+p
+r ???.R
+p
+r ???.T
+p
+q
+EOF
+
+#####
+#   convert to a PNG
+#####
+for J in 001 002 003 004 005
+do
+plotnps -F7 -W10 -EPS -K < P$J.PLT > t.eps
+convert -trim t.eps $J.png
+done
+
+#####
+# clean up
+#####
+rm hspec96.??? whole.mod dfile T.? t.eps 
