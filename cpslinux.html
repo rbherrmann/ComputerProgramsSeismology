@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body style="background-color:#FFFFFF">
+    <h2>Linux</h2>
+    <p>As of the date of this web page, October 21, 2023, there are no
+      inherent difficulties in compiling and running the Computer
+      Programs in Seismology codes. However as Linux migrate to using
+      the Wayland graphics compositor, there may be some differences in
+      how the X11R6 graphics is supported.&nbsp; <br>
+    </p>
+    <p>The instructions below show how to install the compilers and
+      useful software to be able to compile Computer Programs in
+      Seismology and to have a functioning system for research.<br>
+    </p>
+    <p>Of the distributions below, the author uses Linux Mint, and thus
+      the instructions are current. The instructions for Ubuntu Linux
+      should be very similar.&nbsp; <br>
+    </p>
+    <p>The instructions for Red Hat and OpenSUSE are old and perhaps
+      outdated. Use the instructions for Linux Mint as a guide to
+      necessary software, even though the name of the required packages
+      may be slightly different.<br>
+    </p>
+<ul>
+<li><a href="#LINUX">Linux Distributions</a></li>
+<li><a href="#COMPILE">Compile</a></li>
+</ul>
+    <h2 id="LINUX">Linux Distributions<br>
+    </h2>
+<ul>
+<li><a href="#Mint">Linux Mint and Ubuntu</a></li>
+<li><a href="#RHEL">Red Hat</a></li>
+<li><a href="#SUSE">OpenSuse</a></li>
+</ul>
+    <h3 id="Mint">Ubuntu Linux and Mint</h3>
+    You can use the software download page, or open a terminal window
+    and enter the following commands:
+    <p> </p>
+    <pre>   sudo apt-get install make
+   sudo apt-get install gcc
+   sudo apt-get install gfortran
+   sudo apt-get install xorg-dev
+   sudo apt-get install libncurses5-dev
+   sudo apt-get install gawk
+</pre>
+    <p> The following programs are useful: </p>
+    <p> </p>
+    <pre>   sudo apt-get install gv
+   sudo apt-get install ImageMagick
+</pre>
+    <p>
+      ImageMagick is useful tool for converting Encapsulated PostScript
+      to other graphics files. This is useful when creating documents
+      using Microsoft Work or LibreOffice and presentations using MS
+      PowerPoint or LibreOffice Impress. As software is further
+      developed, there are often slight differences that must be
+      accounted for to be useful.<br>
+    </p>
+    <p>First beware of ImageMagick 7.1.1-8. See the discussion given in
+      the section on MacOS.
+      <br>
+    </p>
+    <p>Also note that there may be permission problems in creating PNG
+      files from EPS files using ImageMagick. To be able do this,follow
+      these instructions:<br>
+    </p>
+    <pre>   As superuser,  edit /etc/ImageMagick-6/policy.xml 
+   
+   e.g., sudo vi /etc/ImageMagick-6/policy.xml 
+   or sudo xed /etc/ImageMagick-6/policy.xml
+          
+   Change  the lines
+   
+   &lt;policy domain="coder" rights="none" pattern="PS" /&gt;
+   &lt;policy domain="coder" rights="none" pattern="EPS" /&gt;
+   &lt;policy domain="coder" rights="none" pattern="PDF" /&gt;
+   &lt;policy domain="coder" rights="none" pattern="XPS" /&gt;
+          
+   to this:
+          
+   &lt;policy domain="coder" rights="read|write" pattern="PS" /&gt;
+   &lt;policy domain="coder" rights="read|write" pattern="EPS" /&gt;
+   &lt;policy domain="coder" rights="read|write" pattern="PDF" /&gt;
+   &lt;policy domain="coder" rights="read|write" pattern="XPS" /&gt;
+</pre>
+    <p> </p>
+    <h3 id="RHEL">RHEL 6.3 Linux, CENTOS (perhaps Fedora) <font color="#ff0000">This
+        has not been updated in at least 10 years.</font><br>
+    </h3>
+    You can use the Add/Remove Software tab, or open a terminal window
+    and enter the following commands:
+    <p> </p>
+    <pre>   yum install gfortran
+   yum install libX11-devel
+   yum install ncurses-devel
+</pre>
+    <p> the following programs are useful: </p>
+    <p> </p>
+    <pre>   yum install gv
+   yum install ImageMagick
+</pre>
+    <p> </p>
+    <h3 id="SUSE">OpenSUSE 13.1&nbsp; <font color="#ff0000">This has not been
+        updated in at least 10 years.</font></h3>
+    Applications -&gt; SystemLizard Button -&gt; Computer -&gt;
+    Install/Remove Softares , or invoke /sbin/YaST2 directly
+    <p> </p>
+    <pre>   gcc
+   gcc-fortran
+   xorg-x11-devel
+   ncurses-devel
+   ImageMagick
+   gv
+   java
+   make
+   perl
+</pre>
+<h2 id="COMPILE">Compile</h2>
+    <p>
+<ul>
+      <li>You are now ready to compile CPS. If PROGRAMS.330 is in your
+        login directory, then if you have an Intel Mac<br>
+        <pre>cd PROGRAMS.330
+./Setup LINUX6440 
+./C 2&gt;&amp;1 C.txt
+</pre>
+      </li>
+      <li>The file <i>C.txt</i> provides a record of the compile. To
+        test the compile results, do
+        <pre>ls bin/* | wc
+</pre>  
+        If you do not see on the order of 150 programs, then examine the
+        <i>C.txt</i> to determine what failed. This is the file to send
+        to the Email address&nbsp; given on the main page if there are
+        problems. </li>
+    </ul>
+  </body>
+</html>

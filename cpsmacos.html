@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+  </head>
+  <body style="background-color:#FFFFFF">
+    <h3>MacOS </h3>
+    <p> <b><i> These notes apply to the installation on April 23, 2023
+          under MacOS Version Ventura 13.2.1.&nbsp; The test machine was
+          a MacBook Air with the M2 Apple Silicon chip.<br>
+          <br>
+        </i></b> These instructions should apply to other MacOS
+      versions.</p>
+    <b><i> </i></b>
+    <p></p>
+    <ol>
+      <li>Determine the version of the operating system: Top menu bar
+        AppleLogo -&gt; About This Mac will give the version, e.g., OSX
+        Version 13.2.1It also gives processor.Note whether you have the
+        older Intel system or the newer M1/M2 system.<br>
+      </li>
+      <li>Install <b>xcode</b> on your Mac, since you will need command
+        line tools. Click on <b>AppStore</b> and then search for <b>Xcode</b>.
+        You will need your password to download from the Apple Store.<br>
+        When Xcode in installed, the Icon in AppStore will now exhibit <br>
+      </li>
+      <ol>
+        <li>"Open", so open it and <br>
+        </li>
+        <li>Agree (password again). </li>
+      </ol>
+      <li>Install <b>Xquartz</b> to get X11 graphic support. You can
+        get this at <a href="http://www.xquartz.org">
+          http://www.xquartz.org/ </a>. This will also set up the links
+        required to compile X11 programs. When the download is complete,</li>
+      <ol>
+        <li>Install</li>
+        <li>Open</li>
+        <li>Agree (enter password)</li>
+        <li>Install</li>
+      </ol>
+    </ol>
+    <blockquote>Next we need the compilers and other software. We will
+      get these using both Homebrew and MacPorts<br>
+    </blockquote>
+    <ol start="4">
+      <li>Install <b>MacPorts</b> <a
+          href="http://www.macports.org/install.php">http://www.macports.org/install.php</a>.
+        Select the version for your operating system, e.g. if running
+        Ventura 13.2.1, <i>MacOS Ventura v13</i><br>
+        Clicking on the install will place a package in your downloads.
+        Just click, icons will appear, and then click on the
+        MacPorts...pkg icon. Answer the questions and enter your
+        password. <br>
+        MacPorts gives libraries and LINUX like tools that will be
+        useful for productivity. I have <b>bzip2</b>, <b>gawk</b>, <b>ghostscript</b>,
+        <b>gv</b>, <b>ImageMagick</b>, <b>ncurses</b>, <b>xfig</b>
+        and <b>xv</b> among others:
+        <pre>sudo port install gv
+sudo port install xv
+sudo port install ImageMagick
+              </pre>
+      </li>
+      <li>Install homebrew <a href="brew.sh">brew.sh</a>. The web page
+        gives a command for installing <b>homebrew</b>. As of April 27,
+        2023, this command is
+        <pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+</pre>
+        Refer to the HomeBrew website to ensure that this command line
+        is uptodate. Now install the following packages:
+        <pre>brew install wget
+brew install gcc
+brew install make          <font color="#ff0000">         <font color="#cc0000"> This will give the GNU make  </font></font>       
+brew install xfig
+brew install gawk
+brew install ghostscript
+brew install ffmpeg
+brew install gmt
+brew install graphicsmagick
+brew install --cask mactex <font color="#ff0000">         <font color="#cc0000"> This will give LaTex for document creation </font></font>       
+</pre>
+        <p> <i> The reason for downloading from the two sources is that
+            a&nbsp; package&nbsp; missing from one may be in&nbsp; the
+            other. The other, less obvious reason, is that distribution
+            may not work as desired. For example, I use the <b>ImageMagick</b>
+            <b>convert</b> program to convert the Computer Programs in
+            Seismology (CPS) EPS files to PNG for display on the weband
+            inclusion in documenbts and presentations. The CPS program <b>plotnps
+
+              -EPS</b> determines the boundingbox of&nbsp; a figure, and
+            uses it by placing the line <b>%%BoundingBox: (atend)</b>
+            at the top of the EPS file and then placing at the second
+            last line the exact dimensions, for example <b>%%BoundingBox:
+
+              47 45 585 321</b>. I found that the Imagemagick 7.1.1-8
+            downloaded from <b>HomeBrew</b> did not recognize this but
+            that the ImageMagick 6.9.11-60 downloaded from <b>MacPorts</b>
+            did recognize this. The effect was that the 7.1.1-8 version
+            yielded a cropped bit graphic image, which was not desired.
+            Note: <b>HomeBrew</b> does have a link to download a
+            Version 6 of <b>ImageMagick</b>.</i> </p>
+        <p> <i>Not all packages are required to compile CPS. I have
+            selected the following&nbsp; items in order to be
+            productive: </i> </p>
+        <ul>
+          <li><b>wget</b> - an easy way to download files from a
+            webserver. Similar to <b>curl</b>.</li>
+          <li><b>gcc</b> - MacOS links the <b>gcc</b> command to the <b>clang</b>
+            compiler. I need FORTRAN. The download of the true <b>gcc</b>
+            provides the <b>gfortran</b>.</li>
+          <li><b>gmt</b> - I use this for maps. This requires <b>graphicsmagick</b>,
+            <b>ghostscript</b> and recommends <b>ffmpeg</b>.</li>
+          <li><b>gv</b> - A PostScript viewer what I prefer to <b>Preview</b>
+            on the Mac and to <b>evince</b> on LINUX.</li>
+          <li><b>xv</b> - a older viewer that displays PNG and other
+            formats. For perusing a large number of files, it is very
+            efficient.</li>
+          <li><b>xfig</b> - An older code useful for creating drawings.</li>
+          <li><b>ImageMagick</b> - A graphics manipulation package. I
+            primarily use the <b>convert</b> command to convert EPS to
+            PNG, e.g.,
+            <pre>convert -trim t.eps -background white -alpha remove -alpha off t.png
+</pre>
+          </li>
+          <li><b>mactex</b> - provides the command line <b>latex</b>
+            tool for creating documents.</li>
+          <li><b>ghostscript</b> - provides the <b>gs</b> command and
+            is required by <b>ImageMagick</b> and <b>graphicsmagick</b></li>
+        </ul>
+        <p> <i>All of these installations will create an entry in the
+            .zprofile in the login directory to point to the location of
+            these executables</i></p>
+      </li>
+      <li> Carefully enter the following command to point to the
+        downloaded <b>gcc</b> instead of&nbsp; the one installed. If
+        the installed compiler is not Version 12, then <b><i>ls
+            /opt/homebrew/bin</i></b> to see what has been installed. If
+        the compiler was installed using <b>HomeBrew</b><br>
+        <pre>sudo ln -s /opt/homebrew/bin/gcc-13 /opt/homebrew/bin/gcc
+</pre>
+        &nbsp; If the compiler was installed&nbsp; using <b>MacPorts</b>.
+        You may have to do something like
+        <pre>cd /usr/local/bin<br>sudo ln -s  /opt/local/bin/gcc-mp-11 gcc<br>sudo ln -s  /opt/local/bin/gfortran-mp-11 gfortran
+</pre>
+        <p> <font color="#ff0000">(The mp-11 means MacPorts gcc6 was
+            installed. This how MacPorts&nbsp; distinguishes the
+            different versions)</font> </p>
+      </li>
+      <li> Since the default SHELLis <b>zsh</b>, Define the correct
+        PATH so that the shell can find the sources. Carefully edit the
+        <b>.zprofile</b> in your login directory to add lines at the end
+        of the file such as
+        <pre>OPATH=$PATH
+PATH=:.:$HOME/bin:$HOME/PROGRAMS.330/bin:$OPATH <font color="#ff0000"> 
+     (This assumes that you installed CPS in your login directory)</font>
+</pre>
+      </li>
+      <li>You are now ready to compile CPS. If PROGRAMS.330 is in your
+        login directory, then if you have an Intel Mac<br>
+        <pre>cd PROGRAMS.330
+./Setup OSX40
+./C 2&gt;&amp;1 C.txt
+</pre>
+        If you have the newer Macs with the M1/M2 chip, <br>
+        <pre>cd PROGRAMS.330
+./Setup OSXM
+./C 2&gt;&amp;1 C.txt
+</pre>
+      </li>
+      <li>The file <i>C.txt</i> provides a record of the compile. To
+        test the compile results, do
+        <pre>ls bin/* | wc
+</pre>
+        If you do not see on the order of 150 programs, then examine the
+        <i>C.txt</i> to determine what failed. This is the file to send
+        to the Email address&nbsp; given on the main page if there are
+        problems. </li>
+    </ul>
+  </body>
+</html>
