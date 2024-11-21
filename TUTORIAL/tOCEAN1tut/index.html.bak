@@ -1,0 +1,285 @@
+<HTML>
+<HEAD><TITLE>Computer Programs in Seismology Tutorials</TITLE>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials -</title>
+    <style type="text/css">
+                h2.cjk { font-family: "Arial Unicode MS" }
+                h2.ctl { font-family: "Arial Unicode MS" }
+                h3.cjk { font-family: "Arial Unicode MS" }
+                h3.ctl { font-family: "Arial Unicode
+                                MS" }
+                h4.cjk { font-family: "Arial
+                                Unicode MS" }
+                h4.ctl { font-family: "Arial Unicode MS" }
+                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
+                pre.cjk { font-family: "Courier New", monospace }
+        </style>
+    <style>
+pre {
+  background-color: rgb(230,230,230);
+  margin-top:12px;
+  margin-bottom:12px;
+  margin-left:6px;
+  font-weight: bold;
+}
+</style>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF">
+<h2>Introduction</h2>
+<p>
+This tutorial considers  wave propagation in water layers from 1.0 to 5.0km thick in order to assist
+the interpretation of OBS data. The ocean model is based on
+the <a href="https://rses.anu.edu.au/seismology/ak135/ak135f.html">AK135-F model </a> developed at the Australian National University.
+The model was truncated to consist of  just the water layer, crust and upper mantle and then converted to the
+MODEL96 format of Computer Programs in Seismology (CPS). The Q<sub>&kappa;</sub> and Q<sub>&mu;</sub> were converted to
+Q<sub>S</sub> using the relations 
+Q<sup>-1</sup><sub>P</sub> = L Q<sup>-1</sup><sub>&mu;</sub> + (1 -L) Q<sup>-1</sup><sub>&kappa;</sub>
+and Q<sub>S</sub> = Q<sub>&mu;</sub> 
+where L = (4/3)(V<sub>P</sub> / V<sub>S</sub>)<sup>2</sup>
+(Ben-Menahem and Singh, 10.03; Dahlen and Tromp, 9.59 and 9.60).
+</p>
+<p>
+Thus the AK135F_AVG entry
+<br>
+<pre>
+Spherical average structure
+    Depth    density  P vel    S vel    Q kappa     Q mu
+      km      Mg/km3   km/s     km/s
+     0.00    1.0200   1.4500   0.0000  57822.00     0.00
+     3.00    1.0200   1.4500   0.0000  57822.00     0.00
+     3.00    2.0000   1.6500   1.0000    163.35    80.00
+     3.30    2.0000   1.6500   1.0000    163.35    80.00
+     3.30    2.6000   5.8000   3.2000    1478.30  599.99
+     10.00   2.6000   5.8000   3.2000    1478.30  599.99
+     10.00   2.9200   6.8000   3.9000    1368.02  599.99
+     18.00   2.9200   6.8000   3.9000    1368.02  599.99
+     18.00   3.6410   8.0355   4.4839    950.50   394.62
+     43.00   3.5801   8.0379   4.4856    972.77   403.93
+     80.00   3.5020   8.0400   4.4800   1008.71   417.59
+     80.00   3.5020   8.0450   4.4900    182.03    75.60
+     120.00  3.4268   8.0505   4.5000    182.57    76.06
+     120.00  3.4268   8.0505   4.5000    182.57    76.06
+     165.00  3.3711   8.1750   4.5090    188.72    76.55
+     210.00  3.3243   8.3007   4.5184    200.97    79.40
+     210.00  3.3243   8.3007   4.5184    338.47   133.72
+     260.00  3.3663   8.4822   4.6094    346.37   136.38
+     310.00  3.4110   8.6650   4.6964    355.85   139.38
+</pre>
+<br>
+becomes
+<pre>
+MODEL.01
+AK135-F model converted to layers
+ISOTROPIC
+KGS
+SPHERICAL EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+      H(KM)   VP(KM/S)   VS(KM/S) RHO(GM/CC)    QP        QS     ETAP       ETAS      FREFP      FREFS
+     3.000     1.450     0.000     1.020     0.000     0.000 0 0 1 1
+     0.300     1.650     1.000     2.000   108.161    80.000 0 0 1 1
+     6.700     5.800     3.200     2.600   927.336   599.990 0 0 1 1
+     8.000     6.800     3.900     2.920   876.141   599.990 0 0 1 1
+    25.000     8.037     4.485     3.611   606.789   399.275 0 0 1 1
+    37.000     8.039     4.483     3.541   624.909   410.760 0 0 1 1
+    40.000     8.048     4.495     3.464   115.086    75.830 0 0 1 1
+    45.000     8.113     4.504     3.399   116.831    76.305 0 0 1 1
+    45.000     8.238     4.514     3.348   121.781    77.975 0 0 1 1
+    50.000     8.391     4.564     3.345   213.266   135.050 0 0 1 1
+    50.000     8.574     4.653     3.389   218.446   137.880 0 0 1 1
+    50.000     8.756     4.740     3.434   224.376   141.070 0 0 1 1
+    50.000     8.956     4.940     3.434   224.376   141.070 0 0 1 1
+</pre>
+<br>
+after replacing gradients by the average velocity (even though I should have
+used the average slowness to preserve vertical travel time).
+</p>
+<p>
+This is just a test model.
+</p>
+<p>
+In the examples developed below the models will be given with names like <i>OCEAN_4.0.mod</i> where the <i>4.0</i>
+indicates that the water layer is 4.0km thick instead of the original 3.0km. The examples will
+consider wave propagation with water layer thicknesses of 1.0, 2.0, 3.0, 4.0 and 5.0km.
+</p>
+<h2>Test scripts</h2>
+<p>Download the script <a href="OCEAN1.tgz">OCEAN1.tgz</a> and unpack it using the command
+<br>
+<pre>
+gunzip -c OCEAN1.tgz | tar xvf -
+cd OCEAN1
+</pre>
+<br>
+You will see two directories. OCEAN_SW is for the surface wave study and OCEAN_WK is for the generation of a complete seismogram.
+<br>
+<pre>
+ls -F
+OCEAN_SW/	OCEAN_WK/
+</pre>
+<br>
+<h2>Surface Wave</h2>
+<p>
+<pre>
+cd OCEAN_SW
+DOITSW
+</pre>
+<p>
+The purpose of this section is to compute the theoretical fundamental and first higher mode dispersion for Love and Rayleigh waves in each of the models. 
+The computations and results will be in the sub-directories with names such as <i>swDIR_5.0</i>.
+The result will be the eigenfunction files <i>slegn96.egn</i> and <i>sregn96.egn</i> which are used by the program <b>sdpegn96</b> to plot the dispersion.  The shell script <b>DOITSW</b> performs the computations and creates the plots, which will be a superposition of the phase velocity (solid curve) and group velocities (dashed curve). The <b>DOITSW</b> assigns a different color to each depth from red at 1.0 to blue at 5.0 km.
+The individual plots in each sub-directory are named <i>R.PLT</i> and <i>L.PLT</i>. At the top level there are <i>ALLL.PLT</i> and <i>ALLR.PLT</i>.
+</p>
+<p>
+For a water thickness of 5.0km, the dispersion plots are shown in the next figure.
+<br>
+<table>
+<tr>
+	<td><img src="L.png"><p>Love wave fundamental and first higher mode</p></td>
+	<td><img src="R.png"><p>Rayleigh wave fundamental and first higher mode</p></td>
+</tr>
+</table>
+<br>
+The composite plot of all water depths is a little busy,
+<table>
+<tr>
+	<td><img src="ALLL.png"><p>Composite Love wave fundamental and first higher mode. <br>Orange=1.0km, blue=5.0km</p></td>
+	<td><img src="ALLR.png"><p>Composite Rayleigh wave fundamental and first higher mode.<br> Orange=1.0km, blue=5.0km</p></td>
+</tr>
+</table>
+<br>
+This figure demonstrates two things. First all of the Love wave plots are the same since the Love wave is not affected by the
+surface water layer. Second the Rayleigh wave dispersion is very sensitive to the thickness of the water layer.
+</p>
+<h3>Suggestion</h3>
+<p>
+The model used is generic. It consists of a water layer, a sediment layer and a two layer crust. One might perturb the model to see the effect of the sediment thickness on the dispersion.  It seems as if more can be learned about structure from an observation of the Love wave than from the Rayleigh wave.
+</p>
+<h2>Complete synthetics</h2>
+<p>
+After completing the surface wave computation, since we will use the eigenfunctions later when analyzing the dispersion using <b>do_mft</b>,
+enter the following command in the <i>OCEAN_WK</i> directory.
+<br>
+<pre>
+DOITWK
+</pre>
+</p>
+<p>This script will create a sub-directory for each source depth.
+The computations and results will be in the sub-directories with names such as <i>wkDIR_5.0</i>.
+In order to make synthetics that can be used for interpretation of ambient noise from OBS seismometers on the sea bottom and, at the same time, account for efficient computation, the source is placed at a depth of 100m (0.1km) beneath the water-solid boundary and the receiver at a depth of 50m (0.05km) beneath the boundary. At long periods, this slight shift from a value of 0.0 will not affect the synthetics. <b>Note:</b> To obtain the Green's functions for a pressure field in the water, the receiver should be slightly above the boundary in the water.
+</p>
+<p>
+The script will compute all Green's functions, but to understand the results of ambient noise analysis, the cross-correlation and stacking of the Z components (ZZ) will theoretically be the ZVF (vertical component observation due to a vertical force) Green's function, although the amplitude spectrum will be different. Part of this signal will be the Rayleigh wave. If ambient noise is obtained from the great circle path radial components (RR), RHF (radial due to horizontal force) is the Green's functions to consider, and finally THF will be appropriate for the TT cross-correlation.
+The purpose of these synthetics is to see what group and phase velocities may be obtained from the ambient noise results.
+</p>
+<p>The script <b>DOITWK</b> will compute synthetics at distances of 100, 200, 300, 400 and 500km. As an example the next figure compares
+the ZVF, RHF and THF Green's functions at a distance of 500 km.
+<br>
+<table>
+<tr>
+<td><img src="P001.png"><p>ZVF, RHF and THF Green's functions at a distance of 500km</p></td>
+</tr>
+</p>
+<p>
+The next figure displays a record section of the THF and ZVF Green's functions for a water thickness of 5.0km.
+<br>
+<table>
+<tr>
+<td><img src="PRS001.png"><p>ZVF record section</p></td>
+<td><img src="PRS002.png"><p>THF record section</p></td>
+</tr>
+</table>
+</p>
+<p>
+Finally consider the THF and RVF Greens functions at a distance of 500km for different source depths.
+<br>
+<table>
+<tr>
+<td><img src="THF.png"><p>THF at 500km for source depths of 1.1, 2.1, ..., 5.1km</p></td>
+<td><img src="ZVF.png"><p>ZVF at 500km for source depths of 1.1, 2.1, ..., 5.1km</p></td>
+</tr>
+</table>
+</p>
+<h2>do_mft analysis</h2>
+<p>
+A use of the ambient noise empirical Green's functions is to determine group and phase velocity.  
+The <b>do_mft</b> applies a multiple filter analysis to the seismograms. If shell scripts <b>MFTDOOVERLAY</b> and <b>PHVDOOVERLAY</b>
+have been created, then it is possible to overlay the theoretical model curves onto the dispersion estimate using the seismogram.
+When working with real data, this feature is used to determine an acceptable range of good observations. In this case with synthetics, this overlay
+permits one to understand the effects of the model on the determination of these velocities.
+</p>
+<p>
+The next set of figures are screenshots of a set of <b>do_mft</b> windows. Comments will be placed at the bottom of each figure.
+In this example, the water is 5.0km deep, and we consider two separate runs - one for the ZVF traces and the other for the THF traces. The ZVF will be processed in detail at first, and just the important plots for the THF Green's functions will be displayed.
+</p>
+<p>To keep the number of figures small, I will just indicate what "botton" to press on each page. We will staert with the ZVF sytnhetics.
+<br>
+<pre>
+cd wkDIR_5.0
+do_mft -G -IG -T *ZVF
+</pre>
+<br>
+For assistance with this command just enter <b>do_mft -h</b>. the program is a  GUI editor for the work done by the
+programs <b>sacmft96</b> and <b>sacmat96</b>. The <i>-G</i> flag indicates that the name of the picked dispersion will have a <i>.dsp</i> or <i>.phv</i> appended to the file name for easier identification later. The <i>-IG</i> flag tells the program that the waveforms is an ambient noise Green's function of the type ZZ, RR or TT, and that the phase velocity shoudl accou for a &pu;/4 phse shift of the source. Finally the <i>-T</i> flag indicates that the program should invoke the script <b>MFTDOOVERLAY</b> or <b>PHVDOOVERLAY</b> which is in the users PATH. These programs can be hand tailored to plot theoretical dispersion onto the observed seismigram dispersion.  For this example, just the theoretical curves are overlain. I have more complicated scripts for North Amerca which overlay theoretical curves for selected mdoels and also the results of coninental tomography. 
+</p>
+<p>
+Here are the steps taken to obtain the figures.
+<ul>
+<li>
+Page 1 - Select a trace by clicking on the box. 005000000_005100_005050.ZVF is selected
+</li>
+<li>
+Page 2 - Click on "Unit" and select "Counts". Then click on "Do MFT" at the top.
+</li>
+<li>
+Page 3 - Click on "Type: until Rayleigh appears since this is Z component observations.<br>
+Click on "Vmin" to select the power "0.10" and then "1.0". This defines the minimum velocity fo the plot to be 0.1 km/s.<br>
+The "Alpha" parameter controls the Gaussian filter. A larger value has better frequency domain resolution but less time domain resolution because of the uncertainty principle. You might try different values to find the one that permits you to obtain the group and phase velocity.<br>
+Click on "Do MFT".
+</li>
+<li>
+Page 4 - This is the interctive selection of diepersion values. To use a rubber bnd pick, click on "Auto" nd then selet the "Mode". Notice the "Tomo" button. Click on that and the <b>MFTDOOVERLAY </b> will be run and the dispersion plot redrawn. The result is<br>
+<table>
+<tr><td><img src="ZSS_4.png"></td></tr>
+</table>
+<br>
+The white curves on the plot are the theoretical values for the 5.0km model that were computed in OCEAN_SW. Note that Green's function has a large amplitude higher mode. Also note that the relative amplitudes displayed will be different for real data since the underlying amplitude spectrum of the noise will be different.
+<br>
+Click on "PhVel"
+</li>
+<li>
+Page 5 - The region to the right is the phase velocity display while the figure on the left duplicates the group velocity display. the group velocities cannot be picked on this page, but are shown to indicate regions of large amplitude.
+At each period, the filtered trace is examined for the maximum amplitude of its envelope (used to determine the grroup velocity on Page 4). At this point the instantaneous pahse is determined. The phase velocity is then computed for multiple values of 2&pi; radian phase shifts (this is always an ambiguity in pahse determineation). If is up to the user to select the correct brnch for the pahse velocity.
+<br>
+Click on "Tomo". this calls the script <b>PHVOOVERLAY</b> which plots the theoretical here as red curves.
+We see that it si very difficult to get the phase velocity using this technque oin this case.
+<br>The result is the picture
+<br>
+<table>
+<tr><td><img src="ZSS_5.png"></td></tr>
+</table>
+</li>
+</ul>
+</b>
+<p>
+If we examine the THF Green's function which is related to the TT analysis, we obtain the following two figures after entering
+<br>
+<pre>
+do_mft -G -IG -T *THF
+</pre>
+and being sure to select  "Love"  for "Type" on Page 3.
+<table>
+<tr><td><img src="THF_4.png"></td></tr>
+<tr><td><img src="THF_5.png"></td></tr>
+</table>
+<br>
+In this case we actually get some good pahse velocities except at very long periods.
+
+
+
+</BODY>
+</HTML>
