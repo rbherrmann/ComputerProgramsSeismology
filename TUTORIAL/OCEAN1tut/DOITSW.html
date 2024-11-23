@@ -2,47 +2,51 @@
 <html>
   <head>
     <title>Computer Programs in Seismology Tutorials</title>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials -</title>
-    <style type="text/css">
-                h2.cjk { font-family: "Arial Unicode MS" }
-                h2.ctl { font-family: "Arial Unicode MS" }
-                h3.cjk { font-family: "Arial Unicode MS" }
-                h3.ctl { font-family: "Arial Unicode
-                                MS" }
-                h4.cjk { font-family: "Arial
-                                Unicode MS" }
-                h4.ctl { font-family: "Arial Unicode MS" }
-                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
-                pre.cjk { font-family: "Courier New", monospace }
-        </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1>
+<h2>Wave propagation for ocean floor observations</h2></header>
     <h2> DOITSW </h2>
     <p> This script executes the surface wave codes to create the
       theoretical dispersion curves for the five different water
       thicknesses. The initial appearance of the <i>OCEAN_SW</i>
       directory is<br>
+    <pre><small>
+&gt; ls -F
+DOITSW*		OCEAN_2.0.mod	
+OCEAN_1.0.mod	OCEAN_3.0.mod	
+OCEAN_4.0.mod	OCEAN_5.0.mod 
+</small></pre>
     </p>
-    <pre>&gt; ls -F<br>DOITSW*		OCEAN_1.0.mod	OCEAN_2.0.mod	OCEAN_3.0.mod	OCEAN_4.0.mod	OCEAN_5.0.mod <br></pre>
     <p>After executing the <b>DOITSW</b> command this directory will
       appear as<br>
     </p>
-    <pre>&gt;ls -F<br>LLL.PLT	DOITSW*  OCEAN_2.0.mod	OCEAN_4.0.mod	swDIR_1.0/	swDIR_3.0/	swDIR_5.0/<br>ALLR.PLT	 OCEAN_1.0.mod	OCEAN_3.0.mod	OCEAN_5.0.mod	swDIR_2.0/	swDIR_4.0/<br></pre>
+    <pre><small>
+&gt;ls -F
+ALLR.PLT	OCEAN_1.0.mod	OCEAN_4.0.mod	swDIR_2.0/	swDIR_5.0/
+DOITSW* 	OCEAN_2.0.mod	OCEAN_5.0.mod	swDIR_3.0/	
+LLL.PLT 	OCEAN_3.0.mod	swDIR_1.0/	swDIR_4.0/
+</small></pre>
     <p>The subdirectories, such as <i>swDIR_3.0</i> for the 3.0km water
       thickness will have the following files:<br>
     </p>
-    <pre>&gt; ls -F<br>L.PLT		R.PLT		SLEGNC.PLT	SREGN.dsp	SREGNU.PLT	sdisp96.lov	slegn96.egn<br>OCEAN_3.0.mod	SLEGN.dsp	SLEGNU.PLT	SREGNC.PLT	sdisp96.dat	sdisp96.ray	sregn96.egn<br></pre>
+    <pre><small>&gt; ls -F
+L.PLT		SLEGN.dsp	SREGN.dsp	sdisp96.lov	sdisp96.ray	
+OCEAN_3.0.mod	SREGNC.PLT	SLEGNC.PLT	slegn96.egn     sregn96.egn
+R.PLT		SLEGNU.PLT	SREGNU.PLT	sdisp96.dat	
+</small></pre>
     <p>The <i>sdisp96.dat </i>is created by the program <b>sprep96</b>,
       <i>sdisp96.lov</i> and <i>sdisp96.ray</i> are created by <b>sdisp96</b>,
       <i>sregn96.egn</i> by <b>sregn96 </b>and <i>slegn96.egn</i> by
@@ -76,50 +80,54 @@ pre {
     </p>
     <p>To use this enter a command as<br>
     </p>
-    <pre> DOITSW 
-
-</pre>
+    <pre><small> DOITSW 
+</small></pre>
     <p> The <i>DOITSW</i> shell script is </p>
-    <pre>#!/bin/sh
+    <pre><small>
+#!/bin/sh
 
 for D in 1.0 2.0 3.0 4.0 5.0
 do
-	case $D in
-		0.5) KOLOR=1000 ;;           <font color="#ff0000">These are CALPLOT colors. See the Appendix of the PDF's in the documentation </font>
-		1.0) KOLOR=1020 ;;
-		2.0) KOLOR=1040 ;;
-		3.0) KOLOR=1060 ;;
-		4.0) KOLOR=1080 ;;
-		5.0) KOLOR=1100 ;;
-	esac
+   case $D in
+      0.5) KOLOR=1000 ;;  # <font color="#ff0000">These are CALPLOT colors. See the </font>
+      1.0) KOLOR=1020 ;;  # <font color="#ff0000">Appendix of the PDF in </font>>
+      2.0) KOLOR=1040 ;;  # <font color="#ff0000">PROGRAMS.330/DOC</font>
+      3.0) KOLOR=1060 ;;
+      4.0) KOLOR=1080 ;;
+      5.0) KOLOR=1100 ;;
+   esac
 
-	if [ ! -d swDIR_${D} ]               <font color="#ff0000">Create a unique directory for each model</font> 
-	then
-		mkdir swDIR_${D}
-	fi
-	cp OCEAN_${D}.mod swDIR_${D}
-	#  run in a sub shell
-	(
-		cd swDIR_${D}
-		sprep96 -PMIN 1 -PMAX 150 -M OCEAN_${D}.mod -NMOD 2 -L -R  <font color="#ff0000">Execute the surface wave codes to get dispersion for</font>
-		sdisp96                                                    <font color="#ff0000">fundamental and first high modes</font>
-		sregn96
-		slegn96
+   if [ ! -d swDIR_${D} ]    #<font color="#ff0000">Create a unique directory for each model</font> 
+   then
+      mkdir swDIR_${D}
+   fi
+   cp OCEAN_${D}.mod swDIR_${D}
+   #  run in a sub shell
+   (
+      cd swDIR_${D}
+      sprep96 -PMIN 1 -PMAX 150 -M OCEAN_${D}.mod -NMOD 2 -L -R  
+                        #<font color="#ff0000">Execute the surface wave codes to get dispersion</font>
+                        #<font color="#ff0000">for fundamental and first high modes</font>
+      sdisp96
+      sregn96
+      slegn96
 set -x
-		sdpegn96 -R -C -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0
-		sdpegn96 -R -U -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0 -DT "short"
-		sdpegn96 -L -C -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0
-		sdpegn96 -L -U -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 -YMIN 0.0 -YMAX 5.0 -DT "short"
-		cat SREGN[CU].PLT &gt; R.PLT
-		cat SLEGN[CU].PLT &gt; L.PLT
-	)
+      sdpegn96 -R -C -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 \
+                -YMIN 0.0 -YMAX 5.0
+      sdpegn96 -R -U -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 \
+                -YMIN 0.0 -YMAX 5.0 -DT "short"
+      sdpegn96 -L -C -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 \
+                -YMIN 0.0 -YMAX 5.0
+      sdpegn96 -L -U -XLOG -PER -S  -K ${KOLOR} -XMIN 1 -XMAX 150 \
+                -YMIN 0.0 -YMAX 5.0 -DT "short"
+      cat SREGN[CU].PLT &gt; R.PLT
+      cat SLEGN[CU].PLT &gt; L.PLT
+   )
 done
 
 cat */R.PLT &gt; ALLR.PLT
 cat */L.PLT &gt; ALLL.PLT
-</pre>
-    <br>
-    <div style="text-align: center;">Last Changed November 8, 2024<br>
-    </div>
+</small></pre>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

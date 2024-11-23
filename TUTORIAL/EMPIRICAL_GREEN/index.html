@@ -1,23 +1,41 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials - do_mft </title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Phase velocity from do_mft</h2></header>
     <h2>Introduction</h2>
+<p>
+This documents the modification of <b>do_mft</b> and <b>sacmft96</b> to estimate phase velocities from empirical Green's functions.
+</p>
     <h2>Distribution</h2>
     <p>The sample data set and other scripts can be obtained by
       downloading <a href="Dist.tgz"> Dist.tgz</a> and then unpacking
-      with the command </p>
-    <pre>    gunzip -c Dist.tgz | tar xf -
-    cd EMPIRICAL_GREEN/DIST
+      with the command 
+<pre>
+gunzip -c Dist.tgz | tar xf -
+cd EMPIRICAL_GREEN/DIST
 </pre>
+</p>
     <p> In that folder you will find the following files:<br>
     </p>
-    <pre>EMPIRICAL_GREEN/DIST/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |--/RANDOM4/<br>                    |          |--DOIT            <br>                    |          |--MFTDOOVERLAY<br>                    |          |--PHVDOOVERLAY<br>                    |          |--DOCLEAN<br>                    |          |--CUS.mod<br>                    |<br>                    |--/EXAMPLE1/<br>                    |          |--DOSRF<br>                    |          |--MFTDOOVERLAY<br>                    |          |--PHVDOOVERLAY<br>                    |          |--DOCLEAN<br>                    |          |--SIUCBHZBLOBHZ.WSTK<br>                    |          |--CUS.mod <br>                    |<br>                    |--/EXAMPLE.GRN/<br>                               |--CUS.mod<br>                               |--DOIT<br>                               |--DOCLEAN<br></pre>
-    <h2>Sac Files</h2>
+<pre>EMPIRICAL_GREEN/DIST/<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |--/RANDOM4/<br>                    |          |--DOIT            <br>                    |          |--MFTDOOVERLAY<br>                    |          |--PHVDOOVERLAY<br>                    |          |--DOCLEAN<br>                    |          |--CUS.mod<br>                    |<br>                    |--/EXAMPLE1/<br>                    |          |--DOSRF<br>                    |          |--MFTDOOVERLAY<br>                    |          |--PHVDOOVERLAY<br>                    |          |--DOCLEAN<br>                    |          |--SIUCBHZBLOBHZ.WSTK<br>                    |          |--CUS.mod <br>                    |<br>                    |--/EXAMPLE.GRN/<br>                               |--CUS.mod<br>                               |--DOIT<br>                               |--DOCLEAN<br></pre>
+</p>
+    <h2>Sac files</h2>
+<p>
     In order to use Sac files that are not created by the Computer
     Programs in Seismology codes, one must be careful about the
     following header values:<br>
@@ -34,12 +52,13 @@
         amplitudes should not be used outside the acceptable bandpass
         region.</li>
     </ul>
+</p><p>
     If in doubt, look at the header values of the sample
     cross-correlation in the file SIUCBHZBLOBHZ.WSTK in
     EMPIRICAL_GREEN/DIST/EXAMPLE1<br>
     <h2>Theory</h2>
+<p>
     The detailed theory is given in <a href="MFT.pdf"> MFT.pdf</a><br>
-    <p>&nbsp; <br>
     </p>
     <h2>Program Usage</h2>
     <p>This discussion uses the files in the sub-directory
@@ -122,6 +141,7 @@
       <li>Finally, the sac files in POS1 and POS2 are read to create a
         map.</li>
     </ul>
+</p><p>
     The question arises as to why this is all done.&nbsp;&nbsp; The
     objective is to create a model based synthetic data set that can be
     used to mimic the data sets used in the cross-correlation of ground
@@ -160,6 +180,7 @@
     theoretical dispersion plots,&nbsp; the command <br>
     <br>
     <pre>do_mft -G -IG -T *.sym <br></pre>
+</p><p>
     leads to the following comparison plots:<br>
     <br>
     <img alt="groupd velocity" src="FIGURES/RANDOM4_1.png" height="638"
@@ -199,8 +220,11 @@
     syntax to a source with strike 0, dip 80n and rake 10, e.g., <br>
     <br>
     <blockquote>
-      <pre>#mt to ZNE AZ ${AZ2} BAZ ${BAZ2} FN $FN FE $FE FD $FD FILE $B<br>mt to ZNE AZ ${AZ2} BAZ ${BAZ2} STK 0 DIP 80 RAKE 10 MW 2  FILE $B<br><br></pre>
+<font size="2">
+<pre>#mt to ZNE AZ ${AZ2} BAZ ${BAZ2} FN $FN FE $FE FD $FD FILE $B<br>mt to ZNE AZ ${AZ2} BAZ ${BAZ2} STK 0 DIP 80 RAKE 10 MW 2  FILE $B<br><br></pre>
+</font>
     </blockquote>
+</p><p>
     Running <b>do_mft </b>with the same arguments, leads to the
     following images:<br>
     <br>
@@ -226,7 +250,7 @@
     Since the logic behind the scripts works, it is now possible to
     consider the effect of less-uniform source distribution on the
     stacks and the dispersion analysis.<br>
-    <br>
+    </p>
     <h3>Other cross-correlations</h3>
     <p>In running the script for MAXSRC=2500 and 20 subsources
       consisting of randomly directed forces, 9 inter-component
@@ -275,9 +299,9 @@
     <p>The whiten command with the zero-phase bandpass filter gives the
       same amplitude spectrum to both. The resultant plot is<br>
     </p>
-    <img alt="comaprison between synthetic and empirical Green"
-      src="FIGURES/EMPGRN.png" height="468" width="613">The <br>
-    <p>The .G are from the synthetics and the &gt;E are from the
+    <img alt="comparison between synthetic and empirical Green"
+      src="FIGURES/EMPGRN.png" height="468" width="613">
+<p>The  .G are from the synthetics and the &gt;E are from the
       cross-correlation. The waveform comparison is very good. The
       difference in absolute amplitude is no problem.&nbsp; <br>
       The demonstrates that synthetics can be generated to mimic the
@@ -308,6 +332,6 @@
       function of an arbitrary inhomogeneous medium by cross
       correlation, Phys. Rev. Lettrs. 93, 254301-1 - 254301-4.<br>
     </p>
-    <center>last changed November 8, 2013</center>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

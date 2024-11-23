@@ -1,14 +1,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Computer Programs in Seismology Tutorials</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8413900">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Hudson synthetics</h2></header>
+
 <H2>Introduction</H2>
 <P>This is a discussion of the use of the program <B>hudson96 </B>which
 was created from pieces of <B>hrftn96,</B> <B>hspec96p,</B> and
@@ -27,11 +36,13 @@ tutorial on the use of the program is on the tutorial page.<BR><BR><BR>
 (1969). A quantitative evaluation of seismic signals at teleseismic
 distances - II. Body waves and surface waves from an extended source,
 <I>Geophys. J. Roy. astr. Soc. </I><B>18</B>, 353-370.</P>
-<P><BR><BR>
 </P>
 <H2>Usage</H2>
 <P>The syntax of the program is given by the command <B>hudson96 -h </B>:</P>
-<PRE> USAGE: hudson96 [-TEL modeltel] [-SRC modelsrc] [-REC modlrec]  [ -HS hs ] [ -O offset ] [-P] [-S]  [-GCARC gcarc] [-DT dt] [-NPTS npts]  [-NOSRC] [-NOREC] [-NOTEL] [-?] [-h]
+<font size="2">
+<PRE> USAGE: hudson96 [-TEL modeltel] [-SRC modelsrc] [-REC modlrec]  
+          [ -HS hs ] [ -O offset ] [-P] [-S]  [-GCARC gcarc] [-DT dt] 
+          [ -NPTS npts]  [-NOSRC] [-NOREC] [-NOTEL] [-?] [-h]
  -TEL modeltel (default none) Earth velocity model
  -SRC modelsrc (default modeltel) Velocity model for source
  -REC modelrec (default modeltel) Velocity model for receiver
@@ -51,8 +62,12 @@ distances - II. Body waves and surface waves from an extended source,
  -h            Display this usage message
  The program creates the file hspec96.grn for hpulse96.
  The program creates the files hudsonsrc.mod and hudsonrec.mod,
- which are the complete models (model96 format) used for the src and rec regions from the surface to interior.
- these can be plotted using shwmod96.</PRE><P>
+ which are the complete models (model96 format) used for 
+ the src and rec regions from the surface to interior.
+ these can be plotted using shwmod96.
+</PRE>
+</font>
+</p><P>
 This program creates a file <I>hspec96.grn </I>which is used by
 <B>hpulse96 </B>to create a <I>file96 </I>time series file.</P>
 <H2>Test Runs</H2>
@@ -77,7 +92,7 @@ This program creates a file <I>hspec96.grn </I>which is used by
 	comparison  (Modified 19 MAR 2009)</B></FONT></A>
 	</P>
 </UL>
-<P><BR><BR>
-</P>
+</p>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

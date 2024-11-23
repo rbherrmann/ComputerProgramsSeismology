@@ -2,66 +2,60 @@
 <html>
   <head>
     <title>Computer Programs in Seismology Tutorials</title>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials -</title>
-    <style type="text/css">
-                h2.cjk { font-family: "Arial Unicode MS" }
-                h2.ctl { font-family: "Arial Unicode MS" }
-                h3.cjk { font-family: "Arial Unicode MS" }
-                h3.ctl { font-family: "Arial Unicode
-                                MS" }
-                h4.cjk { font-family: "Arial
-                                Unicode MS" }
-                h4.ctl { font-family: "Arial Unicode MS" }
-                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
-                pre.cjk { font-family: "Courier New", monospace }
-        </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1>
+<h2>Wave propagation for ocean floor observations</h2></header>
     <h2> DOPLTPNG </h2>
     <p> This script converts the CPS graphics PLT files to a PNG image
       using the ImageMagick <b>convert</b> tool. To use this enter a
       command like
       <br>
-    </p>
     <pre>
-
 DOPLTPNG PRS001.PLT
-
 </pre>
+    </p>
+<p>
     which will create a file with the name <i>PRS001.png</i>.<br>
     <br>
     The comments are given in the color red.<br>
-    <p></p>
-    <pre>#!/bin/sh
+    <br>
+    <pre><small>#!/bin/sh
 
 if [ $# -eq 0 ]
 then
-        echo "Usage:  DOPLTPNG CPS_plot_files   "                       <font color="#ff0000"> </font><font color="#cc0000"><font color="#ff0000">If no files are given on the command line,</font> </font>
-        echo "   as in "
-        echo "   DOPLTPNG PRS001.PLT"                                   <font size="+1" color="#ff0000"> </font><font color="#ff0000">print the command syntax.</font>
-        exit 0
+   echo "Usage:  DOPLTPNG CPS_plot_files "  #<font color="#ff0000"> If no files are given on the</font> </font>
+   echo "   as in "                         #<font color="#ff0000"> command line, print the  </font>
+   echo "   DOPLTPNG PRS001.PLT"            #<font color="#ff0000"> command syntax.</font>
+   exit 0
 fi
 
 for i 
 do
-B=`basename $i .PLT`                                                     <font color="#ff0000">For each file on the command line, strip off the .PLT</font>
-plotnps -F7 -W10 -EPS -K &lt; $i &gt; t.eps                                    <font color="#ff0000">Convert to an EPS with color</font>
-convert -trim t.eps -background white -alpha remove -alpha off ${B}.png  <font color="#ff0000">Use ImageMagick to force non-transparency and convert</font>
-rm t.eps                                                                 <font color="#ff0000">Clean up</font>
+B=`basename $i .PLT`                                                     
+plotnps -F7 -W10 -EPS -K &lt; $i &gt; t.eps                               
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png  
+rm t.eps                                                                
 done
+#<font color="0ff0000">For each file on the command line, strip off the .PLT</font>
+#<font color="0ff0000">Convert to an EPS with color</font>
+#<font color="0ff0000">Use ImageMagick to force non-transparency and convert to png </font>
+#<font color="#ff0000">and then clean up</font>
+</small>
 </pre>
-    <div style="text-align: center;">Last Changed November 8, 2024<br>
-    </div>
+</p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

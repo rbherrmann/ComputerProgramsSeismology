@@ -1,18 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>fdsnws_fetch</title>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>FDSN Fetch</h2></header>
     <h2>GEOFON access</h2>
     <p>Access to European data from GEOFON is made through the python
       program <b>fdsnws_fetch</b>. This program will permit one to
@@ -76,7 +80,29 @@ pre {
 href="https://github.com/iris-edu/stationxml-seed-converter/releases">https://github.com/iris-edu/stationxml-seed-converter/releases</a>,
       The usage of this is as follows:<br>
     </p>
-    <pre> rbh$ java -jar stationxml-seed-converter-2.1.3.jar -h<br>===============================================================<br>|                FDSN StationXML SEED Converter                |<br>|                        Version 2.1.3                         |<br>================================================================<br>Usage:<br>java -jar stationxml-seed-converter &lt;FILE&gt; [OPTIONS]<br>OPTIONS: <br>   --help or -h         : print this message<br>   --verbose            : change the verobsity level to info; info is printed to stderr<br>   --input              : input as a file or directory<br>   --output             : output file path and name<br>   --label              : specify label for use in B10<br>   --organization       : specify organization for use in B10<br>   --schema-update      : updates input stationxml from version 1.0 to version 1.1; extensions are removed<br>   --continue-on-error  : prints exceptions to stdout and processes next file<br>===============================================================<br><br></pre>
+<font size="2">
+<pre>
+ rbh$ java -jar stationxml-seed-converter-2.1.3.jar -h
+===============================================================
+|                FDSN StationXML SEED Converter                |
+|                        Version 2.1.3                         |
+================================================================
+Usage:
+java -jar stationxml-seed-converter &lt;FILE&gt; [OPTIONS]
+OPTIONS: 
+   --help or -h         : print this message
+   --verbose            : change the verobsity level to info; info is printed to stderr
+   --input              : input as a file or directory
+   --output             : output file path and name
+   --label              : specify label for use in B10
+   --organization       : specify organization for use in B10
+   --schema-update      : updates input stationxml from version 1.0 to version 1.1; 
+          extensions are removed
+   --continue-on-error  : prints exceptions to stdout and processes next file
+===============================================================
+</pre>
+</font>
+</p>
     <p><b>mseed2sac </b>is a program that converts miniSEED to Sac and
       optionally fills the Sac fields with station coordinates and
       component orientations. This is described at <a
@@ -88,39 +114,87 @@ href="https://github.com/iris-edu/stationxml-seed-converter/releases">https://gi
 
       v2.3 is the latest. To compile, do the following:<br>
     </p>
-    <pre><br>
-      gunzip -c mseed2sac-2.3.tar.gz| tar xf -
-      cd mseed2sac-2.3
-      make&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#ff0000">[Read the top of the Makefile */Makefile to
-                           set the enviroment for the compiler. This works for LINUX and MacOS]</font><br>
-      <font color="#ff0000">Then install mseed2sac to a bin directory in the PATH</font></pre>
-    <p>The syntax for using <b>mseed2sac </b>is the following:<br>
+<pre><br>
+gunzip -c mseed2sac-2.3.tar.gz| tar xf -
+cd mseed2sac-2.3
+make &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#ff0000">#[Read the top of the Makefile */Makefile to
+              # set the enviroment for the compiler. This 
+              # works for LINUX and MacOS]</font><br>
+<font color="#ff0000">Then install mseed2sac to a bin directory in the PATH</font></pre>
+</p>
+<p>The syntax for using <b>mseed2sac </b>is the following:<br>
     </p>
-    <pre>rbh$ mseed2sac -H<br>mseed2sac version: 2.3<br><br>Convert miniSEED data to SAC<br><br>Usage: mseed2sac [options] input1.mseed [input2.mseed ...]<br><br> ## Options ##<br> -V             Report program version<br> -h             Show this usage message<br> -H             Print an extended usage message<br> -v             Be more verbose, multiple flags can be used<br> -O             Overwrite existing output files, default creates new file names<br><br> -k lat/lon     Specify station coordinates as 'Latitude/Longitude' in degrees<br> -m metafile    File containing channel metadata (coordinates and more)<br> -M metaline    Channel metadata, same format as lines in metafile<br> -msi           Convert component inclination/dip from SEED to SAC convention<br> -E event       Specify event parameters as 'Time[/Lat][/Lon][/Depth][/Name]'<br>                  e.g. '2006,123,15:27:08.7/-20.33/-174.03/65.5/Tonga'<br> -l selectfile  Read a list of selections from file, used for subsetting<br><br> -f format      Specify SAC file format (default is 2:binary):<br>                  1=alpha, 2=binary (host byte order),<br>                  3=binary (little-endian), 4=binary (big-endian)<br><br> More options are available, to see their description use the -H option<br><br> -N network     Specify the network code, overrides any value in the SEED<br> -S station     Specify the station code, overrides any value in the SEED<br> -L location    Specify the location code, overrides any value in the SEED<br> -C channel     Specify the channel code, overrides any value in the SEED<br> -r bytes       Specify SEED record length in bytes, autodetected by default<br> -i             Process each input file individually instead of merged<br> -ic            Process each channel individually, data should be well ordered<br> -dr            Use the sampling rate derived from the time stamps instead<br>                  of the sample rate denoted in the input data<br> -z zipfile     Write all SAC files to a ZIP archive, use '-' for stdout<br> -z0 zipfile    Same as -z but do not compress archive entries<br></pre>
+<font size="2">
+<pre>rbh$ mseed2sac -H
+mseed2sac version: 2.3
+<br>Convert miniSEED data to SAC
+<br>Usage: mseed2sac [options] input1.mseed [input2.mseed ...]
+<br> ## Options ##
+ -V             Report program version
+ -h             Show this usage message
+ -H             Print an extended usage message
+ -v             Be more verbose, multiple flags can be used
+ -O             Overwrite existing output files, default creates new file names
+<br> -k lat/lon     Specify station coordinates as 'Latitude/Longitude' in degrees
+ -m metafile    File containing channel metadata (coordinates and more)
+ -M metaline    Channel metadata, same format as lines in metafile
+ -msi           Convert component inclination/dip from SEED to SAC convention
+ -E event       Specify event parameters as 'Time[/Lat][/Lon][/Depth][/Name]'
+                  e.g. '2006,123,15:27:08.7/-20.33/-174.03/65.5/Tonga'
+ -l selectfile  Read a list of selections from file, used for subsetting
+<br> -f format      Specify SAC file format (default is 2:binary):
+                  1=alpha, 2=binary (host byte order),
+                  3=binary (little-endian), 4=binary (big-endian)
+<br> More options are available, to see their description use the -H option
+<br> -N network     Specify the network code, overrides any value in the SEED
+ -S station     Specify the station code, overrides any value in the SEED
+ -L location    Specify the location code, overrides any value in the SEED
+ -C channel     Specify the channel code, overrides any value in the SEED
+ -r bytes       Specify SEED record length in bytes, autodetected by default
+ -i             Process each input file individually instead of merged
+ -ic            Process each channel individually, data should be well ordered
+ -dr            Use the sampling rate derived from the time stamps instead
+                  of the sample rate denoted in the input data
+ -z zipfile     Write all SAC files to a ZIP archive, use '-' for stdout
+ -z0 zipfile    Same as -z but do not compress archive entries
+</pre>
+</font>
+</p>
     <p>This is useful if one is just interested in the Sac files and not
       the responses. Consider the following example which gets the
       miniSEED from a data center, and also gets the information on the
-      channels. <br>
+      channels. 
+
     </p>
-    <pre><br><br>fdsnws_fetch -N '*' -S 'KIP' -L '*' -C 'LHZ' -s "2010-02-27T07:00:00Z" -e "2010-02-27T08:00:00Z" -v -o data.mseed<br>fdsnws_fetch -N '*' -S 'KIP' -L '*' -C '*' -s "2010-02-27T07:00:00Z" -e "2010-02-27T08:00:00Z" -y station -q format=text -q level=channel  -v -o channel.txt<br>mseed2sac -f 3 data.mseed -m channel.txt<br></pre>
+<font size="2">
+<pre>fdsnws_fetch -N '*' -S 'KIP' -L '*' -C 'LHZ' -s "2010-02-27T07:00:00Z" \
+   -e "2010-02-27T08:00:00Z" -v -o data.mseed
+fdsnws_fetch -N '*' -S 'KIP' -L '*' -C '*' -s "2010-02-27T07:00:00Z" \
+   -e "2010-02-27T08:00:00Z" -y station -q format=text -q level=channel -v -o channel.txt
+mseed2sac -f 3 data.mseed -m channel.txt
+</pre>
+</font>
+</p>
     <p><br>
       Running these commands in with the following script <a
         href="KIPExample/DOIT">KIPExample/DOIT</a> give the following
       image producted by <b>gsac</b>:
-      <br>
-      <table>
-        <tbody>
-          <tr>
-            <td><img src="KIPExample/P001.png&quot;"></td>
-          </tr>
-        </tbody>
-      </table>
-      <br>
+<br>
+<table>
+<tbody>
+<tr>
+<td><img src="KIPExample/P001.png"></td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>
       and an examination of the headers using <b>gsac</b> shows that
       the desired fields are set in the Sac files:
       <br>
     </p>
-    <pre> rbh$ gsac
+<font size="2">
+<pre> rbh$ gsac
 GSAC - Computer Programs in Seismology [V1.1.61 30 OCT 2022]
        Copyright 2004-2022 R. B. Herrmann
 GSAC&gt; rh *SAC
@@ -136,6 +210,7 @@ G.KIP.10.LHZ.Q.2010.058.070000.SAC (1):
       CMPINC                     0
 GSAC&gt; 
 </pre>
+</font>
     <h2>Examples of using fdsnws_fetch</h2>
     <p>An alternative to using <b>mseed2sac</b> is to use the
       datalessSEED created from the FDSNstation.xml using the <b>stationxml-seed-converter-2.1.3.jar</b>,
@@ -159,8 +234,29 @@ GSAC&gt;
       Orig directory, and the results are placed in the parallel Sac
       directory.&nbsp; <br>
     </p>
-    <pre><b>#!/bin/sh<br>set -x<br>START="2022-11-02T01:23:45"</b><br><b><b>EMD="2022-11-02T01:23:45"</b>
-for NET in AC BS BW CH CR FR GE GR HL HT HU II IU MN OE OX PL RO SJ SX TH SL SK CZ<br>do<br>fdsnws_fetch -N ${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}    -v -o ${NET}.data.mseed<br>fdsnws_fetch -N ${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END} -y station -q level=response    -v -o ${NET}.station.xml<br>#####<br>#    convert station xml to dataless<br>#####<br><br>java -jar ~/bin/stationxml-seed-converter-2.1.0.jar --input ${NET}.station.xml --output ${NET}.dataless<br>(cd ../Sac<br>rdseed -f ../Orig/${NET}.data.mseed -g ../Orig/\${NET}.dataless -p -o -d 1<br>)<br><br>done<br>EOG<br></b><br></pre>
+<font size="2">
+<pre>#!/bin/sh
+set -x
+START="2022-11-02T01:23:45"
+EMD="2022-11-02T01:23:45"</b>
+for NET in AC BS BW CH CR FR GE GR HL HT HU II IU MN OE OX PL RO SJ SX TH SL SK CZ
+do
+fdsnws_fetch -N ${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}\
+         -v -o ${NET}.data.mseed
+fdsnws_fetch -N ${NET} -S '*' -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}\
+         -y station -q level=response    -v -o ${NET}.station.xml
+#####
+#    convert station xml to dataless
+#####
+java -jar ~/bin/stationxml-seed-converter-2.1.0.jar --input ${NET}.station.xml \
+         --output ${NET}.dataless
+(cd ../Sac
+rdseed -f ../Orig/${NET}.data.mseed -g ../Orig/\${NET}.dataless -p -o -d 1
+done
+EOG
+</pre>
+</font>
+</p>
     <p>The disadvantage of this script is that one must know the
       location of stations belonging to particular networks and edit the
       <b>for NET in&nbsp; </b>line to select only those stations of
@@ -191,8 +287,145 @@ for NET in AC BS BW CH CR FR GE GR HL HT HU II IU MN OE OX PL RO SJ SX TH SL SK 
     </p>
     <p>The download of the miniSEED is quite fast. The <b>DOFDSNQUERY </b>script
       is given here:<br>
+<font size="2">
+<pre>
+#!/bin/sh
+<br>#####
+#    attempt to clone syntax of the USGS CWBqeury 
+#    for use with the GEOFON fdsnws_fetch
+#    One difference is that CWBquery will provide data
+#    in sac format and sac pole-zero format for stations 
+#    within a rabge of distances of a given latitude and longitude
+#    This will be done in software here
+#
+#    For everything to work, we need the Computer Programs in Seismology redodate
+#    and the IRIS mseed2sac
+#
+#    Finally the variables DURATION which is the number of seconds after origin time
+#    and DEG which is the outer radius of the search region and OFFSET which is the
+#    number of seconds before the origin time are set in this
+#    script. Just modify these values as required
+#####
+<br>if [ $# -ne 11 ]
+then
+echo DOFDSNQUERY YEAR MO DY HR MN SC MSC  LAT   LON   DEP MAG
+echo DOFDSNQUERY 2022 11 09 06 07 27 000 43.93 13.31 10.0 5.8
+	echo $*
+	exit 0
+fi
+<br>#####
+#    convert command line parameters to variable names
+#####
+YEAR="${1}"
+MO="${2}"
+DY="${3}"
+HR="${4}"
+MN="${5}"
+SEC="${6}"
+MSEC="${7}"
+LAT="${8}"
+LON="${9}"
+DEP="${10}"
+MAG="${11}"
+
+
+#####
+#    define search parameters
+#    The script finds all stations within DEG degrees of the coordinate (LAT,LON)
+#    The time window of the data download is
+#    ORIGIN_TIME - OFFSET to ORIGIN_TIME + DURATION seconds, where the
+#    ORIGIN_TIME = YEAR MO DY HR MN SEC MSEC
+#
+#    These values can be changed by the user
+#####
+DEG=4.0
+DURATION=300
+OFFSET=-60
+
+#####
+#    define the start and end dates in the format required by fdsnws_fetch
+#    redodate is part of the Computer Programs in Seismology package
+#####
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${OFFSET} | \
+       awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} | \
+       awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ",$1,$2,$3,$4,$5,$6}' `
+
+echo $START
+echo $END
+
+set -x
+#####
+#    get a list of stations within the search region
+#    station.txt is not used later, but may be of interest
+#    channel.txt is the file that is used by mseed2sac to put station/channel 
+#    parameters into the Sac file headers.
+#    channel.txt will be used here to define the network-station-channel 
+#    to be downloaded.
+#
+#    Note this use of fdsnws_fetch permits a geographical search indicated by 
+#    the last part of the query
+#####
+fdsnws_fetch -N '*' -S '*' -L '*' -C 'BH*,HH*' -s "${START}" -e "${END}" -y station \
+       -q level=station -v -o station.txt -q format=text -q latitude="${LAT}" \
+       -q longitude="${LON}" -q maxradius="${DEG}"
+fdsnws_fetch -N '*' -S '*' -L '*' -C 'BH*,HH*' -s "${START}" -e "${END}" -y station \
+       -q level=channel -v -o channel.txt -q format=text -q latitude="${LAT}" \
+       -q longitude="${LON}" -q maxradius="${DEG}"
+
+#####
+# Typical contents of channel.txt
+#
+#Network|Station|Location|Channel|Latitude|Longitude|Elevation|Depth|Azimuth|Dip|
+#       SensorDescription|Scale|ScaleFreq|ScaleUnits|SampleRate|StartTime|EndTime
+#GE|MARCO||BHE|40.29724|15.80632|933.0|1.0|90.0|0.0|GFZ:GE1993:STS-2.5/g=1500
+#       |629145000.0|0.02|M/S|20.0|2021-06-04T00:00:00|
+#GE|MARCO||BHN|40.29724|15.80632|933.0|1.0|0.0|0.0|GFZ:GE1993:STS-2.5/g=1500
+#       |629145000.0|0.02|M/S|20.0|2021-06-04T00:00:00|
+#
+#####
+# make a simple tabulation without the | separators for use with bash while loop
+#####
+cat channel.txt | grep -vi Network  | \
+    awk 'BEGIN { FS = "|" } ;{if($3 == "") LOC="ND" ; else LOC=$3 ;\
+    print $1, $2, LOC, $4, $5, $6, $7 }' &gt; plist
+#####
+#GE MARCO ND BHE 40.29724 15.80632 933.0
+#GE MARCO ND BHN 40.29724 15.80632 933.0
+#GE MARCO ND BHZ 40.29724 15.80632 933.0
+#####
+# now for each network station pair get components. We only need the NET STA CMP codes
+# It is assumed that the adjacent directory ../Sac exists. 
+#####
+while read NET STA LOC  CMP LAT LON ELEV
+do
+   fdsnws_fetch -N ${NET} -S ${STA} -L '*' -C 'BH*,HH*' -s ${START}  -e ${END} \
+       -v -o ${NET}.${STA}.data.mseed
+   fdsnws_fetch -N ${NET} -S ${STA} -L '*' -C 'BH*,HH*' -s ${START}  -e ${END} \
+       -y station -q level=response    -v -o ${NET}.${STA}.station.xml
+   #####
+   #    convert station xml to dataless
+   #####
+
+   java -jar ~/bin/stationxml-seed-converter-2.1.0.jar \
+       --input ${NET}.${STA}.station.xml --output ${NET}.${STA}.dataless
+   (cd ../Sac
+   rdseed -f ../Orig/${NET}.${STA}.data.mseed -g ../Orig/${NET}.${STA}.dataless \
+       -p -R -o -d 1
+   )
+
+   #
+done &lt; plist
+
+#####
+#    The ../Sac directory will now contain files such as
+#    2022.113.02.19.29.6800.GE.MARCO..HHZ.D.SAC
+#    RESP.GE.MARCO..HHZ
+#    SAC_PZs_GE_MARCO_HHZ__2021.155.00.00.00.0000_2599.365.23.59.59.99999
+#####
+</pre>
+</font>
     </p>
-    <pre>#!/bin/sh<br><br>#####<br>#    attempt to clone syntax of the USGS CWBqeury <br>#    for use with the GEOFON fdsnws_fetch<br>#    One difference is that CWBquery will provide data<br>#    in sac format and sac pole-zero format for stations <br>#    within a rabge of distances of a given latitude and longitude<br>#    This will be done in software here<br>#<br>#    For everything to work, we need the Computer Programs in Seismology redodate<br>#    and the IRIS mseed2sac<br>#<br>#    Finally the variables DURATION which is the number of seconds after origin time<br>#    and DEG which is the outer radius of the search region and OFFSET which is the<br>#    number of seconds before the origin time are set in this<br>#    script. Just modify these values as required<br>#####<br><br>if [ $# -ne 11 ]<br>then<br>echo DOFDSNQUERY YEAR MO DY HR MN SC MSC  LAT   LON   DEP MAG<br>echo DOFDSNQUERY 2022 11 09 06 07 27 000 43.93 13.31 10.0 5.8<br>	echo $*<br>	exit 0<br>fi<br><br>#####<br>#    convert command line parameters to variable names<br>#####<br>YEAR="${1}"<br>MO="${2}"<br>DY="${3}"<br>HR="${4}"<br>MN="${5}"<br>SEC="${6}"<br>MSEC="${7}"<br>LAT="${8}"<br>LON="${9}"<br>DEP="${10}"<br>MAG="${11}"<br><br><br>#####<br>#    define search parameters<br>#    The script finds all stations within DEG degrees of the coordinate (LAT,LON)<br>#    The time window of the data download is<br>#    ORIGIN_TIME - OFFSET to ORIGIN_TIME + DURATION seconds, where the<br>#    ORIGIN_TIME = YEAR MO DY HR MN SEC MSEC<br>#<br>#    These values can be changed by the user<br>#####<br>DEG=4.0<br>DURATION=300<br>OFFSET=-60<br><br>#####<br>#    define the start and end dates in the format required by fdsnws_fetch<br>#    redodate is part of the Computer Programs in Seismology package<br>#####<br>START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${OFFSET} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ",$1,$2,$3,$4,$5,$6}' `<br>END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ",$1,$2,$3,$4,$5,$6}' `<br><br>echo $START<br>echo $END<br><br>set -x<br>#####<br>#    get a list of stations within the search region<br>#    station.txt is not used later, but may be of interest<br>#    channel.txt is the file that is used by mseed2sac to put station/channel parameters into the Sac file headers.<br>#    channel.txt will be used here to define the network-station-channel to be downloaded.<br>#<br>#    Note this use of fdsnws_fetch permits a geographical search indicated by the last part of the query<br>#####<br>fdsnws_fetch -N '*' -S '*' -L '*' -C 'BH*,HH*' -s "${START}" -e "${END}" -y station -q level=station -v -o station.txt -q format=text -q latitude="${LAT}" -q longitude="${LON}" -q maxradius="${DEG}"<br>fdsnws_fetch -N '*' -S '*' -L '*' -C 'BH*,HH*' -s "${START}" -e "${END}" -y station -q level=channel -v -o channel.txt -q format=text -q latitude="${LAT}" -q longitude="${LON}" -q maxradius="${DEG}"<br><br>#####<br># Typical contents of channel.txt<br>#<br>#Network|Station|Location|Channel|Latitude|Longitude|Elevation|Depth|Azimuth|Dip|SensorDescription|Scale|ScaleFreq|ScaleUnits|SampleRate|StartTime|EndTime<br>#GE|MARCO||BHE|40.29724|15.80632|933.0|1.0|90.0|0.0|GFZ:GE1993:STS-2.5/g=1500|629145000.0|0.02|M/S|20.0|2021-06-04T00:00:00|<br>#GE|MARCO||BHN|40.29724|15.80632|933.0|1.0|0.0|0.0|GFZ:GE1993:STS-2.5/g=1500|629145000.0|0.02|M/S|20.0|2021-06-04T00:00:00|<br>#<br>#####<br># make a simple tabulation without the | separators for use with bash while loop<br>#####<br>cat channel.txt | grep -vi Network  | awk 'BEGIN { FS = "|" } ;{if($3 == "") LOC="ND" ; else LOC=$3 ;print $1, $2, LOC, $4, $5, $6, $7 }' &gt; plist<br>#####<br>#GE MARCO ND BHE 40.29724 15.80632 933.0<br>#GE MARCO ND BHN 40.29724 15.80632 933.0<br>#GE MARCO ND BHZ 40.29724 15.80632 933.0<br>#####<br># now for each network station pair get components. We only need the NET STA CMP codes<br># It is assumed that the adjacent directory ../Sac exists. <br>#####<br>while read NET STA LOC  CMP LAT LON ELEV<br>do<br>	fdsnws_fetch -N ${NET} -S ${STA} -L '*' -C 'BH*,HH*' -s ${START}  -e ${END}    -v -o ${NET}.${STA}.data.mseed<br>	fdsnws_fetch -N ${NET} -S ${STA} -L '*' -C 'BH*,HH*' -s ${START}  -e ${END} -y station -q level=response    -v -o ${NET}.${STA}.station.xml<br>	#####<br>	#    convert station xml to dataless<br>	#####<br><br>	java -jar ~/bin/stationxml-seed-converter-2.1.0.jar --input ${NET}.${STA}.station.xml --output ${NET}.${STA}.dataless<br>	(cd ../Sac<br>	rdseed -f ../Orig/${NET}.${STA}.data.mseed -g ../Orig/${NET}.${STA}.dataless -p -R -o -d 1<br>	)<br><br>	#<br>done &lt; plist<br><br>#####<br>#    The ../Sac directory will now contain files such as<br>#    2022.113.02.19.29.6800.GE.MARCO..HHZ.D.SAC<br>#    RESP.GE.MARCO..HHZ<br>#    SAC_PZs_GE_MARCO_HHZ__2021.155.00.00.00.0000_2599.365.23.59.59.99999<br>#####<br></pre>
     <p>As mentioned, getting the responses is tiem consuming. It is not
       possible to use the geographic search for the responses. Thus
       created a response directory, and updating it peridocally may be
@@ -201,5 +434,6 @@ for NET in AC BS BW CH CR FR GE GR HL HT HU II IU MN OE OX PL RO SJ SX TH SL SK 
     <p></p>
     <p>
     </p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

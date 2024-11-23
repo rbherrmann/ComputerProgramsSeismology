@@ -1,15 +1,29 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Computer Programs in Seismology - Lesson B</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body bgcolor="#ffffff">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Surface wave synthetics and phase velocity</h2></header>
 <h2>Introduction</h2>
+<p>
 This lesson creates some synthetic seismograms by surface wave model
 superposition. The user is requested to determine the phase velocities
 through the use of the interactive program do_pom. The observed
-dispersion is then compared to the theoretical values from the model.<br>
-<br>
+dispersion is then compared to the theoretical values from the model.
+</p><p>
 I
 create the directory <span style="font-weight: bold;">LessonB&nbsp;
 </span><span style="color: rgb(0, 0, 0);">and</span> <span
@@ -17,8 +31,8 @@ create the directory <span style="font-weight: bold;">LessonB&nbsp;
  style="text-decoration: underline;"><a href="DOIT">DOIT</a></span>,&nbsp;
 and&nbsp;<a href="DOCLEAN">DOCLEAN </a><span style="font-weight: bold;"></span><span
  style="font-weight: bold;"> </span>in
-that directory. <br>
-<br>
+that directory. 
+</p><p>
 For testing everything is in the tarball&nbsp; <a href="LessonB.tgz">LessonB.tgz</a>
 . Unpack this with the command <span style="font-weight: bold;"><span
  style="font-style: italic;">gunzip -c LessonB.tgz | tar xvf
@@ -30,21 +44,23 @@ LessonB and place the file <span style="font-style: italic;"><span
 </span></span>in that directory.<br>
 <br>
 <h2>DOIT</h2>
+<p>
 When you run this script, surface-modal superposition is used to create
 a synthetic seismograms at a distances of 2500-2850&nbsp; km in 50 km
 increments for a source with a
 depth of 10 km and with a faulting model of strike=45, rake=45 and
 dip=45. For this source depth mechanism, the Rayleigh wave signal
-is simple in that the fundamental model spectrum is smooth.<br>
-<br>
+is simple in that the fundamental model spectrum is smooth.
+</p><p>
 </span><span style="color: rgb(0, 0, 0);"></span>
-<h3>Phase Velocity Analysis<br>
-</h3>
+<h3>Phase Velocity Analysis </h3>
+<p>
 <span style="color: rgb(0, 0, 0);">After the synthetics are computed
 the program <span style="font-weight: bold;">do_pom </span>is started
 using the command<br>
 </span><span style="color: rgb(0, 0, 0);"></span>
 <pre>	&gt; do_pom B*Z00.sac<br><br></pre>
+</p><p>
 to study the Rayleigh wave dispersion. You will see the following
 graphical menu:<br>
 <br>
@@ -97,6 +113,7 @@ the next figure.<br>
 <br>
 <br>
 <h3>Comparison with Theory</h3>
+<p>
 The shell script now compares the selected dispersion to the
 theoretical dispersion for the model. This is a very useful exercise
 since we can learn something about the imperfections of the multiple
@@ -119,11 +136,9 @@ Wave Comparison<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 509px; height: 474px;" alt="slegnc.png" src="slegnc.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img src="slegnc.png">
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 509px; height: 475px;" alt="regenc.png" src="sregnc.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img src="sregnc.png">
       </td>
     </tr>
   </tbody>
@@ -131,25 +146,21 @@ Wave Comparison<br>
 <br>
 We see that the phase velocities are well determined at all
 periods. <br>
-<br>
-<br>
 <span style="color: rgb(0, 0, 0);">
 <h2>Cleanup</h2>
+<p>
 After you are done testing these programs, enter <span
  style="font-weight: bold;">DOCLEAN</span> to clean up the directory.
 You will be left only with the <span style="font-style: italic;">00README,
 DOIT and DOCLEAN</span> files.<br>
 </span><span style="color: rgb(0, 0, 0);"></span>
 <h2>Other Tests</h2>
+<p>
 Modify the script so that the source depth is 30 km, the faulting
 mechanism has strike 0, dip 90 and rake 0.&nbsp; Then run the script.
 In this case you will notice that the Rayleigh wave signal on the
 vertical and radial components has a spectral hole. See if this affects
 the phase velocity determination.<br>
-<br>
-<br>
-<span style="color: rgb(0, 0, 0);"><br>
-<br>
-</span>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

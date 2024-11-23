@@ -1,12 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Finite Fault Synthetics -Computer Programs in Seismology
-      Tutorials</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Static deformation from finite fault</h2></header>
     <a name="TOP"></a>
     <p>
     </p>
@@ -24,9 +34,10 @@
     </ul>
     <a name="SEC01"></a>
     <h2>Introduction</h2>
+<p>
     The USGS NEIC provides Finite Fault Models for larger earthquakes.
-    An example of this is at <a
-href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php">http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php</a>.
+    An example of this was once  at 
+<i>http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php</i>, but this link has been superceded by another presentation.</p>
     <p> This tutorial shows how to use the Computer Programs in
       Seismology codes to compute the static deformation for a given
       finite fault model.<br>
@@ -35,7 +46,7 @@ href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_
     <h2>Theory</h2>
     <p>The solution for static deformation in a wholespace, halfspace
       and a layer isotropic media are given in the file <a
-        href="static.pdf">static.pdf</a>.<br>
+        href="static.pdf">static.pdf</a>.</p><p>
       Two program are used: <b>hsanal96</b> and <b>hstat96</b>. The
       first is used for the special problem of an observation point
       anywhere within an isotropic halfspace or at the surface of an
@@ -53,44 +64,86 @@ href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_
     <p>The sequence of running these two programs is as simple as
       running&nbsp;&nbsp; <b>hspec96</b>:<br>
     </p>
-    <blockquote>
-      <blockquote>
-        <pre><b>hprep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH<br>hsanal96<br><br>hprep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH<br>hstat96<br></b><br></pre>
-      </blockquote>
-    </blockquote>
-    which is the sequence same sequence as for running <b>hspec96</b>.
+<pre>
+prep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH
+hsanal96
+
+hprep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH
+hstat96<br>
+</pre>
+</p><p>
+    which is the same sequence as for running <b>hspec96</b>.
     There are two differences though. First the <b>hspec96</b>&nbsp;creates
     the output file hspec96.grn which is then convolved with the source
     time function to create the ASCII file in the file96 format, e.g.,<br>
-    <blockquote>
-      <blockquote>
-        <pre><b>hpulse96 -p -V -l 1 &gt; file96</b><br></pre>
-      </blockquote>
-    </blockquote>
+        <pre>hpulse96 -p -V -l 1 &gt; file96</pre>
+</p><p>
+</p><p>
     Since the static deformation is just a single point, the <b>hstat96</b>
     and <b>hsanal96</b>&nbsp; directly create an output named <i>file96</i>.
     The other difference is that both programs accept a <i>-V </i>command
     line flag. The interesting part of the output is the following:<br>
     <br>
-    <table cellpadding="2" cellspacing="2" width="100%" border="1">
-      <tbody>
-        <tr>
+<table cellpadding="2" cellspacing="2" width="100%" border="1">
+<tbody>
+<tr>
           <td align="center" valign="top"><b>hsanal96</b><br>
           </td>
+</tr>
+<tr>
+<td align="center" valign="top">
+<pre>
+ TSTATIC:           1 ZDD           1 -1.41254714E-06
+ TSTATIC:           2 RDD           2 -2.82509382E-06
+ TSTATIC:           3 ZDS           3 -4.84096199E-06
+ TSTATIC:           4 RDS           4 -9.68192307E-06
+ TSTATIC:           5 TDS          13 -1.31267000E-13
+ TSTATIC:           6 ZSS           5  2.73420915E-06
+ TSTATIC:           7 RSS           6  9.77280888E-06
+ TSTATIC:           8 TSS          14 -1.92498214E-06
+ TSTATIC:           9 ZEX           7  2.01586749E-06
+ TSTATIC:          10 REX           8  4.03173499E-06
+ TSTATIC:          11 ZVF           9 -1.71420732E-04
+ TSTATIC:          12 RVF          10 -7.14882117E-05
+ TSTATIC:          13 ZHF          11  9.19448121E-06
+ TSTATIC:          14 RHF          12  1.97109504E-04
+ TSTATIC:          15 THF          15 -1.35676630E-04
+</pre>
+          </td>
+        </tr>
+</tbody>
+</table>
+</p><p>
+<table>
+<tbody>
+<tr>
           <td align="center" valign="top"><b>hstat96</b><br>
           </td>
-        </tr>
-        <tr>
-          <td align="center" valign="top">
-            <pre> TSTATIC:           1 ZDD           1 -1.41254714E-06<br> TSTATIC:           2 RDD           2 -2.82509382E-06<br> TSTATIC:           3 ZDS           3 -4.84096199E-06<br> TSTATIC:           4 RDS           4 -9.68192307E-06<br> TSTATIC:           5 TDS          13 -1.31267000E-13<br> TSTATIC:           6 ZSS           5  2.73420915E-06<br> TSTATIC:           7 RSS           6  9.77280888E-06<br> TSTATIC:           8 TSS          14 -1.92498214E-06<br> TSTATIC:           9 ZEX           7  2.01586749E-06<br> TSTATIC:          10 REX           8  4.03173499E-06<br> TSTATIC:          11 ZVF           9 -1.71420732E-04<br> TSTATIC:          12 RVF          10 -7.14882117E-05<br> TSTATIC:          13 ZHF          11  9.19448121E-06<br> TSTATIC:          14 RHF          12  1.97109504E-04<br> TSTATIC:          15 THF          15 -1.35676630E-04<br></pre>
+</tr>
+<tr>
+<td align="center" valign="top">
+<pre>
+ HSTATIC:           1 ZDD           1 -1.41254611E-06
+ HSTATIC:           2 RDD           2 -2.82509268E-06
+ HSTATIC:           3 ZDS           3 -4.84096336E-06
+ HSTATIC:           4 RDS           4 -9.68191762E-06
+ HSTATIC:           5 TDS          13  1.58707737E-13
+ HSTATIC:           6 ZSS           5  2.73421119E-06
+ HSTATIC:           7 RSS           6  9.77280979E-06
+ HSTATIC:           8 TSS          14 -1.92498396E-06
+ HSTATIC:           9 ZEX           7  2.01586795E-06
+ HSTATIC:          10 REX           8  4.03173590E-06
+ HSTATIC:          11 ZVF           9 -1.71379419E-04
+ HSTATIC:          12 RVF          10 -7.14995622E-05
+ HSTATIC:          13 ZHF          11  9.18313890E-06
+ HSTATIC:          14 RHF          12  1.97061323E-04
+ HSTATIC:          15 THF          15 -1.35628448E-04
+</pre>
           </td>
-          <td align="center" valign="top">
-            <pre> HSTATIC:           1 ZDD           1 -1.41254611E-06<br> HSTATIC:           2 RDD           2 -2.82509268E-06<br> HSTATIC:           3 ZDS           3 -4.84096336E-06<br> HSTATIC:           4 RDS           4 -9.68191762E-06<br> HSTATIC:           5 TDS          13  1.58707737E-13<br> HSTATIC:           6 ZSS           5  2.73421119E-06<br> HSTATIC:           7 RSS           6  9.77280979E-06<br> HSTATIC:           8 TSS          14 -1.92498396E-06<br> HSTATIC:           9 ZEX           7  2.01586795E-06<br> HSTATIC:          10 REX           8  4.03173590E-06<br> HSTATIC:          11 ZVF           9 -1.71379419E-04<br> HSTATIC:          12 RVF          10 -7.14995622E-05<br> HSTATIC:          13 ZHF          11  9.18313890E-06<br> HSTATIC:          14 RHF          12  1.97061323E-04<br> HSTATIC:          15 THF          15 -1.35628448E-04<br></pre>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <br>
+</tr>
+</tbody>
+</table>
+</p><p>
     The purpose of this output is to compare the analytic results on the
     left to the numerical integration results on the right for each of
     the basic Greens functions. This test case was for a source at a
@@ -100,6 +153,7 @@ href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_
     <p><a href="#TOP">Top of Page</a></p>
     <a name="SEC03"></a>
     <h2>Download</h2>
+<p>
     To run the simulations, you will need the following:
     <ul>
       <li>A velocity model in the CPS model96 format. </li>
@@ -113,8 +167,9 @@ href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_
     <h2>Setting up the test runs</h2>
     <p> Unpack the <i>DOSTATIC.tgz</i> using the commands: </p>
     <p> </p>
-    <pre>	gunzip -c DOSTATIC.tgz | tar xvf -
+    <pre>gunzip -c DOSTATIC.tgz | tar xvf -
 </pre>
+</p>
     <p> This will create the following directory structure: </p>
     <pre>STATIC_TEST-|
             |-FINITE_1
@@ -125,6 +180,7 @@ href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_
             |
             |-FINITE_4
 </pre>
+</p><p>
     In each sub-directory there will be an executable shell script named
     DOIT. This shell script computes the static deformation of a finite
     fault model and then plots a contour map.
@@ -164,30 +220,19 @@ href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_
     <h2>Example </h2>
     <p>The example uses the finite fault solution for the <a
 href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_finite-fault">M7.7
-
-
-
         - 83km E of Khash, Iran (2013-04-16 10:44:20 UTC) earthquake.</a>&nbsp;
-
-
-
       We use the "Subfault Format" as the data file for the simulation.
       The following three figures present the finite fault solution
       (left) and the projection of the slip distribution onto topography
       (center) and&nbsp; INSAR image (right).<br>
     </p>
     <p>
-      <table height="484" width="880">
+      <table>
         <tbody>
           <tr>
-            <td valign="top"><img alt="Slip distribution"
-                src="TEST0_FIG/b000g7x7_slip.png" height="419"
-                width="480"></td>
-            <td valign="top"><img alt="map view"
-                src="TEST0_FIG/b000g7x7_base.png" height="419"
-                width="384"></td>
-            <td valign="top"><img alt="map view"
-                src="TEST0_FIG/insar.png" height="419" width="384"></td>
+            <td valign="top"><img alt="Slip distribution" src="TEST0_FIG/b000g7x7_slip.png" ></td>
+            <td valign="top"><img alt="map view" src="TEST0_FIG/b000g7x7_base.png" "></td>
+            <td valign="top"><img alt="map view" src="TEST0_FIG/insar.png" ></td>
           </tr>
         </tbody>
       </table>
@@ -204,20 +249,17 @@ href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_fini
       <tbody>
         <tr align="center">
           <td colspan="2" rowspan="1" align="left" valign="top">
-            <blockquote>
-              <blockquote>Vertical deformation (cm) for the halfspace
-                model. The left&nbsp; shows the result of using the
-                analytic solution <b>hsanal96</b> while<br>
-                the right column gives the solution using the propagator
-                matrices and numerical wavenumber integration using<br>
-                <b>hstat96</b>.&nbsp;&nbsp; The results are
-                identical.&nbsp; The upper and lower panels compare the
-                <b>xyz2grd </b>and <b>surface</b> output respectively.<br>
-                Because the grid sampling interval was 0.25 degrees in
-                latitude and longitude, for a 17 x 17 grid, the two
-                plots are very similar.<br>
-              </blockquote>
-            </blockquote>
+Vertical deformation (cm) for the halfspace
+model. The left&nbsp; shows the result of using the
+analytic solution <b>hsanal96</b> while
+the right column gives the solution using the propagator
+matrices and numerical wavenumber integration using
+<b>hstat96</b>.&nbsp;&nbsp; The results are
+identical.&nbsp; The upper and lower panels compare the
+<b>xyz2grd </b>and <b>surface</b> output respectively.
+Because the grid sampling interval was 0.25 degrees in
+latitude and longitude, for a 17 x 17 grid, the two
+plots are very similar.<br>
           </td>
         </tr>
         <tr>
@@ -266,32 +308,29 @@ href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_fini
     </p>
     <h3>Test 2</h3>
     <p>The second test is to investigate the sensitivity of the finite
-      fault solution to the velocity model used.<br>
+      fault solution to the velocity model used.</p><p>
       Here we will compare the computed displacements in the N (north) E
       (east) and Z (up directions). In the case of the Z comparison<br>
-      we are able to compare the results to INSAR estimates.<br>
+      we are able to compare the results to INSAR estimates.
     </p>
-    <p><br>
-    </p>
+    <p>
     <table cellpadding="2" cellspacing="2" width="100%" border="1">
       <tbody>
         <tr>
           <td colspan="2" rowspan="1" align="left" valign="top">
-            <blockquote>
-              <blockquote>Comparison of vertical component deformation
+              Comparison of vertical component deformation
                 (cm) for the SCM, WUS and upper AK135 velocity models.
-                These are compared <br>
+                These are compared 
                 to the INSAR image of the source region. Note that the
                 maximum deformation for the synthetics seems to be about
-                10 km<br>
+                10 km
                 to the northwest of the depression indicated by the
                 INSAR image. This offset is on the order of the
-                teleseismic location error.<br>
+                teleseismic location error.
                 The SCM model produces the largest surface displacements
                 since the S-wave velocity at the source depth is much
-                lower than<br>
-                for the other two models. </blockquote>
-            </blockquote>
+                lower than
+                for the other two models. 
           </td>
         </tr>
         <tr>
@@ -317,17 +356,14 @@ href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_fini
     </table>
     <p><br>
     </p>
+<p>
     <table cellpadding="2" cellspacing="2" width="100%" border="1">
       <tbody>
         <tr>
           <td colspan="2" rowspan="1" valign="top">
-            <blockquote>
-              <blockquote>
                 <div align="left">Comparison of north component
                   deformation (cm) for the SCM, WUS and upper AK135
                   velocity models.</div>
-              </blockquote>
-            </blockquote>
           </td>
         </tr>
         <tr>
@@ -357,11 +393,9 @@ href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_fini
         <tr>
           <td colspan="2" rowspan="1" valign="top">
             <div align="center">
-              <blockquote>
                 <div align="left">Comparison of east component
                   deformation (cm) for the SCM, WUS and upper AK135
                   velocity models.</div>
-              </blockquote>
             </div>
           </td>
         </tr>
@@ -385,7 +419,6 @@ href="http://comcat.cr.usgs.gov/earthquakes/eventpage/usb000g7x7#scientific_fini
         </tr>
       </tbody>
     </table>
-    <p><br>
     </p>
     <p><a href="#TOP">Top of Page</a></p>
     <a name="SEC08"></a>
@@ -408,7 +441,8 @@ Since we are discussing the static deformation due to a rupturing finite fault, 
 </p>
 <p>Hopefully there may be some value in this presentation in addition to demonstrating how this can be done using these codes.</p>
     <p><a href="#TOP">Top of Page</a></p>
-    <center>Last changed October 20, 2015</center>
 <p>Avinash Nayak found an error in this documentation.
+</p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

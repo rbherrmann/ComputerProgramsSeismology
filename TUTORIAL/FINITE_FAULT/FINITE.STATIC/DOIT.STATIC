@@ -1,0 +1,367 @@
+#!/bin/sh
+
+#####
+#    define the bounds on the gridded area and also the
+#    grid interval
+#####
+LATMIN="8.0"
+LATMAX="12.0"
+DLAT="0.25"
+LONMIN="-87.0"
+LONMAX="-83.0"
+DLON="0.25"
+
+#####
+#    define control variables for the loop
+#####
+ENDLATLOOP="NO"
+ENDLONLOOT="NO"
+
+#####
+#    define initial values
+#####
+LAT=${LATMIN}
+LON=${LONMIN}
+
+#####
+#     These lines define the velocity model and the rupture model 
+#####
+
+MODEL="WUS.mod"
+cp ../Models/${MODEL} .
+         
+RUPTUREMODEL=HayesCostaRica.mod 
+cp ../FiniteFaultModels/${RUPTUREMODEL} .
+
+#####
+#    define TOPLEVEL directory
+#####
+MYTOP=`pwd`
+
+
+#####
+#    processing
+#    First get the fault model by skipping the first few lines of the output
+#####
+ed ${RUPTUREMODEL}  << EOF
+1,/t_rup/d
+w ff.mod
+EOF
+
+#####
+#    create the do_process script that does all of the work
+#####
+do_process ()
+{
+#####
+#     do_process SITE_LATITUDE SITE_LONGITUDE
+STLA=$1
+STLO=$2
+#####
+#     NSUB is the sub fault number
+#     PNSUB is a pretty version with 4 digits, e.g., 0001 for
+#     file name
+#####
+NSUB=0
+#####
+#     make a synthetic for each finite fault element
+#####
+	while read EVLA EVLO EVDP SLIP RAKE STK DIP TRUP TRISE MOM
+	do
+		NSUB=`echo $NSUB | awk '{print $1 + 1 }' `
+		PBSUB=`echo $NSUB | awk '{printf "%4.4d", $1}' `
+		MW=`echo $MOM | awk '{ print 2.*( log($1)/log(10.0) -16.1)/3.0 }' `
+#                echo $MOM $MW $DUR
+		#####
+		#   compute the distance in km ans azimuth from subfault to station
+		#####
+		DIST=`udelaz -DIST -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		AZ=`udelaz -AZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		BAZ=`udelaz -BAZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		#####
+		#    determine the static deformation
+		#####
+cat > dfile << EOF
+${DIST} 0.1 256 0 0
+EOF
+		hprep96 -M ${MODEL} -d dfile -ALL -HS ${EVDP} -HR 0 -TF -BH
+		hstat96
+		#####
+		#    go to WORK make GREEN and then mechanism, delay and duration
+		#####
+		cd WORK
+		rm -f *
+		#####
+		#    get Green functions
+		#####
+		f96tosac -T < ../file96
+		#####
+		#    get basename for gsac
+		#####
+		F=`ls *.ZSS`
+		FILEPROTO=`basename ${F} .ZSS`
+gsac > /dev/null << EOF
+mt to ZNE MW ${MW} AZ ${AZ} BAZ ${BAZ} STK ${STK} RAKE ${RAKE} DIP ${DIP} FILE ${FILEPROTO}
+#  
+ch EVLA ${EVLA} EVLO ${EVLO} STLA ${STLA} STLO ${STLO}
+w
+mv T.Z ../STACK/Z.${PBSUB}
+mv T.N ../STACK/N.${PBSUB}
+mv T.E ../STACK/E.${PBSUB}
+q
+EOF
+cd ${MYTOP}
+	done < ff.mod
+
+#####
+#     now perform the stacking
+#     determine the minimum B time, maximum E time to define the cut window
+#     determine the minimum A time to set the first srrival time on the stack
+#     These offsets are with respect to the origin time
+#####
+cd STACK
+
+#####
+#    now use gsac to read all in and stack
+#####
+gsac << EOF
+r Z.????
+stack absolute
+w ../FINALZ/${STLA}_${STLO}.Z
+r N.????
+stack absolute
+w ../FINALN/${STLA}_${STLO}.N
+r E.????
+stack absolute
+w ../FINALE/${STLA}_${STLO}.E
+q
+EOF
+
+}
+
+#####
+#    create a work area for making the synthetic for a sub-fault
+#####
+rm -fr WORK ; mkdir WORK
+
+#####
+#    create a work area to store synthetics for each finite fault
+#    which will be used for the stack
+#####
+rm -fr STACK ; mkdir STACK
+
+#####
+#    create directory for final synthetics
+#####
+rm -fr FINALZ ; mkdir FINALZ
+rm -fr FINALN ; mkdir FINALN
+rm -fr FINALE ; mkdir FINALE
+
+
+
+while [ "${ENDLATLOOP}" != "YES" ]
+do
+	while [ "${ENDLONLOOP}" != "YES" ]
+	do
+		#####
+		#   process this LAT/LON coordinate
+		#####
+		cd ${MYTOP}
+		do_process $LAT $LON
+		LON=`echo $LON $DLON | awk '{print $1 + $2 }' `
+		ENDLONLOOP=`echo ${LONMIN} ${LONMAX} ${LON} | awk '{ if ( $3 >= $1 && $3 <= $2 ) print "NO" ; else print "YES" }' ` 
+	done
+	#####
+	# reset the LON loop
+	#####
+	ENDLONLOOP="NO"
+	LON=${LONMIN}
+	#####
+	# increment and test latitude
+	#####
+	LAT=`echo ${LAT} ${DLAT} | awk '{print $1 + $2 }' `
+	ENDLATLOOP=`echo ${LATMIN} ${LATMAX} ${LAT} | awk '{ if ( $3 >= $1 && $3 <= $2 ) print "NO" ; else print "YES" }' ` 
+done
+
+#####
+#    now make contour map
+#####
+
+cd ${MYTOP}
+pwd
+#####
+#    control parameters
+#####
+#    The grid is defined in by the MIN/MAX LAT/LON values
+#    The grid is equally spaced with increments DLON and DLAT
+#    Coutours are plotted and annotated at intervals of DCONT
+#####
+
+#####
+#     note if the width is changed from 15c you will have to adjust the
+#     location of the pstext which is given in cm
+#####
+#####
+#    define the plot width
+#####
+WIDTH="15c"
+
+#####
+#    set up xyz files
+#    convert meters to cm
+#####
+for C in Z N E
+do
+	rm -f ${C}.xyz
+	for j in   FINAL${C}/*${C} 
+	do
+		saclhdr -NL  -STLO -STLA -DEPMAX $j | awk '{print $1, $2, 100.*$3}'  >> ${C}.xyz
+	done
+done
+
+#####
+#     get the maximum value
+#####
+AMAX=`cat *.xyz | awk '{ if ($3 < 0.0) A=-($3); else A=$3 ; if ( A > AMAX) AMAX=A}END{print AMAX}' `
+#####
+#     set a nice contour interval
+#####
+cat > gdc.c << EOF
+#include <stdio.h>
+#include <math.h>
+
+main()
+{
+	float vmax, dc, vmax10, val,dval;
+	int ivmax10;
+/*
+	set nice contour values
+*/
+	scanf("%g",&vmax);
+	if(vmax == 0.0) {
+		dc = 1.0 ;
+	} else {
+		if(vmax == 0.0){
+			dc = 1.0 ;
+		} else {
+			vmax10 = log(vmax)/log(10.);
+			if(vmax >= 1.0){
+				ivmax10 = vmax10 ;
+				val = vmax/pow(10.0,ivmax10);
+			} else {
+				vmax10 = vmax10 -1 ;
+				ivmax10 = vmax10  ;
+				val = vmax/pow(10.0,ivmax10);
+			}
+			/* now 1 < val < 10 */
+			/* now define the interval */
+			dval = val ;
+			if(val <= 2)
+				dval = 2.0 ;
+			else if(val > 2. && val < 5.0)
+				dval = 5.0 ;
+			else
+				dval = 10.0 ;
+			dc = dval * pow(10.0,ivmax10) / 20.0 ;
+		}
+	}
+	printf("%10.1g",dc);
+}
+EOF
+gcc -lm gdc.c
+
+DCONT=`echo $AMAX | a.out `
+echo AMAX=$AMAX DCONT=$DCONT
+rm -f a.out
+
+#####
+# now use GMT to define the GRD file
+#####
+
+#####
+#    set GMT defaults
+#####
+gmtset BASEMAP_TYPE FANCY DEGREE_FORMAT 5 MEASURE_UNIT cm
+
+#####
+#    Define map bounds: LONMIN/LONMAX/LATMIN/LATMAX
+#####
+LATLON="${LONMIN}/${LONMAX}/${LATMIN}/${LATMAX}"
+
+#####
+#    Define Mercalli projection: Center_lon/Center_Lat/Plot_Width
+#####
+CENLON=`echo ${LONMIN} ${LONMAX} | awk '{print ( $1 + $2) /2 }' `
+CENLAT=`echo ${LATMIN} ${LATMAX} | awk '{print ( $1 + $2) /2 }' `
+PROJ="M${CENLON}/${CENLAT}/${WIDTH}"
+
+#####
+#    Define Coastline resolution: one of fhilc
+#    (f)ull, (h)igh, (i)ntermediate, (l)ow, and (c)rude)
+#  . The resolution drops off by 80% between data sets.
+#####
+RESCOAST="i"
+
+#####
+#    Define boundaries for pscoast
+#    1 = National boundaries
+#    2 = State boundaries within the Americas
+#    3 = Marine boundaries
+#    a = All boundaries (1-3) pscoast
+#####
+BDRYS="a"
+
+#####
+#    Define Ticmark interval
+#####
+TICS="a0.500000g0/a0.500000g0WSne"
+
+#####
+#    now make a map for each component
+#####
+
+for C in Z N E
+do
+cat > text.d << EOF
+ 1.4 10 6 0 1 CB ${C}-displacement (cm)
+EOF
+#####
+#   use xyz2grd
+#####
+FNAME=${C}.eps
+xyz2grd ${C}.xyz -G${C}.grd -Degree/degree/meter/1/0/"Z Static Deformation"/"Static Deformation" -R${LATLON} -I${DLON}/${DLAT} -V
+grdcontour ${C}.grd -P -K  -A"${DCONT}"f10 -J${PROJ} -R${LATLON}  > ${FNAME}
+pscoast  -P  -O -W  -J${PROJ} -R${LATLON} -B${TICS} -O  -K  -N${BDRYS} -D${RESCOAST} -A2500  -V >> ${FNAME}
+pstext  -R0c/20c/0c/20c -JX20cY20c  -O -: -V -W255/255/255 -C0.05i/0.05i    >> ${FNAME} << EOF
+ 1.3 12 10 0 1 CB ${C}-displacement (cm)
+ 0.8 12 10 0 1 CB Model: ${MODEL} hstat96
+ 0.3 12 10 0 2 CB (xyz2grd)
+EOF
+
+#####
+#    use surface for a smoother display
+#####
+FNAME=Surf.${C}.eps
+DDLAT=`echo $DLAT | awk '{print $1 / 2. }' `
+DDLON=`echo $DLON | awk '{print $1 / 2. }' `
+surface ${C}.xyz -Gsurf.${C}.grd  -R${LATLON} -I${DDLON}/${DDLAT} -V -T0.75
+grdcontour surf.${C}.grd -P -K  -A"${DCONT}"f10 -J${PROJ} -R${LATLON}  > ${FNAME}
+pscoast  -P  -O -W  -J${PROJ} -R${LATLON} -B${TICS} -O  -K  -N${BDRYS} -D${RESCOAST} -A2500  -V >> ${FNAME}
+pstext  -R0c/20c/0c/20c -JX20cY20c  -O -: -V -W255/255/255 -C0.05i/0.05i    >> ${FNAME} << EOF
+ 1.3 12 10 0 1 CB ${C}-displacement (cm)
+ 0.8 12 10 0 1 CB Model: ${MODEL} hstat96
+ 0.3 12 10 0 2 CB (surface)
+EOF
+done
+
+rm -f *.xyz *.grd
+rm -f hspec96.dat
+rm WORK/*
+rm STATIC/*
+
+convert -trim E.eps E.png
+convert -trim N.eps N.png
+convert -trim Z.eps Z.png
+convert -trim Surf.E.eps Surf.E.png
+convert -trim Surf.N.eps Surf.N.png
+convert -trim Surf.Z.eps Surf.Z.png

@@ -1,20 +1,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Finite Fault Synthetics -Computer Programs in Seismology
-      Tutorials</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Finite fault simulations</h2></header>
     <h2>Introduction</h2>
+<p>
     The USGS NEIC provides Finite Fault Models for larger earthquakes.
     An example of this is at
     href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php"&gt;http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php.
-
-
-
-
+</p>
     <p> This tutorial shows how to use the Computer Programs in
       Seismology codes to compute&nbsp; teleseismic vertical component
       P-wave synthetics, regional vertical north and east (ZNE)
@@ -23,13 +31,8 @@
     </p>
     <p>This tutorial is an extension of the following:<br>
       <a
-        href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE/index.html">
-        Finite Fault Synthetics
-        http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE/index.html</a><br>
-      <a
-href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE_STATIC/index.html">
-        Static Deformation Finite Fault
-        http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE_STATIC/index.html</a><br>
+        href="../FINITE/index.html"> Finite Fault Synthetics</a><br>
+      <a href="../FINITE_STATIC/index.html"> Static Deformation Finite Fault</a><br>
     </p>
     <p>The finite fault model is that of the Costa Rica earthquake of
       2012/09/05 14:42:00, which is the subjet of the first tutorial.<br>
@@ -39,6 +42,7 @@ href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE_STATIC/index.html">
       deformation<br>
     </p>
     <h2>Requirements</h2>
+<p>
     To run the simulations, you will need the following:
     <ul>
       <li>Unpack the <a href="FINITE_FAULT.tgz"> FINITE_FAULT.tgz</a></li>
@@ -48,218 +52,73 @@ href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/FINITE_STATIC/index.html">
           following directory structure</li>
       </ul>
     </ul>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; FINITE_FAULT/<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |------index.html<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    |-----------------Models/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    <font color="#ff0000">[Velocity models]</font><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; |----tak135sph.mod<br>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp;&nbsp; | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; |----CUS.mod<br>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp;&nbsp; | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; |----WUS.mod
-    <br>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp;&nbsp; |<br>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp;&nbsp; |----FiniteFaultModels/
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp;&nbsp; | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    |----HayesCostaRica.mod &nbsp;&nbsp; <font color="#ff0000">[Rupture
-      model for Costa Rica earthquake 2012/09/05]</font><br>
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp;&nbsp; | <br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |----------FINITE.TEL/<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |-----index.html<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |-----DOIT.TEL<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |----------FINITE.REG/<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |-----index.html<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |-----DOIT.REG<br>
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |------FINITE.STATIC/<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |-----index.html<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-
-
-
-
-    |-----DOIT.STATIC<br>
+<pre>
+FINITE_FAULT/
+            |------index.html
+            |------Models/                 [Velocity models]
+            |            |----tak135sph.mod
+            |            |----CUS.mod
+            |            |----WUS.mod
+            |
+            |--FiniteFaultModels/        
+            |            |----HayesCostaRica.mod  
+            |                  [Rupture model for Costa Rica 
+            |                       earthquake 2012/09/05]
+            |
+            |-------FINITE.TEL/
+            |                 |-----index.html
+            |                 |-----DOIT.TEL
+            |-------FINITE.REG/
+            |                 |-----index.html
+            |                 |-----DOIT.REG
+            |----FINITE.STATIC/
+            |                 |-----index.html
+            |                 |-----DOIT.STATIC
+</pre>
+</p>
     <ul>
       <li>A list of stations for which synthetics are to be made</li>
       <li>the finite fault model given by a link at the bottom of the
         USGS Finite Fault solution page</li>
-      <li>NOTE: The DOIT.TEL and DOIT.REG scripts use the <b>gsac</b> <i>map
-
-        </i>comand to produce <b>map.sh</b> which can be used for a
+      <li>NOTE: The DOIT.TEL and DOIT.REG scripts use the <b>gsac</b> <i>map </i>comand to produce <b>map.sh</b> which can be used for a
         GMT3/GMT4 installation. If you have GMT5 installed, then edit
         these scripts to change the lines</li>
     </ul>
-    <blockquote>
-      <blockquote>
-        <pre>map ksntm on global on ray on<br>sh map.sh<br># if GMT5 is installed comment the previous line and then <br># uncomment the next two<br>#map5 ksntm on global on ray on<br>#sh map5.sh<br></pre></blockquote>to read<br><blockquote><pre>#map ksntm on global on ray on<br>#sh map.sh<br># if GMT5 is installed comment the previous line and then <br># uncomment the next two<br>map5 ksntm on global on ray on<br>sh map5.sh<br><br></pre></blockquote><pre><br></pre></blockquote><ul>
-    </ul>
+<font size="2">
+<pre>
+map ksntm on global on ray on<br>sh map.sh<br># if GMT5 is installed comment the previous line and 
+# then uncomment the next two
+#map5 ksntm on global on ray on
+#sh map5.sh
+</pre></font>
+</p><p>
+to read
+<font size="2">
+<pre>
+#map ksntm on global on ray on
+#sh map.sh
+# if GMT5 is installed comment the previous line and then 
+# uncomment the next two
+map5 ksntm on global on ray on
+sh map5.sh</font></pre>
+</p>
     <h2>Simulations</h2>
     <p>I assume that you are in the top level directory FINITE.<br>
     </p>
     <h3>Teleseismic <br>
     </h3>
-    <pre>&nbsp;&nbsp;&nbsp; cd FINITE.TEL<br>    DOIT.TEL<br><br></pre>This simulation computes teleseismic P-wave signals using the tak135sph.mod model and the HayesCostaRica.mod rupture model.&nbsp; 
+    <pre>&nbsp;&nbsp;&nbsp; cd FINITE.TEL<br>    DOIT.TEL<br><br></pre>
+</p><p>
+This simulation computes teleseismic P-wave signals using the tak135sph.mod model and the HayesCostaRica.mod rupture model.
 The DOIT.TEL creates the subdirectories WORK, STACK and FINAL in this directory. The stacked teleseismic synthetics are Sac files in the subdirectory FINAL. 
-This example creates the following files:<br><br><blockquote><pre>ADK.Z	ASCN.Z	CMB.Z	EFI.Z	GRFO.Z	JOHN.Z	KEV.Z	KONO.Z	NV31.Z	PD31.Z	POHA.Z	SHEL.Z	TRQA.Z<br>AFI.Z	BFO.Z	CMLA.Z	ESK.Z	HOPE.Z	KBS.Z	KIP.Z	MACI.Z	PAB.Z	PFO.Z	RSSD.Z	SSPA.Z	TUC.Z<br>ANMO.Z	BORG.Z	COR.Z	FFC.Z	HRV.Z	KDAK.Z	KNTN.Z	MIDW.Z	PASC.Z	PMSA.Z	SFJD.Z	TRIS.Z<br><br></pre></blockquote>
+This example creates the following files:
+<font size="1">
+<pre>
+ADK.Z	ASCN.Z	CMB.Z	EFI.Z	GRFO.Z	JOHN.Z	KEV.Z	KONO.Z	NV31.Z	PD31.Z	POHA.Z	SHEL.Z	TRQA.Z
+AFI.Z	BFO.Z	CMLA.Z	ESK.Z	HOPE.Z	KBS.Z	KIP.Z	MACI.Z	PAB.Z	PFO.Z	RSSD.Z	SSPA.Z	TUC.Z
+ANMO.Z	BORG.Z	COR.Z	FFC.Z	HRV.Z	KDAK.Z	KNTN.Z	MIDW.Z	PASC.Z	PMSA.Z	SFJD.Z	TRIS.Z
+</pre></font>
+</p><p>
 The DOIT.TEL also creates the graphics files map.png and finite_tel.png which are shown in the next figure:<p>
 <table>
 <tbody><tr>
@@ -267,10 +126,24 @@ The DOIT.TEL also creates the graphics files map.png and finite_tel.png which ar
 	<td><img src="FINITE.TEL/finite_tel.png" <br=""><center>Teleseismic P-wave simulations of ground velocity in m/s from the finite fault</center></td>
 </tr>
 </tbody></table>
-<br><br></p><h3>Regional</h3><pre>&nbsp;&nbsp;&nbsp; cd FINITE.REG<br>    DOIT.REG</pre>
+</p><h3>Regional</h3>
+<p>
+<pre>
+cd FINITE.REG
+DOIT.REG
+</pre>
+</p><p>
 This simulation computes regional&nbsp; signals using the WUS.mod model and the HayesCostaRica.mod rupture model.&nbsp;
-Because wavenumber integration is used, the computations will be lengthy. So the control file, <i>dfile</i>, was created as follows for each subfault to each station<br><br><blockquote><pre>cat &gt; dfile &lt;&lt; EOF<br>${DIST} 1.0 512 -20 8.5<br>EOF<br></pre></blockquote>The 1.0 indicates a sample rate of 1.0 sec, the 512 indicates the number of points in the time series, and the first time sample is given by&nbsp; t = -20 + DIST/8.5.&nbsp; The computational time is such that if I had used 0.5 sec and 1024 points to include higher frequencies, then the time woudl increase by a factor of 4. I thought that my chose here was appropriate since the finite fault model was constructed using long period data.<br><br>The DOIT.REG creates the subdirectories WORK, STACK and FINAL in this directory. The stacked teleseismic synthetics are Sac files in the subdirectory FINAL.
-This example creates the following files:<br><br><blockquote><pre>BCIP.E	BCIP.N	BCIP.Z	JTS.E	JTS.N	JTS.Z<br><br></pre></blockquote>
+Because wavenumber integration is used, the computations will be lengthy. So the control file, <i>dfile</i>, was created as follows for each subfault to each station<br>
+<pre>
+cat &gt; dfile &lt;&lt; EOF
+${DIST} 1.0 512 -20 8.5
+EOF<br></pre>
+</p><p>
+The 1.0 indicates a sample rate of 1.0 sec, the 512 indicates the number of points in the time series, and the first time sample is given by&nbsp; t = -20 + DIST/8.5.&nbsp; The computational time is such that if I had used 0.5 sec and 1024 points to include higher frequencies, then the time woudl increase by a factor of 4. I thought that my chose here was appropriate since the finite fault model was constructed using long period data.<br><br>The DOIT.REG creates the subdirectories WORK, STACK and FINAL in this directory. The stacked teleseismic synthetics are Sac files in the subdirectory FINAL.
+This example creates the following files:<br>
+<pre>BCIP.E	BCIP.N	BCIP.Z	JTS.E	JTS.N	JTS.Z
+</pre></p><p>
 The DOIT.REG also creates the graphics files map.png and finite_tel.png which are shown in the next figure:<p>
 <table>
 <tbody><tr>
@@ -278,7 +151,12 @@ The DOIT.REG also creates the graphics files map.png and finite_tel.png which ar
 <td><img src="FINITE.REG/finite_reg.png" <br=""><center>Regional  simulations of ground velocity in m/sfrom the finite fault</center></td>
 </tr>
 </tbody></table>
-</p><h3>Static deformation<br></h3><br><pre>&nbsp;&nbsp;&nbsp; cd FINITE.STATIC<br>    DOIT.STATIC</pre>
+</p><h3>Static deformation<br></h3><br>
+<p>
+<pre>
+cd FINITE.STATIC
+DOIT.STATIC</pre>
+</p><p>
 This simulation computes static deformation for the WUS.mod model and the HayesCostaRica.mod rupture model. Since <b>hstat96</b> computes the solution for a multilayered halfspace through numerical integration, this example runs a long time. On the other hand if <b>hsanal96</b> is used to compute the halfspace solution, the computations are then very, very fast.<br><br>Two sets of GMT plots are created. The first is a direct contour of the deformation values, and the second is a contour plot after applying the surface command of GMT.<br>
 <p>
 <table>
@@ -297,4 +175,6 @@ This simulation computes static deformation for the WUS.mod model and the HayesC
 </tr>
 </tbody></table>
 
-<br><br><br></p></body></html>
+</p>
+<footer>Last changed November 21, 2024</footer>
+</body></html>

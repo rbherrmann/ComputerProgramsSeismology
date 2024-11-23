@@ -1,29 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <style type="text/css"> h2.cjk {
-                                font-family: "Arial Unicode MS" } h2.ctl
-                                { font-family: "Arial Unicode MS" }
-                                h3.cjk { font-family: "Arial Unicode MS"
-                                } h3.ctl { font-family: "Arial Unicode
-                                MS" } h4.cjk { font-family: "Arial
-                                Unicode MS" } h4.ctl { font-family:
-                                "Arial Unicode MS" } pre.cjk {
-                                font-family: "Courier New", monospace }
-                              </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-}
-</style>
-    <title></title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Test of Moment Tensor Inversion</h2></header>
     <h2>Introduction</h2>
     <p> When writing code, testing&nbsp; is important.&nbsp; For moment
       tensor inversion this can be accomplished by creating a set of
@@ -104,10 +97,12 @@ pre {
     <pre>gunzip -c MTIVTEST.tgz | tar xf -<br></pre>
     <p>This will create the following directory structure:<br>
     </p>
-    <pre>MTIVTEST
-&#9500;&#9472;&#9472; 0XXXREG          <font color="#ff0000"><b># these are the prototype directories with scripts are used for all tests</b></font>         
-&#9500;&#9472;&#9472; 20210813115735   <b><font color="#ff0000"># This is a real data set. The dsta in distribution is used in the synthetic test</font></b>
-&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; DAT.REG
+<font size="2">
+    <pre>
+MTIVTEST
+&#9500;&#9472;&#9472; 0XXXREG          <font color="#ff0000"><b># Prototype directories containing scripts used for all tests</b></font>         
+&#9500;&#9472;&#9472; 20210813115735   <font color="#ff0000"><b># This is a real data set. The dsta in distribution are used </font></b>
+&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; DAT.REG      <font color="#ff0000"><b># for the synthetic test</font></b>
 &#9474;&nbsp;&nbsp; &#9474;&nbsp;&nbsp; &#9492;&#9472;&#9472; NOUSE
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; GRD.REG
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; HTML.REG
@@ -122,11 +117,11 @@ pre {
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; MT.REG
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; NEW2.REG
 &#9474;&nbsp;&nbsp; &#9492;&#9472;&#9472; SYN.REG
-&#9500;&#9472;&#9472; 20210813115735_0.06  <b><font color="#ff0000"># this has the same structure as above, but the lower frequencies are used for the inversion</font></b>  
-&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; ...
-&#9500;&#9472;&#9472; bin  <b><font color="#ff0000"># executables that are specific to moment tensor inversion</font></b><br>|&#9472;&#9472; MTDC <b><font color="#ff0000"># organization for testing the moment tensor inversion of a double couple source </font></b>
-&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; DAT.REG <b><font color="#ff0000"># waveforms for inversion </font></b>
-&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; DAT.SYN <b><font color="#ff0000"># create synthetic data set and place into DAT.REG </font></b>
+&#9500;&#9472;&#9472; 20210813115735_0.06  <b><font color="#ff0000"># this has the same structure as above, </font></b>  
+&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; ...              <b><font color="#ff0000"># but the lower frequencies are used for the inversion</font></b>
+&#9500;&#9472;&#9472; bin                  <b><font color="#ff0000"># executables that are specific to moment tensor inversion</font></b><br>|&#9472;&#9472; MTDC <b><font color="#ff0000"># for testing the moment tensor inversion of a double couple source </font></b>
+&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; DAT.REG           <b><font color="#ff0000"># waveforms for inversion </font></b>
+&#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; DAT.SYN           <b><font color="#ff0000"># create synthetic data set and place into DAT.REG </font></b>
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; GRD.REG
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; HTML.REG
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; MLG.REG
@@ -138,9 +133,9 @@ pre {
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; MTGRD.REG.DEV
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; MT.OTHER
 &#9474;&nbsp;&nbsp; &#9492;&#9472;&#9472; MT.REG
-&#9500;&#9472;&#9472; MTDEV <b><font color="#ff0000"># organization for testing the moment tensor inversion of a deviatoric source</font></b>
+&#9500;&#9472;&#9472; MTDEV <b><font color="#ff0000"># for testing the moment tensor inversion of a deviatoric source</font></b>
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font>   
-&#9500;&#9472;&#9472; MTFULL <b><font color="#ff0000"># organization for testing the moment tensor inversion of a full moment tensor source</font></b><br>&#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font><br>&#9500;&#9472;&#9472; MTFULL.NOISE <b><font color="#ff0000"># organization for testing the moment tensor inversion of a full moment tensor source with noise</font></b><br>&#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font>
+&#9500;&#9472;&#9472; MTFULL <b><font color="#ff0000"># for testing the moment tensor inversion of a full moment tensor source</font></b><br>&#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font><br>&#9500;&#9472;&#9472; MTFULL.NOISE <b><font color="#ff0000"># testing  full moment tensor source with noise</font></b><br>&#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font>
 &#9500;&#9472;&#9472; DOALL5  <b><font color="#ff0000">(see below)</font></b><br>&#9500;&#9472;&#9472; DALL5<br>&#9500;&#9472;&#9472; DOALL<br>&#9500;&#9472;&#9472; DALL<br>&#9500;&#9472;&#9472; src <font color="#ff0000"><b># source code for executables to be placed in the ../bin directory</b></font>
 &#9492;&#9472;&#9472; TGREEN       <font color="#ff0000"><b># precomputed Green's functions at only those distances for the test.</b></font>
     &#9492;&#9472;&#9472; CUS.REG
@@ -150,8 +145,9 @@ pre {
         &#9500;&#9472;&#9472; 0270
         &#9500;&#9472;&#9472; 0280
         &#9492;&#9472;&#9472; 0290
-&nbsp;&nbsp;&nbsp;
-&nbsp;<br></pre>
+</pre>
+</font>
+</p>
     <p>It is assumed the Computer Programs in Seismology has been
       successfully compiled and that the <b>gcc</b> an <b>gfortran</b>
       compilers were used. In addition the <b>ImageMagick</b> package
@@ -162,6 +158,7 @@ pre {
       directory and to the CPS source codes. Here are some examples of
       how to do this.<br>
     </p>
+<font size="2">
     <pre><b>LINUX example 1</b>
 <i>In ~/.profile</i>
 # set PATH so it includes user's PROGRAMS.330/bin if it exists
@@ -182,6 +179,8 @@ export CPS='/home/rbh/PROGRAMS.310t/PROGRAMS.330/'
 OPATH=$PATH
 PATH=:.:$HOME/bin:$HOME/PROGRAMS.310t/PROGRAMS.330/bin:$OPATH
 export CPS=${HOME}/PROGRAMS.310t/PROGRAMS.330</pre>
+</font>
+</p>
     <p>It is also necessary to point to the Green's functions before
       trying to duplicate this tutorial. For this tutorial, the required
       subset of&nbsp; Green's functions is provided.<br>
@@ -205,10 +204,12 @@ cd ..</pre>
       directories.&nbsp;&nbsp; The <b>DOALL5</b> copies the <b>DALL5 </b>into
       each test directory, and then executes it.&nbsp; These codes are<br>
     </p>
+<font size="2">
     <pre><b>DOALL5:<br><br></b>#!/bin/sh<br><br>export PATH=:`pwd`/bin:$PATH      #Define PATH to point to the local bin directory<br>cd src ; make all ;cd ..          #Compile the source code<br>for i in */DAT.SYN                #Make the synthetic data set <br>do<br>(cd $i ; DOSYN)<br>done<br><br><br>cd TGREEN                         #Define the location of the Green;s functions<br>export GREENDIR=`pwd`<br>cd ..<br><br>for i in 20* MT*                  #Run each test suite<br>do<br>cp DALL5 $i<br>(cd $i ; DALL5)<br>done<br></pre>
+</font>
+</p>
     <p>The <b>DALL5</b>&nbsp; is run in each test directory:</p>
     <pre>#!/bin/sh<br><br>(cd GRD.REG;DOGRD;DODELAY;DOPLTSAC5;DOCLEANUP)<br>(cd  MT.REG;DOMT ;DODELAY;DOPLTSAC5;DOCLEANUP)<br>(cd MTD.REG;DOMTD;DODELAY;DOPLTSAC5;DOCLEANUP)<br><br>(cd MTGRD.REG.DEV;DOMTGRD;DODELAY;DOPLTSAC5;DOCLEANUP)<br>(cd MTGRD.REG.DC ;DOMTGRD;DODELAY;DOPLTSAC5;DOCLEANUP)<br>(cd MTGRD.REG    ;DOMTGRD;DODELAY;DOPLTSAC5;DOCLEANUP)<br>(cd HTML.REG;DOHTML5)<br></pre>
-    <p><br>
     </p>
     <h2>Comparisons<br>
     </h2>
@@ -219,25 +220,27 @@ cd ..</pre>
     <ul>
       <li>MTFULL - A synthetic data set created using a full moment
         tensor model of a collapse is inverted <a
-          href="MTFULL/HTML.REG">MTFULL</a> </li>
+          href="MTFULL/HTML.REG/index.html">MTFULL</a> </li>
       <li>MTDEV - A synthetic data set created using a deviatoric moment
-        tensor model is inverted <a href="MTDEV/HTML.REG">MTDEV</a> </li>
+        tensor model is inverted <a href="MTDEV/HTML.REG/index.html">MTDEV</a> </li>
       <li>MTDC - A synthetic data set created using a double couple
-        source is inverted <a href="MTDC/HTML.REG">MTDC</a> </li>
+        source is inverted <a href="MTDC/HTML.REG/index.html">MTDC</a> </li>
       <li>20210813115735 - A real data set for a mine collapse is
         inverted. The observed and predicted ground velocities are
         filtered in the 0.03 - 0.10 Hz band <a
-          href="20210813115735/HTML.REG">20210813115735</a> </li>
+          href="20210813115735/HTML.REG/index.html">20210813115735</a> </li>
       <li>20210813115735_0.06 - A real data set for a mine collapse is
         inverted. The observed and predicted ground velocities are
         filtered in the 0.06 - 0.10 Hz band <a
-          href="20210813115735_0.06/HTML.REG">20210813115735_0.06</a> </li>
+          href="20210813115735_0.06/HTML.REG/index.html">20210813115735_0.06</a> </li>
       <li>MTFULL with NOISE - A synthetic data set with noise between
         the NLNM and NHNM levels created using a full moment tensor
-        model of a collapse is inverted <a href="MTFULL.NOISE/HTML.REG">MTFULL.NOISE</a>
+        model of a collapse is inverted <a href="MTFULL.NOISE/HTML.REG/index.html">MTFULL.NOISE</a>
       </li>
     </ul>
+</p>
     <h2>Discussion</h2>
+<p>
     The tests indicate that the codes work properly.&nbsp; In the case
     of a double-couple source, all codes yield similar results.<br>
     In the case of a deviatoric source, <b>wvfmtd96,</b> <b>wvfmt96,</b>
@@ -245,7 +248,7 @@ cd ..</pre>
     results. Finally for a general moment tensor with an isotropic
     component <b> wvfmt96</b> and <b>wvfgrd96</b> give similar
     results. Small differences in the results are due the increment in
-    angles used for the grid searches.&nbsp; <br>
+    angles used for the grid searches.&nbsp; </p>
     <h2>Synthetic data sets</h2>
     <p>The first thing that is required is a station distribution, which
       is defined here in the file <i>list1</i> which has the following
@@ -267,6 +270,7 @@ GOGA  US 303.381  153.962 33.4112 -83.4666
     <p> </p>
     <pre>Models/      CUS.REG
 </pre>
+</p><p>
     The <i>Models</i> directory will have the velocity model in the <i>model96&nbsp;
 
 
@@ -292,7 +296,8 @@ GOGA  US 303.381  153.962 33.4112 -83.4666
 009800100.TDS  009800100.TSS  009800100.ZDD  009800100.ZDS     
 009800100.ZEX  009800100.ZSS  W.CTL
 </pre>
-    &nbsp; gives synthetics at a distance of 0098.0 km for a source
+</p><p>
+    gives synthetics at a distance of 0098.0 km for a source
     depth of 010.0 km. The W.CTL file is uses as an index. A few lines
     of which are
     <p> </p>
@@ -322,14 +327,18 @@ GOGA  US 303.381  153.962 33.4112 -83.4666
     <p>This shell script to make synthetics for the full moment tensor
       is as follows:</p>
     <p> </p>
-    <pre>#!/bin/sh
+<font size="2">
+    <pre>
+#!/bin/sh
 
 #####
 # make synthetics for a given moment tensor and mw
 #####
 
 #####
-#    define the origin time <b><font color="#ff0000"># this is so that the observed and synthetics can be plotted on the same absolute time scale</font></b> 
+#    define the origin time 
+<b><font color="#ff0000"># this is so that the observed and synthetics 
+# can be plotted on the same absolute time scale</font></b> 
 #####
 NZYEAR=2021
 NZJDAY=225
@@ -351,14 +360,18 @@ MYY=-1.06E+22
 MYZ=0.28E+22
 MZZ=-2.19E+22
 M0=2.69E+22
-HS=0010                     <b><font color="#ff0000"># This is important since it defines the source depth  of 1.0km for the synthetics. This naming matches the<br>                            # directory structure in ${GREENDIR}/CUS.REG/</font></b>
+HS=0010     <b><font color="#ff0000"># This is important since it defines the source depth  of 1.0km  
+            # for the synthetics. This naming matches the<br>                            
+            # directory structure in ${GREENDIR}/CUS.REG/</font></b>
 
 mtinfo -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ -a &gt; mtinfo.txt
 
-GREEN=${GREENDIR}/CUS.REG   <b><font color="#ff0000"># Change this to use Greens functions if  another model is used. </font></b> 
+GREEN=${GREENDIR}/CUS.REG <b><font color="#ff0000"># Change this to use other Greens functions  </font></b> 
 
 
-MOMENT=`echo $MXX $MXY $MXZ $MYY $MYZ $MZZ| awk '{print sqrt(0.5*($1*$1 + 2*$2*$2 + 2*$3*$3 + $4*$4 + 2*$5*$5 + $6*$6))}' `<br>echo $MOMENT<br>fmplot -FMPLMN -P -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ
+
+MOMENT=`echo $MXX $MXY $MXZ $MYY $MYZ $MZZ| \
+    awk '{print sqrt(0.5*($1*$1 + 2*$2*$2 + 2*$3*$3 + $4*$4 + 2*$5*$5 + $6*$6))}' `<br>echo $MOMENT<br>fmplot -FMPLMN -P -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ
 
 #####
 #   begin the computation of synthetics
@@ -408,6 +421,8 @@ done &lt; list1
 mtinfo -xx $MXX -yy $MYY -zz $MZZ -xy $MXY -xz $MXZ -yz $MYZ &gt; mtinfo.out
 cp mt.msg ../MT.OTHER/true
 </pre>
+</font>
+</p>
     <p> The script is commented. The upper part defines the origin time
       and location of the event as well as its moment tensor values. The
       source depth is given as <i>0010</i> to agree with the
@@ -424,7 +439,10 @@ cp mt.msg ../MT.OTHER/true
     <p>The script for the deviatoric moment tensor synthetics has these
       lines after the moment tensor is defined:<br>
     </p>
+<font size="2">
     <pre>#####<br># make deviatoric<br>#####<br>MI=`echo $MXX $MYY $MZZ | awk '{printf "%11.3e", ($1+$2+$3)/3.}' `<br>MXX=`echo $MXX $MI | awk '{printf "%11.3e", $1 - $2}' `<br>MYY=`echo $MYY $MI | awk '{printf "%11.3e", $1 - $2}' `<br>MZZ=`echo $MZZ $MI | awk '{printf "%11.3e", $1 - $2}' `<br></pre>
+</font>
+</p>
     <p>The deviatoric moment tensor is formed by subtracting the
       isotropic component from the moment tensor.&nbsp; Thus if the
       moment tensor is changed, then this part of the code will give the
@@ -437,9 +455,10 @@ cp mt.msg ../MT.OTHER/true
       then manually inserted into the DOSYN script in MTDC/DAT.SYN. Thus
       that script has<br>
     </p>
+<font size="2">
     <pre>#These are the from the major double couple of the original<br>#moment tensor which is obtained from mtinfo<br><br>MXX=0.6160382E+22<br>MXY=0.2148202E+22<br>MXZ=0.1017061E+23<br>MYY=0.7464936E+21<br>MYZ=0.3297876E+22<br>MZZ=-0.6906876E+22<br></pre>
-    <p><br>
-    </p>
+</font>
+</p>
     <h3>Synthetics with Noise<br>
     </h3>
     <p> This script DOSYN script in MTFULL.NOISE/DAT.SYN is given here.
@@ -457,8 +476,150 @@ href="https://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/MT_SENSITIVITY/index.html">Mo
       in the&nbsp; <i>src</i> directory of the MTIVTEST.tgz .<br>
     </p>
     <p> </p>
-    <pre>!/bin/bash<br><br>#####<br># make synthetics for a given moment tensor and mw<br>#####<br><br>#####<br>#    define the origin time and source parameters. These are for the full moment tensor<br>#####<br>NZYEAR=2021<br>NZJDAY=225<br>NZMON=08<br>NZDAY=13<br>NZHOUR=11<br>NZMIN=57<br>NZSEC=35<br>NZMSEC=000<br><br>MW=4.22<br>MXX=-1.01E+22<br>MXY=+0.03E+22<br>MXZ=0.88E+22<br>MYY=-1.06E+22<br>MYZ=0.28E+22<br>MZZ=-2.19E+22<br>M0=2.69E+22<br>HS=0010<br><br>mtinfo -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ -a &gt; mtinfo.txt<br><br>GREEN=${GREENDIR}/CUS.REG<br>MOMENT=`echo $MXX $MXY $MXZ $MYY $MYZ $MZZ| awk '{print sqrt(0.5*($1*$1 + 2*$2*$2 + 2*$3*$3 + $4*$4 + 2*$5*$5 + $6*$6))}' `<br>echo $Moment<br>fmplot -FMPLMN -P -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ <br><br>#####<br>#   begin the computation of synthetics<br>#####<br>while read STA NET DIST AZ STLA STLO<br>do<br>	echo $STA $NET $DIST $AZ<br>#####<br>#       search over source depth These depths are the subdirectory<br>#       names in the Green's Function Directory<br>#####<br>cat &gt; awkprog &lt;&lt; FOE<br># This works under gawk - on Solaris try nawk<br>BEGIN { MDIF = 10000.0 }<br>{DIF = $DIST - \$1 ;<br>if( DIF &lt; 0 ) DIF = - DIF ;<br>if(DIF &lt; MDIF) { MDIF = DIF ; Dfile = \$7 ; Rate = \$2 ; Dist = \$1 }<br>}<br>END { print Dfile , Rate, Dist }<br>FOE<br>        cat ${GREEN}/${HS}/W.CTL | \<br>                awk -f awkprog &gt; j<br>DFILE=`awk '{print $1}' &lt; j `<br>PROTO=${GREEN}/${HS}/${DFILE}<br>echo $STA $NET $DIST $AZ $PROTO<br>gsac &lt;&lt; EOF<br>mt to ZRT MXX $MXX MXY $MXY MXZ $MXZ MYY $MYY MYZ $MYZ MZZ $MZZ AZ $AZ FILE ${PROTO}<br>w<br>rh T.?<br>ch NZYEAR $NZYEAR NZJDAY $NZJDAY NZHOUR $NZHOUR NZMIN $NZMIN NZSEC $NZSEC NZMSEC $NZMSEC<br>ch ocal $NZYEAR $NZMON $NZDAY $NZHOUR $NZMIN $NZSEC $NZMSEC<br>ch KSTNM $STA KNETWK $NET STLA $STLA STLO $STLO<br>ch lcalda false<br>ch evla 35.877 evlo -84.898<br>synchronize o<br>wh<br>cut a -60 a 250<br>r T.?<br>synchronize o<br>lh kcmpnm kstnm<br>w<br>w append .orig<br>quit<br>EOF<br>echo ========= FOR LOOP ===========<br>for i in T.Z T.R T.T<br>do<br>	RVAL=$RANDOM<br>	echo ======================= $i =======================<br>	NPTS=`saclhdr -NPTS $i`<br>	DELTA=`saclhdr -DELTA $i`<br>	PVAL=0.5<br><br>        NPTS=`saclhdr -NPTS ${i}`<br>        A=`saclhdr -A ${i}`<br>        O=`saclhdr -O ${i}`<br>        DELTA=`saclhdr -DELTA ${i}`<br>        EVLA=`saclhdr -EVLA ${i}`<br>        EVLO=`saclhdr -EVLO ${i}`<br>        B=`saclhdr -B ${i}`<br>        E=`saclhdr -E ${i}`<br>	KCMPNM=`saclhdr -KCMPNM ${i}`<br>        RVAL=${RANDOM}<br>	sacnoise -dt ${DELTA} -s ${RVAL} -p ${PVAL} -npts ${NPTS}<br>	        #####<br>        #  To get noise before the synthetic<br>        #    for the synthetic<br>        #    set the O 60 seconds into the record<br>        #    then set the time stamp<br>        #    then synchronize O<br>        #    then set the A time for the P first arrival<br>        #####<br><br>	gsac &lt;&lt; EOF<br>r O.sac<br>ch lcalda false<br>w<br>r<br>        ch NZYEAR $NZYEAR NZJDAY $NZJDAY NZHOUR $NZHOUR NZMIN $NZMIN NZSEC $NZSEC NZMSEC $NZMSEC<br>        shift fixed -120<br>        synchronize o<br>        ch a $A<br>        ch KSTNM ${STA}<br>	ch KNETWK ${NET}<br>	ch KCMPNM ${KCMPNM}<br>        ch EVLA $EVLA EVLO $EVLO STLA $STLA STLO $STLO<br>        transfer from none to none freqlimits 0.005 0.01 10 20<br>        #convert to velocity<br>        int<br>        w noise<br>r $i noise <br>addf master 1<br>w ${i} none<br>rh ${i}<br>ch  KCMPNM ${KCMPNM}<br>ch o gmt ${NZYEAR} ${NZJDAY} ${NZHOUR} ${NZMIN} ${NZSEC} ${NZMSEC}<br>synchronize o<br><br>wh<br>q<br>EOF<br>done<br>cp T.Z ../DAT.REG/${STA}${NET}BHZ<br>cp T.R ../DAT.REG/${STA}${NET}BHR<br>cp T.T ../DAT.REG/${STA}${NET}BHT<br>done &lt; list1<br> rm -f j awkprog<br><br>#####<br>#    create the true solution for the comparison panel<br>#####<br>mtinfo -xx $MXX -yy $MYY -zz $MZZ -xy $MXY -xz $MXZ -yz $MYZ &gt; mtinfo.out<br>cp mt.msg ../MT.OTHER/true<br>
+<font size="2">
+    <pre>
+#!/bin/bash
+#####
+# make synthetics for a given moment tensor and mw
+#####
+<br>#####
+#    define the origin time and source parameters. These are for the full moment tensor
+#####
+NZYEAR=2021
+NZJDAY=225
+NZMON=08
+NZDAY=13
+NZHOUR=11
+NZMIN=57
+NZSEC=35
+NZMSEC=000
+<br>MW=4.22
+MXX=-1.01E+22
+MXY=+0.03E+22
+MXZ=0.88E+22
+MYY=-1.06E+22
+MYZ=0.28E+22
+MZZ=-2.19E+22
+M0=2.69E+22
+HS=0010
+<br>mtinfo -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ -a &gt; mtinfo.txt
+<br>GREEN=${GREENDIR}/CUS.REG
+MOMENT=`echo $MXX $MXY $MXZ $MYY $MYZ $MZZ| \
+    awk '{print sqrt(0.5*($1*$1 + 2*$2*$2 + 2*$3*$3 + $4*$4 + 2*$5*$5 + $6*$6))}' `
+echo $Moment
+fmplot -FMPLMN -P -XX $MXX -XY $MXY -XZ $MXZ -YY $MYY -YZ $MYZ -ZZ $MZZ 
+<br>#####
+#   begin the computation of synthetics
+#####
+while read STA NET DIST AZ STLA STLO
+do
+	echo $STA $NET $DIST $AZ
+#####
+#       search over source depth These depths are the subdirectory
+#       names in the Green's Function Directory
+#####
+cat &gt; awkprog &lt;&lt; FOE
+# This works under gawk - on Solaris try nawk
+BEGIN { MDIF = 10000.0 }
+{DIF = $DIST - \$1 ;
+if( DIF &lt; 0 ) DIF = - DIF ;
+if(DIF &lt; MDIF) { MDIF = DIF ; Dfile = \$7 ; Rate = \$2 ; Dist = \$1 }
+}
+END { print Dfile , Rate, Dist }
+FOE
+        cat ${GREEN}/${HS}/W.CTL | \
+                awk -f awkprog &gt; j
+DFILE=`awk '{print $1}' &lt; j `
+PROTO=${GREEN}/${HS}/${DFILE}
+echo $STA $NET $DIST $AZ $PROTO
+gsac &lt;&lt; EOF
+mt to ZRT MXX $MXX MXY $MXY MXZ $MXZ MYY $MYY MYZ $MYZ MZZ $MZZ AZ $AZ FILE ${PROTO}
+w
+rh T.?
+ch NZYEAR $NZYEAR NZJDAY $NZJDAY NZHOUR $NZHOUR NZMIN $NZMIN NZSEC $NZSEC NZMSEC $NZMSEC
+ch ocal $NZYEAR $NZMON $NZDAY $NZHOUR $NZMIN $NZSEC $NZMSEC
+ch KSTNM $STA KNETWK $NET STLA $STLA STLO $STLO
+ch lcalda false
+ch evla 35.877 evlo -84.898
+synchronize o
+wh
+cut a -60 a 250
+r T.?
+synchronize o
+lh kcmpnm kstnm
+w
+w append .orig
+quit
+EOF
+echo ========= FOR LOOP ===========
+for i in T.Z T.R T.T
+do
+	RVAL=$RANDOM
+	echo ======================= $i =======================
+	NPTS=`saclhdr -NPTS $i`
+	DELTA=`saclhdr -DELTA $i`
+	PVAL=0.5
+<br>        NPTS=`saclhdr -NPTS ${i}`
+        A=`saclhdr -A ${i}`
+        O=`saclhdr -O ${i}`
+        DELTA=`saclhdr -DELTA ${i}`
+        EVLA=`saclhdr -EVLA ${i}`
+        EVLO=`saclhdr -EVLO ${i}`
+        B=`saclhdr -B ${i}`
+        E=`saclhdr -E ${i}`
+	KCMPNM=`saclhdr -KCMPNM ${i}`
+        RVAL=${RANDOM}
+	sacnoise -dt ${DELTA} -s ${RVAL} -p ${PVAL} -npts ${NPTS}
+	        #####
+        #  To get noise before the synthetic
+        #    for the synthetic
+        #    set the O 60 seconds into the record
+        #    then set the time stamp
+        #    then synchronize O
+        #    then set the A time for the P first arrival
+        #####
+<br>	gsac &lt;&lt; EOF
+r O.sac
+ch lcalda false
+w
+r
+ch NZYEAR $NZYEAR NZJDAY $NZJDAY NZHOUR $NZHOUR NZMIN $NZMIN NZSEC $NZSEC NZMSEC $NZMSEC
+shift fixed -120
+synchronize o
+ch a $A
+ch KSTNM ${STA}
+ch KNETWK ${NET}
+ch KCMPNM ${KCMPNM}
+ch EVLA $EVLA EVLO $EVLO STLA $STLA STLO $STLO
+transfer from none to none freqlimits 0.005 0.01 10 20
+#convert to velocity
+int
+w noise
+r $i noise 
+addf master 1
+w ${i} none
+rh ${i}
+ch  KCMPNM ${KCMPNM}
+ch o gmt ${NZYEAR} ${NZJDAY} ${NZHOUR} ${NZMIN} ${NZSEC} ${NZMSEC}
+synchronize o
+<br>wh
+q
+EOF
+done
+cp T.Z ../DAT.REG/${STA}${NET}BHZ
+cp T.R ../DAT.REG/${STA}${NET}BHR
+cp T.T ../DAT.REG/${STA}${NET}BHT
+done &lt; list1
+ rm -f j awkprog
+<br>#####
+#    create the true solution for the comparison panel
+#####
+mtinfo -xx $MXX -yy $MYY -zz $MZZ -xy $MXY -xz $MXZ -yz $MYZ &gt; mtinfo.out
+cp mt.msg ../MT.OTHER/true
+
 </pre>
+</font>
+</p>
     <p>The PVAL=0.5 sets the noise level. 0.0 is for the NLNM and 1.0 is
       for the NHNM. Most of the script is dedicated to making the noise
       start and end at the same time as the noise-free time series, so
@@ -489,7 +650,6 @@ href="https://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/MT_SENSITIVITY/index.html">Mo
         </tbody>
       </table>
     </p>
-    <p> </p>
-    <center> Last Changed May 30, 2022</center>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

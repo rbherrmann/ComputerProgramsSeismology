@@ -1,0 +1,276 @@
+#!/bin/sh
+set -x
+
+#####
+#    create a teleseismic P-wave synthetic using
+#    hudson96 and the NEIc (Gavin Hayes) finite fault
+#    solution
+#####
+#
+#   Script
+#
+#   Initialization
+#        The environment variable GREENDIR points to thhe locaiton of the
+#        Greens function directories, e.g., GREEDDIR=/d/rbh/GREEN
+#        There is a subdirectory names Models which has tak135sph.mod
+#   Finite Fault Model
+#   Station List
+#   Computations for each station
+#####
+
+#####
+#     These lines define the velocity model, the rupture model and the station list
+#####
+
+REGMODEL=../Models/WUS.mod
+RUPTUREMODEL=HayesCostaRica.mod 
+cp ../FiniteFaultModels/${RUPTUREMODEL} .
+
+# STA  LAT  LON 
+cat > stat.list << EOF
+  JTS   10.291  -84.953 
+ BCIP  9.166   -79.837 
+EOF
+
+#####
+#     end of problem specific input
+#####
+
+
+#####
+#    processing
+#    First get the fault model by skipping the first few lines of the output
+#####
+ed ${RUPTUREMODEL} << EOF
+1,/t_rise/d
+w ff.mod
+EOF
+
+#####
+#    define the hypocenter on the basis of the earliest rupture time
+#####
+sort -nr -k8 ff.mod | tail -1 > hypo
+REVLA=`cat hypo | awk '{print $1}' `
+REVLO=`cat hypo | awk '{print $2}' `
+REVDP=`cat hypo | awk '{print $3}' `
+rm -f hypo
+
+#####
+#    create a work area for making the synthetic for a sub-fault
+#####
+rm -fr WORK ; mkdir WORK
+
+#####
+#    create a work area to store synthetics for each finite fault
+#    which will be used for the stack
+#####
+rm -fr STACK ; mkdir STACK
+
+#####
+#    create directory for final synthetics
+#####
+rm -fr FINAL ; mkdir FINAL
+
+#####
+#    define TOPLEVEL directory
+#####
+MYTOP=`pwd`
+
+
+
+#####
+#    make composite synthetic for each station
+#####
+
+while read KSTNM STLA STLO 
+do
+
+cd ${MYTOP}
+
+#####
+#     NSUB is the sub fault number
+#     PNSUB is a pretty version with 4 digits, e.g., 0001 for
+#     file name
+#####
+NSUB=0
+#####
+#     make a synthetic for each finite fault element
+#####
+	while read EVLA EVLO EVDP SLIP RAKE STK DIP TRUP TRISE MOM
+	do
+		NSUB=`echo $NSUB | awk '{print $1 + 1 }' `
+		PBSUB=`echo $NSUB | awk '{printf "%4.4d", $1}' `
+		MW=`echo $MOM | awk '{ print 2.*( log($1)/log(10.0) -16.1)/3.0 }' `
+                echo $MOM $MW $DUR
+		#####
+		#   compute the arc distance from subfault to station
+		#####
+		GCARC=`udelaz -GCARC -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		DIST=`udelaz -DIST -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		AZ=`udelaz -AZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		BAZ=`udelaz -BAZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+echo $GCARC $DIST $AZ $BAZ
+                #####
+                #   make a wavenumber integration synthetic
+                #####
+# DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)           first time point is T0 + DIST/VRED           VRED=0 means infinite velocity though
+cat > dfile << EOF
+${DIST} 1.0 512 -20 8.5
+EOF
+
+                hprep96 -d dfile -M ${REGMODEL} -HS ${EVDP} -EQEX
+                hspec96
+                hpulse96 -p -V -l 1 > file96
+		rm -f hspec96.grn hspec96.dat
+		#####
+		#    go to WORK make GREEN and then mechanism, delay and duration
+		#####
+		cd WORK
+		rm -f *
+		#####
+		#    get Green functions
+		#####
+		f96tosac -T < ../file96
+		rm -f ../file96
+		#####
+		#    get basename for gsac
+		#####
+		F=`ls *.ZSS`
+		FILEPROTO=`basename ${F} .ZSS`
+echo mt to ZNE MW ${MW} AZ ${AZ} BAZ=${BAZ} STK ${STK} RAKE ${RAKE} DIP ${DIP} FILE ${FILEPROTO}
+gsac  << EOF
+mt to ZNE MW ${MW} AZ ${AZ} BAZ ${BAZ} STK ${STK} RAKE ${RAKE} DIP ${DIP} FILE ${FILEPROTO}
+#  
+shift F ${TRUP}
+triangle w ${TRISE}
+ch KSTNM ${KSTNM} 
+ch EVLA ${EVLA} EVLO ${EVLO} STLA ${STLA} STLO ${STLO}
+w
+rh T.Z
+ch kcmpnm BHZ
+wh
+rh T.E
+ch kcmpnm BHE
+wh
+rh T.N
+ch kcmpnm BHN
+wh
+q
+EOF
+ls
+mv T.Z ../STACK/Z.${PBSUB}
+mv T.N ../STACK/N.${PBSUB}
+mv T.E ../STACK/E.${PBSUB}
+ls ../STACK
+
+cd ${MYTOP}
+	done < ff.mod
+
+#####
+#     now perform the stacking
+#     determine the minimum B time, maximum E time to define the cut window
+#     determine the minimum A time to set the first srrival time on the stack
+#     These offsets are with respect to the origin time
+#####
+cd STACK
+rm -f asum esum bsum
+for i in Z.????
+do
+	saclhdr -NL -B  $i >> bsum
+	saclhdr -NL -A  $i >> asum
+	saclhdr -NL -E  $i >> esum
+done
+BMIN=`cat bsum | awk 'BEGIN {MIN=9999}{if ( $1 < MIN ) MIN=$1} END { print MIN}' `
+EMAX=`cat esum | awk 'BEGIN {MAX=0}   {if ( $1 > MAX ) MAX=$1} END { print MAX}' `
+AMIN=`cat asum | awk 'BEGIN {MIN=9999}{if ( $1 < MIN ) MIN=$1} END { print MIN}' `
+rm -f asum esum bsum
+
+#####
+#    now use gsac to read all in and stack
+#####
+gsac << EOF
+cuterr fillz
+cut o ${BMIN} o ${EMAX}
+r Z.????
+stack absolute
+ch A ${AMIN}
+ch EVLA ${REVLA} EVLO ${REVLO} EVDP ${REVDP}
+w ../FINAL/${KSTNM}.Z
+q
+EOF
+rm Z.????
+
+gsac << EOF
+cuterr fillz
+cut o ${BMIN} o ${EMAX}
+r N.????
+stack absolute
+ch A ${AMIN}
+ch EVLA ${REVLA} EVLO ${REVLO} EVDP ${REVDP}
+w ../FINAL/${KSTNM}.N
+q
+EOF
+rm N.????
+
+gsac << EOF
+cuterr fillz
+cut o ${BMIN} o ${EMAX}
+r E.????
+stack absolute
+ch A ${AMIN}
+ch EVLA ${REVLA} EVLO ${REVLO} EVDP ${REVDP}
+w ../FINAL/${KSTNM}.E
+q
+EOF
+rm E.????
+
+cd ${MYTOP}
+#rm WORK/*
+	
+
+done < stat.list
+
+
+#####
+#    make final graphics
+#####
+cd ${MYTOP}
+
+#####
+#   to make the map we need geographical limits
+#   so get the extreme lat lon and put a margin of 2 degrees 
+#   on each side
+#####
+rm -f limit.lat limit.lon
+for i in FINAL/*
+do
+saclhdr -NL -STLA $i >> limit.lat
+saclhdr -NL -STLO $i >> limit.lon
+done
+
+North=`cat limit.lat | awk 'BEGIN{North='"${REVLA}"'} { if($1 > North)North=$1 }END{print North + 2.0}' `
+South=`cat limit.lat | awk 'BEGIN{South='"${REVLA}"'} { if($1 < South)South=$1 }END{print South - 2.0}' `
+East=` cat limit.lon | awk 'BEGIN{East='"${REVLO}"'} { if($1 > East)East=$1 }END{print East + 2.0}' `
+West=` cat limit.lon | awk 'BEGIN{West='"${REVLO}"'} { if($1 < West)West=$1 }END{print West - 2.0}' `
+
+
+gsac << EOF
+r FINAL/*
+sort up dist
+fileid name
+bg plt
+p
+map ksntm on   ray on N ${North} S ${South} E ${East} W ${West} 
+sh map.sh
+# if GMT5 is installed comment the previous line and then 
+# uncomment the next two
+#map5 ksntm on ray on
+#sh map5.sh
+q
+EOF
+plotnps -BGFILL -F7 -W10 -EPS -K < P001.PLT > t.eps
+convert -trim t.eps finite_reg.png
+convert -trim map.eps map.png
+rm P001.PLT
+
+

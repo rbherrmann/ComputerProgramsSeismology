@@ -1,27 +1,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Computer Programs in Seismology - Network QC</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8574100">
-	<STYLE TYPE="text/css">
-	<!--
-		TD P { color: #000000 }
-		H1 { color: #000000 }
-		P { color: #000000 }
-		PRE { color: #000000 }
-		H2 { color: #000000 }
-		H3 { color: #000000 }
-		H4 { color: #000000 }
-	-->
-	</STYLE>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" TEXT="#000000" BGCOLOR="#ffffff" DIR="LTR">
-<P ALIGN=CENTER><FONT SIZE=5><B>Seismic Network QC through Teleseism
-Modeling</B></FONT></P>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Teleseism synthetics and station performance</h2></header>
+
 <H1 ALIGN=LEFT>Introduction</H1>
 <P ALIGN=LEFT>The purpose of this package is to compare synthetic
 seismograms to observations for teleseismic P, SV and SH in the
@@ -46,7 +42,8 @@ long period mantle surface-waves.</P>
 the directory ${GREENDIR} where the SHELL variable GREENDIR is
 defined in the user's <I>~/.bashrc file</I>.&nbsp; On my system I
 define this as</P>
-<PRE STYLE="margin-bottom: 0.2in; text-align: left">   export GREENDIR=/backup/rbh/GREEN</PRE><P ALIGN=LEFT>
+<PRE>   export GREENDIR=/backup/rbh/GREEN</PRE>
+</p><P>
 If you use CSHELL then you will do something similar in your <I>.login</I>
 or <I>.cshrc</I> file. The reason for specifying the PATH in the
 startup file, is that the scripts use the ${GREENDIR}, which means
@@ -65,10 +62,11 @@ AK135sph.mod (used for the old Green's functions) and tak135sph.mod
 <H1 ALIGN=LEFT>The Package</H1>
 <P ALIGN=LEFT>The processing package is obtained at <A HREF="../MECHQC.TEL/mechqctel.tgz">mechqctel.tgz</A>.&nbsp;
 Download this file and unpack using the command</P>
-<PRE STYLE="margin-left: 0.42in; text-align: left">gunzip -c mechqctel.tgz | tar xvf - 
- </PRE><P ALIGN=LEFT>
+<PRE>gunzip -c mechqctel.tgz | tar xvf - 
+ </PRE>
+</p><p>
 This will create the directory MECHQC.TEL with the following contents</P>
-<PRE STYLE="text-align: left">MECHQC.TEL
+<PRE>MECHQC.TEL
 |-- 0XXXTEL
 |   |-- 00README
 |   |-- DAT.TEL
@@ -101,8 +99,7 @@ This will create the directory MECHQC.TEL with the following contents</P>
     |-- IDOGCARC
     |-- IDOPREV
     |-- IDOQC
-    `-- IDOROT</PRE><P ALIGN=LEFT>
-<BR><BR>
+    `-- IDOROT</PRE>
 </P>
 <H2 ALIGN=LEFT>Getting Data</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0in">There are many ways to get
@@ -115,7 +112,7 @@ of these sources, e.g., use the DOWILQCORFEUS&nbsp; if you obtain
 waveforms data from Orfeus.&nbsp; <BR><BR>After selecting the
 earthquake of interest at the IRIS Wilber II or the Orfeus page, you
 will see a set of menus that will lead you to the data stream.<BR><BR>In
-this tutorial I will display the screens for the event:<BR><BR>&nbsp;&nbsp;&nbsp;
+this tutorial I will display the screens for the event:
 </P>
 <TABLE CELLPADDING=2 CELLSPACING=3>
 	<TR>
@@ -153,8 +150,9 @@ this tutorial I will display the screens for the event:<BR><BR>&nbsp;&nbsp;&nbsp
 		</TD>
 	</TR>
 </TABLE>
-<H3 ALIGN=LEFT>IRIS Wilber II</H3>
-<P ALIGN=LEFT>From the IRIS page I will select only the II and IU
+</p>
+<H3>IRIS Wilber II <font color="#FF0000"> Obsolete</font></H3>
+<P>From the IRIS page I will select only the II and IU
 networks.&nbsp; There are too many stations for my screendump. At the
 bottom of the page I click <B>Proceed </B>to go to the next page.</P>
 <CENTER>
@@ -196,9 +194,8 @@ bottom of the page I click <B>Proceed </B>to go to the next page.</P>
 		</TR>
 	</TABLE>
 </CENTER>
-<P ALIGN=LEFT><BR><BR>
 </P>
-<H3 ALIGN=LEFT>Orfeus Wilber II</H3>
+<H3 ALIGN=LEFT>Orfeus Wilber II <font color="#FF0000"> Obsolete</font></H3>
 <P ALIGN=LEFT>I will select only the GEOSCOPE and GEOFON networks for
 this example</P>
 <CENTER>
@@ -225,7 +222,8 @@ this example</P>
 		</TR>
 	</TABLE>
 </CENTER>
-<P ALIGN=LEFT><BR><BR><BR><BR><BR>On this Page 2,&nbsp; I select the
+</p>
+<P>On this Page 2,&nbsp; I select the
 stations in the 30 - 95 degree epicentral distance range, state that
 I want everything in SEED, that I want a time window from 2 minutes
 before P to 20 minutes after P.&nbsp; Note the User Name and the
@@ -307,13 +305,14 @@ names such as</P>
 		</TD>
 	</TR>
 </TABLE>
-<P ALIGN=LEFT><BR><BR><BR><BR>
 </P>
 <H2 ALIGN=LEFT>Scripts</H2>
 <H4 ALIGN=LEFT>DO</H4>
 <P ALIGN=LEFT>This script starts everything.&nbsp; 
 </P>
-<PRE STYLE="text-align: left">#!/bin/sh
+<font size="2">
+<PRE>
+#!/bin/sh
 #####
 #####
 #./DO..QC.. YEAR MO DY HR MN SC MSC  LAT(o) LON(o) H(km) MAG MT_DEPTH(km) STRIKE DIP RAKE Mw USERNAME FILE_NAME EVID MODEL
@@ -323,7 +322,9 @@ names such as</P>
 #####
 ./DOWILQCORFEUS 2008 03 03 14 11 15 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141115 pdbs AK135
 ./DOWILQC       2008 03 03 14 11 16 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141116 pdbs AK135
-./DOCWBQC       2008 03 03 14 11 14 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141116 pdbs AK135</PRE><P ALIGN=LEFT STYLE="margin-bottom: 0in">
+./DOCWBQC       2008 03 03 14 11 14 000 13.4 125.7 24.0 6.9 37 133 51 -85  6.8 RBHerrmann 20080303141116 pdbs AK135</PRE>
+</font>
+</p><p>
 This script actually defines the parameters for the scripts that do
 all the work.&nbsp; The only difference in the scripts is the data
 source. Normally only one<BR>data source is examined. I usually
@@ -425,7 +426,6 @@ tensor. I used those parameters for the forward synthetics<BR><BR><A HREF="20080
 - Data from IRIS DMC</A><BR><BR><A HREF="20080303141115/HTML.TEL/index.html">DOWILQCORFEUS
 - Data from the Orfeus Data Center</A><BR><BR><BR><BR><BR>
 </P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0in"><I><BR>Last Changed March
-12, 2008</I></P>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

@@ -1,10 +1,24 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Cross-correlation of ground noise</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body bgcolor="#ffffff">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Ambient noise cross-correlation</h2></header>
 <h2>Introduction</h2>
+<p>
 At the request of one user, this tutorial provides current scripts on
 the cross correlation of gound noise for the purpose of determining an
 interstation Green's function.<br>
@@ -12,38 +26,92 @@ interstation Green's function.<br>
 The complete package is contained in the archive <a href="noise.tgz">noise.tgz</a>
 which is 46 megabytes in size.<br>
 <h3>Contents:</h3>
+,p>
 Unpack the archive with the command<br>
 <br>
-<pre>	gunzip -c noise.tgz | tar xvf -<br><br></pre>
-This will create the directory structure as follows:<br>
+<pre>gunzip -c noise.tgz | tar xvf -</pre>
+</p><p>
+This will create the directory structure as follows:
 <br>
-<pre style="margin-left: 40px;">NOISE<br>|-- DATA<br>|   `-- 2010<br>|       |-- 245<br>|       |   |-- Q37ABHE<br>|       |   |-- Q37ABHN<br>|       |   |-- Q37ABHZ<br>|       |   |-- R34ABHE<br>|       |   |-- R34ABHN<br>|       |   `-- R34ABHZ<br>|       |-- 246<br>|       |-- 247<br>|       |-- 248<br>|       |-- 249<br>|       |-- 250<br>|       |-- 251<br>|       |-- 252<br>|       |-- 253<br>|       |-- 254<br>|       |-- 255<br>|       |-- 256<br>|       |-- 257<br>|       |-- 258<br>|       |-- 259<br>|       |-- 260<br>|       |-- 261<br>|       |-- 262<br>|       |-- 263<br>|       |-- 264<br>|       |-- 265<br>|       |-- 266<br>|       |-- 267<br>|       `-- 268<br>|           |-- Q37ABHE<br>|           |-- Q37ABHN<br>|           |-- Q37ABHZ<br>|           |-- R34ABHE<br>|           |-- R34ABHN<br>|           `-- R34ABHZ<br>|-- DOCLEANUP<br>|-- DOCONVERT<br>|-- DOCORR<br>|-- DOITALL<br>|-- DOSTACK<br>`-- bin<br>    `-- DOPAIRDIST<br><br></pre>
+<font size="2">
+<pre>
+   NOISE
+   |-- DATA
+   |   -- 2010
+   |       |-- 245
+   |       |   |-- Q37ABHE
+   |       |   |-- Q37ABHN
+   |       |   |-- Q37ABHZ
+   |       |   |-- R34ABHE
+   |       |   |-- R34ABHN
+   |       |   `-- R34ABHZ
+   |       |-- 246
+   |       |-- 247
+   |       |-- 248
+   |       |-- 249
+   |       |-- 250
+   |       |-- 251
+   |       |-- 252
+   |       |-- 253
+   |       |-- 254
+   |       |-- 255
+   |       |-- 256
+   |       |-- 257
+   |       |-- 258
+   |       |-- 259
+   |       |-- 260
+   |       |-- 261
+   |       |-- 262
+   |       |-- 263
+   |       |-- 264
+   |       |-- 265
+   |       |-- 266
+   |       |-- 267
+   |       `-- 268
+   |           |-- Q37ABHE
+   |           |-- Q37ABHN
+   |           |-- Q37ABHZ
+   |           |-- R34ABHE
+   |           |-- R34ABHN
+   |           `-- R34ABHZ
+   |-- DOCLEANUP
+   |-- DOCONVERT
+   |-- DOCORR
+   |-- DOITALL
+   |-- DOSTACK
+   `-- bin
+       -- DOPAIRDIST
+</pre>
+</font>
+</p><p>
 This data set consists of 24 days of the Transportable Array stations
 Q37A and R34A together with processin scripts.<br>
 <br>
 After modifying the scripts (see the discussion in the next section),
 the scripts are run in the following order:<br>
 <br>
-<div style="margin-left: 40px;">
 <pre>DOCONVERT<br>DOITALL<br>DOSTACK<br></pre>
-</div>
-<pre style="margin-left: 40px;">After the run there will be two new directories created: CROSS and STACK. The directory CROSS&nbsp; contains the cross-correlations for each day, e.g., </pre>
+</p><p>
+After the run there will be two new directories created: CROSS and STACK. The directory CROSS contains the cross-correlations for each day, e.g., 
 <br>
-<pre style="margin-left: 40px;">CROSS/2010/268:<br>2010.268.Q37ABHRR34ABHR.cor  2010.268.Q37ABHTR34ABHT.rev<br>2010.268.Q37ABHRR34ABHR.rev  2010.268.Q37ABHZR34ABHZ.cor<br>2010.268.Q37ABHTR34ABHT.cor  2010.268.Q37ABHZR34ABHZ.rev<br></pre>
+<pre >CROSS/2010/268:
+2010.268.Q37ABHRR34ABHR.cor  2010.268.Q37ABHTR34ABHT.rev
+2010.268.Q37ABHRR34ABHR.rev  2010.268.Q37ABHZR34ABHZ.cor
+2010.268.Q37ABHTR34ABHT.cor  2010.268.Q37ABHZR34ABHZ.rev</pre>
+</p><p>
 and the directory STACK will contain<br>
-<pre style="margin-left: 40px;">Q37ABHRR34ABHR.WSTK  Q37ABHTR34ABHT.WSTK  Q37ABHZR34ABHZ.WSTK<br></pre>
+<pre>Q37ABHRR34ABHR.WSTK  Q37ABHTR34ABHT.WSTK  Q37ABHZR34ABHZ.WSTK</pre>
+</p><p>
 A plot of the 24 day stack of the cross-corelation (.cor) and reversed
 cross-correlation (.rev) is performed using the <span
  style="font-weight: bold;">gsac</span> commands<br>
-<pre style="margin-left: 40px;">GSAC&gt; r STACK/*<br>GSAC&gt; xlim o o 300<br>GSAC&gt; markt on<br>GSAC&gt; p<br></pre>
-<img style="width: 606px; height: 469px;" alt="plot of stack"
- src="P001.png"><br>
+<pre>GSAC&gt; r STACK/*<br>GSAC&gt; xlim o o 300<br>GSAC&gt; markt on<br>GSAC&gt; p<br></pre>
+</p><p>
+<img  alt="plot of stack" src="P001.png"><br>
 The <span style="font-style: italic;">markt </span>command indicates
 the group velocity. As can bee seen the Rayleigh wave is well developed
 on the R and Z components and the Love wave is well defined on the T
-component of the 24 day stack.<br>
-<br>
-The group velocities are picked using the interactive program <span
+component of the 24 day stack.<br> <br> The group velocities are picked using the interactive program <span
  style="font-weight: bold;">do_mft</span> (which calls the program <span
  style="font-weight: bold;">sacmft96</span> to do the processing). The
 plots resulting from <span style="font-weight: bold;">sacmft96&nbsp; </span>are
@@ -53,30 +121,28 @@ as follow:<br>
  cellspacing="2">
   <tbody>
     <tr>
-      <td style="vertical-align: top; text-align: center;">Z<br>
+      <td style="vertical-align: middle; text-align: center;">Z<br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 691px; height: 327px;" alt="ZMFT96.png" src="ZMFT96.png"><br>
-      </td>
-    </tr>
-    <tr>
-      <td style="vertical-align: top; text-align: center;">R<br>
-      </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 691px; height: 326px;" alt="RMFT96.png" src="RMFT96.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img alt="ZMFT96.png" src="ZMFT96.png"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;">T<br>
+      <td style="vertical-align: middle; text-align: center;">R<br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 691px; height: 326px;" alt="TMFT96.png" src="TMFT96.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img alt="RMFT96.png" src="RMFT96.png"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: middle; text-align: center;">T<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><img alt="TMFT96.png" src="TMFT96.png"><br>
       </td>
     </tr>
   </tbody>
 </table>
 <br>
 <h2>Scripts</h2>
+<p>
 Read the scripts carefully. If necessary purchase a book on BASH shell
 programming.<br>
 <br>
@@ -115,8 +181,9 @@ and COMP parameters)<br>
 <br>
 <span style="font-weight: bold;">DOSTACK </span>- this script stacks
 the cross-correlations and places them in the subdirectory STACK<br>
-<br>
+</p>
 <h2>Caution</h2>
+<p>
 Once you get the empirical Green's functions, you must then decide what
 the dispersion actually is. This requires practice since you must
 select a Gaussian filter parameter.&nbsp; I recommend starting with a
@@ -131,5 +198,6 @@ Velocity Determination&nbsp; </a>tutorial)<br>
 This exercise will also assist you in defining the period range that
 you can believe. You can only believe the long period estimates when
 you are are large distances.<br>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

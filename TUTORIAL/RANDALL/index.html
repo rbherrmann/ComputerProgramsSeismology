@@ -1,7 +1,23 @@
 <HTML>
-<HEAD><TITLE>Comparison of the Randall and Herrmann Green function convention </TITLE></HEAD>
+<HEAD>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+</HEAD>
 <BODY>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Randall vs CPS Green's functions</h2></header>
 <H2>Introduction </H2>
+<p>
 The purpose of this note is to compare the fundamental solutions generated using Randall's and Herrmann's codes for Green's functions used for moment tensor studies.  There are eight different solutions that must be
 compared.
 <P>
@@ -25,27 +41,28 @@ For the comparison synthetics will be generated for the CUS model, a source dept
 and are in units of ground velocity of <I>cm/s</I> for a step-like source time function for a seismic moment of 1.0E+20 dyne-cm.
 <H3>Randall</H3>
 <PRE>
-      time mijkennett << EOF
-      rCUS.mod
-      EOF
-      #
-      # -d for displacement, 13 reducing velocity, -1.0 time shift
-      #
-      #1e9,0.0
-      xtsynth -d <<EOF
-      13.0,-1.0
-      EOF
+time mijkennett << EOF
+rCUS.mod
+EOF
+#
+# -d for displacement, 13 reducing velocity, -1.0 time shift
+#
+#1e9,0.0
+xtsynth -d &lt;&lt;EOF
+13.0,-1.0
+EOF
       
-      #####
-      #       put to Langston convention
-      #####
-      for i in *_mxx
-      do
-      B=ZSS.PLT
-      echo ZSS
-      gfconvert ZSS ZSS 1.0
-      done
+#####
+#       put to Langston convention
+#####
+for i in *_mxx
+do
+B=ZSS.PLT
+echo ZSS
+gfconvert ZSS ZSS 1.0
+done
 </PRE>
+</p>
 <P>The model file is <A HREF="rCUS.mod.txt">rCUS.mod</A>
 <P>The Randall Greens function have names like r_0500_0015_pz.clv t_0500_0015_pz.clv and z_0500_0015_pz.clv
 which are identical.  We use the following files for the comparison: z_0500_0015_pz.clv  z_0500_0015_pz.vds	z_0500_0015_sr.clv  z_0500_0015_sr.vds	z_0500_0015_st.vds
@@ -57,8 +74,8 @@ and are in units of ground velocity of <I>cm/s</I> for a step-like source time f
 The Green's functions are filtered using the <B>gsac</B> commands 
 <P>
 <PRE>
-      hp c 0.01 n 3
-      lp c 0.10 n 3
+hp c 0.01 n 3
+lp c 0.10 n 3
 </PRE>
 <P>
 Plots are created showing the first 300 seconds of the traces. Traces in a plot have hte same vertical scale.
@@ -67,7 +84,7 @@ Since the Herrmann Green's functions are in units of velocity, these are
 integrated for comparison after the filter operations:
 <P>
 <PRE>
-      int
+int
 </PRE>
 <P>
 <P>The focus of the comparison is on long periods, for which the slight difference in Q models will not be significant. However there will be slight timing differences since Randall's code uses <I>acausal Q</I> for reasons of speed, which the Herrmann code uses <I>causal Q</I>.
@@ -78,10 +95,11 @@ integrated for comparison after the filter operations:
 <TR>
 	<TD>Herrmann</TD>
 	<TD>Randall</TD>
-	<TD><CENTER>Comparison</CENTER></TD
+	<TD><CENTER>Comparison</CENTER></TD>
 	<TD>Herrmann</TD>
 	<TD>Randall</TD>
 	<TD><CENTER>Comparison</CENTER></TD
+</tr>
 <TR>
 	<TD>ZDD</TD>
 	<TD>z.clv</TD>
@@ -130,6 +148,6 @@ differ only in sign. After sign correction, the amplitudes of all agree.
 be used with code which previously use the Randall Green's functions, this difference is
 accounted for.
 <P>
-<center>Last changed Tue Feb 23 17:15:41 UTC 2010 </center>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

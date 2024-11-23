@@ -1,17 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>High frequency ambient noise simulation</title>
-    <meta name="generator" content="LibreOffice 5.4.4.2 (MacOSX)">
-    <meta name="created" content="00:00:00">
-    <meta name="changed" content="2018-01-01T07:41:47.814527000">
-    <style type="text/css">
-		h2.cjk { font-family: "Arial Unicode MS" }
-		h2.ctl { font-family: "Arial Unicode MS" }
-	</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body dir="ltr" bgcolor="#ffffff" lang="en-US">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Simulate ambient noise processsing</h2></header>
     <h2 class="western">Introduction</h2>
     <p>The purpose of this tutorial is to generate surface-wave noise
       for a known 1-D structural model by applying randomly oriented
@@ -50,9 +55,10 @@
     <h2 class="western">Download and distribution</h2>
     <p>This exercise is contained in the gzip’d tar file <a
         href="HFAMBIENTNOISE.tgz">HFAMBIENTNOISE.tgz</a></p>
+<p>
     After downloading execute the following commands:
-    <blockquote>
-      <pre>HFAMBIENTNOISE.dist/
+<pre>
+HFAMBIENTNOISE.dist/
 HFAMBIENTNOISE.dist/DISP.PLT
 HFAMBIENTNOISE.dist/DOITHF
 HFAMBIENTNOISE.dist/DOSTKZNE
@@ -62,9 +68,7 @@ HFAMBIENTNOISE.dist/Models/soil.mod
 HFAMBIENTNOISE.dist/Models/soilm2.mod
 HFAMBIENTNOISE.dist/Models/tak135sph.mod
 </pre>
-    </blockquote>
-    <p><br>
-    </p>
+</p>
     <h2 class="western">DOITHF</h2>
     <p>This
       <meta charset="utf-8">
@@ -144,225 +148,293 @@ HFAMBIENTNOISE.dist/Models/tak135sph.mod
       010101.&nbsp; All segments are then stacked to form the 900 second
       long noise waveform 1.Z.stk and 2.Z.stk<br>
     </p>
-    <p>The initial pare of <b>DOITHF&nbsp; </b>sets up the parameters
+    <p>The initial part of <b>DOITHF&nbsp; </b>sets up the parameters
       for the simulation:<br>
-    </p>
-    <blockquote>
-      <pre>#!/bin/bash<br><br>#####<br>#    create a noise data set at two stations  by generating synthetic<br>#    motions from randomly distributed point forces<br>#    applied at the surface<br>#    <br>#    To mimic actual field recordings, a long time series is <br>#    created which will then be analyzed by a separate script.<br>#<br>#    This script is designed for high frequency<br>#    motions for local site studies<br>#####<br><br>#####<br>#    Velocity model<br>#####<br>VMOD="Models/soilm2.mod"<br>#####<br>#    for surface wave synthetics<br>#####<br>NMODE=100<br><br>#####<br>#    noise sources:  These occur in the region<br>#    -XMAX &lt;= x &lt;= XMAX<br>#    -YMAX &lt;= y &lt;= YMAX<br>#    except about a region DMIN about the receiver<br>#####<br>DELTA=0.002     # sample interval in seconds<br><br>DMIN=0.025      # exclude sources within DMIN km of receiver<br>XMAX=1.000      # define source region <br>YMAX=1.000<br><br>#####<br>#    define the receiver coordinate   <font color="#ff0000">	By placing the receivers along the x-axis, the Rayleigh wave fill be on the Z and E components </font><br>#    XR,YR				<font color="#ff0000">and the Love on the N component after the cross-correlations and stacking</font><br>#####<br>XR1=0.050<br>YR1=0.0<br>XR2=-0.050<br>YR2=0.0<br><br>#####<br>TMAX=900        # The sac file will 0 to TMAX seconds long<br>#<br>NSRC=10000      # number of random sources<br>                # these will occur at intervals of TMAX/NSRC seconds<br><br></pre>
-    </blockquote>
-    <meta charset="utf-8">
-    <span style="color: rgb(0, 0, 0); font-family: Times; font-size:
-      medium; font-style: normal; font-variant-ligatures: normal;
-      font-variant-caps: normal; font-weight: 400; letter-spacing:
-      normal; orphans: 2; text-align: start; text-indent: 0px;
-      text-transform: none; white-space: normal; widows: 2;
-      word-spacing: 0px; -webkit-text-stroke-width: 0px;
-      background-color: rgb(255, 255, 255); text-decoration-style:
-      initial; text-decoration-color: initial; display: inline
-      !important; float: none;">The next part of the script defines some
-      functions. The details of the functions are not given in this
-      description.<br>
-      <br>
-    </span><span style="color: rgb(0, 0, 0); font-family: Times;
-      font-size: medium; font-style: normal; font-variant-ligatures:
-      normal; font-variant-caps: normal; font-weight: 400;
-      letter-spacing: normal; orphans: 2; text-align: start;
-      text-indent: 0px; text-transform: none; white-space: normal;
-      widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px;
-      background-color: rgb(255, 255, 255); text-decoration-style:
-      initial; text-decoration-color: initial; display: inline
-      !important; float: none;"></span>
-    <blockquote>
-      <pre>function getvmodextreme () {<br>#####<br>#    examine the velocity model to determine the<br>#    minimum and maximum shear velocities which<br>#    will be used for the noise sampling<br>#    <br>#   the following are returned globally:<br>#   VMIN - minimum S velocity in the model<br>#   VMAX - maximum S velocity in the model<br>#####<br>}<br><br>function getsrc()<br>{<br>#####<br>#    get random coordinates in the region <br>#    -XMAX &lt;= x &lt;= XMAX<br>#    -YMAX &lt;= y &lt;= YMAX<br>#<br>#   the following are returned globally:<br>#   (XS,YS) - source coordinates in km<br>#   (EVAL,EVLO) - sourc coordinate in geocentrc coordinates<br>#           - for simplicity the receivers are assumed to be<br>#           - near (0,0) so that te conversion from km to degree<br>#           - does is essentially cartesian<br>#####<br>}<br><br><br>function getforce()<br>{<br>#####<br>#    get the components for the force to be applied at the surface<br>#    the following are returned globally:<br>#    FN - force component in north direction<br>#    FE - force component in east  direction<br>#    FD - force component in down  direction<br>#   <br>#####<br>}<br><br>function getdistaz ()<br>{<br>#####<br>#   get distance, azimuth, backazimuth<br>#   Input arguments:<br>#       1 Source x coordinate<br>#       2 Source y coordinate<br>#       3 Receiver x coordinate<br>#       4 Receiver y coordinate<br>#<br>#   returns the following global variables<br>#   DIST - distance between source and receiver in km<br>#   AZ   - azimuth from source to receiver in degrees<br>#   BAZ  - backazimuth from receiver to source in degrees<br>#####<br>}<br><br>function makesyn ()<br>{<br>#####<br>#    make a synthetic for the global location and global force<br>#    for a particular distance, azimuth, backazimuth<br>#####<br>#    input:<br>#    $1 = distance<br>#    $2 = azimuth<br>#    $3 = backazimuth<br>#    $4,$5  x,y coordinates of source<br>#    $6,$7  x,y coordinates of receiver<br>#<br>#    return<br>#    sac files T.Z T.N T.E<br>#####<br>}<br><br></pre>
-    </blockquote>
+<font size="2">
+<pre>
+#!/bin/bash
+<br>#####
+#    create a noise data set at two stations  by generating synthetic
+#    motions from randomly distributed point forces
+#    applied at the surface
+#    
+#    To mimic actual field recordings, a long time series is 
+#    created which will then be analyzed by a separate script.
+#
+#    This script is designed for high frequency
+#    motions for local site studies
+#####
+<br>#####
+#    Velocity model
+#####
+VMOD="Models/soilm2.mod"
+#####
+#    for surface wave synthetics
+#####
+NMODE=100
+<br>#####
+#    noise sources:  These occur in the region
+#    -XMAX &lt;= x &lt;= XMAX
+#    -YMAX &lt;= y &lt;= YMAX
+#    except about a region DMIN about the receiver
+#####
+DELTA=0.002     # sample interval in seconds
+<br>DMIN=0.025      # exclude sources within DMIN km of receiver
+XMAX=1.000      # define source region 
+YMAX=1.000
+<br>#####
+#    define the receiver coordinate   
+#    XR,YR				
+#    <font color="#ff0000">By placing the receivers along the x-axis, the Rayleigh wave fill </font>
+#    <font color="#ff0000">be on the Z and E components </font>
+#    <font color="#ff0000">and the Love on the N component after the cross-correlations and stacking</font>
+#####
+XR1=0.050
+YR1=0.0
+XR2=-0.050
+YR2=0.0
+<br>#####
+TMAX=900        # The sac file will 0 to TMAX seconds long
+#
+NSRC=10000      # number of random sources
+                # these will occur at intervals of TMAX/NSRC seconds
+</pre>
+</font>
+</p><p>
+The next part of the script defines some functions. The details of the functions are not given in this description.
+<font size="2">
+<pre>
+function getvmodextreme () {
+#####
+#    examine the velocity model to determine the
+#    minimum and maximum shear velocities which
+#    will be used for the noise sampling
+#    
+#   the following are returned globally:
+#   VMIN - minimum S velocity in the model
+#   VMAX - maximum S velocity in the model
+#####
+}
+<br>function getsrc()
+{
+#####
+#    get random coordinates in the region 
+#    -XMAX &lt;= x &lt;= XMAX
+#    -YMAX &lt;= y &lt;= YMAX
+#
+#   the following are returned globally:
+#   (XS,YS) - source coordinates in km
+#   (EVAL,EVLO) - sourc coordinate in geocentrc coordinates
+#           - for simplicity the receivers are assumed to be
+#           - near (0,0) so that te conversion from km to degree
+#           - does is essentially cartesian
+#####
+}
+<br>
+function getforce()
+{
+#####
+#    get the components for the force to be applied at the surface
+#    the following are returned globally:
+#    FN - force component in north direction
+#    FE - force component in east  direction
+#    FD - force component in down  direction
+#   
+#####
+}
+
+function getdistaz ()
+{
+#####
+#   get distance, azimuth, backazimuth
+#   Input arguments:
+#       1 Source x coordinate
+#       2 Source y coordinate
+#       3 Receiver x coordinate
+#       4 Receiver y coordinate
+#
+#   returns the following global variables
+#   DIST - distance between source and receiver in km
+#   AZ   - azimuth from source to receiver in degrees
+#   BAZ  - backazimuth from receiver to source in degrees
+#####
+}
+
+function makesyn ()
+{
+#####
+#    make a synthetic for the global location and global force
+#    for a particular distance, azimuth, backazimuth
+#####
+#    input:
+#    $1 = distance
+#    $2 = azimuth
+#    $3 = backazimuth
+#    $4,$5  x,y coordinates of source
+#    $6,$7  x,y coordinates of receiver
+#
+#    return
+#    sac files T.Z T.N T.E
+#####
+}
+
+
+</pre>
+</font>
+</p>
     <p>
-      <meta charset="utf-8">
-      <span style="color: rgb(0, 0, 0); font-family: Times; font-size:
-        medium; font-style: normal; font-variant-ligatures: normal;
-        font-variant-caps: normal; font-weight: 400; letter-spacing:
-        normal; orphans: 2; text-align: start; text-indent: 0px;
-        text-transform: none; white-space: normal; widows: 2;
-        word-spacing: 0px; -webkit-text-stroke-width: 0px;
-        background-color: rgb(255, 255, 255); text-decoration-style:
-        initial; text-decoration-color: initial; display: inline
-        !important; float: none;">The last part of the script performs
+The last part of the script performs
         the simulation:<br>
-      </span></p>
-    <pre><span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"></span></pre>
-    <blockquote>##### everything below here does the synthetic of the
-      noise #####<br>
-      <br>
-      #####<br>
-      #&nbsp;&nbsp;&nbsp; clean up previouse run<br>
-      #####<br>
-      rm -f ??????.stk<br>
-      rm -f *.Z<br>
-      rm -f *.N<br>
-      rm -f *.E<br>
-      <br>
-      #####<br>
-      #&nbsp;&nbsp;&nbsp; get the extreme values of the S velocity from
-      the model<br>
-      #####<br>
-      getvmodextreme<br>
-      echo VMIN=$VMIN VMAX=$VMAX<br>
-      <br>
-      #####<br>
-      #&nbsp;&nbsp;&nbsp; first generate the eigenfunctions so that the<br>
-      #&nbsp;&nbsp;&nbsp; synthetics can be made<br>
-      #&nbsp;&nbsp;&nbsp; The time window must be long enough to
-      encompass the<br>
-      #&nbsp;&nbsp;&nbsp; arrivals at the fastest and slowest velocities<br>
-      #####<br>
-      NPT=`echo $XMAX $YMAX $VMIN $VMAX $DELTA | awk \<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '{ DIST=sqrt($1*$1 +
-      $2*$2) ; TWIN=(DIST/$3 ) ; print int(TWIN/$5)}' `<br>
-      DIST=`echo $XMAX $YMAX | awk '{print sqrt($1*$1 + $2*$2)}' `<br>
-      echo DIST $DIST XMAX $XMAX YMAX $YMAX<br>
-      cat &gt; ddfile &lt;&lt; EOF<br>
-      ${DIST} ${DELTA} ${NPT} 0.0 0.0<br>
-      EOF<br>
-      sprep96&nbsp; -M ${VMOD} -HS 0 -HR 0 -L -R -NMOD ${NMODE} -d
-      ddfile<br>
-      sdisp96<br>
-      sregn96 -NOQ<br>
-      slegn96 -NOQ<br>
-      FNYQ=`echo $DELTA | awk '{print 0.5/$1}' `<br>
-      <br>
-      #####<br>
-      #&nbsp;&nbsp;&nbsp; make plot of the dispersion of the form<br>
-      #&nbsp;&nbsp;&nbsp; LC RC<br>
-      #&nbsp;&nbsp;&nbsp; LU RU<br>
-      #####<br>
-      rm -fr S?EGN?.PLT<br>
-      rm -f DISP.PLT<br>
-      sdpegn96 -L -C&nbsp; -XLIN -YLIN -X0 2.0 -Y0 8 -XLEN 6 -YLEN 6
-      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
-      sdpegn96 -L -U&nbsp; -XLIN -YLIN -X0 2.0 -Y0 1 -XLEN 6 -YLEN 6
-      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
-      sdpegn96 -R -C&nbsp; -XLIN -YLIN -X0 9.5 -Y0 8 -XLEN 6 -YLEN 6
-      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
-      sdpegn96 -R -U&nbsp; -XLIN -YLIN -X0 9.5 -Y0 1 -XLEN 6 -YLEN 6
-      -YMIN 0 -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}<br>
-      cat S?EGN?.PLT &gt; DISP.PLT<br>
-      <br>
-      #####<br>
-      #&nbsp;&nbsp;&nbsp; now make the synthetics<br>
-      #&nbsp;&nbsp;&nbsp; for each subsource<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; get source coordinates<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; get force orientation<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make synthetic<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; use gsac to apply the
-      force<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open the synthetic
-      using cut o 0 o TMAX<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; save<br>
-      #&nbsp;&nbsp;&nbsp; then stack the subsources<br>
-      #####<br>
-      count=1<br>
-      while [ $count -lt ${NSRC} ]<br>
-      do<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SRC=`echo $count | awk
-      '{printf "%6.6d", $1}' `<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getsrc<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo $EVLA $EVLO $XS $YS<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getforce<br>
-      #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo $FN $FE $FD<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #####<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp;&nbsp; Y = north<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&nbsp;&nbsp; X = east<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #####<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getdistaz $XS $YS $XR1
-      $YR1<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIST1=$DIST<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AZ1=$AZ<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BAZ1=$BAZ<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; getdistaz $XS $YS $XR2
-      $YR2<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIST2=$DIST<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AZ2=$AZ<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BAZ2=$BAZ<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TSHIFT=`echo $SRC $NSRC
-      $TMAX | awk '{WIN=$3/$2; print ($1 -1.) *&nbsp; WIN}'`<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ######<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # check to see that
-      DIST1 &gt; DMIN and DIST2 &gt; XMIN<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #####<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ANS=`echo $DIST1
-      $DIST2&nbsp; $DMIN | awk '{ if ( $1 &gt;= $3 &amp;&amp; $2 &gt;=
-      $3 ) print "YES" ; else print "NO" }' `<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if [ $ANS = "YES" ]<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; then<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      makesyn $DIST1 $AZ1 $BAZ1 $XS $YS $XR1 $YR1<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      mv T.Z 1.${SRC}.Z<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      mv T.N 1.${SRC}.N<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      mv T.E 1.${SRC}.E<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      makesyn $DIST2 $AZ2 $BAZ2 $XS $YS $XR2 $YR2<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      mv T.Z 2.${SRC}.Z<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      mv T.N 2.${SRC}.N<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      mv T.E 2.${SRC}.E<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; count=`expr $count + 1
-      `<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fi<br>
-      done<br>
-      <br>
-      <br>
-      #####<br>
-      #&nbsp;&nbsp;&nbsp; make the final stack <font color="#ff0000">These
-        are the 900 second long windows for noise</font><br>
-      #####<br>
-      gsac &lt;&lt; EOF<br>
-      cut o o ${TMAX}<br>
-      r 1.??????.E<br>
-      stack relative<br>
-      ch kcmpnm E<br>
-      w 1.E.stk<br>
-      <br>
-      r 1.??????.N<br>
-      stack relative<br>
-      ch kcmpnm N<br>
-      w 1.N.stk<br>
-      <br>
-      r 1.??????.Z<br>
-      stack relative<br>
-      ch kcmpnm Z<br>
-      w 1.Z.stk<br>
-      q<br>
-      EOF<br>
-      <br>
-      <br>
-      gsac &lt;&lt; EOF<br>
-      cut o o ${TMAX}<br>
-      r 2.??????.E<br>
-      stack relative<br>
-      ch kcmpnm E<br>
-      w 2.E.stk<br>
-      <br>
-      r 2.??????.N<br>
-      stack relative<br>
-      ch kcmpnm N<br>
-      w 2.N.stk<br>
-      <br>
-      r 2.??????.Z<br>
-      stack relative<br>
-      ch kcmpnm Z<br>
-      w 2.Z.stk<br>
-      q<br>
-      EOF<br>
-      <br>
-      <br>
-      <br>
-    </blockquote>
-    <pre><span style="color: rgb(0, 0, 0); font-family: Times; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;"></span>
-    </pre>
+<font size="2">
+<pre>
+##### everything below here does the synthetic of the noise #####
+
+#####
+#    clean up previouse run
+#####
+rm -f ??????.stk
+rm -f *.Z
+rm -f *.N
+rm -f *.E
+
+#####
+#    get the extreme values of the S velocity from the model
+#####
+getvmodextreme
+echo VMIN=$VMIN VMAX=$VMAX
+
+#####
+#    first generate the eigenfunctions so that the
+#    synthetics can be made
+#    The time window must be long enough to encompass the
+#    arrivals at the fastest and slowest velocities
+#####
+NPT=`echo $XMAX $YMAX $VMIN $VMAX $DELTA | awk \
+        '{ DIST=sqrt($1*$1 + $2*$2) ; TWIN=(DIST/$3 ) ; print int(TWIN/$5)}' `
+DIST=`echo $XMAX $YMAX | awk '{print sqrt($1*$1 + $2*$2)}' `
+echo DIST $DIST XMAX $XMAX YMAX $YMAX
+cat > ddfile << EOF
+${DIST} ${DELTA} ${NPT} 0.0 0.0
+EOF
+sprep96  -M ${VMOD} -HS 0 -HR 0 -L -R -NMOD ${NMODE} -d ddfile
+sdisp96
+sregn96 -NOQ
+slegn96 -NOQ
+FNYQ=`echo $DELTA | awk '{print 0.5/$1}' `
+
+#####
+#    make plot of the dispersion of the form
+#    LC RC
+#    LU RU
+#####
+rm -fr S?EGN?.PLT
+rm -f DISP.PLT
+sdpegn96 -L -C -XLIN -YLIN -X0 2.0 -Y0 8 -XLEN 6 -YLEN 6 -YMIN 0 \
+                       -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+sdpegn96 -L -U -XLIN -YLIN -X0 2.0 -Y0 1 -XLEN 6 -YLEN 6 -YMIN 0 \
+                       -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+sdpegn96 -R -C -XLIN -YLIN -X0 9.5 -Y0 8 -XLEN 6 -YLEN 6 -YMIN 0 \
+                       -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+sdpegn96 -R -U -XLIN -YLIN -X0 9.5 -Y0 1 -XLEN 6 -YLEN 6 -YMIN 0 \
+                       -YMAX ${VMAX} -XMIN 0.0 -XMAX ${FNYQ}
+cat S?EGN?.PLT > DISP.PLT
+
+#####
+#    now make the synthetics
+#    for each subsource
+#        get source coordinates
+#        get force orientation
+#        make synthetic
+#        use gsac to apply the force
+#        open the synthetic using cut o 0 o TMAX
+#        save
+#    then stack the subsources
+#####
+count=1
+while [ $count -lt ${NSRC} ]
+do
+        SRC=`echo $count | awk '{printf "%6.6d", $1}' `
+        getsrc
+#       echo $EVLA $EVLO $XS $YS
+        getforce
+#       echo $FN $FE $FD
+        #####
+        #   Y = north
+        #   X = east
+        #####
+        getdistaz $XS $YS $XR1 $YR1
+        DIST1=$DIST
+        AZ1=$AZ
+        BAZ1=$BAZ
+        getdistaz $XS $YS $XR2 $YR2
+        DIST2=$DIST
+        AZ2=$AZ
+        BAZ2=$BAZ
+        TSHIFT=`echo $SRC $NSRC $TMAX | awk '{WIN=$3/$2; print ($1 -1.) *  WIN}'`
+        ######
+        # check to see that DIST1 > DMIN and DIST2 > XMIN
+        #####
+        ANS=`echo $DIST1 $DIST2  $DMIN | \
+              awk '{ if ( $1 >= $3 && $2 >= $3 ) print "YES" ; else print "NO" }' `
+        if [ $ANS = "YES" ]
+        then
+                makesyn $DIST1 $AZ1 $BAZ1 $XS $YS $XR1 $YR1
+                mv T.Z 1.${SRC}.Z
+                mv T.N 1.${SRC}.N
+                mv T.E 1.${SRC}.E
+                makesyn $DIST2 $AZ2 $BAZ2 $XS $YS $XR2 $YR2
+                mv T.Z 2.${SRC}.Z
+                mv T.N 2.${SRC}.N
+                mv T.E 2.${SRC}.E
+        count=`expr $count + 1 `
+        fi
+done
+
+
+#####
+#    make the final stack These are the 900 second long windows for noise
+#####
+gsac << EOF
+cut o o ${TMAX}
+r 1.??????.E
+stack relative
+ch kcmpnm E
+w 1.E.stk
+
+r 1.??????.N
+stack relative
+ch kcmpnm N
+w 1.N.stk
+
+r 1.??????.Z
+stack relative
+ch kcmpnm Z
+w 1.Z.stk
+q
+EOF
+
+
+gsac << EOF
+cut o o ${TMAX}
+r 2.??????.E
+stack relative
+ch kcmpnm E
+w 2.E.stk
+
+r 2.??????.N
+stack relative
+ch kcmpnm N
+w 2.N.stk
+
+r 2.??????.Z
+stack relative
+ch kcmpnm Z
+w 2.Z.stk
+q
+EOF
+</pre>
+</font>
+</p><p>
     <h2 class="western">DOSTKZNE</h2>
     <p>As set up, this script processes each of the 900 seconds of
       continuous 3-component noise at the two stations in 10 second
@@ -379,9 +451,7 @@ HFAMBIENTNOISE.dist/Models/tak135sph.mod
       <br>
       These were processed using the command<br>
     </p>
-    <blockquote>
       <pre><b>do_mft -G -IG ?.correv</b><br></pre>
-    </blockquote>
     <p>The -G ensures that the selected dispersion files will be named
       Z.correv.dsp&nbsp; for the ground velocities and Z.correc.phv for
       the phase velocities if the Z.correv is processed. The -IG flag<br>
@@ -453,7 +523,6 @@ HFAMBIENTNOISE.dist/Models/tak135sph.mod
     <p><br>
       <br>
     </p>
-    <p style="margin-bottom: 0in" align="center">Last changed December
-      31, 2017</p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

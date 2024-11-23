@@ -1,11 +1,24 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Waveform filtering for moment tensor inversion</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body style="background-color: rgb(255, 255, 255);">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Filtering and Moment Tensor</h2></header>
 <h2>Introduction</h2>
-<br>
+<p>
 The purpose of this display is to show the effect of a rejection filter
 on the processing. I consider events for which moment tensors have been
 obtained. I compare the ground velocities bandpass fitlered in the 0.02
@@ -16,9 +29,9 @@ frequency of about 0.16 Hz or by teleseismic surface waves with
 frequency of about 0.05 Hz.&nbsp; Coherent noise is typically a problem
 with small events.&nbsp; The reason that we want a simple waveform for
 the inversion is avoid the time shift operation of the inversion code
-latching onto the wrong peak.<br>
-<br>
-We consider the following earthquakes:<br>
+latching onto the wrong peak.
+<p>
+We consider the following earthquakes:
 <ul>
   <li>Earthquake of <a href="#20070806055945">20070806055945</a>
 Example of microseism rejection that also overcomes inadequacies of
@@ -30,6 +43,7 @@ Example of teleseism surface wave rejection<br>
   <li>Earthquake of <a href="#20090501013358">20090501013358</a>
 Example of microseism rejection that isolates pulse-like signal</li>
 </ul>
+</p><p>
 In this comparison I use a standard time window of 10 seconds before
 predicted/observed P and 150 seconds after. In the actual inversion
 this window was mad much shorter to degradation of the goodness of fit
@@ -37,12 +51,76 @@ parameter because of the post-signal noise.<br>
 <br>
 <a name="20070806055945"></a>
 <h2>Earthquake of 20070806055945</h2>
+<p>
 The processing of the Nevada event is found at&nbsp;<a
  href="http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20070806055945/index.html">http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20070806055945/index.html</a>&nbsp;&nbsp;&nbsp;
 <br>
+<font size="2">
+<pre>
+ SLU Moment Tensor Solution
+ 2007/08/06 05:59:45 37.811 -114.433 5.0 4.1 Nevada
+ 
+ Best Fitting Double Couple
+    Mo = 8.04e+21 dyne-cm
+    Mw = 3.87 
+    Z  = 8 km
+     Plane   Strike  Dip  Rake
+      NP1       14    82   145
+      NP2      110    55    10
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+     T   8.04e+21     30     326
+     N   0.00e+00     54     183
+     P  -8.04e+21     18      67
 <br>
-<pre> SLU Moment Tensor Solution<br> 2007/08/06 05:59:45 37.811 -114.433 5.0 4.1 Nevada<br> <br> Best Fitting Double Couple<br>    Mo = 8.04e+21 dyne-cm<br>    Mw = 3.87 <br>    Z  = 8 km<br>     Plane   Strike  Dip  Rake<br>      NP1       14    82   145<br>      NP2      110    55    10<br> Principal Axes:<br>   Axis    Value   Plunge  Azimuth<br>     T   8.04e+21     30     326<br>     N   0.00e+00     54     183<br>     P  -8.04e+21     18      67<br><br><br><br> Moment Tensor: (dyne-cm)<br>    Component  Value<br>       Mxx     3.01e+21<br>       Mxy    -5.39e+21<br>       Mxz     2.00e+21<br>       Myy    -4.32e+21<br>       Myz    -4.10e+21<br>       Mzz     1.31e+21<br>                                                     <br>                                                     <br>                                                     <br>                                                     <br>                     ############--                  <br>                 ################------              <br>              ###################---------           <br>             #####   ############----------          <br>           ####### T ############------------        <br>          ########   ###########--------------       <br>         #######################----------   --      <br>        -#######################---------- P ---     <br>        -######################-----------   ---     <br>       ---#####################------------------    <br>       -----##################-------------------    <br>       ------#################-------------------    <br>       --------##############--------------------    <br>        ----------###########-------------------     <br>        -------------#######--------------------     <br>         ----------------###-----------------##      <br>          -----------------######------#######       <br>           ----------------##################        <br>             -------------#################          <br>              -----------#################           <br>                 -------###############              <br>                     --############                  <br>                                                     <br>                                                     <br>                                                     <br><br> Harvard Convention<br> Moment Tensor:<br>      R          T          F<br>  1.31e+21   2.00e+21   4.10e+21 <br>  2.00e+21   3.01e+21   5.39e+21 <br>  4.10e+21   5.39e+21  -4.32e+21 <br></pre>
-<br>
+<br> Moment Tensor: (dyne-cm)
+    Component  Value
+       Mxx     3.01e+21
+       Mxy    -5.39e+21
+       Mxz     2.00e+21
+       Myy    -4.32e+21
+       Myz    -4.10e+21
+       Mzz     1.31e+21
+                                                     
+                                                     
+                                                     
+                                                     
+                     ############--                  
+                 ################------              
+              ###################---------           
+             #####   ############----------          
+           ####### T ############------------        
+          ########   ###########--------------       
+         #######################----------   --      
+        -#######################---------- P ---     
+        -######################-----------   ---     
+       ---#####################------------------    
+       -----##################-------------------    
+       ------#################-------------------    
+       --------##############--------------------    
+        ----------###########-------------------     
+        -------------#######--------------------     
+         ----------------###-----------------##      
+          -----------------######------#######       
+           ----------------##################        
+             -------------#################          
+              -----------#################           
+                 -------###############              
+                     --############                  
+                                                     
+                                                     
+                                                     
+
+ Harvard Convention
+ Moment Tensor:
+      R          T          F
+  1.31e+21   2.00e+21   4.10e+21 
+  2.00e+21   3.01e+21   5.39e+21 
+  4.10e+21   5.39e+21  -4.32e+21 
+
+</pre>
+</font>
+</p><p>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
  cellspacing="2">
   <tbody>
@@ -53,13 +131,9 @@ The processing of the Nevada event is found at&nbsp;<a
  style="font-weight: bold;">Microseism Rejection Filter</span></td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 517px; height: 653px;" alt="default"
- src="20070806055945/cmp1def.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img src="20070806055945/cmp1def.png"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 517px; height: 653px;" alt="reject"
- src="20070806055945/cmp1rej.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img src="20070806055945/cmp1rej.png"><br>
       </td>
     </tr>
     <tr>
@@ -74,14 +148,82 @@ br c 0.12 0.25 n 4 p 2<br>
     </tr>
   </tbody>
 </table>
-<br>
+</p>
+<p>
 <a name="20070818131630"></a>
+</p>
 <h2>Earthquake of 20070818131630</h2>
-The processing of this earthquake is documented at&nbsp;<a
- href="http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20070818131630/index.html">http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20070818131630/index.html</a>&nbsp;
+<p>
+The processing of this earthquake is documented at <a href="http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20070818131630/index.html">http://www.eas.slu.edu/eqc/eqc_mt/MECH.NA/20070818131630/index.html</a>
 <br>
-<pre> SLU Moment Tensor Solution<br> 2007/08/18 13:16:30 38.07 -113.31 7.0 3.9 Utah<br> <br> Best Fitting Double Couple<br>    Mo = 3.76e+21 dyne-cm<br>    Mw = 3.65 <br>    Z  = 9 km<br>     Plane   Strike  Dip  Rake<br>      NP1       65    75   -75<br>      NP2      199    21   -134<br> Principal Axes:<br>   Axis    Value   Plunge  Azimuth<br>     T   3.76e+21     28     143<br>     N   0.00e+00     14     241<br>     P  -3.76e+21     57     355<br><br><br><br> Moment Tensor: (dyne-cm)<br>    Component  Value<br>       Mxx     7.71e+20<br>       Mxy    -1.30e+21<br>       Mxz    -2.96e+21<br>       Myy     1.04e+21<br>       Myz     1.10e+21<br>       Mzz    -1.82e+21<br>                                                     <br>                                                     <br>                                                     <br>                                                     <br>                     #######-------                  <br>                 ######----------------              <br>              ######----------------------           <br>             #####-------------------------          <br>           #####-----------------------------        <br>          #####-----------   -----------------       <br>         #####------------ P -----------------#      <br>        #####-------------   ----------------###     <br>        ####-------------------------------#####     <br>       #####----------------------------#########    <br>       ####---------------------------###########    <br>       ####------------------------##############    <br>       ####--------------------##################    <br>        ###----------------#####################     <br>        ####----------##########################     <br>         ###---################################      <br>          ---#######################   #######       <br>           ---###################### T ######        <br>             --#####################   ####          <br>              --##########################           <br>                 -#####################              <br>                     ##############                  <br>                                                     <br>                                                     <br>                                                     <br><br> Harvard Convention<br> Moment Tensor:<br>      R          T          F<br> -1.82e+21  -2.96e+21  -1.10e+21 <br> -2.96e+21   7.71e+20   1.30e+21 <br> -1.10e+21   1.30e+21   1.04e+21 <br></pre>
-<br>
+<font size="2">
+<pre> 
+SLU Moment Tensor Solution
+ 2007/08/18 13:16:30 38.07 -113.31 7.0 3.9 Utah
+ 
+ Best Fitting Double Couple
+    Mo = 3.76e+21 dyne-cm
+    Mw = 3.65 
+    Z  = 9 km
+     Plane   Strike  Dip  Rake
+      NP1       65    75   -75
+      NP2      199    21   -134
+ Principal Axes:
+   Axis    Value   Plunge  Azimuth
+     T   3.76e+21     28     143
+     N   0.00e+00     14     241
+     P  -3.76e+21     57     355
+
+
+
+ Moment Tensor: (dyne-cm)
+    Component  Value
+       Mxx     7.71e+20
+       Mxy    -1.30e+21
+       Mxz    -2.96e+21
+       Myy     1.04e+21
+       Myz     1.10e+21
+       Mzz    -1.82e+21
+                                                     
+                                                     
+                                                     
+                                                     
+                     #######-------                  
+                 ######----------------              
+              ######----------------------           
+             #####-------------------------          
+           #####-----------------------------        
+          #####-----------   -----------------       
+         #####------------ P -----------------#      
+        #####-------------   ----------------###     
+        ####-------------------------------#####     
+       #####----------------------------#########    
+       ####---------------------------###########    
+       ####------------------------##############    
+       ####--------------------##################    
+        ###----------------#####################     
+        ####----------##########################     
+         ###---################################      
+          ---#######################   #######       
+           ---###################### T ######        
+             --#####################   ####          
+              --##########################           
+                 -#####################              
+                     ##############                  
+                                                     
+                                                     
+                                                     
+
+ Harvard Convention
+ Moment Tensor:
+      R          T          F
+ -1.82e+21  -2.96e+21  -1.10e+21 
+ -2.96e+21   7.71e+20   1.30e+21 
+ -1.10e+21   1.30e+21   1.04e+21 
+</pre>
+</font>
+</p>
+<p>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
  cellspacing="2">
   <tbody>
@@ -94,13 +236,9 @@ The processing of this earthquake is documented at&nbsp;<a
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 516px; height: 1301px;" alt="default"
- src="20070818131630/cmp1def.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img src="20070818131630/cmp1def.png"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 516px; height: 1301px;" alt="reject"
- src="20070818131630/cmp1rej.png"><br>
+      <td style="vertical-align: top; text-align: center;"><img src="20070818131630/cmp1rej.png"><br>
       </td>
     </tr>
     <tr>
@@ -117,14 +255,87 @@ br c 0.045 0.055 n 4 p 2<br>
     </tr>
   </tbody>
 </table>
-<br>
+</p><p>
 <a name="20090501013358"></a>
+</p>
 <h2>Earthquake of 20090501013358</h2>
-The solution for this earthquake is to be found at the link&nbsp;<a
+<p>
+The solution for this earthquake is to be found at the link<br>
+<a
  href="http://eqinfo.eas.slu.edu/Earthquake_Center/MECH.NA/20090501013358/index.html:f">http://eqinfo.eas.slu.edu/Earthquake_Center/MECH.NA/20090501013358/index.html</a>&nbsp;&nbsp;
 <br>
-<pre> USGS/SLU Moment Tensor Solution<br> ENS  2009/05/01 01:33:58:0  36.85 -104.78   5.0 3.5 New Mexico<br> <br> Stations used:<br>   IU.ANMO TA.Q25A TA.R25A TA.S25A TA.T21A TA.T22A TA.T23A <br>   TA.T24A TA.T25A TA.U21A TA.U24A TA.U25A TA.U26A TA.V24A <br>   TA.V25A TA.W23A TA.W24A TA.X23A TA.X24A TA.X25A TA.X26A <br> <br> Filtering commands used:<br>   hp c 0.02 n 3<br>   lp c 0.10 n 3<br>   br c 0.12 0.25 n 4 p 2<br> <br> Best Fitting Double Couple<br>  Mo = 6.24e+20 dyne-cm<br>  Mw = 3.13 <br>  Z  = 8 km<br>  Plane   Strike  Dip  Rake<br>   NP1      185    85    20<br>   NP2       93    70   175<br>  Principal Axes:<br>   Axis    Value   Plunge  Azimuth<br>    T   6.24e+20     18      51<br>    N   0.00e+00     69     198<br>    P  -6.24e+20     10     317<br><br> Moment Tensor: (dyne-cm)<br>    Component   Value<br>       Mxx    -1.02e+20<br>       Mxy     5.78e+20<br>       Mxz     3.26e+19<br>       Myy     6.46e+19<br>       Myz     2.14e+20<br>       Mzz     3.70e+19<br>                                                     <br>                                                     <br>                                                     <br>                                                     <br>                     --------######                  <br>                 ------------##########              <br>                 ------------#############           <br>             - P -----------###############          <br>           ---   -----------############   ##        <br>          ------------------############ T ###       <br>         -------------------############   ####      <br>        -------------------#####################     <br>        -------------------#####################     <br>       --------------------######################    <br>       #-------------------######################    <br>       ###-----------------######################    <br>       ########-----------####################---    <br>        ###############---############----------     <br>        ##################----------------------     <br>         #################---------------------      <br>          ################--------------------       <br>           ###############-------------------        <br>             #############-----------------          <br>              ############----------------           <br>                 #########-------------              <br>                     #####---------                  <br>                                                     <br>                                                     <br>                                                     <br> Global CMT Convention Moment Tensor:<br>      R          T          P<br>  3.70e+19   3.26e+19  -2.14e+20 <br>  3.26e+19  -1.02e+20  -5.78e+20 <br> -2.14e+20  -5.78e+20   6.46e+19 <br></pre>
-<br>
+<font size="2">
+<pre>
+ USGS/SLU Moment Tensor Solution
+ ENS  2009/05/01 01:33:58:0  36.85 -104.78   5.0 3.5 New Mexico
+ 
+ Stations used:
+   IU.ANMO TA.Q25A TA.R25A TA.S25A TA.T21A TA.T22A TA.T23A 
+   TA.T24A TA.T25A TA.U21A TA.U24A TA.U25A TA.U26A TA.V24A 
+   TA.V25A TA.W23A TA.W24A TA.X23A TA.X24A TA.X25A TA.X26A 
+ 
+ Filtering commands used:
+   hp c 0.02 n 3
+   lp c 0.10 n 3
+   br c 0.12 0.25 n 4 p 2
+ 
+ Best Fitting Double Couple
+  Mo = 6.24e+20 dyne-cm
+  Mw = 3.13 
+  Z  = 8 km
+  Plane   Strike  Dip  Rake
+   NP1      185    85    20
+   NP2       93    70   175
+  Principal Axes:
+   Axis    Value   Plunge  Azimuth
+    T   6.24e+20     18      51
+    N   0.00e+00     69     198
+    P  -6.24e+20     10     317
+<br> Moment Tensor: (dyne-cm)
+    Component   Value
+       Mxx    -1.02e+20
+       Mxy     5.78e+20
+       Mxz     3.26e+19
+       Myy     6.46e+19
+       Myz     2.14e+20
+       Mzz     3.70e+19
+                                                     
+                                                     
+                                                     
+                                                     
+                     --------######                  
+                 ------------##########              
+                 ------------#############           
+             - P -----------###############          
+           ---   -----------############   ##        
+          ------------------############ T ###       
+         -------------------############   ####      
+        -------------------#####################     
+        -------------------#####################     
+       --------------------######################    
+       #-------------------######################    
+       ###-----------------######################    
+       ########-----------####################---    
+        ###############---############----------     
+        ##################----------------------     
+         #################---------------------      
+          ################--------------------       
+           ###############-------------------        
+             #############-----------------          
+              ############----------------           
+                 #########-------------              
+                     #####---------                  
+                                                     
+                                                     
+                                                     
+ Global CMT Convention Moment Tensor:
+      R          T          P
+  3.70e+19   3.26e+19  -2.14e+20 
+  3.26e+19  -1.02e+20  -5.78e+20 
+ -2.14e+20  -5.78e+20   6.46e+19 
+</pre>
+</font>
+</p><p>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
  cellspacing="2">
   <tbody>
@@ -140,11 +351,9 @@ Reject filter<br>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 517px; height: 1589px;" alt="default"
  src="20090501013358/cmp1def.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 517px; height: 1589px;" alt="reject"
  src="20090501013358/cmp1rej.png"><br>
       </td>
     </tr>
@@ -164,5 +373,6 @@ br c 0.12 0.25 n 4 p 2<br>
 </table>
 <br>
 <br>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

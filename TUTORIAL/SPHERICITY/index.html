@@ -1,14 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Earth Flattening</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8460100">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Synsthetics for a spehre</h2></header>
 <H2>Introduction</H2>
 <P>This is a comparison between&nbsp;<A HREF="http://geodynamics.org/cig/software/packages/seismo/mineos/">mineos</A>
 and earth-flattened wavenumber integration synthetics (<A HREF="../../../eqccps.html">Computer
@@ -23,7 +31,7 @@ layers.</P>
 and the starting model for an AK135-F continental is <A HREF="AK135/ak135-f">ak135-f</A>.
 Running the program as&nbsp; 
 </P>
-<P STYLE="margin-left: 0.42in; margin-bottom: 0in">g77 conv.f<BR>a.out
+<P STYLE="margin-left: 0.42in; margin-bottom: 0in">gfortran conv.f<BR>a.out
 &lt; ak135-f</P>
 <P>creates the files tak135-f.txt for <I><B>mineos </B></I>and
 tak135sph.mod for the <I><B>CPS </B></I>programs. <BR><BR>This
@@ -84,21 +92,17 @@ problem.&nbsp; He demonstrated that the 2.275 was appropriate for the
 fundamental mode.&nbsp; This exercise focused on the entire waveform,
 which effectively tests the appropriateness for higher modes.</P>
 <H2>Program Installation</H2>
-<UL>
-	<UL>
 		<UL>
 			<LI><H3>Computer Programs in Seismology&nbsp; 
 			</H3>
 		</UL>
-		<LI><P STYLE="margin-bottom: 0in">&nbsp;I assume that you already
+		<P STYLE="margin-bottom: 0in">&nbsp;I assume that you already
 		have Computer Programs in Seismology installed and that the PATH
 		variable includes the absolute path to PROGRAMS.330/bin. 
 		</P>
 		<UL>
 			<LI><H3><A HREF="MINEOS/HTML/index.html">MINEOS</A></H3>
 		</UL>
-	</UL>
-</UL>
 <H2>Tests</H2>
 <P>The tests performed consisted of comparing travel times,
 free-oscillation synthetics to wavenumber-integration synthetics that
@@ -108,7 +112,7 @@ dispersion between the free oscillation and plane-layer codes.</P>
 	<UL>
 		<UL>
 			<LI><H3><A HREF="TIME96/index.html">Isotropic Travel Time Tests</A></H3>
-			<LI><H3><A HREF="NORMAL_MODE">Normal Mode vs Earth Flattening
+			<LI><H3><A HREF="NORMAL_MODE/index.html">Normal Mode vs Earth Flattening
 			Synthetics</A></H3>
 			<LI><H3><A HREF="Dispersion/index.html">Dispersion Tests</A></H3>
 		</UL>
@@ -118,7 +122,6 @@ dispersion between the free oscillation and plane-layer codes.</P>
 </P>
 <P><BR><BR>
 </P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0in">Last changed February 2,
-2008</P>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

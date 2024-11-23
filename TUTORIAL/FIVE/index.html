@@ -1,17 +1,23 @@
 <html>
 <head>
-<title>Using Fetchdata with SLU Moment Tensor</title>
-<style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Accessing FDSN Data Centers</h2></header>
 <h2>Introduction</h2>
+<p>
 At the time of the initial release of Computer Programs in Seismology in 1996, the INTERNET was young and seismic data were distributed in SEED volumes, which contained the waveforms, responses and meta-data such as information about instrument locations and orientations.
 <p>
 Since then, the methods of data access have changed as has the ability to acquire data from multiple data archives. Currently many data centers support the FDSN Web Services: <a href="https://www.fdsn.org/webservices/datacenters/">https://www.fdsn.org/webservices/datacenters/</a>. , which may include services for acquiring data, station or event information. Using these services requires software. The IRIS DMC distributes Perl scripts to access these services:
@@ -43,6 +49,7 @@ Always make sure that you are using the current verson of the software.
 The SLU moment tensor effort usually accesses the USGS CWB (Continuous Wave Buffer) to get waveforms and responses for studying earthquake in the United States. However, there were and are times when it is necessary to augment the data from the CWB with data from IRIS.
 <p>
 The FetchData scripts are used to accomplish this. FetchData offers the following options:
+<font size="2">
 <pre>
 Usage: FetchData [options]
 
@@ -75,6 +82,8 @@ Usage: FetchData [options]
  -m metafile       Write basic metadata to specified file
  -X SXMLfile       Write response-level StationXML to specified file
 </pre>
+</font>
+</p>
 <P>
 I note several <i>caveats</i>. The IRIS DMC has a response server that provides the instrument responses as SAC pole-zero files and <tt>evalresp</tt> RESP files. Not all seismogram data centers provide this service. Most, however, will provide the instrument response information as FDSN Station XML. 
 <p>
@@ -84,6 +93,7 @@ An alternative is to request the Station XML, and then use the <tt>stationxml-se
 <p>
 
 A shell script to do all this is listed below. Note the presence of the backslashes. This script is used to create another script and the backslashes prevent the first execution from filling in the variables. I call the final code DOFINISH.
+<font size="2">
 <pre>
 #####
 #     get the data
@@ -124,7 +134,8 @@ cd Orig
         #####
 
 
-        FetchData -F  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius \${CCORD}  -s \${START}  -e \${END} -o BH.mseed -m BH.metadata -X BH.metaxml 
+        FetchData -F  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius \${CCORD}  -s \${START}  \\
+                  -e \${END} -o BH.mseed -m BH.metadata -X BH.metaxml 
         #####
         #   The Fetch data will create file with names such as
         #   DMC-BH.mseed etc.
@@ -140,7 +151,8 @@ cd Orig
                 # data centers can be identified
                 #####
                 # use the converter to make a dataless
-                java -jar ~/bin/stationxml-seed-converter-2.0.7-SNAPSHOT.jar --input \${B}-BH.metaxml --output \${B}-BH.dataless
+                java -jar ~/bin/stationxml-seed-converter-2.0.7-SNAPSHOT.jar \\
+                       --input \${B}-BH.metaxml --output \${B}-BH.dataless
                 ( cd ../Sac
                         In a sub-shell go to the Sac directory to
                         convert the miniSEED and datalessSEED to 
@@ -151,14 +163,21 @@ cd Orig
                 )
 done
 </pre>
+</font>
+</p>
 <p>
 For data from the FDSN I use a DOWSF script which creates the DOFINISH  above. 
 <p>
 For data from the IRIS DMC, I use DOWS. If I execute the command:
+<font size="2">
 <pre>
-DOWS "2020" "08" "13" "02" "34" "17" "000" "62.237  " " -124.434" "10.0"  " 4.0" "CUS" "NONE" "NONE" "NWT, Canada "
+DOWS "2020" "08" "13" "02" "34" "17" "000" "62.237  " " -124.434" "10.0"  " 4.0" \
+     "CUS" "NONE" "NONE" "NWT, Canada "
 </pre>
+</font>
+</p><p>
 the script <I>DOFINISH</I> is created, which is as follows:
+<font size="2">
 <pre>
 #!/bin/sh
 
@@ -202,10 +221,13 @@ cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
 #####
 mkdir Orig
 cd Orig
-START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
-END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} |         awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 |       \
+  awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} | \
+        awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
 CCORD=`echo ${LAT} ${LON} ${DEG} | awk '{printf "%f:%f:%f",$1,$2,$3}' `
-FetchData  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius ${CCORD}  -s ${START}  -e ${END} -o BH.mseed -m BH.metadata -rd . 
+FetchData  -N '*' -S '*' -C 'BH*,HH*,HN*' -radius ${CCORD}  -s ${START} \
+ -e ${END} -o BH.mseed -m BH.metadata -rd . 
 mseed2sac -f 3 BH.mseed -m BH.metadata
 mv *SAC RESP* ../Sac
 cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
@@ -238,16 +260,20 @@ IDOQC
 #       do the inversion
 #####
 cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA
-./DOSOLUTION "${YEAR}" "${MO}" "${DY}" "${HR}" "${MN}" "${SEC}" "${MSEC}" "${LAT}" "${LON}" "${DEP}" "${MAG}" "${REG}" "${NEIC}" "${FELTID}" "${STATE}" "${MYPWD}" 
+./DOSOLUTION "${YEAR}" "${MO}" "${DY}" "${HR}" "${MN}" "${SEC}" "${MSEC}" "${LAT}" \
+     "${LON}" "${DEP}" "${MAG}" "${REG}" "${NEIC}" "${FELTID}" "${STATE}" "${MYPWD}" 
 </pre>
+</font>
 <p>
 You will see that the backslash-escaped character have avoided the interpretation by DOWS to create the correct DOFINISH.
 <p>
 The difference between the two DOFINISH scripes ariases from the fact that IRIS has a response server whihc provides the RESP files that I require.
 <h2>GMT</h2>
+<p>
 If you look at the recent SLM regional moment tensor solutions at
 <a href="www.eas.slu.edu/eqc/eqc_mt/MECH.NA">www.eas.slu.edu/eqc/eqc_mt/MECH.NA</a> you will see that GMT is used to several plots: station and epicenter map, focal mechanism and direction of maximum compressive stress axes. I have scripts to use GMT4 and GMT5. In addition, the CPS program <b>gsac</b> has the <i>map</i> and <i>map5</i> commands for use with GMT4 and 5 respectively. Those commands create an annotated shell script <i>map.sh</i> or <i>map5.sh</i> that, when executed, wil create the PostScript files <i>map.eps</i> or <i>map5.eps</i>. The shell scripts can be used a a prototype for fine adjustment of the GMT commands.
 <h2>Scripts</h2>
+<p>
 To distinguish the scripts that use GMT5, I append a <i>5</i> to the script name.  Thus there are DOWS5, DOSOLUTION5 and DOSETUP5.  In addition the working scripts for the inversion have DOPLTSAC5 in place of DOPLTSAC, OHTML5 inplace of DOHTML.  The DOSETUP5 knows about these.
 <p>
 My current scripts are available in a compressed tar archive: <a href="MECH.NA.tgz">MECH.NA.tgz</a>. To extract the scripts, use something like:
@@ -258,7 +284,7 @@ gunzip -c ~/MECH.NA.tgz | tr xvf -
 </pre>
 
 
-<center>last changed 16 AUG 2020</center>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>
 

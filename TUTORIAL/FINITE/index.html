@@ -1,12 +1,28 @@
 <HTML>
-<HEAD><TITLE>Finite Fault Synthetics -Computer Programs in Seismology Tutorials</TITLE>
+<HEAD>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
-<BODY BGCOLOR="#FFFFFF">
+<body>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Finite fault synthetics</h2></header>
 <h2>Introduction</h2>
+<p>
 The USGS NEIC provides Finite Fault Models for larger earthquakes. An example of this is at <a href="http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php"> http://earthquake.usgs.gov/earthquakes/eqinthenews/2012/usc000cfsd/finite_fault.php</A>. 
 <p>
 This tutorial shows how to use the Computer Programs in Seismology codes to make teleseismic P-wave synthetics from the published finite-fault solution.
 <h2>Requirements</h2>
+<p>
 To run the simulations, you will need the following:
 <UL>
 <li>a shell environment pointer to the Greens function directory, e.g.,
@@ -16,6 +32,7 @@ GREENDIR=/d/rbh/GREEN, the AK135 velocity file reached by $GREENDIR/Models/tak13
 <li>the shell script <a href="DOIT"> DOIT </a>
 </ul>
 <h2>DOIT</h2>
+<p>
 The distributed DOIT script is annotated and self contained, in that the script has the finite fault model, e.g., HayesCostaRica.mod, and the station list, stat.list. Although the finite fault model format may be standard, you can adjust the station lsit to your needs, since only the station name, latitude and longitude are required.
 <p>
 For each station, individual sub-fault synthetics are computed and then stacked to make the synthetic for a station. Teleseismic P-wave synthetics are created using <b>hudson96</b>. It is possible to change the script to make SH or SV synthetics. 
@@ -27,5 +44,6 @@ The following two plots show the stations and the record section.
 <p>
 <img src="prs.png">
 
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

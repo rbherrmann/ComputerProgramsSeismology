@@ -4,13 +4,31 @@
     <meta http-equiv="content-type" content="text/html;
       charset=windows-1252">
     <title>Computer Programs in Seismology Tutorials</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple.css Test Page</title>
+	<!-- The following are some stylesheets for testing -->
+	<!-- Sanitize.css reset -->
+	<!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+	<!-- Latest release version of Simple.css -->
+	<!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+	<!-- Latest commit from GitHub -->
+	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+	<!-- Local version -->
+	<link rel="stylesheet" href="nsimple.css">
   </head>
   <body>
-    <br>
-    <h1>COMPUTER PROGRAMS IN SEISMOLOGY - TUTORIALS<br>
-    </h1>
-    <hr>
-    <h2>Tutorials</h2>
+<header><h1>Computer Programs in Seismology </h1> <h2>Tutorials</h2></header>
+<h2>Tutorials</h2>
+<p>
+This section contains links to tutorials that illustrate the use of many of the Computer Programs in Seismoloigy codes. These examples were developed to test codes, to address research topics and to respond to needs of users. In most cases, a compressed archive is provided to permit the user to duplicate the example and to serve as a prototype for user modification. As needs arise, new tutorials are added to this compilation.
+</p>
+<p>
+I believe that the value of simulations lies in insights that they provide for the design of actual fiel experiments and defining the limitations of actual data sets.  The tutorial on   <a href="OCEAN1tut/index.html"> regional wave propagation in the ocean</a> is an example of the limitations of ambient noise empirical Green's functions when using vertical component data but the opportunities of using the transverse-transverse cross-correlations.
+</p>
+<p>
+Note that because of the age of some of the tutorials, links to external sites may no longer exist. This fact shoud not affect the lessons inherent in each tutorial.
+</p>
     <h3>Basic Seismology</h3>
     <ul style="font-weight: bold;">
       <li><a href="PMOTION/index.html">Particle motion plots for focal
@@ -369,14 +387,15 @@ response
           font-style: italic; font-weight: bold;">NEW November 22, 2022 </span>. This shows how access data from the European data centers using fdsn2ws_fetch.</li>
     </ul>
     <hr>
-    <h2><big>Introduction</big></h2>
+    <h2>Shell Scripting</h2>
+<p>
     The Computer Programs in Seismology is a documented package of well
     tested algorithms for certain types of seismological study. However,
     possession of the programs is just the first step for research.
     Equally important is the use of these programs to prepare and
     analyze data sets. For any researcher, this is difficult until one
-    becomes comfortable with data analysis.<br>
-    <br>
+    becomes comfortable with data analysis.
+</p><p>
     The purpose of these Tutorials is to provide proven procedures for
     data analysis in areas of common interest.&nbsp; Hopefully this list
     will continue to add new topics.<br>
@@ -384,43 +403,72 @@ response
     highlight the limitations of any analysis technique. These also
     serve as a validation of the compiled programs on a given
     computer.&nbsp; Other tutorials provide real data sets for
-    consideration.<br>
-    <br>
+    consideration.
+</p><p>
     Considerable use of made of SHELL scripts (get any modern book on
     LINUX and read the section on the BASH shell). The BASH shell is
     inherently a programming language that is the default shell on
     CYGWIN, LINUX and MacOS-X. A simple example of the bash shell (with
-    comments in color) is the following.<br>
-    <br>
+    comments in color) is the following.
+</p><p>
     Assume that we have a file named <span style="font-style: italic;">DOIT.
-
-
-
-
-
-
-
     </span>Also assume that this is an executable shell script, e.g., <br>
     <br>
-    <pre style="margin-left: 40px;">rbh&gt; ls -l DOIT<br>-rwxr-xr-x&nbsp; 1 rbh rbh 3619 2007-01-04 08:16 DOIT	<span style="color: rgb(255, 0, 0);">[The x means that this is an executable]<br></span><br></pre>
-    Assume that the contents of this file are the following:<br>
+    <pre>&gt; ls -l DOIT
+-rwxr-xr-x 1 rbh rbh 3619 2007-01-04 08:16 DOIT	
+<font style="color: rgb(255, 0, 0);">[The x means that this is an executable]<br></font></pre>
+</p><p>
+  Assume that the contents of this file are the following:<br>
     <br>
-    <pre style="margin-left: 40px;">#!/bin/sh<br>#####<br>#	A line starting with an initial # is a comment. <br>#	I use comments a lot to document scripts so that I know what I did<br><br>#	when I look at them later<br><br>#####<br><br>#####<br>#	This script will get ray parameters for a given source depth and epicentral distance<br><br>#	in degrees from the program udtdd<br><br>#####<br><br>#####<br>#	define event depth as a shell variable - note no spaces are permitted<br><br>#####<br>EVDP=100<br>#####<br>#	loop over epicentral distances<br>#####<br>for GCARC in 30 40 50 60 70 80 90<br>do<br>	RAYP=`udtdd -GCARC ${GCARC} -EVDP ${EVDP}`<br>	#####<br>	# the desired ray parameter is placed in the shell variable RAYP<br>	# we can use this value later. Note that the command syntax is -GCARC distance_degrees<br>	# The ${GCARC} places the value from the for loop into the proper position<br>	#####<br><br>	#####<br>	# now list the results using the echo command<br>	#####<br>	echo ${GCARC} ${EVDP} ${RAYP}<br>done<br></pre>
+    <pre>
+#!/bin/sh<br>#####
+#A line starting with an initial # is a comment. 
+#I use comments a lot to document scripts so that I know 
+<br>#what I did when I look at them later
+<br>#####
+<br>#####
+#This script will get ray parameters for a given source 
+#depth and epicentral distance in degrees from the
+#program udtdd
+#####
+#define event depth as a shell variable - note 
+#no spaces are permitted
+#####
+EVDP=100
+#####
+#	loop over epicentral distances
+#####
+for GCARC in 30 40 50 60 70 80 90
+do
+   RAYP=`udtdd -GCARC ${GCARC} -EVDP ${EVDP}`
+   #####
+   # the desired ray parameter is placed in the shell variable 
+   # RAYP. We can use this value later. Note that the command 
+   # syntax is -GCARC distance_degrees The ${GCARC} places 
+   # the value from the for loop into the proper position
+   #####
+   # now list the results using the echo command
+   #####
+   echo ${GCARC} ${EVDP} ${RAYP}
+done
+</pre>
+</p>
+<p>
     I can now run the script as follows<br>
-    &nbsp; <br>
-    <pre style="margin-left: 40px;">&gt; DOIT<br>30 100 0.0787601843<br>40 100 0.0742743611<br>50 100 0.0685746446<br>60 100 0.0613518916<br>70 100 0.0545108728<br>80 100 0.0479682162<br>90 100 0.0420032926<br></pre>
+     <br>
+    <pre>
+DOIT
+30 100 0.0787601843
+40 100 0.0742743611
+50 100 0.0685746446
+60 100 0.0613518916
+70 100 0.0545108728
+80 100 0.0479682162
+90 100 0.0420032926
+</pre>
+</p><p>
     Use SHELL scripts and put in comments.<br>
-    <hr style="width: 100%; height: 2px;">
-    <div style="text-align: center;"><span style="font-style: italic;">
-        Last changed December 31, 2017<br>
-      </span></div>
-<ul>
-      <li><span style="color: rgb(255, 0, 0); font-weight: bold;"><a
-            href="tOCEAN1tut/index.html"> Wave propagation for ocean floor observations
-             </a></span><span style="color: rgb(255, 0, 0);
-          font-style: italic; font-weight: bold;"> </span><span
-          style="color: rgb(255, 0, 0); font-style: italic; font-weight:
-          bold;">NEW November  7, 2024</span></li>
-    </ul>
+</p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

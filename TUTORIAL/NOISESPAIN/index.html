@@ -1,19 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE></TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="20060622;8503300">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8552700">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
-<H1>Shear-Wave Velocities from the Cross-Correlation of Ground Noise
-in the South of Spain</H1>
-<P><BR><BR>
-</P>
-<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Introduction</FONT></FONT></P>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Ambient noise Spain</h2></header>
+<H2>Shear-Wave Velocities from the Cross-Correlation of Ground Noise
+in the South of Spain</H2>
+<P Introduction</FONT></FONT></P>
 <P>This note describes the initial results of applying the technique
 of cross-correlation of ground noise to obtain inter-station Green's
 functions between broadband stations run by IAG of the University of
@@ -76,13 +82,10 @@ a plot of locations are as follow:</P>
 		</TR>
 	</TBODY>
 </TABLE>
-<P ALIGN=CENTER><IMG SRC="map.png" NAME="graphics1" ALIGN=BOTTOM WIDTH=462 HEIGHT=557 BORDER=0></P>
+<P ALIGN=CENTER><IMG SRC="map.png" NAME="graphics1" 0></P>
 <P>The interstation distances are ACLR-ASCB 54 km, ACLR-VELZ 68 km,
 and ASCB-VELZ 60 km</P>
-<P><BR><BR>
-</P>
-<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Data
-Preparation</FONT></FONT></P>
+<h2>Data Preparation</h2>
 <P>The data were in SEISAN binary format. Since the <I>sacsei</I> did
 not work properly under LINUX, I used the <I>seiasc</I> pre-compiled
 for LINUX to create and ASCII SEISAN file, which was then converted
@@ -92,31 +95,34 @@ seiascsacbin.f -o seiascsacbin) [<A HREF="seiascsacbin.f">seiascsacbin.f</A>]
 <P>Before discussing the preparation and processing, the directory
 organization in important: 
 </P>
-<PRE>/rrd0/home/rbh/DATA/FLOR/----
-                            |
-                            |----2005/--
-                            |          |-----305/
-                            |          ...
-                            |          |-----317/
-                            |          |       |---ACLRBHE  ACLRBHN  ACLRBHZ  ASCBBHE  ASCBBHN  ASCBBHZ  VELZBHE  VELZBHN  VELZBHZ
-                            |          ...
-                            |          |-----334/
-                            |
-                            |----WORK/
-                            |      |--DOIT seiasc* seiascsacbin* seiascsacbin.f
-                            |
-                            |----TEMP/
-                            |
-                            |----NOISE/
-                            |      |-----DOCORRBH ACLRBHTVELZBHT.WSTK
-                            |
-                            |----RAW/
-                            |      |----ACLR/
-                            |      |       |----2005-11-30-2329-42S.CLR___003 2005-11-30-2359-42S.CLR___003
-                            |      |----ASCB/
-                            |      |----VELZ
-                            |
-                            |-----MFT/</PRE><P>
+<font size="2">
+<PRE>/home/rbh/DATA/----
+                       |
+                       |----2005/--
+                       |          |-----305/
+                       |          ...
+                       |          |-----317/
+                       |          |       |---ACLRBHE  ACLRBHN  ACLRBHZ ...
+                       |          ...
+                       |          |-----334/
+                       |
+                       |----WORK/
+                       |      |--DOIT seiasc* seiascsacbin* seiascsacbin.
+                       |
+                       |----TEMP/
+                       |
+                       |----NOISE/
+                       |      |-----DOCORRBH ACLRBHTVELZBHT.WSTK
+                       |
+                       |----RAW/
+                       |      |----ACLR/
+                       |      |       |----2005-11-30-2329-42S.CLR___003 
+                       |      |----ASCB/
+                       |      |----VELZ
+                       |
+                       |-----MFT/</PRE>
+</font>
+</p><P>
 <I>RAW</I> contains the SEISAN files from the the stations. These
 were organized by station into subdirectories, and the station day
 was split into 30 minute chunks</P>
@@ -136,10 +142,7 @@ the subdirectory 2005/305
 <P>This conversion to SAC took a lot of time. Mostly because I did
 this on my RAID, so that there was a lot of overhead. 
 </P>
-<P><BR><BR>
-</P>
-<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Noise
-Cross-correlation</FONT></FONT></P>
+<h2>Cross-correlation</h2>
 <P>This was run from the script in the <I>NOISE</I> directory. The
 processing script is called <A HREF="DOCORRBH">DOCORRBH</A>. This
 script is also heavily commented. If you keep the naming convention
@@ -172,6 +175,7 @@ functions and group velocities</FONT></FONT></P>
 <P>The following <I>gsac</I> commands were run from within the DOC
 directory to plot the results 
 </P>
+<font size="2">
 <PRE>GSAC - Computer Programs in Seismology [V1.1 10 JAN 2005]
        Copyright 2004, 2005, 2006 R. B. Herrmann
 GSAC&gt; r ../NOISE/*Z.WSTK
@@ -184,9 +188,12 @@ BP: corners fl 0.050000 fh 2.000000 npoles 2 pass 2 Butterworth
 GSAC&gt; xlim o o 50
 GSAC&gt; markt on
 GSAC&gt; fileid name
-GSAC&gt; p</PRE><P>
+GSAC&gt; p</PRE>
+</font>
+</p><P>
 The result is 
-<IMG SRC="P001.png" NAME="graphics2" ALIGN=BOTTOM WIDTH=606 HEIGHT=468 BORDER=0>
+<br>
+<IMG SRC="P001.png" NAME="graphics2" >
 </P>
 <P>Group velocity analysis was performed using <I>do_mft -G
 ../NOISE/*.WSTK</I>. Group velocity analysis is tricky. We must be
@@ -235,13 +242,12 @@ dispersion from these files.
 		</TD>
 	</TR>
 </TABLE>
-<P>The <I>surf96</I> combined dispersion file is <BR><A HREF="surf.disp">surf.disp</A>
+<P>The <I>surf96</I> combined dispersion file is <A HREF="surf.disp">surf.disp</A>
 Cross-correlation of ground noise will work for southern Spain. The
 cross-correlations may improve if we add another 30 days of data to
 the processing 
 </P>
-<P STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>Stacked
-waveforms</FONT></FONT></P>
+<h2>Stacked waveforms</h2>
 <P>The following are the SAC binary files of the stacked waveforms.
 The SAC header value IHDR11 shows the number of traces that were
 stacked to create this result. Note that since we stack the day
@@ -271,6 +277,7 @@ You can safely use these SAC files on your computer.
 <BR><A HREF="ASCBBHTVELZBHT.WSTK">ASCBBHTVELZBHT.WSTK</A>
 <BR><A HREF="ASCBBHZVELZBHZ.WSTK">ASCBBHZVELZBHZ.WSTK</A> 
 </P>
-<H1></H1>
+
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

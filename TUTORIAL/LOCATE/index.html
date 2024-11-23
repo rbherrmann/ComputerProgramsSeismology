@@ -1,34 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>Computer Programs in Seismology Tutorial Locate</title>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials -SW Inversion
-      Kernels</title>
-    <style type="text/css">
-                h2.cjk { font-family: "Arial Unicode MS" }
-                h2.ctl { font-family: "Arial Unicode MS" }
-                h3.cjk { font-family: "Arial Unicode MS" }
-                h3.ctl { font-family: "Arial Unicode
-                                MS" }
-                h4.cjk { font-family: "Arial
-                                Unicode MS" }
-                h4.ctl { font-family: "Arial Unicode MS" }
-                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
-                pre.cjk { font-family: "Courier New", monospace }
-        </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Epicenter determination</h2></header>
     <h2>Introduction</h2>
     <p>This tutorial shows how to locate the epicenter of a seismic
       event using <b>gsac</b>, <b>sac2eloc</b> and
@@ -42,17 +30,16 @@ pre {
     </p>
     <pre>gunzip -c event.tgz | tar xvf -
 </pre>
-    <br>
+   </p> <p>
     This will create the subdirectory <i>DAT</i> which contains the
     waveform files. You can check to see that the files have the station
     coordinates properly installed with the command
-    <br>
     <pre>gsac
 GSAC&gt; rh *
 GSAC&gt; lh stla stlo stel
 GSAC&gt; q
 </pre>
-    <br>
+</p><p>
     Note that the <b>gsac</b> invokes the code and that the <i>GSAC&gt;</i>
     are the interactive prompts of the program.
     <p></p>
@@ -70,7 +57,9 @@ GSAC&gt; q
     </p>
     <p>
     </p>
-    <pre>cd DAT
+<font size="2">
+    <pre>
+cd DAT
 gsac
 GSAC&gt; r *
 GSAC&gt; ppk regional
@@ -79,13 +68,16 @@ GSAC&gt; ppk regional
 GSAC&gt; wh
 GSAC&gt; q
 </pre>
+</font>
     <p></p>
     <p>
       For the data set the following shows the commands and interactive
       session:
       <br>
     </p>
-    <pre>cd DAT
+<font size="2">
+    <pre>
+cd DAT
 gsac
 GSAC&gt; r *
 GSAC&gt; rtr
@@ -97,7 +89,8 @@ GSAC&gt; ppk perplot 3 regional
                    <font color="#ff0000">[Use the regional picking GUI and display three traces at</font> 
                     <font color="#ff0000">a time since the stations have 3 components of motion]</font>
 </pre>
-    <br>
+</font>
+</p><p>
     The result of this sequence is the window
     <br>
     <br>
@@ -181,8 +174,9 @@ GSAC&gt; q
       will work in the directory above. thus enter the command
       <br>
     </p>
-    <pre>sac2eloc DAT/*SAC  [since the sac files ended as .SAC]
+    <pre>sac2eloc DAT/*SAC  #[since the sac files ended as .SAC]
 </pre>
+</p><p>
     <br>
     The result is the file <a href="elocate.dat">elocate.dat</a>.
     <br>
@@ -208,13 +202,15 @@ GSAC&gt; q
       identified as "7". So a batch run using the WUS model would be
       <br>
     </p>
-    <pre>elocate -VELMOD             [Creates the file VEL.MOD in the directory.]
+<font size="2">
+    <pre>
+elocate -VELMOD       #[Creates the file VEL.MOD in the directory.]
 elocate -M 7 -D 10 -BATCH &gt; elocate.txt   
-                            <font color="#ff0000">[Use model 7, an initial depth of 10 km and batch (automatic run.}</font>
+<font color="#ff0000">#[Use model 7, an initial depth of 10 km and batch (automatic run.}</font>
 </pre>
-    <br>
-    <p></p>
-    <p>The output of this run is in the file <a href="elocate.txt">
+</font>
+</p><p>
+The output of this run is in the file <a href="elocate.txt">
         elocate.txt</a>. The first part of this file shows the data
       which includes the station, weight, arrival time,. phase and
       polarity, and station latitude, longitude and elevation [Note: <b>elocate</b>
@@ -229,7 +225,9 @@ elocate -M 7 -D 10 -BATCH &gt; elocate.txt
       the solution:
       <br>
     </p>
-    <pre> Error Ellipse  X=   1.7949 km  Y= 2.7735 km  Theta = 348.0448 deg (azimuth of X axis)
+<font size="2">
+    <pre>
+ Error Ellipse  X=   1.7949 km  Y= 2.7735 km  Theta = 348.0448 deg (azimuth of X axis)
 
  RMS Error        :               1.694              sec
  Travel_Time_Table:          WUS     
@@ -247,22 +245,26 @@ elocate -M 7 -D 10 -BATCH &gt; elocate.txt
  
     ch o gmt   2024 270  07 56 47 380
 </pre>
-    <br>
+</font>
+</p><p>
     The last three line are <b>gsac</b> commands if you wish to place
     the location information in the sac files, e.g.,
     <br>
-    <pre>gsac
+<font size="2">
+    <pre>
+gsac
 GSAC&gt; rh *SAC
 GSAC&gt;   ch evla    31.5325 evlo  -104.1199 evdp      12.90
 GSAC&gt;   ch ocal   2024 09 26 07 56 47 380
 GSAC&gt; wh
 GSAC&gt; q
 </pre>
+</font>
+</p><p>
     If the <i>CMPINC</i> and <i>CMPAZ</i> fields are set in the
     header, you are ready to rotate the three component traces to make
     Z, R and T traces.
-    <p></p>
-    <p>
+    </p><p>
       Several output files are created: fmplot.tmp, assoc.tmp,
       origin.tmp. orger.tmp and elocate.sum. They contain information
       from the elocate.txt listing. The <i>fmplot.tmp</i> can be use
@@ -272,7 +274,9 @@ GSAC&gt; q
       observations. The commands are
       <br>
     </p>
-    <pre>#!/bin/sh
+<font size="2">
+    <pre>
+#!/bin/sh
 
 elocate -VELMOD
 elocate -M 7 -BATCH -D 10 &gt; elocate.txt
@@ -287,10 +291,10 @@ plotnps -BGFILL -F7 -W10 -EPS -K &lt; FMPLOT.PLT &gt; t.eps
 # Use ImageMagick to convert EPS to PNG
 convert -trim t.eps slufm.png
 </pre>
-    <br>
-    The result is ithe file <i>slufm.png<br>
-      <br>
-    </i>
+</font>
+</p><p>
+    The result is ithe file <i>slufm.png </i>
+<br>
     <table>
       <tbody>
         <tr>
@@ -327,5 +331,6 @@ convert -trim t.eps slufm.png
       find that the S arrival is sharper on the T (transverse
       component), and thus read it from that component.<br>
     </p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

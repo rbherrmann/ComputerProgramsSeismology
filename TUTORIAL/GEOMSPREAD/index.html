@@ -1,14 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Teleseismic Geometrical Spreading</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8423300">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Geometrical spreading</h2></header>
 <P><FONT SIZE=5><B>Teleseismic P- and S-wave Geometrical Spreading</B></FONT></P>
 <H2>Introduction</H2>
 <P>Langston and Helmberger (1975) proposed a simple technique to
@@ -18,31 +26,43 @@ teleseismic signal immediately following P.&nbsp; They used a simple
 halfspace&nbsp; model for the source and receiver crusts and required
 a geometrical spreading and T* attenuation parameter to propagate the
 signal from the source region to the receiver.</P>
-<PRE>       We follow Bullen and the
-      Herrmann class notes http://www.eas.slu.edu/People/RBHerrmann/Courses/EASA462/
-               for Ass14.pdf
-       The geometrical spreading is dimensionless and gives the decrease in amplitude from
-       a distance of 1 km from the source to the receiver
-                 2                            2
-            (   a sin Is Vs                  d T      )
-       sqrt |  ------------------------     -----     |
-            |                              2      2   |
-            (  sin DEG  cos Ir Rs Cos Is Rr  d DEL    )
-       a = radius of sphere about source - we use 1.0 km
-       Is= incident angle at source
-       Ir= incident angle at receiver
-       Rs= distance from center of Earth to source
-       Rr= distance from center of Earth to receiver
-       DEG=epicental distance in degrees
-       DEL=distance in radians
-       note that the second derivative divided by Rr^2 is sec/km^2 - which we can get
-       from dp/dx  where dp is in sec/km and dx is the distance in km, so we compute
-                 2                            2
-            (   a sin Is Vs                  d T      )
-       sqrt |  ------------------------     -----     |
-            |                                  2      |
-            (  sin DEG  cos Ir Rs Cos Is     dx       )
-       The only imperfection is the numerical computation of dp/dD</PRE><P>
+<font size="3">
+<PRE>
+We follow Bullen and the
+Herrmann class notes 
+ http://www.eas.slu.edu/People/RBHerrmann/Courses/EASA462/
+         for Ass14.pdf
+The geometrical spreading is dimensionless and gives the 
+decrease in amplitude from a distance of 1 km from the 
+source to the receiver
+
+          2                            2
+     (   a sin Is Vs                  d T      )
+sqrt |  ------------------------     -----     |
+     |                              2      2   |
+     (  sin DEG  cos Ir Rs Cos Is Rr  d DEL    )
+
+a = radius of sphere about source - we use 1.0 km
+Is= incident angle at source
+Ir= incident angle at receiver
+Rs= distance from center of Earth to source
+Rr= distance from center of Earth to receiver
+DEG=epicental distance in degrees
+DEL=distance in radians
+Note that the second derivative divided by Rr^2 is sec/km^2 - which we 
+can get from dp/dx  where dp is in sec/km and dx is the distance in km, 
+so we compute
+
+          2                            2
+     (   a sin Is Vs                  d T      )
+sqrt |  ------------------------     -----     |
+     |                                  2      |
+     (  sin DEG  cos Ir Rs Cos Is     dx       )
+
+The only imperfection is the numerical computation of dp/dD</PRE>
+</font>
+</p>
+<P>
 This description describes is a function of the ratio of ray tube
 areas at the receiver to the source.&nbsp; Aki and Richards (199?)
 and others note that a consideration of wave dynamics requires this
@@ -124,5 +144,6 @@ entering the command DOIT yields the following:</P>
  90.0  10.0   783.98   4.685    3.255e-05  1.65</PRE><P>
 <BR><BR>
 </P>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

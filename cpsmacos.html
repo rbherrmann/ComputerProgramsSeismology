@@ -1,19 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body style="background-color:#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>MacOS installation</h2></header>
     <h3>MacOS </h3>
     <p> <b><i> These notes apply to the installation on April 23, 2023
           under MacOS Version Ventura 13.2.1.&nbsp; The test machine was
@@ -74,20 +77,26 @@ sudo port install ImageMagick
       <li>Install homebrew <a href="brew.sh">brew.sh</a>. The web page
         gives a command for installing <b>homebrew</b>. As of April 27,
         2023, this command is
-        <pre>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+<font size="1">
+        <pre>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 </pre>
+</font>
         Refer to the HomeBrew website to ensure that this command line
         is uptodate. Now install the following packages:
-        <pre>brew install wget
+        <pre><small>
+brew install wget
 brew install gcc
-brew install make          <font color="#ff0000">         <font color="#cc0000"> This will give the GNU make  </font></font>       
+brew install make    # <font color="#ff0000">This will give the GNU make  </font>       
 brew install xfig
 brew install gawk
 brew install ghostscript
 brew install ffmpeg
 brew install gmt
 brew install graphicsmagick
-brew install --cask mactex <font color="#ff0000">         <font color="#cc0000"> This will give LaTex for document creation </font></font>       
+brew install --cask mactex 
+        #<font color="#ff0000"> This will give LaTex for document creation </font>       
+</small>
 </pre>
         <p> <i> The reason for downloading from the two sources is that
             a&nbsp; package&nbsp; missing from one may be in&nbsp; the
@@ -129,7 +138,7 @@ brew install --cask mactex <font color="#ff0000">         <font color="#cc0000">
           <li><b>ImageMagick</b> - A graphics manipulation package. I
             primarily use the <b>convert</b> command to convert EPS to
             PNG, e.g.,
-            <pre>convert -trim t.eps -background white -alpha remove -alpha off t.png
+            <pre><small>convert -trim t.eps -background white -alpha remove -alpha off t.png</small>
 </pre>
           </li>
           <li><b>mactex</b> - provides the command line <b>latex</b>
@@ -162,7 +171,7 @@ brew install --cask mactex <font color="#ff0000">         <font color="#cc0000">
         of the file such as
         <pre>OPATH=$PATH
 PATH=:.:$HOME/bin:$HOME/PROGRAMS.330/bin:$OPATH <font color="#ff0000"> 
-     (This assumes that you installed CPS in your login directory)</font>
+(Assumeing that you installed CPS in your login directory)</font>
 </pre>
       </li>
       <li>You are now ready to compile CPS. If PROGRAMS.330 is in your
@@ -186,5 +195,6 @@ PATH=:.:$HOME/bin:$HOME/PROGRAMS.330/bin:$OPATH <font color="#ff0000">
         to the Email address&nbsp; given on the main page if there are
         problems. </li>
     </ul>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

@@ -1,10 +1,27 @@
 <HTML>
-<HEAD><TITLE>Computer Programs in Seismology Tutorials - UVW XYZ</TITLE>
+<HEAD>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Instrument QC UVW/XYZ</h2></header>
 <h2>Summary</h2>
+<p>
 While using waveforms from an earthquake, inconsistences in waveforms at some stations were noted.  The  problem is  traced to recording the internal UVW rather than ENZ components. A quick fix is proposed and an examination of field cabling is recommended.
+</p>
 <H2>Introduction</H2>
+<p>
 Some modern 3-component seismometers, such at the STS-2 and the Trillium, do not use orthogonal sensors, but rather three sensors inclined to the vertical. The advantage of this choice is that all can be engineered the same since all are affected by gravity in the same manner. The problem is that if one of the UVW components fails, then the output is not longer reliably ZNE, for example.
 
 <P>
@@ -30,21 +47,26 @@ This double dispersion feature could be due to
 <li>mis-orientation of the instreument in the ground, or
 <li>recording UVW rather than ENZ </li>
 </ul>
+</p>
 <P>
 The presumably rotated traces show the problem.
-<br>
+<p>
 <img src="PAULI/P001.png">
 <br>
 Note that the Z and T traces are very similar. For these north American paths, my experience is that the Z and R should be similar in terms of the envelope and that the T should arrive earlier.
-
+</p>
 <H3>Recordings of 2012/08/27 Mw=7.4 Offshore El Salvador earthquake</h3>
+<p>
 Although the epicentral distance range of 20.7 to 23.7 degrees is not useful for receiver function determination, this Mw=7.4 earthquake provided waveforms with high signal-to-noise ratios.
 <P>
 The comparisons will show the ground velocity in nanometers/s obtained by
 removing the instrument response with the <b>gsac</b> command
+<font size="2">
 <pre>
 transfer from polezero subtype PZFILE to vel freqlimits 0.003 0.005 FHL FHH
 </pre>
+</font>
+</p><p>
 where FHH is the Nyquist frequency and FHL is one-half the Nyqujist frequency.
 In the plots, the traces for stations BIRD, HODGE and PAULI are plotted in red.
 <p>
@@ -65,7 +87,7 @@ The first plots focus on the teleseismic P-wave. The traces have been low-pass f
 </tbody>
 </table>
 <p>
-The obvioous features on the Z is that stations HODGE, PAULI and BIRD have different amplitudes, arrival times and polarities compared to the P-wave puale at the other stations.  The traces have been plotted at true amplitude to also look for gain problems. Only a distance dependence of amplitude is seen for the other stations.
+The obvious features on the Z is that stations HODGE, PAULI and BIRD have different amplitudes, arrival times and polarities compared to the P-wave puale at the other stations.  The traces have been plotted at true amplitude to also look for gain problems. Only a distance dependence of amplitude is seen for the other stations.
 <p>
 Nothing odd stands out on the R components. HODGE, PAULI and BIRD stand out on the transverse component as being different, although other stations, Z53A, GOGA look odd.
 <p>
@@ -139,8 +161,11 @@ are given in the following table.
 <p>
 The problem stations all have the Q330SR recorder. So perhaps the wiring assumptions were not satisfied for this recorder.
 <H2>Solution</H2>
+<p>
 The mathematics of the transformation from the internal UVW to XYZ is given in
-<A HREF="/eqc/eqc_cps/ROTATE3/rotate3.pdf"> rotate3.pdf</a> whiich was written to document the <b>gsac></b> <i>rot3 to uvwtril</i> and <i>rot3 to uvwsts2</i> commands.
+<A HREF="rotate3.pdf"> rotate3.pdf</a> which was written to document the <b>gsac></b> 
+<i>rot3 to uvwtril</i> and 
+<i>rot3 to uvwsts2</i> commands.
 <p>
 <h3>Using existing data </h3>
 <p>A quick fix is to read in the Z, N and E recordings and than tho change the
@@ -170,10 +195,12 @@ CMPINC and CMPAZ in the Sac files to the following values:
 	</tr>
 </tbody>
 </table>
+</p>
 <P>
 Note that such a hack implicitly assiumes that the instrument response of the Z, N and E channels are identical. This asusmption is usually true.
 
 <h3>Proper solution</h3>
+<p>
 The proper solution consists of two steps:
 <ul>
 <li>Changing the metadata until now to have the proper component vector orientations. This can be handled by <b>gsac</b> and perhaps <b>sac</b> if the Sac developers appreciate the problem.</li>
@@ -202,7 +229,7 @@ as follow:
 </tbody>
 </table>
 <p>
-Although is it difficult to follow individual pahse, we not that the waveforms have the proper shapes and amplitudes. The consistent short duration and earlier arrival times on the transverse component indicates that the Love wave has been isolated. I could nout use lower frequencies for the comparison because the earthquake was only an Mw=5.6.
+Although is it difficult to follow individual phase, we not that the waveforms have the proper shapes and amplitudes. The consistent short duration and earlier arrival times on the transverse component indicates that the Love wave has been isolated. I could nout use lower frequencies for the comparison because the earthquake was only an Mw=5.6.
 <p>
 We see now that the waveforms of HODGE, PAULI and BIRD agree in shape, arrival time and amplitude with neighboring stations.
 
@@ -233,6 +260,6 @@ This test involving earthquakes at different back azimuths to the stations incid
 Until the problem is corrected, one should not attempt to use automatic determinations of receiver functions from HODGE, BIRD or PAULI. Fortunately there are no receiver functions for these stations at the EARS web site <a href="http://ears.iris.washington.edu/">http://ears.iris.washington.edu/</a>.
 <p>
 This caution also applies to using these stations for source inversion, dispersion determination or receiver function studies until the problem is address or the hack described above is used.
-<center>Last changed August 28, 2012</center>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

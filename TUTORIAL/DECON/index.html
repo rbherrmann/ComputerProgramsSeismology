@@ -1,14 +1,24 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Estimating Source Time Function Using Empirical/Synthetic
-Green Function</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body style="background-color: rgb(255, 255, 255);">
-<center><big><big><b>Estimating Source Time Function Using
-Empirical/Synthetic
-Green's Function</b></big></big></center>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Estimating source time function</h2></header>
 <h2>Introduction</h2>
+<p>
 For most seismologists, large earthquakes are interesting not only
 because of the effects caused but also because of their size. One
 unresolved question is "what causes an earthquake to be big?" This may
@@ -20,43 +30,47 @@ information from seismographic recordings to image the rupture process
 on the fault plane.&nbsp; Such analysis requires computaion. Detail
 fault rupture analysis has implications for estimating the shaking
 effects near an earthquake by characterizing the rupture plane and the
-rupture direction.<br>
-<br>
+rupture direction.
+</p><p>
 In the context of hazard estimation, response time is important. The
 question arises whether it is possible to quickly determine if the
 rupture process was simple or | complex.&nbsp; One way to make a simple
 determination is try to determine an average source time function for
-the earthquake.<br>
-<p>
+the earthquake.>
 </p>
 <h2>Installation</h2>
+<p>
 The file <a href="DECON.tgz">DECON.tgz</a> contains the directory
-structure and processing scripts to perform the deconvolution.<br>
+structure and processing scripts to perform the deconvolution.
 After downloading, execute the following command to unpack the
-distribution:<br>
-<div style="margin-left: 40px;">
-<pre>gunzip -c DECON.tgz | tar xvf -<br></pre>
-</div>
-which will unpack the following files and directories:<br>
-<div style="margin-left: 40px;">
-<pre>DECON/PROTO.EMP/<br>DECON/PROTO.EMP/DOITEMP<br>DECON/PROTO.GRN/<br>DECON/PROTO.GRN/DOMKSYN<br>DECON/PROTO.GRN/DOITGRN<br></pre>
-</div>
+distribution:
+<pre>gunzip -c DECON.tgz | tar xvf -</pre>
+</p>
+<p>
+which will unpack the following files and directories:
+<pre>DECON/PROTO.EMP/
+DECON/PROTO.EMP/DOITEMP
+DECON/PROTO.GRN/
+DECON/PROTO.GRN/DOMKSYN
+DECON/PROTO.GRN/DOITGRN
+</pre>
+</p><p>
 These scripts use the programs <span style="font-weight: bold;">saclhdr</span>,
 <span style="font-weight: bold;">saciterd</span> and <span
  style="font-weight: bold;">gsac</span>. To do the graphics we need the
 GraphicsMagick <span style="font-weight: bold;">gm </span>(the
 ImageMagick <span style="font-weight: bold;">convert</span>&nbsp; can
 be used by slightly modify the script) and <span
- style="font-weight: bold;">GMT </span>for the map displays.<br>
+ style="font-weight: bold;">GMT </span>for the map displays.
 <br>
-The scripts are discussed in the following links:<br>
+The scripts are discussed in the following links:
 <ul>
   <li>Empirical Green's Function Processing:
     <ul>
       <li><a href="emp.html"> Discussion of DOITEMP</a></li>
     </ul>
   </li>
-  <li>Synthetic Green's Function Processing:<br>
+  <li>Synthetic Green's Function Processing:
     <ul>
       <li><a href="grn.html"> Discussion of DOITGRN</a></li>
       <li><a href="syn.html"> Discussion of DOMKSYN</a></li>
@@ -65,81 +79,92 @@ The scripts are discussed in the following links:<br>
 </ul>
 <p> </p>
 <h2>Execution</h2>
+<p>
 Assume that we have already prepared teleseismic data by removing the
 instrument response, rotating traces, and QC'ing waveforms and that
 they are placed on the system in the order used for telemseismic source
 inversion or for using teleseismic for quality control. We will set up
-the processing using&nbsp; empirical and synthetic Green's functions.<br>
-<br>
+the processing using&nbsp; empirical and synthetic Green's functions.
+</p><p>
 Let directory for the deconvolved, rotated, QC'd wavforms for the large
-earthquake be <br>
-<pre>&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;">/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL</span><br><br></pre>
+earthquake be 
+<font size="3">
+<pre>/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL
+</pre>
+</font>
+</p><p>
 and let the directory for the small earthquake used as an empirical
-Green's function be<br>
-<pre>&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;">/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL<br></span></pre>
+Green's function be
+<font size="3">
+<pre>/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL</pre>
+</font>
+</p><p>
 Now go to the DECON directory created by unpacking the DECON.tgz file
-and create two new directories:<br>
+and create two new directories:
 <br>
-<div style="margin-left: 40px;">
-<pre><span style="font-weight: bold;">mkdir </span><span
- style="font-family: monospace;"></span><span style="font-weight: bold;">20070818025235.EMP<br>mkdir </span><span
- style="font-weight: bold;">20070818025235.GRN<br></span></pre>
-</div>
+<pre>
+mkdir 20070818025235.EMP
+mkdir 20070818025235.GRN
+</pre>
+</p><p>
 Now copy the prototype files into the appropriate directory, e.g.,<br>
-<br>
-<pre><span style="font-family: monospace;">&nbsp;&nbsp;&nbsp; <span
- style="font-weight: bold;">cp PROTO.EMP/*</span></span><span
- style="font-weight: bold;"><span style="font-family: mon;"> </span>20070818025235.EMP<br></span><span
- style="font-family: monospace;"><span style="font-weight: bold;">    cp PROTO.GRN/*</span></span><span
- style="font-weight: bold;"><span style="font-family: mon;"> </span>20070818025235.GRN<br><br></span></pre>
-Finally edit the files in these two directories as follow:<br>
+<pre>
+cp PROTO.EMP/* 20070818025235.EMP
+cp PROTO.GRN/* 20070818025235.GRN
+</pre>
+</p><p>
+Finally edit the files in these two directories as follow:
 <br>
 Edit the <span style="font-weight: bold;">20070818025235.EMP/DOITEMP&nbsp;&nbsp;
-</span>to change the lines<br>
-<pre>	<span style="font-family: mon;"><span style="font-weight: bold;">DIRBIG=path_to_big_event_waveform_directory<br>	DIRSMALL=path_to_small_event_waveform_directory<br><br></span></span><span
- style="font-family: mon;"><span style="font-weight: bold;"></span></span></pre>
-to <br>
-<pre><span style="font-family: mon;"></span><span
- style="font-family: mon;"><span style="font-weight: bold;">	DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL<br>	DIRSMALL=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL<br></span></span><span
- style="font-weight: bold;"><span style="font-family: mon;"></span></span></pre>
-<pre><br></pre>
+</span>to change the lines
+<pre>DIRBIG=path_to_big_event_waveform_directory
+DIRSMALL=path_to_small_event_waveform_directory
+</pre>
+</p><p>
+to 
+<font size="2">
+<pre>
+DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL
+DIRSMALL=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL
+</pre>
+</font></p><p>
 Edit the <span style="font-weight: bold;">20070818025235.GRN/DOITGRN
-&nbsp; </span>to change the line<br>
+&nbsp; </span>to change the line
 <br>
-<pre>	<span style="font-weight: bold;">DIRBIG=path_to_big_event_waveform_directory</span></pre>
-to<br>
-<pre><span style="font-family: mon;"><span style="font-weight: bold;">	DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL</span></span></pre>
+<font size="2">
+<pre>DIRBIG=path_to_big_event_waveform_directory</pre>
+</font>
+</p><p>
+to
+<font size="2">
+<pre>DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL</pre>
+</font>
+</p><p>
 Also edit the mechanism and source depth lines to use the values
 expected for the big earthquake:<br>
 <br>
-<pre><span style="font-weight: bold;">	STK=171</span><br
- style="font-weight: bold;"><span style="font-weight: bold;">	DIP=55</span><br
- style="font-weight: bold;"><span style="font-weight: bold;">	RAKE=112</span><br
- style="font-weight: bold;"><span style="font-weight: bold;">	HS=30</span><br
- style="font-weight: bold;"><span style="font-weight: bold;">	MW=5.0</span><br><br></pre>
+<pre>STK=171
+DIP=55
+RAKE=112
+HS=30
+MW=5.0
+</pre>
+</p><p>
 You are now ready to run the codes:<br>
 <br>
 For the empirical Green's function technique<br>
 <pre>	
-<span style="font-weight: bold;">	cd 20070818025235.EMP<br>	DOITEMP</span><br></pre>
+cd 20070818025235.EMP
+DOITEMP</span><br></pre>
+</p><p>
 For the synthetic Green's function technique<br>
-<span style="font-family: mon;"><span style="font-weight: bold;"></span></span><br>
-<pre><span style="font-weight: bold;">	cd 20070818025235.GRN<br>	DOITGRN</span></pre>
-<br>
-<br>
-<pre><span style="font-weight: bold;"></span><span
- style="font-weight: bold;"></span></pre>
-<div style="margin-left: 40px;">&nbsp;
-<small></small><span style="font-family: monospace;"><span
- style="font-weight: bold;"></span></span></div>
-<pre><span style="font-family: monospace;"></span></pre>
-<pre><span style="font-weight: bold;"></span><br></pre>
-<pre><span style="font-weight: bold;"></span><span
- style="font-weight: bold;"></span></pre>
-<p> </p>
+<pre>cd 20070818025235.GRN
+DOITGRN</span></pre>
+</p>
 <h2>Example and Testing<br>
 </h2>
 <h3>Peru earthquake of August 15, 2007.</h3>
+<p>
 This Mw = 8.0 earthquake occurred at 23:40:57.890 UT, had a depth of 39
 km, latitude and longitude of -13.39 and -76.60, respectively. We will
 attempt to define the source time function by comparing this to the
@@ -176,11 +201,17 @@ givne in the two figures:<br>
   </tbody>
 </table>
 <h4>Empirical Green's function deconvolution</h4>
+<p>
 For this event we edit the DOITEMP script in the PERU.EMP directory do
 define the directories containing the waveforms for the main event and
 the event used as an empirical Green's function:<br>
 <br>
-<pre>DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL<br>DIRSMALL=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL<br><br></pre>
+<font size="2">
+<pre>DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL
+DIRSMALL=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070818025235/DAT.TEL
+</pre>
+</font>
+</p><p>
 We then execute the script DOITTEMP.&nbsp; The individual station
 deconvolutions are given in the directory DECONDIR.<br>
 In addition several image files are created:&nbsp; <br>
@@ -195,7 +226,23 @@ Zdecon.1.0.gif - an azimuthal record section for ALP=1.0<br>
 In addition I ran the following gsac commands to get an average of the
 deconvolutions:<br>
 <br>
-<pre>for ALP in 0.5 1.0 <br>do<br>gsac &lt;&lt; EOF<br>r DECONDIR/*.${ALP}.decon<br>stack norm on<br>w ${ALP}.stk<br>r ${ALP}.stk<br>filedid name<br>bg plt<br>plotnps -F7 -W10 -EPS -K &lt; P001.PLT  &gt; t.eps<br>echo using the GraphicsMagick package to convert from eps to png<br>gm convert -trim t.eps ${ALP}.stk.png<br>q<br>EOF<br>done<br><br></pre>
+<font size="2">
+<pre>for ALP in 0.5 1.0 <br>do
+gsac &lt;&lt; EOF
+r DECONDIR/*.${ALP}.decon
+stack norm on
+w ${ALP}.stk
+r ${ALP}.stk
+filedid name
+bg plt
+plotnps -F7 -W10 -EPS -K &lt; P001.PLT  &gt; t.eps
+echo using the GraphicsMagick package to convert from eps to png
+gm convert -trim t.eps ${ALP}.stk.png
+q
+EOF
+done></pre>
+</font>
+</p><p>
 Here are the images:<br>
 <br>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
@@ -208,23 +255,15 @@ Here are the images:<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 467px; height: 351px;" alt="map"
- src="FIGURES.EMP/HZ.0.5.map.png"><br>
+      <td><img src="FIGURES.EMP/HZ.0.5.map.png"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 467px; height: 351px;" alt="map"
- src="FIGURES.EMP/HZ.1.0.map.png"><br>
+      <td><img src="FIGURES.EMP/HZ.1.0.map.png"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 640px; height: 480px;" alt="az"
- src="FIGURES.EMP/Zdecon.0.5.gif"><br>
+      <td><img src="FIGURES.EMP/Zdecon.0.5.gif"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 640px; height: 480px;" alt="az"
- src="FIGURES.EMP/Zdecon.1.0.gif"><br>
+      <td><img src="FIGURES.EMP/Zdecon.1.0.gif"><br>
       </td>
     </tr>
     <tr>
@@ -268,13 +307,9 @@ in the deconvolution procedure for ALP=0.5:<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 598px; height: 468px;" alt="100 stack"
- src="FIGURES.EMP/0.5.stk.png"><br>
+      <td><img src="FIGURES.EMP/0.5.stk.png"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 640px; height: 486px;" alt="500 stack"
- src="FIGURES.EMP/0.5.500.stk.png"><br>
+      <td><img src="FIGURES.EMP/0.5.500.stk.png"><br>
       </td>
     </tr>
   </tbody>
@@ -285,12 +320,16 @@ sense of an initial event followed 60 seconds later by a larger pulse
 carries through.<br>
 <h4>Synthetic Green's function deconvolution<br>
 </h4>
+<p>
 To use synthetics for the small event, we copy the two scripts in
 PROTO.GRN to PERU.GRN. We then edit the DOITGRN script to provide the
 location of the seismograms for the main event and the typical
 mechanism for the region:<br>
 <br>
+<font size="2">
 <pre>DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL<br><br>#####<br>#       define the mechanism and depth for the synthetics<br>#       These values can be obtained from the regional<br>#       averages of mechanisms using the new code<br>#       STK = strike<br>#       DIP = dip<br>#       RAKE = rake<br>#       HS = sourrce depth in km<br>#       MW = this is the reference MW, in theory the zero frequency<br>#       level of the derived source time function is the moment ratio<br>#       of the two events, e.g., a ratio of 1000 corresponds to a<br>#       delta Mw of 2.0, so if thw reference Mw=5 then the big event has Mw=7!<br>#####<br>STK=171<br>DIP=55<br>RAKE=112<br>HS=30<br>MW=5.0<br><br></pre>
+</font>
+</p><p>
 &nbsp;We get the average source parameters by running the new USGS code
 EarthquakeParams.jar through the command line<br>
 <span style="font-family: monospace;"><br>
@@ -300,15 +339,31 @@ EarthquakeParams.jar through the command line<br>
 The output of this command is in the file mtformat.out, the first 15
 lines of this file are<br>
 <br>
-<pre>Composite Mechanism<br>Strike  Dip   Rake  <br>  171    55    112  <br><br>MT Format<br>Radial Search Center Coordinates:    -13.00, -76.60<br>Radial Search Distance (in deg):       3.0<br><br>                        E P I C E N T E R   |          MOMENT      |           M O M E N T    T E N S O R <br>     DATE    TIME (UTC)   LAT      LONG  SRC|DEPTH     VAL  EX HALF|SRC  EX         C O M P O N E N T S  <br>  YR  MO DA HR MN SEC     deg      deg      |  km  Mw       Nm DUR |     Nm  MRR   MTT   MFF   MRT   MRF   MTF <br>---------------------------------------------------------------------------------------------------------------<br> 1976 05 15 21:55:58.50 -11.640  -74.480 MLI| 33.0 6.7 1.7  19  5.7|GCMT 19  0.78 -0.05 -0.73 -0.31  1.41  0.27<br> 1977 03 08 13:08:56.30 -11.960  -74.200 MLI| 41.0 5.5 2.6  17  2.4|GCMT 17  0.93  0.02 -0.95 -1.32  0.45  2.13<br> 1980 06 15 23:47:15.00 -15.520  -75.240 MLI| 26.0 5.8 6.2  17  3.0|GCMT 17  2.74  0.73 -3.46 -0.24 -4.97  1.97<br><br></pre>
+<font size="1">
+<pre>Composite Mechanism
+Strike  Dip   Rake  
+  171    55    112  
+<br>MT Format
+Radial Search Center Coordinates:    -13.00, -76.60
+Radial Search Distance (in deg):       3.0
+<br>                        E P I C E N T E R   |          MOMENT      |           M O M E N T    T E N S O R 
+     DATE    TIME (UTC)   LAT      LONG  SRC|DEPTH     VAL  EX HALF|SRC  EX         C O M P O N E N T S  
+  YR  MO DA HR MN SEC     deg      deg      |  km  Mw       Nm DUR |     Nm  MRR   MTT   MFF   MRT   MRF   MTF 
+---------------------------------------------------------------------------------------------------------------
+ 1976 05 15 21:55:58.50 -11.640  -74.480 MLI| 33.0 6.7 1.7  19  5.7|GCMT 19  0.78 -0.05 -0.73 -0.31  1.41  0.27
+ 1977 03 08 13:08:56.30 -11.960  -74.200 MLI| 41.0 5.5 2.6  17  2.4|GCMT 17  0.93  0.02 -0.95 -1.32  0.45  2.13
+ 1980 06 15 23:47:15.00 -15.520  -75.240 MLI| 26.0 5.8 6.2  17  3.0|GCMT 17  2.74  0.73 -3.46 -0.24 -4.97  1.97
+<br></pre>
+</font>
+</p><p>
 the procedure of this script is to use <span style="font-weight: bold;">hudson96</span>
 to make synthetics for an Mw=5 earthquake. We will look at the
 deconvolutions for ALP=0.5 and 1.0 again as above.<br>
 We will also examine the effect of the assumed source depth on the
 dseconvolutions:<br>
 <br>
-<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
- cellspacing="2">
+</p><p>
+<table>
   <tbody>
     <tr>
       <td style="vertical-align: top; text-align: center;">-N 100
@@ -321,33 +376,21 @@ dseconvolutions:<br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 467px; height: 332px;" alt="0.5 map"
- src="FIGURES.GRN/HZ.0.5.map.png"><br>
+      <td><img src="FIGURES.GRN/HZ.0.5.map.png"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 467px; height: 332px;" alt="1.0 map"
- src="FIGURES.GRN/HZ.1.0.map.png"><br>
+      <td><img src="FIGURES.GRN/HZ.1.0.map.png"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 640px; height: 480px;" alt="0.5 az"
- src="FIGURES.GRN/Zdecon.0.5.gif"><br>
+      <td><img src="FIGURES.GRN/Zdecon.0.5.gif"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 640px; height: 480px;" alt="1.0 az"
- src="FIGURES.GRN/Zdecon.1.0.gif"><br>
+      <td><img src="FIGURES.GRN/Zdecon.1.0.gif"><br>
       </td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 606px; height: 468px;" alt="0.5 stk"
- src="FIGURES.GRN/0.5.stk.png"><br>
+      <td><img src="FIGURES.GRN/0.5.stk.png"><br>
       </td>
-      <td style="vertical-align: top; text-align: center;"><img
- style="width: 606px; height: 468px;" alt="1.0 stk"
- src="FIGURES.GRN/1.0.stk.png"><br>
+      <td><img src="FIGURES.GRN/1.0.stk.png"><br>
       </td>
     </tr>
   </tbody>
@@ -371,33 +414,28 @@ source depth, and henc the corresponding moment ratio of the mainshock
 to the Green's function, since the area under and trace is
 proporational to the moment ratio.<br>
 <br>
-<div style="text-align: center;">
 <table
- style="text-align: left; width: 664px; margin-left: auto; margin-right: auto; height: 480px;"
- border="1" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
-      <td style="vertical-align: top;"><img
- style="width: 606px; height: 468px;" alt="hs sensirivity"
- src="FIGURES.GRN/dep.stk.png"><br>
+      <td style="vertical-align: top;"><img src="FIGURES.GRN/dep.stk.png"><br>
       </td>
     </tr>
   </tbody>
 </table>
 <br>
-</div>
+</p><p>
 There is signiicant sensitivity in the deconvolved source pulse to the
 assumed source depth for the Green's function used to make the
 predicted motion.&nbsp; This would imply different moment ratios.<br>
 Some of the sensitivity may be due to the variation in material
 properties with depth, with the P velocity increasing from about 6 km/s
-near the surface to about 8 km/s beneath the Moho wile the density
+near the surface to about 8 km/s beneath the Moho while the density
 might increase from 2700 to 3300 kg/m^3. Since the teeleseismic
-amplitude is proportional to Mo/(rho Vp Vp Vp) for the P wave, the
+amplitude is proportional to Mo/(&rho;V<sub}p</sub><sup>3</sup>) for the P wave, the
 teleseismic amplitude for the small Green's event would be decreased by
 a actor of roughly 2.9, which is what we see in the figure.&nbsp; This
 simple analysis ignores any of the effects of the depth phases.<br>
-<p> </p>
-<center>Last changed August 14, 2009</center>
+</p>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

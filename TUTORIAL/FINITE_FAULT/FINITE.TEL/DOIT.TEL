@@ -1,0 +1,244 @@
+#!/bin/sh
+
+#####
+#    create a teleseismic P-wave synthetic using
+#    hudson96 and the NEIc (Gavin Hayes) finite fault
+#    solution
+#####
+#
+#   Script
+#
+#   Initialization
+#        The environment variable GREENDIR points to thhe locaiton of the
+#        Greens function directories, e.g., GREEDDIR=/d/rbh/GREEN
+#        There is a subdirectory names Models which has tak135sph.mod
+#   Finite Fault Model
+#   Station List
+#   Computations for each station
+#####
+
+#####
+#     These lines define the velocity model, the rupture model and the station list
+#####
+
+TELMODEL=../Models/tak135sph.mod
+RUPTUREMODEL=HayesCostaRica.mod
+cp ../FiniteFaultModels/${RUPTUREMODEL} .
+
+# STA  LAT  LON 
+cat > stat.list << EOF
+ SSPA  40.636  -77.888  
+ ANMO  34.946 -106.457  
+  TUC  32.310 -110.785  
+  HRV  42.506  -71.558  
+  PFO  33.611 -116.455  
+ RSSD  44.121 -104.036  
+ PASC  34.171 -118.185  
+ PD31  42.767 -109.558  
+ NV31  38.433 -118.153  
+  CMB  38.035 -120.387  
+  FFC  54.725 -101.978  
+  COR  44.585 -123.305  
+ TRQA -38.057  -61.979  
+ CMLA  37.764  -25.524  
+ SFJD  66.996  -50.621  
+  EFI -51.675  -58.064  
+ MACI  28.250  -16.508  
+ POHA  19.757 -155.533  
+ KDAK  57.783 -152.583  
+ BORG  64.747  -21.327  
+  KIP  21.420 -158.011  
+ ASCN  -7.933  -14.360  
+ HOPE -54.284  -36.488  
+ PMSA -64.774  -64.049  
+  PAB  39.545   -4.350  
+  ESK  55.317   -3.205  
+  KBS  78.915   11.939  
+ JOHN  16.733 -169.529  
+ TRIS -37.068  -12.315  
+ SHEL -15.959   -5.746  
+  ADK  51.882 -176.684  
+ KONO  59.649    9.598 
+  BFO  48.332    8.331 
+ GRFO  49.691   11.220
+ KNTN  -2.774 -171.719
+ MIDW  28.216 -177.370
+  KEV  69.757   27.003
+  AFI -13.909 -171.777
+EOF
+
+#####
+#     end of problem specific input
+#####
+
+
+#####
+#    processing
+#    First get the fault model by skipping the first few lines of the output
+#####
+ed ${RUPTUREMODEL} << EOF
+1,/t_rise/d
+w ff.mod
+EOF
+
+#####
+#    define the hypocenter on the basis of the earliest rupture time
+#####
+sort -nr -k8 ff.mod | tail -1 > hypo
+REVLA=`cat hypo | awk '{print $1}' `
+REVLO=`cat hypo | awk '{print $2}' `
+REVDP=`cat hypo | awk '{print $3}' `
+rm -f hypo
+
+#####
+#    create a work area for making the synthetic for a sub-fault
+#####
+rm -fr WORK ; mkdir WORK
+
+#####
+#    create a work area to store synthetics for each finite fault
+#    which will be used for the stack
+#####
+rm -fr STACK ; mkdir STACK
+
+#####
+#    create directory for final synthetics
+#####
+rm -fr FINAL ; mkdir FINAL
+
+#####
+#    define TOPLEVEL directory
+#####
+MYTOP=`pwd`
+
+
+
+#####
+#    make composite synthetic for each station
+#####
+
+while read KSTNM STLA STLO 
+do
+
+cd ${MYTOP}
+
+#####
+#     NSUB is the sub fault number
+#     PNSUB is a pretty version with 4 digits, e.g., 0001 for
+#     file name
+#####
+NSUB=0
+#####
+#     make a synthetic for each finite fault element
+#####
+	while read EVLA EVLO EVDP SLIP RAKE STK DIP TRUP TRISE MOM
+	do
+		NSUB=`echo $NSUB | awk '{print $1 + 1 }' `
+		PBSUB=`echo $NSUB | awk '{printf "%4.4d", $1}' `
+		MW=`echo $MOM | awk '{ print 2.*( log($1)/log(10.0) -16.1)/3.0 }' `
+                echo $MOM $MW $DUR
+		#####
+		#   compute the arc distance from subfault to station
+		#####
+		GCARC=`udelaz -GCARC -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		AZ=`udelaz -AZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		BAZ=`udelaz -BAZ -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO`
+		#####
+		#   make a Hudson synthetic
+		#####
+		hudson96 -TEL ${TELMODEL} -HS ${EVDP} -GCARC ${GCARC}  -NPTS 2048  -DT 0.05 -P 
+		hpulse96 -p -V -l 1 > file96
+		rm -f hspec96.grn hudsonsrc.mod hudsonrec.mod
+		#####
+		#    go to WORK make GREEN and then mechanism, delay and duration
+		#####
+		cd WORK
+		rm -f *
+		#####
+		#    get Green functions
+		#####
+		f96tosac -T < ../file96
+		rm -f ../file96
+		#####
+		#    get basename for gsac
+		#####
+		F=`ls *.ZSS`
+		FILEPROTO=`basename ${F} .ZSS`
+gsac > /dev/null << EOF
+mt to Z MW ${MW} AZ ${AZ} BAZ ${BAZ} STK ${STK} RAKE ${RAKE} DIP ${DIP} FILE ${FILEPROTO}
+#  
+shift F ${TRUP}
+triangle w ${TRISE}
+ch KSTNM ${KSTNM} 
+ch KCMPNM BHZ
+ch EVLA ${EVLA} EVLO ${EVLO} STLA ${STLA} STLO ${STLO}
+w
+mv T.Z ../STACK/Z.${PBSUB}
+q
+EOF
+cd ${MYTOP}
+	done < ff.mod
+
+#####
+#     now perform the stacking
+#     determine the minimum B time, maximum E time to define the cut window
+#     determine the minimum A time to set the first srrival time on the stack
+#     These offsets are with respect to the origin time
+#####
+cd STACK
+rm -f asum esum bsum
+for i in Z.????
+do
+	saclhdr -NL -B  $i >> bsum
+	saclhdr -NL -A  $i >> asum
+	saclhdr -NL -E  $i >> esum
+done
+BMIN=`cat bsum | awk 'BEGIN {MIN=9999}{if ( $1 < MIN ) MIN=$1} END { print MIN}' `
+EMAX=`cat esum | awk 'BEGIN {MAX=0}   {if ( $1 > MAX ) MAX=$1} END { print MAX}' `
+AMIN=`cat asum | awk 'BEGIN {MIN=9999}{if ( $1 < MIN ) MIN=$1} END { print MIN}' `
+rm -f asum bsum esum
+
+#####
+#    now use gsac to read all in and stack
+#####
+gsac << EOF
+cuterr fillz
+cut o ${BMIN} o ${EMAX}
+r Z.????
+stack absolute
+ch A ${AMIN}
+ch EVLA ${REVLA} EVLO ${REVLO} EVDP ${REVDP}
+w ../FINAL/${KSTNM}.Z
+q
+EOF
+rm Z.????
+cd ${MYTOP}
+rm WORK/*
+	
+
+done < stat.list
+
+
+#####
+#    make final graphics
+#####
+cd ${MYTOP}
+gsac << EOF
+r FINAL/*
+bg plt
+prs p 0.070 gcarc amp 0.2 ann sta
+map ksntm on global on ray on
+sh map.sh
+# if GMT5 is installed comment the previous line and then 
+# uncomment the next two
+#map5 ksntm on global on ray on
+#sh map5.sh
+q
+EOF
+plotnps -BGFILL -F7 -W10 -EPS -K < PRS001.PLT > t.eps
+convert -trim t.eps finite_tel.png
+convert -trim map.eps map.png
+rm PRS001.PLT
+
+
+rm -f PRS001.CTL

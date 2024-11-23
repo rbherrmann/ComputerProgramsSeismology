@@ -1,25 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Dispersion tests</title>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-
-}
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-</style>
+<head>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Eigenfunctions - Generalized Reflection Matrices</h2></header>
     <h2>Introduction</h2>
     <p>The propagator matrix technique as implemented in the Computer
       Programs in Seismology sequence <b>sprep96/sdisp96/sregn96</b>
@@ -101,12 +98,15 @@ src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAb0AAAH4CAIAAABR2aTMAAAAA3NCS
     </p>
     <h2>The low velocity model<br>
     </h2>
+<p>
     The purpose of this note is to consider the extreme example of a low
     velocity zone embedded within a halfspace.<br>
     <h3>The model</h3>
     <p>The model in Model96 format is <br>
     </p>
-    <pre>MODEL.01
+<font size="2">
+    <pre>
+MODEL.01
 LVZ Model with infinite Q, e.g., Q inverse = 0
 ISOTROPIC
 KGS
@@ -123,7 +123,8 @@ LINE11
   0.0125  2      1        2.0          0    0   0      0      1     1
   0.0100  4.0000  2.3090  2.0          0    0   0      0      1     1
 </pre>
-    <br>
+</font>
+</p><p>
     A plot of this model is <br>
     <table>
       <tbody>
@@ -136,6 +137,7 @@ LINE11
     <p>Using the velocity model, the following commands were executed to
       get the dispersion: <br>
     </p>
+<font size="2">
     <pre>#!/bin/sh
 
 #prepare the data set
@@ -150,11 +152,14 @@ sdisp96
 # convert the PLT file to a PNG using ImageMagick
 DOPLTPNG  SDISPC.PLT
 </pre>
-    <br>
+</font>
+</p><p>
     The DOPLTPNG converts the CPS CALPLOT file format to EPS and then
     uses the ImageMagick convert to<br>
     create an PNG graphics file. DOPLTPNG is the following script <br>
-    <pre>#!/bin/sh
+<font size="2">
+    <pre>
+#!/bin/sh
 
 for i 
 do
@@ -164,15 +169,14 @@ convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
 rm t.eps
 done
 </pre>
-    <br>
+</font>
+</p><p>
     <p>The dispersion plot is<br>
-    </p>
     <br>
     <table width="50%" cellspacing="2" cellpadding="2" border="1">
       <tbody>
         <tr>
-          <td valign="top"><img
-              src="SREGNC.png"></td>
+          <td valign="top"><img src="SREGNC.png"></td>
         </tr>
         <tr>
           <td valign="top">Rayleigh wave phase velocities for the model
@@ -183,9 +187,7 @@ done
         </tr>
       </tbody>
     </table>
-    <p><br>
     </p>
-    <br>
     <p> This is an interesting plot. Note the nearly horizontal phase
       velocity near 2.12295 km/s, which is the value expected for the
       classical halfspace Rayleigh wave for Vp=4.0 km/s and Vs=2.3098
@@ -195,6 +197,7 @@ done
       on the following dispersion values obtained from the call to
       sdpsrf96. <br>
     </p>
+<font size="2">
     <pre># RMODE NFREQ  PERIOD(S)          FREQUENCY(Hz)        C(KM/S)
 
 #    0   236   0.1848375451E-01    54.10156250        1.112097914
@@ -203,12 +206,19 @@ done
 #    3   236   0.1848375451E-01    54.10156250        2.122965625
 #    4   236   0.1848375451E-01    54.10156250        2.279119456
 </pre>
+</font>
+</p>
     <h3>Eigenfunctions</h3>
     <p> Eigenfunctions were computed using MATLAB code provided by
       Youhua Fan which was used for the paper </p>
-    <pre>Liu, Xuefeng and Youhua Fan (2012). On the characteristics of high-frequency Rayleigh waves in stratified
-half-space, Geophys. j. Int. 190, 1041-1057 doi: 10.1111/j.1365-246X.2012.05479.x
+<font size="2">
+    <pre>
+Liu, Xuefeng and Youhua Fan (2012). On the characteristics of high-frequency 
+Rayleigh waves in stratified half-space, Geophys. j. Int. 190, 1041-1057 
+doi: 10.1111/j.1365-246X.2012.05479.x
 </pre>
+</font>
+</p>
     <p> This code used generalized reflection matrices and an algorithm
       to define the correct eigenfunction. To determine the
       eigenfunctions for a given phase velocity and frequency, one
@@ -348,6 +358,7 @@ half-space, Geophys. j. Int. 190, 1041-1057 doi: 10.1111/j.1365-246X.2012.05479.
       <br>
     </p>
     <h3>Synthetic comparison</h3>
+<p>
     Besides computing dispersion, the PROGRAMS.330/VOLIII codes also
     compute the parameters required to make synthetics. A successful
     comparison of the modal superposition synthetics to those obtained
@@ -370,12 +381,11 @@ half-space, Geophys. j. Int. 190, 1041-1057 doi: 10.1111/j.1365-246X.2012.05479.
     not arrive in the time window of interest.&nbsp; Here are the two
     models in the CPS <b>model96 </b>format:<br>
     <br>
-    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+<font size="2">
+    <table >
       <tbody>
         <tr>
           <td valign="top" align="center"><b>Original model</b><br>
-          </td>
-          <td valign="top" align="center"><b>Locked mode model</b><br>
           </td>
         </tr>
         <tr>
@@ -398,6 +408,12 @@ LINE11
   0.9000  4.0000  2.3590  2.0          0    0   0      0      1     1
 </pre>
           </td>
+</tr>
+          <td valign="top" align="center"><b>Locked mode model</b><br>
+          </td>
+<tr>
+</tr>
+<tr>
           <td valign="top">
             <pre>MODEL.01
 LVZ Model with infinite Q, e.g., Q inverse = 0 for locked mode
@@ -421,7 +437,8 @@ LINE11
         </tr>
       </tbody>
     </table>
-    <br>
+</font>
+</p><p>
     The comparison for selected Green's functions are given in the next
     four figures. An examination shows that the WK and RK synthetics are
     the same, and the SW(locked) does a fairly good job of modeling the
@@ -432,7 +449,7 @@ LINE11
     the original model. See the final summary at the end of this
     webpage.<br>
     <br>
-    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+    <table>
       <tbody>
         <tr>
           <td valign="top"><img src="C_ZVF.png"><br>
@@ -441,7 +458,7 @@ LINE11
       </tbody>
     </table>
     <br>
-    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+    <table>
       <tbody>
         <tr>
           <td valign="top"><img src="C_RVF.png"><br>
@@ -450,7 +467,7 @@ LINE11
       </tbody>
     </table>
     <br>
-    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+    <table>
       <tbody>
         <tr>
           <td valign="top"><img src="C_THF.png"><br>
@@ -459,7 +476,7 @@ LINE11
       </tbody>
     </table>
     <br>
-    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+    <table>
       <tbody>
         <tr>
           <td valign="top"><img src="C_ZEX.png"><br>
@@ -467,8 +484,7 @@ LINE11
         </tr>
       </tbody>
     </table>
-    <br>
-    <br>
+</p>
     <h3>Record sections</h3>
     <p>This distribution has two sub-directories: SECTION_001 for a
       source depth of 0.001km and SECTION_100 for a source depth of
@@ -513,12 +529,29 @@ LINE11
       follows for vertical motions recorded at the surface due to a
       point vertical force:<br>
     </p>
-    <pre>do_pom *.ZVF<br><br>[do_pom uses the following button sequence: Select all traces, MinPer of <i>0.01 sec</i>, MaxPer of <i>2.0 sec</i>, Nray <i>500</i>, Vmin <i>0.010</i> km/sm Vmax <i>5.000</i> km/s, X-Axis <i>Frequency</i> Type <i>Rayleigh</i> and Length of <i>2</i>.]<br><br>DOEGN<br>[Edit the POM96CMP so that the call to sdpegn96 to add 0=-K 0 -W 0.05 at the end to read<br>sdpegn96 -X0  2.00 -Y0  1.00 -XLEN  6.00 -YLEN  6.00 -XMIN  9.96 -XMAX 100. -YMIN  0.01 -YMAX 5.00 -FREQ -R -C -NOBOX -XLOG -YLIN -K 0 -W 0.05 ]<br><br>sh ./POM96CMP<br><br>cat POM96.PLT SREGNC.PLT &gt; 001.PLT<br>../DOPLTPNG 001.PLT<br><br><br></pre>
+<font size="2">
+    <pre>do_pom *.ZVF
+[do_pom uses the following button sequence: Select all traces, MinPer of <i>0.01 sec</i>, 
+ MaxPer of <i>2.0 sec</i>, Nray <i>500</i>, Vmin <i>0.010</i> km/sm Vmax <i>5.000</i> km/s, 
+ X-Axis <i>Frequency</i> Type <i>Rayleigh</i> and Length of <i>2</i>.]
+
+DOEGN
+[Edit the POM96CMP so that the call to sdpegn96 to add 0=-K 0 -W 0.05 at the end to read
+sdpegn96 -X0  2.00 -Y0  1.00 -XLEN  6.00 -YLEN  6.00 -XMIN  9.96 -XMAX 100. \
+     -YMIN  0.01 -YMAX 5.00 -FREQ -R -C -NOBOX -XLOG -YLIN -K 0 -W 0.05 ]
+
+sh ./POM96CMP
+
+cat POM96.PLT SREGNC.PLT &gt; 001.PLT
+../DOPLTPNG 001.PLT
+</pre>
+</font>
+</p>
     <p>In this set of operations the theoretical dispersion is plotted
       on top of the experimentally determined dispersion. The 100.png so
       created is shown in this figure.<br>
     </p>
-    <table width="50%" cellspacing="2" cellpadding="2" border="1">
+    <table>
       <tbody>
         <tr>
           <td valign="top"><img src="001.png"></td>
@@ -534,7 +567,6 @@ LINE11
         </tr>
       </tbody>
     </table>
-    <p><br>
     </p>
     <h5>Source depth 0.100 km (100 m)</h5>
     <p>Here the ZEX Green's function is considered which is due to an
@@ -553,15 +585,32 @@ LINE11
         </tr>
       </tbody>
     </table>
-    <br>
-    <br>
+    </p>
+    <p>
     This looks very different. The higher velocity P-wave arrivals are
     apparent.<br>
     <p>The sequence of operations is as follows for vertical motions
       recorded at the surface due to the isotropic moment tensor source
       at depth:<br>
     </p>
-    <pre>do_pom *.ZEX <br><br>[do_pom uses the following button sequence: Select all traces, MinPer of <i>0.01 sec</i>, MaxPer of <i>2.0 sec</i>, Nray <i>500</i>, Vmin <i>0.010</i> km/sm Vmax <i>5.000</i> km/s, X-Axis <i>Frequency</i> Type <i>Rayleigh</i> and Length of <i>2</i>.]<br><br>DOEGN<br>[Edit the POM96CMP so that the call to sdpegn96 to add 0=-K 0 -W 0.05 at the end to read<br>sdpegn96 -X0  2.00 -Y0  1.00 -XLEN  6.00 -YLEN  6.00 -XMIN  9.96 -XMAX 100. -YMIN  0.01 -YMAX 5.00 -FREQ -R -C -NOBOX -XLOG -YLIN -K 0 -W 0.05 ]<br><br>sh ./POM96CMP<br><br>cat POM96.PLT SREGNC.PLT &gt; 100.PLT<br>../DOPLTPNG 100.PLT<br><br></pre>
+<font size="2">
+    <pre>
+do_pom *.ZEX 
+
+[do_pom uses the following button sequence: Select all traces, 
+ MinPer of <i>0.01 sec</i>, MaxPer of <i>2.0 sec</i>, Nray <i>500</i>, 
+ Vmin <i>0.010</i> km/sm Vmax <i>5.000</i> km/s, X-Axis <i>Frequency</i> Type <i>Rayleigh</i> and Length of <i>2</i>.]
+<br>DOEGN
+[Edit the POM96CMP so that the call to sdpegn96 to add 0=-K 0 -W 0.05 at the end to read
+sdpegn96 -X0  2.00 -Y0  1.00 -XLEN  6.00 -YLEN  6.00 -XMIN  9.96 -XMAX 100. \
+        -YMIN  0.01 -YMAX 5.00 -FREQ -R -C -NOBOX -XLOG -YLIN -K 0 -W 0.05 ]
+
+sh ./POM96CMP
+cat POM96.PLT SREGNC.PLT &gt; 100.PLT
+../DOPLTPNG 100.PLT
+</pre>
+</font>
+</p>
     <p>The 100.png so created is shown in this figure.<br>
     </p>
     <br>
@@ -620,7 +669,7 @@ LINE11
       distance, then beter estimated would have resulted from the
       procedure.<br>
       <br>
-      <table width="50%" cellspacing="2" cellpadding="2" border="1">
+      <table>
         <tbody>
           <tr>
             <td valign="top"><img src="ZVF_001_LOCK.png"></td>
@@ -664,12 +713,19 @@ LINE11
     <p>Since every tutorial needs a tarball of the run, the <a
         href="075.tgz">075.tgz</a> unpacks to<br>
     </p>
-    <pre>gunzip -c 075.tgz | tar tvf -<br>-rwxr-xr-x rbh/rbh         766 2024-02-20 13:50 LSW.075/DOIT<br>-rwxr-xr-x rbh/rbh         693 2024-02-20 10:52 RK.075/DOIT<br>-rwxr-xr-x rbh/rbh         722 2024-02-20 13:51 SW.075/DOIT<br>-rwxr-xr-x rbh/rbh         693 2024-02-20 10:54 WK.075/DOIT<br></pre>
-    <p> </p>
+    <pre>
+gunzip -c 075.tgz | tar tvf -
+-rwxr-xr-x rbh/rbh         766 2024-02-20 13:50 LSW.075/DOIT
+-rwxr-xr-x rbh/rbh         693 2024-02-20 10:52 RK.075/DOIT
+-rwxr-xr-x rbh/rbh         722 2024-02-20 13:51 SW.075/DOIT
+-rwxr-xr-x rbh/rbh         693 2024-02-20 10:54 WK.075/DOIT
+</pre>
+    </p> <p>
     DOIT script in each subdirectory will give the Green's functions for
     a source depth of 0.075 km in the LVZ model.<br>
     <br>
     <h2>References</h2>
+<p>
     Chen, W. and Chen, X. (2002). Modal solutions in stratified
     multi-layered fluid-solid halfspace.<br>
     Science in China, Series D:, 445, 358-365.<br>
@@ -698,17 +754,16 @@ LINE11
     Seism. Soc. Am., 98, 280-287.<br>
     <br>
     Pei, D., Louie, J. N., and Pullammanappallil, S. K. (2009). Erratum
-    to ”improvements on<br>
+    to "Improvements on
     computation of phase velocities of Rayleigh waves based on the
-    generalized R/T coefficient<br>
-    method”. Bull. Seism. Soc. Am., 99, 2610-2611.<br>
+    generalized R/T coefficient
+    method. Bull. Seism. Soc. Am., 99, 2610-2611.<br>
     <br>
     Wu, B. and Chen, X. (2016). Stable, accurate and efficient
     computation of normal modes for<br>
     horizontal stratified models. Geophys. J. Int., 206, 1281-1300.<br>
     <p><br>
     </p>
-    <p> </p>
-    <center>Last changed February 20, 2024 </center>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

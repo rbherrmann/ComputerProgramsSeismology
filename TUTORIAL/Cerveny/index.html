@@ -1,18 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Cerveny Ray Theory Modeling</title>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Cerveny-2D</h2></header>
     <h1>Introduction</h1>
     <p>During a long career,&nbsp; V. Červený&nbsp; contributed much to
       seismic ray theory. The initial impetus was for the determination
@@ -20,19 +24,6 @@ pre {
       for a 2-D model with corrections to represent 3-D propagation. One
       program was named <b>seis81</b> which is encapsulated in the
       Computer Programs in Seismology (Herrmann, 2013)&nbsp; program <b>cseis96.
-
-
-
-
-
-
-
-
-
-
-
-
-
       </b>The techniques are described n a number of publications
       (Červený et al, 1977; Červený, 1985; Červený, 2010;&nbsp; Červený
       and Pšenčík. 2011).<br>
@@ -123,7 +114,8 @@ pre {
     <pre> 
 gunzip -c Cerveny.tgz | tar xf - 
 </pre>
-    <br>
+</p>
+<p>
     This will create a directory structure, such as
     <pre>Cerveny---
          |--/Layer1-----
@@ -135,6 +127,7 @@ gunzip -c Cerveny.tgz | tar xf -
          | 
         ... 
 </pre>
+</p><p>
     Note the names of the subdirectories. These will be the headings of
     each of the examples given below. Thus if an example has the heading
     <b>Layerb</b>, then the computational scripts will be in <i>Cerveny/Layerb<b>.</b></i>
@@ -186,18 +179,15 @@ gunzip -c Cerveny.tgz | tar xf -
     <h2>cprep96<br>
     </h2>
     <p>The program <b>cprep96 </b>prepares the data set for the <b>cseis96
-
-
-
       </b>program by creating the file <i>cseis96.dat.</i> The format
       of that file is given in <i>PROGRAMS.330/VOLIX/DOC/seis81.txt.</i>&nbsp;
-
-
-
-
       The command line flags are seen by the command <b>cprep96 -h</b><br>
     </p>
-    <pre> Usage: cprep96 -M model  [-DOP] [-DOSV] [-DOSH] [-DOALL] [-DOCONV] [-DOREFL]  [-DOTRAN] [-DEBUG] [-DENY deny ]<br>  [-R reverb] [-N maxseg] [-HS sourcez] [-XS sourcex] -d dfile<br> -M model  (default none )  Earth model file name<br> -N nseg   (default 12   )  Maximum number of ray segments <br> -DOP      (default false)  Generate P ray description<br> -DOSV     (default false)  Generate SV ray description<br> -DOSH     (default false)  Generate SH ray description<br> -DOALL    (default false)  Generate P, SV, SH ray description<br> -DOCONV   (default false)  Permit P-SV conversions<br> -DOREFL   (default false)  P-SV conversions on  reflection<br> -DOTRAN   (default false)  P-SV conversions on  transmission<br> -DENY     (default none )  file with layer conversion denial<br> -R reverb (default none )  file with maximum number of multiples in layer<br> -HS sourcez(default 0.0  )  source depth <br> -XS sourcex(default 0.0  )  source x-coordinate <br> -d dfile  (default none )  distance file <br>    dfile contains one of more lines with following entries<br>        DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)<br>            first time point is T0 + DIST/VRED<br>            VRED=0 means infinite velocity though<br> -?        (default none )  this help message <br> -h        (default none )  this help message <br></pre>
+<font size="2">
+    <pre> Usage: cprep96 -M model  [-DOP] [-DOSV] [-DOSH] [-DOALL] [-DOCONV] [-DOREFL]  [-DOTRAN] 
+         [-DEBUG] [-DENY deny ]<br>  [-R reverb] [-N maxseg] [-HS sourcez] [-XS sourcex] -d dfile<br> -M model  (default none )  Earth model file name<br> -N nseg   (default 12   )  Maximum number of ray segments <br> -DOP      (default false)  Generate P ray description<br> -DOSV     (default false)  Generate SV ray description<br> -DOSH     (default false)  Generate SH ray description<br> -DOALL    (default false)  Generate P, SV, SH ray description<br> -DOCONV   (default false)  Permit P-SV conversions<br> -DOREFL   (default false)  P-SV conversions on  reflection<br> -DOTRAN   (default false)  P-SV conversions on  transmission<br> -DENY     (default none )  file with layer conversion denial<br> -R reverb (default none )  file with maximum number of multiples in layer<br> -HS sourcez(default 0.0  )  source depth <br> -XS sourcex(default 0.0  )  source x-coordinate <br> -d dfile  (default none )  distance file <br>    dfile contains one of more lines with following entries<br>        DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)<br>            first time point is T0 + DIST/VRED<br>            VRED=0 means infinite velocity though<br> -?        (default none )  this help message <br> -h        (default none )  this help message <br></pre>
+</font>
+</p>
     <p><br>
       The importance of the <i>-XS sourcex</i> command line flag is
       illustrated in Figure 1. This figure shows the ideal ray paths to
@@ -232,9 +222,15 @@ gunzip -c Cerveny.tgz | tar xf -
       aforementioned <i>seis81.txt</i>. Just before the ray description
       there is a line created by <b>cprep96</b> which reads<br>
     </p>
+<font size="2">
     <pre>    1.0000    3.1416   -0.0628   -3.1416   -3.1416    0.0628    3.1416    0.0010<br></pre>
+</font>
+</p>
     <p>The documentation for this line is</p>
+<font size="2">
     <pre>     12) One card, quantities that control the basic system of initial<br>c         angles in the two-point ray tracing,etc.<br>c         dt,amin1,astep1,amax1,amin2,astep2,amax2,ac    format(8f10.5)<br>c           dt...     time step in the integration of the ray-tracing<br>c                     system. dt should be greater than zero.<br>c                     If dt.lt.0.00001, then dt=1.<br>c           amin1,astep1,amax1... determine the system of initial<br>c                     angles for primary reflected waves (and possibly<br>c                     for other manually generated elementary waves,the<br>c                     first element of which strikes the interface situ-<br>c                     ated below the source)<br>c           amin2,astep2,amax2... determine the system of initial angles<br>c                     for the direct waves (and possibly for other manually<br>c                     generated elementary waves,the first element of<br>c                     which strikes the interface above the source).<br>c           ac...     required accuracy of integration of the ray tracing<br>c                     system. Recomended values: 0.0001 - 0.001.<br></pre>
+</font>
+</p>
     <p>You may wonder why the limits in the example line are π to -π and
       -π to π. The code permits velocity gradients. Thus if velocity
       increases with depth and one wanst a ray from the source to a
@@ -248,6 +244,7 @@ gunzip -c Cerveny.tgz | tar xf -
     <p>Following this is the ray description for each ray<br>
     </p>
     <pre>    0    2    2    1<br>    0    2   -2    1<br>    0    2    2   -1<br>    0    2   -2   -1<br></pre>
+</p><p>
     which represent the rays P<sub>2</sub>P<sub>1</sub>, S<sub>2</sub>P<sub>1</sub>,
     P<sub>2</sub>S<sub>1</sub> and S<sub>2</sub>S<sub>1</sub>,
     respectively. In this notation the <i>0</i> indicates that an
@@ -272,8 +269,11 @@ gunzip -c Cerveny.tgz | tar xf -
     </h2>
     <p>The next program that is executed is <b>cseis96</b>. Its command
       lines are obtained by executing <b>cseis96 -h </b>which gives<br>
-    </p>
+    <br>
+<font size="2">
     <pre> Usage cseis96 [-v] [-P] [-?] [-h]<br>  -v    (default false) verbose output<br>  -R    (default false) generate file for CRAY96<br>  -?    (default false) this help screen<br>  -h    (default false) this help screen<br></pre>
+</font>
+</p>
     <p>The output of this program consists of the file <i>cseis96.amp </i>which
 
 
@@ -296,6 +296,7 @@ gunzip -c Cerveny.tgz | tar xf -
       be very largeThe command line defines the boundaries for the plot.<br>
     </p>
     <pre> Usage: cray96 -XMIN xmin -XMAX xmax -ZMIN zmin -ZMAX zmax -v <br>  -XMIN [xmin]    (default 0)       : Minimum X for plot<br>  -XMAX [xmax]    (default=400.0)   : Maximum X for plot<br>  -ZMIN [zmin]    (default=0.0)     : Minimum Z for plot<br>  -ZMAX [zmax]    (default = 50.0)  : Maximum Z for plot<br>  -v      (default = false) : verbose output<br>  -?      (default = false) : This help screen<br>  -h      (default = false) : This help screen<br></pre>
+</p><p>
     This program is very informative if there is only one distance
     plotted. If there are many distances, then one will get&nbsp; a idea
     of the range of ray paths that reach the stations.<br>
@@ -311,9 +312,41 @@ gunzip -c Cerveny.tgz | tar xf -
       command<br>
       <b>cpulse96 -h. </b>The output of this program the in the ASCII <i>file96</i>
       format which can be converted to Sac files using <b>f96tosac -B.<br>
-      </b></p>
-    <pre> USAGE: cpulse96 [ -v  ] [ -t -o -p -i ] -a alpha -l L [ -D -V -A]  [-F rfile ] [ -m mult]  [ -OD -OV -OA ] [-Z]   <br>      [-Q] [-DELAY delay [-EQEX -EXF -ALL] [ -PMIN pmin -PMAX pmax ]  [-?] [-h]<br>  -v          Verbose output<br>  -t          Triangular pulse of base 2 L dt<br>  -p          Parabolic Pulse of base  4 L dt<br>  -l L        (default 1 )duration control parameter<br>  -D          Output is ground displacment<br>  -V          Output is ground velocity (default)<br>  -A          Output is ground acceleration<br>  -F rfile    User supplied pulse<br>  -m mult     Multiplier (default 1.0)<br>  -OD         Output is ground displacement<br>  -OV         Output is ground velocity<br>  -OA         Output is ground acceleration<br>  -Q          (default false) do causal Q<br>  -DELAY delay (default use t=t0+x/vred for first sample,<br>              else use delay seconds before the first arrival<br>  -EXF        (default) Explosion/point force green functions<br>  -EQEX       Earthquake and double couple green functions<br>  -ALL        Earthquake, Explosion and Point Force <br>  -Z          (default false) zero phase triangular/parabolic pulse<br>  -PMIN pmin -PMAX pmax<br>              If pmin and pmax have the same sign, then rays <br>              with ray parameter |pmin|&lt;= p &lt;=|pmax| are  used.<br>              A positive sign means a ray from source <br>              propagates in the  +x direction, and a negative<br>              in the -x direction<br>  -?          Write this help message<br>  -h          Write this help message<b><br></b></pre>
-    <p></p>
+      </b><br>
+<font size="2">
+<pre> 
+USAGE: cpulse96 [ -v  ] [ -t -o -p -i ] -a alpha -l L [ -D -V -A]  
+        [-F rfile ] [ -m mult]  [ -OD -OV -OA ] [-Z]   [-Q] 
+        [-DELAY delay [-EQEX -EXF -ALL] [ -PMIN pmin -PMAX pmax ]  [-?] [-h]
+  -v          Verbose output
+  -t          Triangular pulse of base 2 L dt
+  -p          Parabolic Pulse of base  4 L dt
+  -l L        (default 1 )duration control parameter
+  -D          Output is ground displacment
+  -V          Output is ground velocity (default)
+  -A          Output is ground acceleration
+  -F rfile    User supplied pulse
+  -m mult     Multiplier (default 1.0)
+  -OD         Output is ground displacement
+  -OV         Output is ground velocity
+  -OA         Output is ground acceleration
+  -Q          (default false) do causal Q
+  -DELAY delay (default use t=t0+x/vred for first sample,
+              else use delay seconds before the first arrival
+  -EXF        (default) Explosion/point force green functions
+  -EQEX       Earthquake and double couple green functions
+  -ALL        Earthquake, Explosion and Point Force 
+  -Z          (default false) zero phase triangular/parabolic pulse
+  -PMIN pmin -PMAX pmax
+              If pmin and pmax have the same sign, then rays 
+              with ray parameter |pmin|&lt;= p &lt;=|pmax| are  used.
+              A positive sign means a ray from source 
+              propagates in the  +x direction, and a negative
+              in the -x direction
+  -?          Write this help message
+  -h          Write this help message<b><br></b></pre>
+</font>
+</p>
     <p>As mentioned above,&nbsp; the trace header fields have
       LCALDA=false, STLA=-12345, STLO=-12345, STLO= station
       x-coordinate, EVLO= station x-coordinate. Thus one can plot a
@@ -328,8 +361,10 @@ gunzip -c Cerveny.tgz | tar xf -
       </i>used by <b>cprep96</b> consists of lines containing the
       following</p>
     <pre>DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)<br>            first time point is T0 + DIST/VRED<br></pre>
+</p><p>
     an example of which is<br>
     <pre> 00.0     0.125   1024   -10.0 6.0<br> 10.0     0.125   1024   -10.0 6.0<br> 20.0     0.125   1024   -10.0 6.0<br></pre>
+</p><p>
     For the emulation of the teleseismic arrival, which will be
     approximated by placing the point source at a large depth, one would
     have to manually change the TO so some large value and have VRED=
@@ -339,10 +374,43 @@ gunzip -c Cerveny.tgz | tar xf -
     <br>
     The resulting output of <b>cseis96</b> is; the file cseis96.amp
     which looks like the following. <br>
-    <pre>model.d<br> 10<br>   0.00000 200.00000   0.00000  10.00000                        <u><font color="#ff0000"><b>Source is at (0,200)</b></font></u><br>  0.1000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01  <b> 	</b><b><font color="#ff0000">Distance 1</font></b><br>  0.2000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01	<b><font color="#ff0000">Distance 2</font></b>
-  0.3000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.4000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.5000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.6000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.7000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.8000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.9000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>  0.1000E+03  0.1250E+00      1024 -0.1000E+01  0.6000E+01<br>    1   10 0.3727E+02 0.4561E-02 0.7823E-02 0.3142E+01 0.0000E+00-0.1107E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01<br>    1    9 0.3655E+02 0.4284E-02 0.8160E-02 0.3142E+01 0.0000E+00-0.1148E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01<br>    1    8 0.3590E+02 0.3963E-02 0.8487E-02 0.3142E+01 0.0000E+00-0.1190E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01<br><b><font color="#ff0000">The output here are <br>	ray number             - ray one<br>	distance number        - 10 means here means the 10'th distance entry, which is  100 km here<br>	horizontal amplitude   - these are used to make the synthetic<br>	vertical amplitude<br>	horizontal phase<br>	vertical phase<br>	pnew                   - For the first entry this is -1.107 radians, or and angle of 63.44 degrees measured upward<br>                                 from the horizontal. This is equivalent to an incident angle of 90 - 64.44 = 25.56 degrees (true is 26.56)<br>                                 There is a rounding error in the presentation of </font></b><b><font color="#ff0000">-0.1107E+01. 
-	mwave                    1 means ray leaves the source as P<br>	ros                      Source density is 2.8 gm/cm<sup>3</sup><br>	vels                     Velocity of ray type, e.g., P, at source is 6.00 km/s<br>	sumtq<br>	rsrf                     Density at receiver 2.8 </font></b><font color="#ff0000"><u><b><font color="#ff0000">gm/cm<sup>3</sup></font></b></u><u><b>
-</b></u><b>	vsrf                     Velocity at receiver to this ray is 6.00 km/</b><b>s<br><br></b></font></pre>
+<font size="2">
+    <pre>
+model.d
+ 10
+   0.00000 200.00000   0.00000  10.00000                        <u><font color="#ff0000"><b>Source is at (0,200)</b></font></u>
+  0.1000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01  <b> 	</b><b><font color="#ff0000">Distance 1</font></b>
+  0.2000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01	<b><font color="#ff0000">Distance 2</font></b>
+  0.3000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.4000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.5000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.6000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.7000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.8000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.9000E+02  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+  0.1000E+03  0.1250E+00      1024 -0.1000E+01  0.6000E+01
+    1   10 0.3727E+02 0.4561E-02 0.7823E-02 0.3142E+01 0.0000E+00-0.1107E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01
+    1    9 0.3655E+02 0.4284E-02 0.8160E-02 0.3142E+01 0.0000E+00-0.1148E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01
+    1    8 0.3590E+02 0.3963E-02 0.8487E-02 0.3142E+01 0.0000E+00-0.1190E+01    1 0.2800E+01 0.6000E+01 0.0000E+00 0.2800E+01 0.6000E+01
+<b><font color="#ff0000">The output here are 
+	ray number             - ray one
+	distance number        - 10 means here means the 10'th distance entry, which is  100 km here
+	horizontal amplitude   - these are used to make the synthetic
+	vertical amplitude
+	horizontal phase
+	vertical phase
+	pnew                   - For the first entry this is -1.107 radians, or and angle of 63.44 degrees measured upward
+                                 from the horizontal. This is equivalent to an incident angle of 90 - 64.44 = 25.56 degrees (true is 26.56)
+                                 There is a rounding error in the presentation of </font></b><b><font color="#ff0000">-0.1107E+01. 
+	mwave                    1 means ray leaves the source as P
+	ros                      Source density is 2.8 gm/cm<sup>3</sup>
+	vels                     Velocity of ray type, e.g., P, at source is 6.00 km/s
+	sumtq
+	rsrf                     Density at receiver 2.8 </font></b><font color="#ff0000"><u><b><font color="#ff0000">gm/cm<sup>3</sup></font></b></u><u><b>
+</b></u><b>	vsrf                     Velocity at receiver to this ray is 6.00 km/</b><b>s
+<br></b></font></pre>
+</font>
+</p> <p>
     This output does not have any information about the ray identified
     by the ray number. That information is contained in the file <i>cseis96.dat</i><i>,.<br>
     </i><br>
@@ -355,15 +423,23 @@ gunzip -c Cerveny.tgz | tar xf -
     0010002000.ZEX and 0010002000.REX. Now run <b>saciterd <br>
       <br>
     </b>
+<font size="2">
     <pre><b>saciterd -FN 0010002000.REX -FD 0010002000.ZEX -RAYP 0.0745 -D 10 -ALP 1.0<br></b><br></pre>
+</font>
+</p>
+<p>
     which creates the Sac file <i>decon.out. </i>Also compute the
     theoretical using <b>hrftn96 </b>with the command<br>
+<font size="2">
     <pre><b>hrftn96 -M model.d -NSAMP 1024 -DT 0.125 -ALP 1.0 -P -RAYP 0.0745 -D 10</b><br></pre>
-    <br>
+</font>
+</p>
+<p>
     which creates the Sac file<i> hrftn96.sac</i>.<br>
     <br>
     <br>
     <h1>Test Cases</h1>
+<p>
     The following test cases were designed to learn how to adapt the
     code for the purpose of modeling teleseismic P-wave receiver
     functions. The sequence of tests<br>
@@ -371,7 +447,8 @@ gunzip -c Cerveny.tgz | tar xf -
     by executing the following commands in order:<br>
     <br>
     <pre>(cd Layer1; DOIT;DOPLT;DOCLEANUP)<br>(cd Layer2;DOIT; DOPLT;DOCLEANUP)<br>(cd Layer3;DOIT; DOPLT;DOCLEANUP)<br>(cd NsubductionReverbF/;DOIT;DOPLT;DOSACITERD;DOREC)<br>(cd NsubductionReverbR/;DOIT;DOPLT;DOSACITERD;DOREC)<br>(cd DOCMPRFTN;DOCMP)<br></pre>
-    <br>
+</p>
+<p>
     <h2>Layer1</h2>
     <p>This discusses running the code and also addresses the ability of
       this ray tracing code to approximate incident plane waves.<br>
@@ -397,8 +474,8 @@ gunzip -c Cerveny.tgz | tar xf -
     <p> The initial test model is based on the image image from <a
         moz-do-not-send="true"
 href="https://www.chegg.com/homework-help/questions-and-answers/figure-56-generalized-east-west-profile-center-nazca-plate-eastern-side-andes-mountains-ho-q52257549">https://www.chegg.com/homework-help/questions-and-answers/figure-56-generalized-east-west-profile-center-nazca-plate-eastern-side-andes-mountains-ho-q52257549</a></p>
-    . The model used here is shown in the next figure <br>
-    <center>
+<p>
+The model used here is shown in the next figure <br>
       <table>
         <tbody>
           <tr>
@@ -406,8 +483,7 @@ href="https://www.chegg.com/homework-help/questions-and-answers/figure-56-genera
           </tr>
         </tbody>
       </table>
-    </center>
-    <br>
+</p><p>
     The P velocities in the layers are 6.0, 8.0, 6.0, 8.0 and 8.5 km/s
     from top to bottom. The layer boundaries on the right side of the
     model are at 0, 40, 200, 207 and 300 km. (The lower boundary at
@@ -433,7 +509,7 @@ href="https://www.chegg.com/homework-help/questions-and-answers/figure-56-genera
       direction, then x<sub>src</sub> = x<sub>rec</sub> - x<sub>offset</sub>.
       If&nbsp; the ray is propagating in the <i>-x</i> direction, e.g.,
       a reverse profile, then x<sub>src</sub> = x<sub>rec</sub> + x<sub>offset</sub>.
-    </p>
+    </p><p>
     To facilitate the specification of the range of acceptable angles
     for the Cerveny code, a simple Fortran program was written. If the
     source depth or velocity change, just modify in the definitions at
@@ -441,6 +517,7 @@ href="https://www.chegg.com/homework-help/questions-and-answers/figure-56-genera
     output are as follow:
     <p></p>
     <p> </p>
+<font size="2">
     <pre>      program ptoradian
 c-----
 c     This program considers at range of teleseismic
@@ -521,19 +598,21 @@ c-----
       end
 
 </pre>
-    <p></p>
-    <p> </p>
+</font>
+</p><p>
+<font size="2">
     <pre>gfortran ptoradian.f
 a.out
 
     Mapping of ray parameter range to horizontal offset and ray angles in radians
     for source depth of  16000.00 and velocity of      8.500 km/s
-  p range (s/km)  Theta   Xoffset            Forward Rays (+x)              Reverse Rays (-x)
-[ 0.045 to 0.055] 25.180  7522.338     [   -1.0843  to   -1.1783]     [   -1.9633  to   -2.0573]
-[ 0.055 to 0.065] 30.705  9502.150     [   -0.9854  to   -1.0843]     [   -2.0573  to   -2.1562]
-[ 0.065 to 0.075] 36.572 11870.596     [   -0.8795  to   -0.9854]     [   -2.1562  to   -2.2620]
+  p range (s/km)  Theta   Xoffset        Forward Rays (+x)          Reverse Rays (-x)
+[ 0.045 to 0.055] 25.180  7522.338  [  -1.0843  to   -1.1783]  [  -1.9633  to   -2.0573]
+[ 0.055 to 0.065] 30.705  9502.150  [  -0.9854  to   -1.0843]  [  -2.0573  to   -2.1562]
+[ 0.065 to 0.075] 36.572 11870.596  [  -0.8795  to   -0.9854]  [  -2.1562  to   -2.2620]
 
 </pre>
+</font>
     <p></p>
     <p><br>
       In the examples that follow, the 0.055-0.065 range of ray
@@ -621,7 +700,7 @@ a.out
         </tr>
       </tbody>
     </table>
-    <br>
+</p><p>
     This comparison shows that the difference at about 20s on the plot
     is due to the multiplayer structure. Comparing the arrival at about
     72s of the Layered.sac and Reverse600.sac, shows an initial
@@ -674,5 +753,6 @@ a.out
     <table>
     </table>
     <p></p>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

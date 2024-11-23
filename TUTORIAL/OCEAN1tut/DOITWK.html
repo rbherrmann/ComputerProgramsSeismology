@@ -1,31 +1,22 @@
 <HTML>
-<HEAD><TITLE>Computer Programs in Seismology Tutorials</TITLE>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials -</title>
-    <style type="text/css">
-                h2.cjk { font-family: "Arial Unicode MS" }
-                h2.ctl { font-family: "Arial Unicode MS" }
-                h3.cjk { font-family: "Arial Unicode MS" }
-                h3.ctl { font-family: "Arial Unicode
-                                MS" }
-                h4.cjk { font-family: "Arial
-                                Unicode MS" }
-                h4.ctl { font-family: "Arial Unicode MS" }
-                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
-                pre.cjk { font-family: "Courier New", monospace }
-        </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+<HEAD>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1>
+<h2>Wave propagation for ocean floor observations</h2></header>
     <h2> Complete Synthetics </h2>
 <p>Complete synthetics are computed along a horizontal profile for different water thicknesses. The source of 0.1km beneath the water - solid boundary and the receiver is 0.05km beneath this boundary. The shell script <b>DOIWK</b> computes the synthetics for the different models. After the synthetics are computed one can use <b>do_mft</b> to pick the dispersion. Because the synthetics are from a numerical model, it is possible to overlay the theoretical dispersion onto that determined by <b>do_mft</b>. To accomplish the overlay, the scripts <b>MFTDOOVERLAY</b> and <b>PHVDOOVERLAY</b> have been tailored to do this.  For my research, these two scripts are more complicated since I present the theoretical dispersion for several models as well as current results from surface wave tomography.
 </p>
@@ -34,31 +25,36 @@ synthetics for all Green's functions.
       The initial appearance of the <i>OCEAN_SW</i>
       directory is<br>
     </p>
-    <pre>&gt; ls -F<br>
-00README	MFTDOOVERLAY*	tOCEAN_1.0.mod	tOCEAN_3.0.mod	tOCEAN_5.0.mod
-DOITWK*		PHVDOOVERLAY*	tOCEAN_2.0.mod	tOCEAN_4.0.mod
-<br></pre>
+    <pre><small>&gt; ls -F<br>
+00README	PHVDOOVERLAY*	tOCEAN_2.0.mod	
+MFTDOOVERLAY*	tOCEAN_1.0.mod	tOCEAN_4.0.mod
+DOITWK*		tOCEAN_3.0.mod	tOCEAN_5.0.mod
+</small></pre>
     <p>After executing the <b>DOITSW</b> command this directory will
       appear as<br>
     </p>
     <pre>&gt;ls -F<br>
-00README	PHVDOOVERLAY*	tOCEAN_1.0.mod	tOCEAN_4.0.mod	wkDIR_2.0/	wkDIR_5.0/
-DOITWK*		THF.PLT		tOCEAN_2.0.mod	tOCEAN_5.0.mod	wkDIR_3.0/
-MFTDOOVERLAY*	ZVF.PLT		tOCEAN_3.0.mod	wkDIR_1.0/	wkDIR_4.0/
+00README	THF.PLT		tOCEAN_3.0.mod	wkDIR_2.0/	
+DOITWK*		ZVF.PLT		tOCEAN_4.0.mod	wkDIR_3.0/
+MFTDOOVERLAY*	tOCEAN_1.0.mod	tOCEAN_5.0.mod	wkDIR_4.0/
+PHVDOOVERLAY*	tOCEAN_2.0.mod	wkDIR_1.0/	wkDIR_5.0/
 <br></pre>
     <p>The subdirectories, such as <i>wkDIR_3.0</i> for the 3.0km water
       thickness,&nbsp; will have  files with names such as:<br>
     </p>
     <pre>&gt; ls -F<br>
-00400000_003100_003050.RDD	00400000_003100_003050.THF	00400000_003100_003050.ZVF
-00400000_003100_003050.RDS	00400000_003100_003050.TSS	MFTDOOVERLAY*
-00400000_003100_003050.REX	00400000_003100_003050.ZDD	PHVDOOVERLAY*
-00400000_003100_003050.RHF	00400000_003100_003050.ZDS	slegn96.egn
-00400000_003100_003050.RSS	00400000_003100_003050.ZEX	sregn96.egn
-00400000_003100_003050.RVF	00400000_003100_003050.ZHF	tOCEAN_3.0.mod
-00400000_003100_003050.TDS	00400000_003100_003050.ZSS
-<br></pre
-<br>
+00400000_003100_003050.RDD	00400000_003100_003050.ZDS	
+00400000_003100_003050.RDS	00400000_003100_003050.ZSS
+00400000_003100_003050.RHF	00400000_003100_003050.ZEX	
+00400000_003100_003050.RSS	00400000_003100_003050.ZVF
+00400000_003100_003050.REX	00400000_003100_003050.ZHF	
+00400000_003100_003050.RVF	MFTDOOVERLAY*
+00400000_003100_003050.TDS	PHVDOOVERLAY*
+00400000_003100_003050.TSS	slegn96.egn
+00400000_003100_003050.THF	sregn96.egn
+00400000_003100_003050.ZDD	tOCEAN_3.0.mod
+</pre
+</p><p>
 Note that the model files differ from those use to compute the dispersion because the number of deep layers are truncated. This is acceptable since the effect of deeper structure will not affect the waveforms at short epicentral distances.
 </P>
 <h3>DOITWK</h3>
@@ -72,6 +68,7 @@ Since the purpose of this tutorial is to compare the dispersion that derived fro
 <p>the <b>DOIT.WK</b> script is
 <br>
 <pre>
+<small>
 #!/bin/sh
 
 #####
@@ -88,40 +85,39 @@ EOF
 
 for D in 1.0 2.0 3.0 4.0 5.0
 do
+  if [ ! -d wkDIR_${D} ]
+  then
+    mkdir wkDIR_${D}
+  fi
+  # place the source and receiver in the solid
+  # is is assumed the the D is actually the the thickness of 
+  # the first layer for long periods we will place the 
+  # source 100m beneath the water - solid boundary. The
+  # receiver is 50 below. The reason for the different depths
+  # is tha tthe computations will not work well for the
+  # source and reciever at the same depths
+  #####
+  cp tOCEAN_${D}.mod wkDIR_${D}
+  #  run in a sub shell
+  (
+    cd wkDIR_${D}
+    cp ../dfile .
+    HS=`echo $D | awk '{print $1 + 0.10 }'`
+    HR=`echo $D | awk '{print $1 + 0.05 }'`
+    hprep96 -d dfile -M  tOCEAN_${D}.mod -HS ${HS} -HR ${HR}
+    hspec96 
+    hpulse96 -V -p -l 1 | f96tosac -FMT 2
 
-	if [ ! -d wkDIR_${D} ]
-	then
-		mkdir wkDIR_${D}
-	fi
-	# place the source and receiver in the solid
-	# is is assumed the the D is actually the the thickness of the first layer
-	# for long periods we will place the source 
-	# 100m beneath the water - solid boundary
-	# The receiver is 50 below. The reason for the different depths
-	# is tha tthe computations will not work well for the
-	# source and reciever at the same depths
-	#####
-	cp tOCEAN_${D}.mod wkDIR_${D}
-	#  run in a sub shell
-	(
-		cd wkDIR_${D}
-		cp ../dfile .
-		HS=`echo $D | awk '{print $1 + 0.10 }'`
-		HR=`echo $D | awk '{print $1 + 0.05 }'`
-		hprep96 -d dfile -M  tOCEAN_${D}.mod -HS ${HS} -HR ${HR}
-		hspec96 
-		hpulse96 -V -p -l 1 | f96tosac -FMT 2
-
-		# for later analysis copy the eigenfunctions
-		# for the model, if they exist
-		if [ -d ../../OCEAN_SW/swDIR_${D} ]
-		then
-			cp ../../OCEAN_SW/swDIR_${D}/*.egn  .
-		fi
-		cp ../MFTDOOVERLAY ../PHVDOOVERLAY .
-		# clean up
-		rm -f hspec96.??? dfile
-	)
+    # for later analysis copy the eigenfunctions
+    # for the model, if they exist
+    if [ -d ../../OCEAN_SW/swDIR_${D} ]
+    then
+      cp ../../OCEAN_SW/swDIR_${D}/*.egn  .
+    fi
+    cp ../MFTDOOVERLAY ../PHVDOOVERLAY .
+    # clean up
+    rm -f hspec96.??? dfile
+  )
 done
 
 #####
@@ -130,6 +126,7 @@ done
 rm -f dfile
 
 #####
+</small>
 </pre>
 </p>
 <h2>do_mft analysis</h2>
@@ -137,15 +134,19 @@ rm -f dfile
 When <b>do_mft</b> calls <b>sacmft96</b>, the files <i>MFT96CMP</i> and <i>PHV96CMP</i> are created in the work directory. These are prototype shell scripts that permit the user to create plot files to overlay onto the <i>MFT96.PLT</i> and <i>PHV96.PLT<i>. These files know everything about these plots, e.g., position on the screen and the mapping of dispersion and amplitude to the screen to permit the overlay. The contents of these files look like
 <br>
 <pre>
+<small>
 &gt; cat MFT96CMP
 #!/bin/sh
  
 # Data file = 00500000_005100_005050.THF
 # alpha =     25.000
  
-sdpegn96 -X0 5.10 -Y0 1.50 -XLEN 4.00 -YLEN 4.00 -XMIN 2.00  -XMAX 100.  -YMIN 0.10 -YMAX 5.00 -PER -L -U -NOBOX -XLOG -YLIN 
+sdpegn96 -X0 5.10 -Y0 1.50 -XLEN 4.00 -YLEN 4.00 -XMIN 2.00  -XMAX 100. \
+            -YMIN 0.10 -YMAX 5.00 -PER -L -U -NOBOX -XLOG -YLIN 
  
-sacspc96 -X0 g1.30 -Y0 1.50 -XLEN 3.00 -YLEN 4.00 -XMIN 1.41  -XMAX 141.  -YMIN 0.100E-06 -YMAX 0.100E-03 -PER -NOBOX -XLOG -YLOG -f 00500000_005100_005050.THF
+sacspc96 -X0 1.30 -Y0 1.50 -XLEN 3.00 -YLEN 4.00 -XMIN 1.41  -XMAX 141.  \
+            -YMIN 0.100E-06 -YMAX 0.100E-03 -PER -NOBOX -XLOG -YLOG \
+            -f 00500000_005100_005050.THF
 
 &gt; cat POM96CMP
 #!/bin/sh
@@ -153,7 +154,9 @@ sacspc96 -X0 g1.30 -Y0 1.50 -XLEN 3.00 -YLEN 4.00 -XMIN 1.41  -XMAX 141.  -YMIN 
 # Data file = 00500000_005100_005050.THF
 # alpha =     25.000
  
-sdpegn96 -X0 5.10 -Y0 1.50 -XLEN 4.00 -YLEN 4.00 -XMIN  2.00   -XMAX  100.   -YMIN 0.10 -YMAX 5.00 -PER -L -C -NOBOX -XLOG -YLIN 
+sdpegn96 -X0 5.10 -Y0 1.50 -XLEN 4.00 -YLEN 4.00 -XMIN  2.00 -XMAX  100.  \
+             -YMIN 0.10 -YMAX 5.00 -PER -L -C -NOBOX -XLOG -YLIN 
+</small>
 </pre>
 <br>
 For use with <b>do_mft</b> only the <b>sdpegn96</b> lines are important.
@@ -222,6 +225,7 @@ rm S?EGN?.PLT
 
 </pre>
 </br>
+<footer>Last changed November 21, 2024</footer>
 
 
 
