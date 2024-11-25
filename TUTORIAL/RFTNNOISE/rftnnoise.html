@@ -1,11 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Effect of ground noise on RFTN's</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>RFTN - Effect of Noise</h2></header>
     <h2>Introduction</h2>
     <p>The incentive for this tutorial arose when a student asked about
       the error in a receiver function. The teleseismic P-wave receiver
@@ -23,6 +34,7 @@
             encoding="TeX">( \pi f / \alpha ) ^2</annotation></semantics></math>
       ]<br>
     </blockquote>
+</p><p>
     If the filter determined from the data confidently predicts the
     low-pass filtered radial component, and if the filter satisfies
     elementary elastic wave theory, then the resultant receiver function
@@ -39,26 +51,30 @@
     <p>This exercise is contained in the gzip'd tar file <a
         href="RFTNNOISE.tgz">RFTNNOISE.tgz </a><br>
       After downloading execute the following commands: </p>
-    <pre>          gunzip -c RFTNNOISE.tgz | tar xf -
-          cd RFTNNOISE.dist/src
-          make all
-          cd ..
+    <pre>
+gunzip -c RFTNNOISE.tgz | tar xf -
+cd RFTNNOISE.dist/src
+make all
+cd ..
 </pre>
+</p><p>
     This procedure creates the directory structure:<br>
-    <pre>          RFTNNOISE.dist/
-          RFTNNOISE.dist/DOCLEANUP              <font color="#ff0000">Script to clean up temporary files</font>
-          RFTNNOISE.dist/DOIT			<font color="#ff0000">Simulation script</font>
-          RFTNNOISE.dist/DOPLOT                 <font color="#ff0000">Script to create PNG graphics</font>
-          RFTNNOISE.dist/Models/                <font color="#ff0000">Directory having models for making synthetics</font>
-          RFTNNOISE.dist/src/
-          RFTNNOISE.dist/src/Makefile
-          RFTNNOISE.dist/src/noisemodel.h
-          RFTNNOISE.dist/src/sacnoise.c
-          RFTNNOISE.dist/src/sacsubc.c
-          RFTNNOISE.dist/src/sacsubc.h
-          RFTNNOISE.dist/Models/CUS.mod  
-          RFTNNOISE.dist/Models/tak135sph.mod
+    <pre>
+RFTNNOISE.dist/
+RFTNNOISE.dist/DOCLEANUP <font color="#ff0000">Script to clean up temporary files</font>
+RFTNNOISE.dist/DOIT      <font color="#ff0000">Simulation script</font>
+RFTNNOISE.dist/DOPLOT    <font color="#ff0000">Script to create PNG graphics</font>
+RFTNNOISE.dist/Models/   <font color="#ff0000">Models for making synthetics</font>
+RFTNNOISE.dist/src/
+RFTNNOISE.dist/src/Makefile
+RFTNNOISE.dist/src/noisemodel.h
+RFTNNOISE.dist/src/sacnoise.c
+RFTNNOISE.dist/src/sacsubc.c
+RFTNNOISE.dist/src/sacsubc.h
+RFTNNOISE.dist/Models/CUS.mod  
+RFTNNOISE.dist/Models/tak135sph.mod
 </pre>
+</p><p>
     As a result of the <i>make all </i>the executable <b>sacnoise</b>
     is created in the <i>src</i> directory.<br>
     <h2>DOIT</h2>
@@ -68,10 +84,11 @@
       </i>are used. These appear first in the file. The logic of the
       simulation is incorporated in these lines:<br>
     </p>
-    <blockquote>
-      <pre>############################################################################
+<font size="2">
+      <pre>
+#################################################
 #    main processing
-############################################################################
+#################################################
 
 #####
 #   clean up from previous runs
@@ -104,7 +121,8 @@ done &lt; surd.tmp
 #####   
 dostack 
 </pre>
-    </blockquote>
+</font>
+</p><p>
     The comments indicate what each function does. <i>init() </i>creates&nbsp;
 
 
@@ -426,9 +444,6 @@ dostack
       simulation reflects real expeience, in that one needs a lot of
       large earthquake eata to make a good receiver function.<br>
     </p>
-    <p><br>
-    </p>
-    <br>
-    <div align="center">Last changed December 16, 2017 </div>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

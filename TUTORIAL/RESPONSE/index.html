@@ -1,16 +1,23 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>Computer Programs in Seismology Tutorials - RESPONSE</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8505800">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Instrument Response</h2></header>
 <H2>Introduction</H2>
-<H2>Transfer functions</H2>
 <H2>Using rdseed</H2>
 <P>When ordering a SEED volume from IRIS, the contents will be both
 the waveform as well as the data defining the station and instrument.
@@ -46,7 +53,10 @@ file is a complete physical description of the response.
 <P>To use the RESP file to define the instrument response, the
 utility program <I>evalresp</I> is used: 
 </P>
-<PRE STYLE="margin-bottom: 0.2in">evalresp STATION_NAME COMPONENT_NAME YEAR DAY_OF_YEAR FMIN FMAX NFREQ -u  'vel' -f RESPFILE</PRE><P>
+<font size="2">
+<PRE >evalresp STA_NAME COMPONENT_NAME YEAR DAY_OF_YEAR FMIN FMAX NFREQ -u 'vel' -f RESPFILE</PRE>
+</font>
+</p><P>
 where STATION_NAME is the station code, COMPONENT_NAME is the
 component. YEAR and DAY_OF_YEAR are used to get the response for a
 given day, since the RESP file can provide the complete instrument
@@ -60,8 +70,11 @@ ground velocity. If the argument is ACC, the response is COUNTS per
 METER/SEC/SEC input ground acceleration. 
 </P>
 <P>For the sample dataless SEED given above, the command 
-</P>
-<PRE STYLE="margin-bottom: 0.2in">evalresp PBMO BHZ 2007 292 0.001 10 500 -u 'vel' -f RESP.NM.PBMO..BHZ</PRE><P>
+<br>
+<font size="2">
+<PRE>evalresp PBMO BHZ 2007 292 0.001 10 500 -u 'vel' -f RESP.NM.PBMO..BHZ</PRE>
+</font>
+</p><P>
 creates the files 
 </P>
 <PRE>AMP.NM.PBMO..BHZ
@@ -74,7 +87,9 @@ the command will be
 which will produce the following files when using <I>rdseed (version
 4.7.5)</I>: 
 </P>
-<PRE>SAC_PZs_NM_PBMO_BHE__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
+<font size="2">
+<PRE>
+SAC_PZs_NM_PBMO_BHE__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 SAC_PZs_NM_PBMO_BHN__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 SAC_PZs_NM_PBMO_BHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 SAC_PZs_NM_PBMO_HHE__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
@@ -82,7 +97,10 @@ SAC_PZs_NM_PBMO_HHN__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 SAC_PZs_NM_PBMO_HHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 SAC_PZs_NM_PBMO_LHE__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 SAC_PZs_NM_PBMO_LHN__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
-SAC_PZs_NM_PBMO_LHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999</PRE><P>
+SAC_PZs_NM_PBMO_LHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
+</PRE>
+</font>
+</p><P>
 The polezero files for seismic sensors created by <I>rdseed</I> from
 the SEED volume, provides the transfer function from ground
 displacement in units of <I>METERS</I> to <I>COUNTS</I>. For the BHZ
@@ -120,9 +138,10 @@ POLES 4
 -314.1590  -202.3190
 CONSTANT 7.101501e+07</PRE><H2>
 Viewing the response</H2>
-<P>We can use <I>gsac</I> to present the amplitude spectra of the
+<P>We can use <b>gsac</b> to present the amplitude spectra of the
 responses: 
 </P>
+<font size="2">
 <PRE>gsac &lt;&lt; EOF
 #####
 #       create an impulse with unit area
@@ -150,7 +169,8 @@ convert -trim respplot.eps respplt.png
 #       obtain the displacement sensitivity
 #####
 r imp.sac
-transfer from none to polezero subtype SAC_PZs_NM_PBMO_BHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
+transfer from none to polezero subtype \
+           SAC_PZs_NM_PBMO_BHZ__2007.173.00.00.00.0000_99999.9999.24.60.60.99999
 w discount.sac
 fft
 color list blue
@@ -160,7 +180,9 @@ convert -trim pzplot.eps pzplt.png
 quit
 EOF
 
-</PRE><P STYLE="margin-bottom: 0in">
+</PRE>
+</font>
+</p><p>
 The amplitude response can be viewed 
 </P>
 <TABLE CELLPADDING=2 CELLSPACING=2>
@@ -194,9 +216,12 @@ apply a bandpass filter as part of the deconvolution.
 <P>Consider the output due to an impulse in ground velocity, which is
 created by the gsac commands: 
 </P>
-<PRE>r imp.sac
+<font size="2">
+<PRE>
+r imp.sac
 transfer from none to eval subtype AMP.NM.PBMO..BHZ PHASE.NM.PBMO..BHZ
-w velcount.sac</PRE><P>
+w velcount.sac</PRE>
+</font></p><P>
 This transfer function removes both the high and low frequencies, as
 seen from the plot above. 
 </P>
@@ -204,7 +229,8 @@ seen from the plot above.
 the instrument, then removal of the instrument will enhance that
 noise. To remove the instrument response, the following is a safe
 procedure: 
-</P>
+<br>
+<font size="2">
 <PRE>#####
 #       define the frequency limits for deconvolution
 #####
@@ -218,10 +244,14 @@ FHL=`echo $DELTA | awk '{print 0.25/$1}' `
 #####
 gsac &lt;&lt; EOF
 r velcount.sac
-transfer from eval subtype AMP.NM.PBMO..BHZ PHASE.NM.PBMO..BHZ to none freqlimits 0.005 0.01  ${FHL} ${FHH}
+transfer from eval subtype AMP.NM.PBMO..BHZ \
+          PHASE.NM.PBMO..BHZ to none freqlimits 0.005 0.01  ${FHL} ${FHH}
 w deconvelfl.sac
 quit
-EOF</PRE><P STYLE="margin-bottom: 0in">
+EOF
+</PRE>
+</font>
+</p><p>
 Note that this automatically adjusts for the sample rate (DELTA) to
 compute the Nyquist frequency (FHH). the result will be a bandpass
 filtered version of the desired ground motion: 
@@ -241,7 +271,6 @@ filtered version of the desired ground motion:
 		</TD>
 	</TR>
 </TABLE>
-<P ALIGN=CENTER STYLE="margin-bottom: 0in">Last changed October 19,
-2007</P>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

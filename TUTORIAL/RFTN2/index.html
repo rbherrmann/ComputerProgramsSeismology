@@ -1,8 +1,23 @@
 <HTML>
-<HEAD><TITLE>Computer Programs in Seismology Tutorials - Effect of Moho Gradient</TITLE>
+<HEAD>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>RFTN-Gradient Moho Effect</h2></header>
 	<h2>Introduction</h2>
+<p>
 Receiver functions and surface-wave dispersion provide information about shallow Earth structure. However, when inverting observations, the question arises as to the number off layers to be used in the inversion. This is critical when the receiver function cannot be fit by a small number of layers.
 <p>
 The object of this exercise is to examine the sensitivity of surface wave dispersion and the receiver functions on a gradational Moho rather than a sharp Moho.
@@ -13,12 +28,14 @@ To accomplish this, different velocity models are created as follow:
 </ul>
 
 	<h2>Download</h2>
+<p>
 	Download the package  <A href="RFTN2.tgz">RFTN2.tgz</a>. Then do the following:
 	<PRE>
 gunzip -c RFTN2.tgz | tar xvf -
 cd RFTN2
 ./DOIT
 </pre>
+</p><p>
 	The script will create the figures shown below. The script requires the FORTRAN compiler <b>gfortran</b>, the CPS programs <b>sprep96, sdisp96, sregn96, slegn96, sdpegn96, hrftn96, gsac</b> and <b>plotnps</b> and the ImageMagick package program <b>convert</b> to transform the EPS files to a PNG image.
 	
 <h2>Discussion</h2>
@@ -27,6 +44,7 @@ The first figure shows the velocity models considered.
 <table>
 	<tr><td><img src="SHWMOD96.png"></td></tr>
 </table>
+</p>
 <p>In the figure the colors indicate the progression from a sharp Moho to a gradational Moho.
 <p>
 The next set of figures use the same color scheme to show the Love and Rayleigh, phase (C) and group (U) velocity dispersion for the different models. <BR>There is little sensitivity to the different models, except at the group velocity minima. Note that the maximum change is at a period of 20-30 sec, for which the signal wavelength is about 60-100 km for models which differ at depths on the order of one-third to one-half a wavelength.
@@ -47,7 +65,7 @@ These figures indicate that one can quickly look at a receiver function and judg
 This example shows how synthetics can provide a sense of how sub-surface structure affects the observed receiver functions and dispersion. One can also perform similar studies that investigate the effect of using other values of the Gaussian filter parameter, ALP, layer thickness.
 <p>
 An interesting exercise would be to consider a low velocity surface layer which is due to sediments or ice.
-<p>
-	<CENTER>Last Changed April 18, 2012</CENTER>
+</p>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

@@ -1,36 +1,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials -SW Inversion
-      Kernels</title>
-    <style type="text/css">
-                h2.cjk { font-family: "Arial Unicode MS" }
-                h2.ctl { font-family: "Arial Unicode MS" }
-                h3.cjk { font-family: "Arial Unicode MS" }
-                h3.ctl { font-family: "Arial Unicode
-                                MS" }
-                h4.cjk { font-family: "Arial
-                                Unicode MS" }
-                h4.ctl { font-family: "Arial Unicode MS" }
-                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
-                pre.cjk { font-family: "Courier New", monospace }
-        </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body link="#0000EE" vlink="#551A8B" text="#000000" bgcolor="#ffffff"
     alink="#EE0000">
-    <br>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Surface wave inversion kernels - II</h2></header>
     <h2>Introduction</h2>
+<p>
     Although the programs <b>surf96</b> and <b>joint96</b> have been
     available for almost 40 years, access to the actual partial
     derivatives used in the inversion of surface-wave data has not been
@@ -56,9 +45,11 @@ pre {
       PROGRAMS.330/VOLIV/src.</p>
     <p> The complete set of scripts for running the programs are given
       in <a href="DIST.tgz"> DIST.tgz</a>. After downloading, unpack
-      using the command: </p>
-    <pre>gunzip -c DIST.tgz | tar xvf -
+      using the command: <br>
+<pre>
+gunzip -c DIST.tgz | tar xvf -
 </pre>
+</p><p>
     This will create the subdirectory SWKERNELS1/DIST. <b>cd
       SWKERNELS1/DIST</b>. There are two subdirectories: Q and NOQ which
     permit one to duplicate the results shown in this tutorial.<br>
@@ -69,6 +60,7 @@ pre {
       Then<br>
     </p>
     <pre>gunzip -c DIST.tgz | tar xf -<br>cd DIST.tgz<br></pre>
+</p><p>
     You will see the following directory structure:<br>
     <br>
     <pre>SWKERNELS1/<br>           | -----  srfpar96.f<br>           | -----  surf.pdf<br>           | ----- Q/<br>           |        | ---- SCMQ.mod<br>           |        | ---- disp.d<br>           |        | ---- sobs.d<br>           |<br>           | ----- NOQ/<br>                    | ---- SCM.mod<br>           |        | ---- disp.d<br>           |        | ---- sobs.d
@@ -92,7 +84,10 @@ pre {
       which initially reads these using <b>srfpre96.&nbsp; <br>
       </b></p>
     <p>The <i>sobs.d </i>used in Example 1 below is</p>
+<font size="2">
     <pre>   4.99999989E-03   4.99999989E-03   0.00000000       4.99999989E-03   0.00000000    <br>    1    1    2    2    1    2    2    0    1    0<br>SCM.mod                                                                         <br>disp.d  <br></pre>
+</font>
+</p><p>
     <p>I usually create this file interactively using <b>srfpre96</b>,
       which creates <i>sobs.d</i> if it does now exist, or which uses
       an existing <i>sobs.d</i>. The meaning of the entries on the four
@@ -167,13 +162,27 @@ pre {
     </p>
     <p>In this example <b>srfker96 </b>will also be run.<br>
     </p>
-    <pre>srfpre96                   <font color="#ff0000">Create the control files</font><br>srfdis96                   <font color="#ff0000">Get the phase velocities for the current model</font><br>srfdrl96                   <font color="#ff0000">This must be run first. Get the Love partials and group velocities</font><br>srfdrr96                   <font color="#ff0000">Get the Rayleigh wave partials and merge results with the Love wave results</font><br>srfpar96 &gt; srfpar96.txt    <font color="#ff0000">Output the partial derivatives corresponding to  the observed dispersion</font><br><br>srfker96 &gt; srfker96.txt    <font color="#ff6600">Output kernels for the the model. The entries here will often be greater than the observed dispersion.</font><br></pre>
+<font size="2">
+    <pre>srfpre96                   <font color="#ff0000">Create the control files</font><br>srfdis96                   <font color="#ff0000">Get the phase velocities for the current model</font><br>srfdrl96                   <font color="#ff0000">Run first. Get the Love partials and group velocities</font><br>srfdrr96                   <font color="#ff0000">Get the Rayleigh wave partials, merge with the Love wave </font><br>srfpar96 &gt; srfpar96.txt    <font color="#ff0000">Output partials for observed dispersion</font><br><br>srfker96 &gt; srfker96.txt    <font color="#ff6600">Output kernels for the the model. 
+            The entries here will often be greater than the observed dispersion.</font><br></pre>
+</font>
+</p>
     <p>Here is the output: <a href="srfpar96noq.txt"> srfpar96.txt</a>
       and <a href="srfker96noq.txt"> srfker96.txt</a>.</p>
-    An entry of <i>srfpar96.txt </i>for one observation looks like<br>
+<p>
+    An entry of <i>srfpar96.txt </i>for one observation looks like
     <br>
-    <pre>           2           2           1   12.0000000       3.50000000       3.14152980      0.358470201               2<br>   5.15833758E-02  -2.00628449E-04<br>  0.755849659      -2.36292444E-02<br>   7.48062041E-03   0.00000000    <br> -0.244638950      -1.38737843E-04<br>  -1.36846924      -1.22778639E-02<br></pre>
-    <br>
+<font size="2">
+    <pre>
+        2        2        1   12.0000000    3.50000000    3.14152980   0.358470201    2
+   5.15833758E-02  -2.00628449E-04
+  0.755849659      -2.36292444E-02
+   7.48062041E-03   0.00000000    
+ -0.244638950      -1.38737843E-04
+  -1.36846924      -1.22778639E-02
+</pre>
+</font>
+</p><p>
     The entries of the first line are type (1=Love, 2=Rayleigh),
     dispersion value (1=phase velocity, 2=group velocity, 3=gamma), mode
     number (0=fundamental), period, observed dispersion, predicted
@@ -196,8 +205,8 @@ pre {
       will&nbsp; be zeros since love waves are not a function of the
       p-wave velocities.<br>
     </p>
-    <h3>Example 2 <br>
-    </h3>
+    <h3>Example 2 </h3>
+<p>
     This differs from the previous example in that the velocity model
     has Qp=600 and Qs=300 in the first layers. Because of this the
     predicted dispersion values and partial derivatives will be
@@ -234,15 +243,16 @@ pre {
     </p>
     <p>Have an sobs.d that looks like<br>
     </p>
-    <pre>   4.99999989E-03   4.99999989E-03   0.00000000       4.99999989E-03   0.00000000    <br>    1    1    2    2    1    2    2    0    1    0.     <font color="#ff0000">This will be different for your data set</font><br>T.mod                                                                         <br>disp.d  </pre>
+<font size="2
+">
+    <pre>   4.99999989E-03   4.99999989E-03   0.00000000       4.99999989E-03   0.00000000    <br>    1    1    2    2    1    2    2    0    1    0. <font color="#ff0000">This will be different for your data </font><br>T.mod                                                                         <br>disp.d  </pre>
+</font>
+</p>
     <p>Now if the sequence of models is something like 000.mod<br>
     </p>
     <pre>cp 000.mod<br><br>srfpre96<br>srfdis96<br>srfdrl96<br>srfdrr96<br><font color="#ff0000">your_modified_srfpar96 &gt; output<br>your inversion which creates a new model, e.g. out.mod<br><br>cp out.mod 001.mod<br>cp 001.mod T.mod<br><br></font><br><font color="#ff0000"><font color="#000000">srfpre96<br>srfdis96<br>srfdrl96<br>srfdrr96</font><br><font color="#ff0000">your_modified_srfpar96 &gt; output<br>your inversion which creates a new model, e.g. out.mod</font>
 <br><br></font></pre>
-    <p><br>
     </p>
-    <br>
-    <div style="text-align: center;">Last Changed&nbsp; August 7, 2024<br>
-    </div>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

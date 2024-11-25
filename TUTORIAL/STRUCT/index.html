@@ -1,14 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>RFTN - Dispersion Tutorial</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8441600">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Inversin for structure</h2></header>
 <H2>Introduction</H2>
 <P>This tutorial demonstrates the inversion of surface-wave
 dispersion and/or receiver functions for crustal structure.<BR><BR>This
@@ -16,17 +24,19 @@ tutorial requires that Computer Programs in Seismology be installed.&nbsp;
 This requires that the PATH environment parameter be set to point to
 the absolute location of PROGRAMS.330/bin. You can test this by
 executing the command (s):</P>
-<PRE STYLE="margin-left: 0.42in"><B>rbh@otto:~&gt; which saccvt surf96 rftn96 joint96 plotxvig</B>
+<PRE><B>rbh@otto:~&gt; which saccvt surf96 rftn96 joint96 plotxvig</B>
 <B>/home/rbh/PROGRAMS.310t/PROGRAMS.330/bin/saccvt</B>
 <B>/home/rbh/PROGRAMS.310t/PROGRAMS.330/bin/surf96</B>
 <B>/home/rbh/PROGRAMS.310t/PROGRAMS.330/bin/rftn96</B>
 <B>/home/rbh/PROGRAMS.310t/PROGRAMS.330/bin/joint96</B>
 <B>/home/rbh/PROGRAMS.310t/PROGRAMS.330/bin/plotxvig</B>
-<B>rbh@otto:~&gt;</B></PRE><P STYLE="margin-left: 0.42in">
+<B>rbh@otto:~&gt;</B></PRE>
+</p>
+<P>
 You will also have to unpack the sample data sets from the tar-ball
 <A HREF="srj.tgz">srj.tgz</A><BR><BR>In order to use the data set you
 must execute the following command:</P>
-<PRE STYLE="margin-left: 0.42in"><B>gunzip -c srj.tgz | tar xvf -</B>
+<PRE><B>gunzip -c srj.tgz | tar xvf -</B>
 <B>cd JOINT</B>
 <B>for i in R*[05]</B>
 <B>do</B>
@@ -71,7 +81,8 @@ weighting.
 </P>
 <H2>surf96:</H2>
 <P><B>cd </B>into the surf96 directory. Then execute the command</P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>DOIT.deep</B></PRE><P STYLE="margin-bottom: 0in">
+<PRE><B>DOIT.deep</B></PRE>
+</p><P>
 The DOIT.deep script will perform 30 iterations. It creates the final
 model <I><B>end.mod</B></I>. It also produces several figures:
 <I><B>SRFPHV96.PLT</B></I> and <I><B>SRFPHR96.PLT</B></I></P>
@@ -94,10 +105,14 @@ model <I><B>end.mod</B></I>. It also produces several figures:
 		</TD>
 	</TR>
 </TABLE>
-<P><I><B><BR></B></I>We can see the progression of the inversion by
+</p>
+<P>We can see the progression of the inversion by
 running the command 
-</P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>shwmod96 -ZMAX 100 -K -1 -LEG start.mod tmpmod96.??? end.mod</B></PRE><P>
+<br>
+<PRE>
+<B>shwmod96 -ZMAX 100 -K -1 -LEG start.mod tmpmod96.??? end.mod</B>
+</PRE>
+</p><P>
 which shows the evolution of the final model&nbsp; through each
 iteration:</P>
 <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
@@ -113,11 +128,10 @@ iteration:</P>
 		</TD>
 	</TR>
 </TABLE>
-<P><BR><BR>
 </P>
 <H2>rftn96:</H2>
 <P><B>cd </B>into the rftn96 directory. Then execute the command</P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>DOIT.deep</B></PRE><P>
+<PRE><B>DOIT.deep</B></PRE><P>
 The DOIT.deep script will perform 30 iterations. It creates the final
 model <I><B>end.mod</B></I>. It also produces several figures:
 <I><B>SRFPHV96.PLT</B></I> and <I><B>SRFPHR96.PLT</B></I></P>
@@ -147,7 +161,7 @@ model <I><B>end.mod</B></I>. It also produces several figures:
 <P><I><B><BR></B></I>We can see the progression of the inversion by
 running the command 
 </P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>shwmod96 -ZMAX 100 -K -1 -LEG start.mod tmpmod96.??? end.mod</B></PRE><P>
+<PRE><B>shwmod96 -ZMAX 100 -K -1 -LEG start.mod tmpmod96.??? end.mod</B></PRE><P>
 which shows the evolution of the final model&nbsp; through each
 iteration:</P>
 <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
@@ -165,8 +179,7 @@ iteration:</P>
 </TABLE>
 <H2>joint96:</H2>
 <P><B>cd </B>into the joint96 directory. Then execute the command</P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>DOIT.deep</B></PRE><P STYLE="margin-bottom: 0in">
-<BR>
+<PRE><B>DOIT.deep</B></PRE>
 </P>
 <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
 	<TR>
@@ -193,8 +206,8 @@ iteration:</P>
 		</TD>
 	</TR>
 </TABLE>
-<P><BR><BR>
 </P>
+<p>
 <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
 	<TR>
 		<TD>
@@ -207,9 +220,10 @@ iteration:</P>
 		</TD>
 	</TR>
 </TABLE>
+</p>
 <P>We can see the progression of the inversion by running the command
-</P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>shwmod96 -ZMAX 100 -K -1 -LEG start.mod tmpmod96.??? end.mod</B></PRE><P>
+<br>
+<PRE><B>shwmod96 -ZMAX 100 -K -1 -LEG start.mod tmpmod96.??? end.mod</B></PRE><P>
 which shows the evolution of the final model&nbsp; through each
 iteration:</P>
 <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
@@ -230,8 +244,8 @@ iteration:</P>
 <P>We can compare the different inversion results by using the
 program <B>shwmod96</B> . We run the same command as before, but this
 time from the parent directory, from which we can see the SURF, RFTN
-and JOINT directories as</P>
-<PRE STYLE="margin-left: 0.42in; margin-bottom: 0.2in"><B>shwmod96 -ZMAX 100 -K -1 -LEG SURF/start.mod */end.mod</B></PRE><P STYLE="margin-bottom: 0in">
+and JOINT directories as<br>
+<PRE><B>shwmod96 -ZMAX 100 -K -1 -LEG SURF/start.mod */end.mod</B></PRE><P>
 This produces the figure <I><B>shwmod96.PLT </B></I>which is shown
 here:</P>
 <TABLE BORDER=1 CELLPADDING=2 CELLSPACING=2>
@@ -248,7 +262,6 @@ here:</P>
 		</TD>
 	</TR>
 </TABLE>
-<P><BR><BR>
 </P>
 <H2>Discussion</H2>
 <P>This example uses a real data set from a KIGAM station at Seoul
@@ -259,7 +272,6 @@ velocities for&nbsp; the receiver function inversion are too large.
 The surface-wave inversion lacks any detail about the Moho.&nbsp; The
 real reason for preferring the joint inversion model is that the
 model is better at fitting regional (100-300 km) broadband waveforms.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0in"><I>Last Changed November
-19, 2006</I></P>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>

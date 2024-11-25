@@ -1,13 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>Computer Programs in Seismology Tutorials -SW Inversion
-      Kernels</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Surface wave inversion kernels-I</h2></header>
     <h2>Changes</h2>
+<br>
     <ul>
       <li>15 AUG 2013 - corrected error in the EXAMPLE_2/DOPLT. The
         maximum amplitude from the file <i>love</i> was use for the
@@ -18,6 +29,7 @@
       </li>
     </ul>
     <h2>Introduction</h2>
+<p>
     Although the programs <b>surf96</b> and <b>joint96</b> have been
     available for a long time, access to the actual partial derivatives
     used in the inversion of surface-wave data has not been easily
@@ -38,6 +50,7 @@
       using the command: </p>
     <pre>gunzip -c DISP.tgz | tar xvf -
 </pre>
+</p><p>
     This will create the subdirectory SWKERNELS/DIST. <b>cd
       SWKERNELS/DIST</b>. There are three subdirectories: EXAMPLE_1 and
     EXAMPLE_2 which have the control files for the two examples in the
@@ -62,21 +75,28 @@
       features are the wave type, group velocity, mode and period
       entries. The sobs.d is the control file for the program <b>surf96</b>.
     </p>
-    <p> Given these files, run the following sequence of commands: </p>
+    <p> Given these files, run the following sequence of commands: <br>
     <pre>surf96 39
 surf96 1
 srfker96 &gt; srfker96.txt
 surf96 39
 </pre>
+</p><p>
     The <b>surf96 39</b> cleans up temporaty files, <b>surf96 1</b>
     computes the partials, and <b>srfker96</b> provides the desired
     kernels. The control file <i>sobs.d</i> is
-    <pre>  4.99999989E-03  4.99999989E-03   0.0000000      4.99999989E-03   0.0000000 
+<br>
+<font size="2">
+    <pre>
+  4.99999989E-03  4.99999989E-03   0.0000000      4.99999989E-03   0.0000000 
     1    1    1    1    1    1    1    0    1    0
 CUS.mod                  
 tdisp.d                                                       
 </pre>
+</font>
+</p><p>
     The velocity model <i>CUS.mod</i> is:
+<font size="2">
     <pre>MODEL.01
 CUS Model with Q from simple gamma values
 ISOTROPIC
@@ -95,11 +115,17 @@ LINE11
  20.0000  6.7000  3.8700  2.9020 0.000E-04 0.000E-04 0.00  0.00  1.00  1.00 
   0.0000  8.1500  4.7000  3.3640 0.194E-02 0.431E-02 0.00  0.00  1.00  1.00 
 </pre>
+</font>
+</p><p>
     and the dispersion file <i>tdisp.d</i> is
+<font size="2">
     <pre>SURF96 L U X   0     10.0000     4.0000     0.1000
 SURF96 R U X   0     10.0000     4.0000     0.1000
 </pre>
+</font>
+</p>
     <p>and the output of <b>srfker96</b> is <i>srfker96.txt</i> </p>
+<font size="1">
     <pre>___________________________________________________________________________________________
 Elastic  Love wave:     Period=    10.000 Mode =    0 C=     3.697 U=     3.471
 LAYER    THICK     dc/db      dU/db      dc/dh      dU/dh
@@ -134,7 +160,9 @@ LAYER    THICK     dc/da      dc/db      dU/da      dU/db      dc/dh      dU/dh 
     5     0.000  7.457E-06  2.243E-03 -5.744E-05 -1.405E-02  0.000E+00  0.000E+00 -4.461E-05 -7.750E-03 -2.760E-05 -4.795E-03  1.713E-06  2.976E-04
 ___________________________________________________________________________________________
 </pre>
-    <p> Note that there are entries for each line of the dispersion file
+</font>
+</p><p>
+    Note that there are entries for each line of the dispersion file
       which contain listings of the partial derivatives without and with
       the effects of Q. </p>
     <h3>Example 2 - Kernels as a function of layer number </h3>
@@ -143,11 +171,14 @@ ________________________________________________________________________________
       partial derivatives can be plotted. The data set is in the
       subdirectory EXAMPLE_2. The only difference is that now <i>sobs.d</i>
       is </p>
+<font size="2">
     <pre>  4.99999989E-03  4.99999989E-03   0.0000000      4.99999989E-03   0.0000000 
     1    1    1    1    1    1    1    0    1    0
 dCUS.mod                  
 tdisp.d                                                       
 </pre>
+</font>
+</p>
     <p> The same commands are run, and the output is in the file <a
         href="ex2_srfker96.txt"> srfker96.txt</a>. </p>
     <p> No program was written to make nice plots. Rather I used the
@@ -164,71 +195,72 @@ tdisp.d
             <td> <img src="FIG_2/LDCDB.png"></td>
             <td> <img src="FIG_2/RDCDB.png"></td>
             <td> <img src="FIG_2/LDUDB.png"></td>
-            <td> <img src="FIG_2/RDUDB.png"></td>
-          </tr>
-          <tr>
-            <td> <br>
-            </td>
-            <td> <img src="FIG_2/RDCDA.png"></td>
-            <td> <br>
-            </td>
-            <td> <img src="FIG_2/RDUDA.png"></td>
-          </tr>
-          <tr>
-            <td> <img src="FIG_2/LDCDH.png"></td>
-            <td> <img src="FIG_2/RDCDH.png"></td>
-            <td> <img src="FIG_2/LDUDH.png"></td>
-            <td> <img src="FIG_2/RDUDH.png"></td>
-          </tr>
-          <tr>
-            <td> <img src="FIG_2/LDCDQB.png"></td>
-            <td> <img src="FIG_2/RDCDQB.png"></td>
-            <td> <img src="FIG_2/LDUDQB.png"></td>
-            <td> <img src="FIG_2/RDUDQB.png"></td>
-          </tr>
-          <tr>
-            <td> <br>
-            </td>
-            <td> <img src="FIG_2/RDCDQA.png"></td>
-            <td> <br>
-            </td>
-            <td> <img src="FIG_2/RDUDQA.png"></td>
-          </tr>
-          <tr>
-            <td> <img src="FIG_2/LDGDQB.png"></td>
-            <td> <img src="FIG_2/RDGDQB.png"></td>
-            <td> <br>
-            </td>
-            <td> <img src="FIG_2/RDGDQA.png"></td>
-          </tr>
-        </tbody>
-      </table>
-    </p>
-    <h2>Testing</h2>
-    To test the programs I modified the subroutine <i>jsamat.f</i> in
-    PROGRAMS.330/VOLIV/src to create a file <i>tmpjsamat.f</i>. I also
-    created a <i>tMakefile</i> to create a program <b>tsurf96</b>. The
-    reason for the changes is that I wanted to determine the partial
-    derivatives of the Rayleigh wave phase- and group velocity and
-    anelastic attenuation coefficient with respect to changes in P- and
-    S-wave inverse Q. The program <b>surf96</b> assumes a specific
-    fixed relationship between the inverse Q's ,a thus the effect of
-    changing only one affects both partials.<br>
-    <br>
-    To run the testing code,&nbsp; cd DIST/Source ; cp&nbsp; tMakefile
-    tmpjsamat&nbsp; Your_Location/PROGRAMS.330/VOLIV/src<br>
-    Then cd Your_Location/PROGRAMS.330/VOLIV/src, and then<br>
-    make -f tsurf96<br>
-    <br>
-    Now run the scripts in DIST/TEST<br>
-    <br>
-    There are two scripts: DOPAR and DONUM<br>
-    <br>
-    The idea is to create a set of models with perturbations in Vp, Vs,
-    Layer Thickness, Qp and Qs. Then we use tsurf96 for each model to
-    compute the dispersion parameters for the model, Finally the partial
-    derivatives are determined numerically and compared with the output
-    of <span style="font-weight: bold;">srfker96</span>.&nbsp;
+		    <td> <img src="FIG_2/RDUDB.png"></td>
+		  </tr>
+		  <tr>
+		    <td> <br>
+		    </td>
+		    <td> <img src="FIG_2/RDCDA.png"></td>
+		    <td> <br>
+		    </td>
+		    <td> <img src="FIG_2/RDUDA.png"></td>
+		  </tr>
+		  <tr>
+		    <td> <img src="FIG_2/LDCDH.png"></td>
+		    <td> <img src="FIG_2/RDCDH.png"></td>
+		    <td> <img src="FIG_2/LDUDH.png"></td>
+		    <td> <img src="FIG_2/RDUDH.png"></td>
+		  </tr>
+		  <tr>
+		    <td> <img src="FIG_2/LDCDQB.png"></td>
+		    <td> <img src="FIG_2/RDCDQB.png"></td>
+		    <td> <img src="FIG_2/LDUDQB.png"></td>
+		    <td> <img src="FIG_2/RDUDQB.png"></td>
+		  </tr>
+		  <tr>
+		    <td> <br>
+		    </td>
+		    <td> <img src="FIG_2/RDCDQA.png"></td>
+		    <td> <br>
+		    </td>
+		    <td> <img src="FIG_2/RDUDQA.png"></td>
+		  </tr>
+		  <tr>
+		    <td> <img src="FIG_2/LDGDQB.png"></td>
+		    <td> <img src="FIG_2/RDGDQB.png"></td>
+		    <td> <br>
+		    </td>
+		    <td> <img src="FIG_2/RDGDQA.png"></td>
+		  </tr>
+		</tbody>
+	      </table>
+	    </p>
+	    <h2>Testing</h2>
+<p>
+	    To test the programs I modified the subroutine <i>jsamat.f</i> in
+	    PROGRAMS.330/VOLIV/src to create a file <i>tmpjsamat.f</i>. I also
+	    created a <i>tMakefile</i> to create a program <b>tsurf96</b>. The
+	    reason for the changes is that I wanted to determine the partial
+	    derivatives of the Rayleigh wave phase- and group velocity and
+	    anelastic attenuation coefficient with respect to changes in P- and
+	    S-wave inverse Q. The program <b>surf96</b> assumes a specific
+	    fixed relationship between the inverse Q's ,a thus the effect of
+	    changing only one affects both partials.<br>
+	    <br>
+	    To run the testing code,&nbsp; cd DIST/Source ; cp&nbsp; tMakefile
+	    tmpjsamat&nbsp; Your_Location/PROGRAMS.330/VOLIV/src<br>
+	    Then cd Your_Location/PROGRAMS.330/VOLIV/src, and then<br>
+	    make -f tsurf96<br>
+	    <br>
+	    Now run the scripts in DIST/TEST<br>
+	    <br>
+	    There are two scripts: DOPAR and DONUM<br>
+	    <br>
+	    The idea is to create a set of models with perturbations in Vp, Vs,
+	    Layer Thickness, Qp and Qs. Then we use tsurf96 for each model to
+	    compute the dispersion parameters for the model, Finally the partial
+	    derivatives are determined numerically and compared with the output
+	    of <span style="font-weight: bold;">srfker96</span>.&nbsp;
     Computing partial derivatives is an art since one has to&nbsp;
     trade-off the numerical insensitivity to small changes with the
     non-linear effect if the change is too large.&nbsp; The initial part
@@ -240,11 +272,9 @@ tdisp.d
     DONUM works with three files: top.mod, 0.mod and bot.mod.&nbsp; If
     one applies the command<br>
     <br>
-    <div style="margin-left: 40px;">
       <pre>cat top.mod 0.mod bot.mod &gt; model.0</pre>
-    </div>
-    <br>
-    the reference velocity model is created in the proper CPS format.<br>
+    </p><p>
+    The reference velocity model is created in the proper CPS format.<br>
     <br>
     DONUM creates the files model.0, model.1 (Vp changed), model.2 (Vs
     changed), model.3 (Qp inverse changed), model.4 (Qs inverse-changed)
@@ -267,8 +297,10 @@ tdisp.d
     below, I have added the DOPAR output (in RED) immediately after the
     corresponding line&nbsp; to the srfker96.txt file<br>
     <br>
-    <pre style="margin-left: 40px;">Elastic  Love wave:     Period=    14.200 Mode =    0 C=     3.637 U=     3.405<br>LAYER    THICK     dc/db      dU/db      dc/dh      dU/dh<br>    1    20.000  7.724E-01  8.195E-01 -6.194E-03  3.115E-03<br>    2    20.000  3.027E-01  1.728E-01 -6.194E-03  3.115E-03<br>    3     0.000  2.583E-02 -4.096E-02  0.000E+00  0.000E+00<br>___________________________________________________________________________________________<br>Anelastic Love wave:     Period=    14.200 Mode =    0 C=     3.604 U=     3.383 GAMMA=  6.498E-04<br>LAYER    THICK     dc/db      dU/db      dc/dh      dU/dh     dc/dQbi    dU/dQbi    dg/dQbi<br>    1    20.000  7.659E-01  8.156E-01 -6.194E-03  3.115E-03 -2.283E+00 -1.520E+00  4.523E-02<br>    2    20.000  3.001E-01  1.705E-01 -6.194E-03  3.115E-03 -8.947E-01 -5.955E-01  1.772E-02<br>                 <span style="color: rgb(255, 0, 0);">3.041e-01  1.859e-01 -5.853e-03  3.199e-03 -8.947e-01 -5.955e-01  1.772e-02</span><br>    3     0.000  2.561E-02 -4.145E-02  0.000E+00  0.000E+00 -1.025E-01 -6.824E-02  2.031E-03<br>___________________________________________________________________________________________<br>Elastic  Rayleigh wave: Period=    14.200 Mode =    0 C=     3.262 U=     3.080<br>LAYER    THICK     dc/da      dc/db      dU/da      dU/db      dC/dh      dU/dh<br>    1    20.000  8.013E-02  5.143E-01  4.639E-02  8.997E-01 -4.813E-03  1.197E-02<br>    2    20.000  3.168E-03  3.086E-01 -1.292E-02 -1.442E-01 -4.813E-03  1.197E-02<br>    3     0.000  1.064E-04  1.392E-02 -5.494E-04 -5.162E-02  0.000E+00  0.000E+00<br>___________________________________________________________________________________________<br>Anelastic Rayleigh wave: Period=    14.200 Mode =    0 C=     3.233 U=     3.061 GAMMA=  7.183E-04<br>LAYER    THICK     dc/da      dc/db      dU/da      dU/db      dc/dh      dU/dh     dc/dQai    dc/dQbi    dU/dQai    dU/dQbi    dg/dQai    dg/dQbi<br>    1    20.000  7.946E-02  5.099E-01  4.578E-02  8.991E-01 -4.813E-03  1.197E-02 -4.128E-01 -1.520E+00 -2.728E-01 -1.005E+00  1.016E-02  3.743E-02<br>    2    20.000  3.141E-03  3.060E-01 -1.303E-02 -1.482E-01 -4.813E-03  1.197E-02 -1.632E-02 -9.122E-01 -1.079E-02 -6.028E-01  4.018E-04  2.246E-02<br>                 <span style="color: rgb(255, 0, 0);">3.028e-03  3.029e-01 -1.330e-02 -1.504e-01 -4.341e-03  1.171e-02 -1.633e-02 -9.122e-01 -1.080e-02 -6.028e-01  4.018e-04  2.246e-02</span><br>    3     0.000  1.055E-04  1.380E-02 -5.535E-04 -5.204E-02  0.000E+00  0.000E+00 -7.326E-04 -5.526E-02 -4.841E-04 -3.652E-02  1.804E-05  1.361E-03<br>___________________________________________________________________________________________<br></pre>
-    <br>
+<font size="1">
+    <pre>Elastic  Love wave:     Period=    14.200 Mode =    0 C=     3.637 U=     3.405<br>LAYER    THICK     dc/db      dU/db      dc/dh      dU/dh<br>    1    20.000  7.724E-01  8.195E-01 -6.194E-03  3.115E-03<br>    2    20.000  3.027E-01  1.728E-01 -6.194E-03  3.115E-03<br>    3     0.000  2.583E-02 -4.096E-02  0.000E+00  0.000E+00<br>___________________________________________________________________________________________<br>Anelastic Love wave:     Period=    14.200 Mode =    0 C=     3.604 U=     3.383 GAMMA=  6.498E-04<br>LAYER    THICK     dc/db      dU/db      dc/dh      dU/dh     dc/dQbi    dU/dQbi    dg/dQbi<br>    1    20.000  7.659E-01  8.156E-01 -6.194E-03  3.115E-03 -2.283E+00 -1.520E+00  4.523E-02<br>    2    20.000  3.001E-01  1.705E-01 -6.194E-03  3.115E-03 -8.947E-01 -5.955E-01  1.772E-02<br>                 <span style="color: rgb(255, 0, 0);">3.041e-01  1.859e-01 -5.853e-03  3.199e-03 -8.947e-01 -5.955e-01  1.772e-02</span><br>    3     0.000  2.561E-02 -4.145E-02  0.000E+00  0.000E+00 -1.025E-01 -6.824E-02  2.031E-03<br>___________________________________________________________________________________________<br>Elastic  Rayleigh wave: Period=    14.200 Mode =    0 C=     3.262 U=     3.080<br>LAYER    THICK     dc/da      dc/db      dU/da      dU/db      dC/dh      dU/dh<br>    1    20.000  8.013E-02  5.143E-01  4.639E-02  8.997E-01 -4.813E-03  1.197E-02<br>    2    20.000  3.168E-03  3.086E-01 -1.292E-02 -1.442E-01 -4.813E-03  1.197E-02<br>    3     0.000  1.064E-04  1.392E-02 -5.494E-04 -5.162E-02  0.000E+00  0.000E+00<br>___________________________________________________________________________________________<br>Anelastic Rayleigh wave: Period=    14.200 Mode =    0 C=     3.233 U=     3.061 GAMMA=  7.183E-04<br>LAYER    THICK     dc/da      dc/db      dU/da      dU/db      dc/dh      dU/dh     dc/dQai    dc/dQbi    dU/dQai    dU/dQbi    dg/dQai    dg/dQbi<br>    1    20.000  7.946E-02  5.099E-01  4.578E-02  8.991E-01 -4.813E-03  1.197E-02 -4.128E-01 -1.520E+00 -2.728E-01 -1.005E+00  1.016E-02  3.743E-02<br>    2    20.000  3.141E-03  3.060E-01 -1.303E-02 -1.482E-01 -4.813E-03  1.197E-02 -1.632E-02 -9.122E-01 -1.079E-02 -6.028E-01  4.018E-04  2.246E-02<br>                 <span style="color: rgb(255, 0, 0);">3.028e-03  3.029e-01 -1.330e-02 -1.504e-01 -4.341e-03  1.171e-02 -1.633e-02 -9.122e-01 -1.080e-02 -6.028e-01  4.018e-04  2.246e-02</span><br>    3     0.000  1.055E-04  1.380E-02 -5.535E-04 -5.204E-02  0.000E+00  0.000E+00 -7.326E-04 -5.526E-02 -4.841E-04 -3.652E-02  1.804E-05  1.361E-03<br>___________________________________________________________________________________________<br></pre>
+</font>
+</p><p>
     As of the creating of this document I have not checked this with a
     spherical model, but everything should work.<br>
     This effort took several weeks of deriving all of the equations,
@@ -300,7 +332,11 @@ tdisp.d
 surf96 1
 srfker96 &gt; srfker96.txt
 surf96 39
-<br>DOPLTz   (note that the script DOPLTz forces the maximum depth to be 400 km)<br><br></pre>
+DOPLTz   
+#(note that the script DOPLTz forces 
+# the maximum depth to be 400 km)
+</pre>
+</p><p>
     If you look at the sobs.d file in EXAMPLE_3 you will see that the
     dispersion file is for a single period of 50 seconds. If you wish to
     see the kernels for other periods, just extract the Love and
@@ -357,7 +393,6 @@ surf96 39
       <br>
       <br>
     </p>
-    <div style="text-align: center;">Last Changed September 9, 2013<br>
-    </div>
+<footer>Last changed November 21, 2024</footer>
   </body>
 </html>

@@ -1,20 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Receiver Function Tutorial</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body bgcolor="#ffffff">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Determination or Receiver Functions</h2></header>
 <h2>Receiver Functions:</h2>
+<p>
 This section will describe the use of Computer Programs in Seismology
 to create teleseismic P-wave receiver functions from digital data.<br>
 <br>
 <h2>Required Programs:</h2>
+<p>
 To perform the analysis we wil require the following programs from the
 Computer Programs in Seismology: <span style="font-weight: bold;">gsac,
 saciterd, saclhdr, </span>and <span style="font-weight: bold;">udtdd.<br>
 <br>
 </span><span style="font-weight: bold;"></span>
 <h2>Data Set:</h2>
+<p>
 For the purpose of this example, I will assume that the original data
 is received as a SEED file which will be read using the program <span
  style="font-weight: bold;">rdseed</span> to create traces in the SAC
@@ -67,32 +83,37 @@ response. For more information on the IDOEVT script click on&nbsp; <a
  style="color: rgb(0, 0, 0);">do the following:<br>
 <br>
 </span></font></font>
-<pre style="margin-left: 40px;"><span style="font-weight: bold;">mkdir Sac</span><br
+<pre>
+mkdir Sac</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">cd Sac</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">rdseed -f ../20060510.seed -R -d -o 1</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">../IDOEVT</span><br></pre>
 <h2>Quality Review:</h2>
+<p>
 Go to the GOOD directory<br>
 <br>
-<div style="margin-left: 40px;">
-<pre><span style="font-weight: bold;">cd ../GOOD</span><br><br></pre>
-</div>
+<pre>cd ../GOOD</span></pre>
+</p><p>
 Use gsac to review the traces so that you can exclude traces that have
 problems<br>
 <br>
-<pre><div style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt;<br>gsac</span><br><span
- style="font-weight: bold;">GSAC&gt;&nbsp; r *sac</span><br><span
- style="font-weight: bold;">GSAC&gt; sort up dist</span><br><span
- style="font-weight: bold;">GSAC&gt; p perplot 3</span><br><span
- style="font-weight: bold;">GSAC&gt; quit</span><br><span
- style="font-weight: bold;">rbh&gt;</span><br><br><span
- style="font-weight: bold;"></span></div></pre>
+<pre>
+rbh&gt;
+gsac
+GSAC&gt; r *sac
+GSAC&gt; sort up dist
+GSAC&gt; p perplot 3
+GSAC&gt; quit
+rbh&gt;
+</span></pre>
+</p>
 <p>Now rotate the traces to a great circle path.<br>
 <br>
 </p>
 <div style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt;
 ../IDOROT</span><br>
 </div>
+</p><p>
 This script looks at traces ending with BHZ.sac or LHZ.sac. It then
 uses saclhdr internally to get the station name,<br>
 using that to get all three components, which are then rotated to form
@@ -120,35 +141,33 @@ the <span style="font-weight: bold;">IDOROT </span>script to key on
 the BHZ.S and BH*.S instead of the BHZ.sac and BH*.sac.<br>
 <br>
 <h2>Receiver functions:</h2>
+<p>
 The steps to be take here are to select the P-wave, and then to cut the
 trace around the P-wave arrival, to decimate to speed up a subsequent
 direct inversion, and to finally do the deconvolution.<br>
 <br>
-This is all handled by the script <span style="font-weight: bold;">DORFTN.
+This is all handled by the script <span style="font-weight: bold;">DORFTN.</span>
 So,<br>
-<br>
-<br>
-</span>
-<pre style="margin-left: 40px;"><span style="font-weight: bold;">cd ..</span><br
+<pre><span style="font-weight: bold;">cd ..</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">DORFTN</span><br></pre>
+</p><p>
 This script is highly commented.&nbsp; You only have to interactively
 pick the P arrival, uainsg the x-x sequence to position the window, P
 to pick and q to quit, you do not have to be very precise<br>
 <br>
 To see the receiver functions,&nbsp; you can use <span
  style="font-weight: bold;">gsac:<br>
-<br>
 </span>
-<pre style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt; cd RFTN</span><br
+<pre><span style="font-weight: bold;">rbh&gt; cd RFTN</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt; gsac</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; r *</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; fileid name</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; p</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; q</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt;</span><br></pre>
-To get hte image below I actually used the following commands:<br>
-<br>
-<pre style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt; cd RFTN</span><br
+</p><p>
+To get the image below I actually used the following commands:<br>
+<pre><span style="font-weight: bold;">rbh&gt; cd RFTN</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt; gsac</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; r *</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; fileid name</span><br
@@ -161,6 +180,7 @@ To get hte image below I actually used the following commands:<br>
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; convert -trim P001.eps P001.png</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; q</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt;</span><br></pre>
+</p><p>
 The Computer Programs in Seismology command <span
  style="font-weight: bold;">plotnps </span>converts CALPLOT graphics
 to Encapsulated PostScript. On my LINUX or CYGWIN system, I have the
@@ -177,16 +197,20 @@ are<br>
 </span><br>
 <h2>&nbsp;
 Displaying Receiver Functions:</h2>
+<p>
 Once the receiver functions have been computed, they should be placed
 in directories organized by the station. For example, I have the
 following in the directory named KWJ:<br>
-<pre style="margin-left: 40px;"><span style="font-weight: bold;">R.KWJBHZ20020590148.2.5  R.KWJBHZ20031411853.1.0  R.KWJBHZ20052810350.1.0</span><br
+<font size="2">
+<pre><span style="font-weight: bold;">R.KWJBHZ20020590148.2.5  R.KWJBHZ20031411853.1.0  R.KWJBHZ20052810350.1.0</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621207.1.0  R.KWJBHZ20031411853.2.5  R.KWJBHZ20052810350.2.5</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621207.2.5  R.KWJBHZ20031461923.1.0  R.KWJBHZ20053091040.1.0</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621213.1.0  R.KWJBHZ20031461923.2.5  R.KWJBHZ20053091040.2.5</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020621213.2.5  R.KWJBHZ20031462314.1.0  R.KWJBHZ20053241244.1.0</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020642114.1.0  R.KWJBHZ20031462314.2.5  R.KWJBHZ20053241244.2.5</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">R.KWJBHZ20020642114.2.5  R.KWJBHZ20031741214.1.0  R.KWJBHZ20053261503.1.0</span><br></pre>
+</font>
+</p><p>
 The PlotRecordSection (prs) command of gsac can plot these receiver
 functions in a way to assist their interpretation. Typically this is
 done in two ways - a plot versus ray parameter and a plot az a funciton
@@ -195,8 +219,9 @@ departure from a two dimensional model.&nbsp; For these plot to work,
 the receiver functions must be computed to have exactly the same number
 of seconds before the first bump.<br>
 <h3>Back Azimuth Plot:</h3>
-<br>
-<pre style="margin-left: 40px;"><span style="font-weight: bold;">rbh&gt; gsac</span><br
+<p>
+<font size="2">
+<pre><span style="font-weight: bold;">rbh&gt; gsac</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; r KWJ/R*.1.0</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; sort up baz</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; bg plt</span><br
@@ -205,13 +230,15 @@ of seconds before the first bump.<br>
  style="font-weight: bold;"><span style="font-weight: bold;">Initializing PRS001.PLT</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; plotnps -F7 -W10 -EPS -K &lt; PRS001.PLT &gt; prs001.eps</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; echo user4 is the ray parameter set by saciterd</span><br
- style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; sort up user4<br>GSAC&gt; echo plot traces as a function of ray parameter from 0.05 to 0.09 sec/km<br
+ style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; sort up user4<br>GSAC&gt; echo plot traces as a function of ray parameter from 0.05 to 0.09 s/km<br
  style="font-weight: bold;"></span><span style="font-weight: bold;">GSAC&gt; prs user4 relative vl 0.05 0.09 title "Ray parameter (sec/km)" shd pos color 2 tl -10 40</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">Hold is OFF</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">Initializing PRS002.PLT</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; plotnps -F7 -W10 -EPS -K &lt; PRS002.PLT &gt; prs002.eps</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">GSAC&gt; quit</span><br
  style="font-weight: bold;"><span style="font-weight: bold;">rbh&gt;</span><br></pre>
+</font>
+</p><p>
 These instructions create a CALPLOT file, e.g., PRS001.PLT, which is
 converted to Encapsulated PostScript using the program <span
  style="font-weight: bold;">plotnps</span>. I then used the ImageMagick
@@ -237,13 +264,11 @@ clipping is there are observations at the extremes). In the second case
 VL indicates ray parameters.<br>
 <br>
 Here are the plots:<br>
-<br>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
  cellspacing="2">
   <tbody>
     <tr align="center">
       <td style="vertical-align: top;"><img
- style="width: 646px; height: 485px;" alt="Back Azimuth plot"
  src="prs001.png"><br>
       <br>
       <center>KWJ receiver functions for ALP=1.0 az a function of back
@@ -258,7 +283,6 @@ azimuth. </center>
   <tbody>
     <tr align="center">
       <td style="vertical-align: top;"><img
- style="width: 646px; height: 485px;" alt="Ray parameter plot"
  src="prs002.png"><br>
       <center> KWJ receiver funcitons for ALP=1.0 as a function of ray
 parameter. Note that the PRS command does not yet have absolute trace
@@ -267,8 +291,7 @@ scaling.</center>
     </tr>
   </tbody>
 </table>
-<br>
-<br>
 </p>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

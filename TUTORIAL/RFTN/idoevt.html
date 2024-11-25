@@ -1,18 +1,104 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <meta content="text/html; charset=ISO-8859-15"
- http-equiv="content-type">
-  <title>idoevt</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Determination of Receiver Functions</h2></header>
 <h2>Annotated IDOEVT&nbsp; for use with SEED data</h2>
+<p>
+<font size="2">
+<pre>
+#!/bin/sh
+set -x
+<br>#####
+#       script for processing IRIS Digital Data
+#####
+<br>######
+#       shell script to make entries for the various command files
+######
+YEAR=2006   <span
+ style="color: rgb(255, 0, 0); font-weight: bold;">Change the following for the event. No spaces are permitted near the = sign</span>
+MO=05
+DY=10
+HR=02
+MN=42
+SEC=56
+MSEC=300
+LAT=52.71
+LON=-169.24
+DEP=56.0
+MAG=6.3
 <br>
-<pre style="margin-left: 40px;">#!/bin/sh<br>set -x<br><br>#####<br>#       script for processing IRIS Digital Data<br>#####<br><br>######<br>#       shell script to make entries for the various command files<br>######<br>YEAR=2006	<span
- style="color: rgb(255, 0, 0); font-weight: bold;">Change the following for the event. No spaces are permitted near the = sign</span><br>MO=05<br>DY=10<br>HR=02<br>MN=42<br>SEC=56<br>MSEC=300<br>LAT=52.71<br>LON=-169.24<br>DEP=56.0<br>MAG=6.3<br><br><br>#####<br>#       No changes below here<br>#####<br><br>if [ -d ../GOOD ]	<span
- style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">Create the GOOD directory for review. Never change original data</span></span><br>then<br>        echo GOOD exists<br>else<br>        mkdir ../GOOD<br>fi<br><span
- style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">rdseed creates SAC files ending in .SAC. For each of the SAC files we get information from the<br>trace header on station name, component name, location, network, and sample rate. We also use<br>the sample rate to determine the bands for deconvolution. We place the event locaiton into the<br>trace header.<br><br>The IRIS command evalresp (included in CPS) is used to read the RESP file to prepare a table of<br>amplitude and phase resposne for the deconvolution.<br><br>The station files are then placed in the parallel directory called GOOD for quality control review. <br>At this point the traces are renamed. The trace file 2006.130.02.49.27.4852.IU.ULN.00.BHZ.R.SAC<br>is placed in ../GOOD as ULNBHZ.S and the deconvolved trace (meters/sec) is placed in ../GOOD as<br>ULNBHZ.sac <br><br></span></span><br>for i in *.SAC<br>do<br>NET=`saclhdr -KNETWK $i`<br>KSTNM=`saclhdr -KSTNM $i`<br>KCMPNM=`saclhdr -KCMPNM $i`<br>LOC=`saclhdr -KHOLE $i`<br>DOY=`saclhdr -NZJDAY $i`<br>DELTA=`saclhdr -DELTA $i`<br>FHH=`echo $DELTA | awk '{print 0.40/$1}' `<br>FHL=`echo $DELTA | awk '{print 0.25/$1}' `<br>cp RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp<br>evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} 0.001 ${FHH} 2049 -u 'vel' -f resp<br>gsac &lt;&lt; EOF<br>r $i<br>ch EVLA $LAT EVLO $LON EVDP $DEP<br>ch O CAL $YEAR $MN $DY $HR $MN $SEC $MSEC<br>ch lovrok true<br>ch lcalda true<br>wh<br>rtr<br>w ../GOOD/${KSTNM}${KCMPNM}.S<br>transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE FREQLIMITS 0.005 0.01 ${FHL} ${FHH}<br>w ../GOOD/${KSTNM}${KCMPNM}.sac<br>quit<br>EOF<br><br>done<br>#SCRIPT FOR IRIS DATA<br></pre>
+#####
+#       No changes below here
+#####
+<br>if [ -d ../GOOD ] <span
+ style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">Create the GOOD directory for review. Never change original data</span></span>
+then
+        echo GOOD exists
+else
+        mkdir ../GOOD
+fi
+<span
+ style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">
+rdseed creates SAC files ending in .SAC. For each of the SAC files we get information 
+from the trace header on station name, component name, location, network, and sample 
+rate. We also use the sample rate to determine the bands for deconvolution. We place
+the event locaiton into the trace header.
 <br>
+The IRIS command evalresp (included in CPS) is used to read the RESP file to prepare a 
+table of amplitude and phase resposne for the deconvolution.
 <br>
+The station files are then placed in the parallel directory called GOOD for quality 
+control review.  At this point the traces are renamed. The trace file 
+2006.130.02.49.27.4852.IU.ULN.00.BHZ.R.SAC is placed in ../GOOD as ULNBHZ.S and 
+the deconvolved trace (meters/sec) is placed in ../GOOD as ULNBHZ.sac 
+<br></span></span>
+for i in *.SAC
+do
+NET=`saclhdr -KNETWK $i`
+KSTNM=`saclhdr -KSTNM $i`
+KCMPNM=`saclhdr -KCMPNM $i`
+LOC=`saclhdr -KHOLE $i`
+DOY=`saclhdr -NZJDAY $i`
+DELTA=`saclhdr -DELTA $i`
+FHH=`echo $DELTA | awk '{print 0.40/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+cp RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp
+evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} 0.001 ${FHH} 2049 -u 'vel' -f resp
+gsac &lt;&lt; EOF
+r $i
+ch EVLA $LAT EVLO $LON EVDP $DEP
+ch O CAL $YEAR $MN $DY $HR $MN $SEC $MSEC
+ch lovrok true
+ch lcalda true
+wh
+rtr
+w ../GOOD/${KSTNM}${KCMPNM}.S
+transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} \
+      PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE FREQLIMITS 0.005 0.01 ${FHL} ${FHH}
+w ../GOOD/${KSTNM}${KCMPNM}.sac
+quit
+EOF
+
+done
+#SCRIPT FOR IRIS DATA
+</pre>
+</font>
+</p>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

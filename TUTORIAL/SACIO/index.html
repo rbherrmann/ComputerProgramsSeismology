@@ -1,14 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
-	<TITLE>SACIO Examples</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.0  (Linux)">
-	<META NAME="CREATED" CONTENT="0;0">
-	<META NAME="CHANGEDBY" CONTENT="Robert Herrmann">
-	<META NAME="CHANGED" CONTENT="20081120;8481700">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </HEAD>
 <BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Simple programs to use SAC files</h2></header>
 <H2>Introduction</H2>
 <P>This tutorial further develops the use of the Computer Programs in
 Seismology routines that work with the SAC format. It is assumed that
@@ -35,6 +43,7 @@ passed through a bilinear recursive digital lowpass filter to create
 <P>Copy the files <I><A HREF="sacsubc.c">sacsubc.c</A> </I>and
 <A HREF="sacsubc.h"><I>sacsubc.h</I></A> to your working directory.
 Then create the file<A HREF="writesac.c"> </A><I><A HREF="writesac.c">writesac.c</A>:</I></P>
+<font size=2">
 <PRE>#include &quot;sacsubc.h&quot;
 /* this is a sample program that creates two sac files
    one of a simple impulse and the other with the impulse passed
@@ -102,7 +111,9 @@ void outputsac(int npts, float *arr, float dt, char *filename)
                 setnhv(&quot;NZMSEC&quot;, 0, &amp;nerr);
         /* output the SAC file */
                 bwsac(npts,filename,arr);
-} </PRE><H3>
+} </PRE>
+</font>
+</p><H3>
 Compiling:</H3>
 <P>&nbsp;&nbsp;&nbsp; gcc writesac.c sacsubc.c -o writesac&nbsp;&nbsp;&nbsp;&nbsp;
 <BR><BR>On LINUX/Unix the executable is <I>writesac. </I>On Windows
@@ -110,10 +121,11 @@ under CYGWIN, the executable is actually called <I>writesac.exe </I>but
 you can execute the program by just enterning <I>writesac</I> at the
 prompt in both environments.<BR><BR>The shell script <A HREF="DOIT">DOIT</A>
 does the compile and also used <B>gsac </B>and <B>plotgif </B>to
-create the following image:<BR><BR><IMG SRC="p001.gif" NAME="graphics1" ALT="p001.gif" ALIGN=BOTTOM WIDTH=640 HEIGHT=480 BORDER=0><BR><BR><BR><BR>
+create the following image:<BR>
+<IMG SRC="p001.gif" NAME="graphics1" ALT="p001.gif" ALIGN=BOTTOM WIDTH=640 HEIGHT=480 BORDER=0>
 </P>
 <H2>Reading a time series in SAC format</H2>
-<P><BR><BR>
+<P>
 </P>
 <H3>Program purpose:</H3>
 <P>This simple program will read the file <I>filt.sac, </I>list
@@ -122,6 +134,7 @@ header values and the time series.</P>
 <P>Copy the files <I><A HREF="sacsubc.c">sacsubc.c</A> </I>and
 <A HREF="sacsubc.h"><I>sacsubc.h</I></A> to your working directory.
 Then create the file<A HREF="writesac.c"> </A><I><A HREF="readsac.c">readsac.c</A>:</I></P>
+<font size="2">
 <PRE>#include &quot;sacsubc.h&quot;
 #include &lt;stdio.h&gt;
 /* define the maximum number of points  and the float array for
@@ -153,8 +166,8 @@ main()
         for(i=0;i &lt; npts ; i ++)
                 printf(&quot;x[%d] = %f\n&quot;,i,x[i]);
 }</PRE><P>
-<BR><BR>
-</P>
+</font>
+</p>
 <H3>Compiling:</H3>
 <P>&nbsp;&nbsp;&nbsp; gcc readsac.c sacsubc.c -o readsac&nbsp;&nbsp;&nbsp;&nbsp;
 <BR><BR>On LINUX/Unix the executable is <I>readsac. </I>On Windows
@@ -210,5 +223,6 @@ x[38] = 0.004527</PRE><P STYLE="margin-bottom: 0in">
 &nbsp;</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0in"><I>Last changed February
 12, 2008</I></P>
+<footer>Last changed November 21, 2024</footer>
 </BODY>
 </HTML>
