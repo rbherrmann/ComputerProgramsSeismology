@@ -1,26 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title>CPSstrain Validate</title>
-	<meta name="generator" content="LibreOffice 7.1.1.2 (MacOSX)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2021-06-07T09:59:53.957969000"/>
-	<style type="text/css">
-		pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 }
-	</style>
-<style>
-table, th, td, tr {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 10px;
-  text-align: center;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body lang="en-US" bgcolor="#ffffff" dir="ltr">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Wave propagatios-strain validation</h2></header>
 <h1>Validation</h1>
 <p>Since the programs represent significant rewrites of existing
 codes, it is necessary to test the codes. The simplest way is to
@@ -88,14 +84,22 @@ The result of the computations are in the directories
 </p>
 <p>Note that the scripts <b>DOSTRAINCMP</b> and <b>DOSTRAINCMPF</b> use the program <b>convert</b> from the ImageMagick package to convert the Encapsulated PostScript eps files to PNG images.</p>
 <h1>Results</h1>
-The following set of figures show the velocities and strains at a depth of 43.0 km in the CUS velocity model used. For this presentation, the Z-axis is positive down while the R-axis is positive away from the source.  Each figure is annotated with the particular file and the component or motion. For example,
 <p>
+The following set of figures show the velocities and strains at a depth of 43.0 km in the CUS velocity model used. For this presentation, the Z-axis is positive down while the R-axis is positive away from the source.  Each figure is annotated with the particular file and the component or motion. For example,
+</p>
+<p>
+<font size="2">
 <pre>
-SW/005000_0100_0030.Uz - Z-component ground velocity in <i>m/s</i> using modal superposition  of new codes
-WK/005000_0100_0030.Uz - Z-component ground velocity in <i>m/s</i> using wavenumber integration of new codes
-SWkm/Uz                - Z-component ground velocity in <i>m/s</i> using modal superposition of original codes
-WKkm/Uz                - Z-component ground velocity in <i>m/s</i> using wavenumber integration  of original codes
+SW/005000_0100_0030.Uz - Z-component ground velocity in <i>m/s</i> using 
+                           modal superposition  of new codes
+WK/005000_0100_0030.Uz - Z-component ground velocity in <i>m/s</i> using 
+                           wavenumber integration of new codes
+SWkm/Uz                - Z-component ground velocity in <i>m/s</i> using 
+                           modal superposition of original codes
+WKkm/Uz                - Z-component ground velocity in <i>m/s</i> using 
+                           wavenumber integration  of original codes
 </pre>
+</font>
 </p>
 <p>
 Thus the leading WK or SW indicate the results of the new codes, while the WKkm or SWkm indicate that the strains were estimated using
@@ -135,5 +139,6 @@ The agreements are excellent. The slight differences are as follow:
 <li>The imperfection of the numerical differentiation is quite apparent in the Eff for the point force.</li>
 </ul>
 </p>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>

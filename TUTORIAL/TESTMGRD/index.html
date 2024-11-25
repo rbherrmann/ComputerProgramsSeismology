@@ -1,43 +1,36 @@
 <html>
 <head>
-	<title> Test of mtgrd96</title>
-    <style type="text/css">
-                h2.cjk { font-family: "Arial Unicode MS" }
-                h2.ctl { font-family: "Arial Unicode MS" }
-                h3.cjk { font-family: "Arial Unicode MS" }
-                h3.ctl { font-family: "Arial Unicode
-                                MS" }
-                h4.cjk { font-family: "Arial
-                                Unicode MS" }
-                h4.ctl { font-family: "Arial Unicode MS" }
-                pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;font-weight: bold }
-                pre.cjk { font-family: "Courier New", monospace }
-        </style>
-    <style>
-pre {
-  background-color: rgb(230,230,230);
-  margin-top:12px;
-  margin-bottom:12px;
-  margin-left:6px;
-  font-weight: bold;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body BGCOLOR="#FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Test of wvfmtgrd96</h2></header>
 <h2>Introduction</h2>
 <p>
-The purpose of this tutorial is to test the correctness of the code for performing a grid search for a complete moment tensor using the program <b>wvfmtgrd96</b>.  Because this program follows Zhu and Ben-Zion (2013) by performing a grid search over five parameters, the derived moment tensor will not be exactly the true moment tensor. This tutorial provides a complete processing environment to duplicate the evaluation given below.
+The purpose of this tutorial is to test the correctness of the code for performing a grid search for a complete moment tensor using the program <b>wvfmtgrd96</b>.  Because this program follows Zhu and Ben-Zion (2013) by performing a grid search over five parameters, the derived moment tensor will not be exactly the true moment tensor because of the finite step size. This tutorial provides a complete processing environment to duplicate the evaluation given below.
 <br>
 <pre>
-Zhu, L., and Y. Ben-Zion (2013). Paramaterization of general seismic potency and 
-   moment tensors for source inversion of seismic wavefrom data, 
-   Geophys. J. Int. 194, 839-843.  doi: 10.1093/gji/ggt137
+Zhu, L., and Y. Ben-Zion (2013). Paramaterization of 
+   general seismic potency and moment tensors for source 
+   inversion of seismic wavefrom data, Geophys. J. Int. 194, 
+   839-843.  doi: 10.1093/gji/ggt137
 </pre>
 <br>
 </p>
 <h2>Processing</h2>
 <p>
-The example given here uses Green's functions for the CUS velocity model at a source dpeth of 1 km. For brevity, the grid search is applied only at one source depth, rather than at a number depths, to focus on the comparison of the true moment tensor to those resulting from <b>wvtmtgrd96</b>. The 
+The example given here uses Green's functions for the CUS velocity model at a source depth of 1 km. For brevity, the grid search is applied only at one source depth, rather than at a number depths, to focus on the comparison of the true moment tensor to those resulting from <b>wvfmtgrd96</b>. The 
 <a href="t.tgz">t.tgz</a> contains the shell scripts and the Green's functions for five epicentral distances and just a source depth of 1.0 km.
 It is assumed that Computer Programs in Seismology and ImageMagick have been installed.
 </p>
@@ -49,7 +42,7 @@ gunzip -c t.tgz | tar xf -
 cd TESTMGRD
 DOALL
 </pre
-<br>
+</p><p>
 Note that the grid search will take computational time.
 </p>
 <p>
@@ -61,18 +54,17 @@ The results of the test run will be in subdirectories such as <i>TEST01</i>. The
 The evaluation consists of making <i>observed</i> waveforms for a given moment tensor and then inverting these. The presentation below provides the
 comparison.
 </p>
-
-<p>
-</p>
-<hr>
-<hr>
 <h3>Run 01</h3>
+<p>
+<font size="1">
 <pre>
-               H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
-  TRUE        1.0  1.000e+20  1.000e+20  0.000e+00  0.000e+00  0.000e+00  3.000e+20
-WVFMTGRD96    1.0  1.030e+20  1.030e+20  0.000e+00 -4.930e+12  1.110e+12  3.180e+20  2.8619  0.9977
+            H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
+  TRUE     1.0  1.000e+20  1.000e+20  0.000e+00  0.000e+00  0.000e+00  3.000e+20
+WVFMTGRD96 1.0  1.030e+20  1.030e+20  0.000e+00 -4.930e+12  1.110e+12  3.180e+20  2.8619  0.9977
 </pre>
-<br>
+</font>
+</p><p>
+<font size="1">
 <table border=1>
 <thead>
 <tr>
@@ -86,6 +78,7 @@ WVFMTGRD96    1.0  1.030e+20  1.030e+20  0.000e+00 -4.930e+12  1.110e+12  3.180e
 </tr>
 <tr>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   2.35E+20   dyne-cm
  Magnitude (Mw)    2.85
@@ -138,8 +131,10 @@ WVFMTGRD96    1.0  1.030e+20  1.030e+20  0.000e+00 -4.930e+12  1.110e+12  3.180e
  
  
 </pre>
+</font>
 </td>
-<td>
+<td> 
+<font size="1">
 <pre>
  Moment (dyne-cm)   2.47E+20   dyne-cm
  Magnitude (Mw)    2.86
@@ -192,21 +187,24 @@ WVFMTGRD96    1.0  1.030e+20  1.030e+20  0.000e+00 -4.930e+12  1.110e+12  3.180e
  
  
 </pre>
+</font>
 </td>
 </tr>
-<tr>
-	<td><img src="TEST01/MTGRD.REG/MTGRDcmp1.png"></td>
-</tr>
 </table>
-<hr>
-<hr>
+</font>
+</p>
 <h3>Run 02</h3>
+<p>
+<font size="1">
 <pre>
-               H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
-  TRUE        1.0 -1.000e+20 -1.000e+20  0.000e+00  0.000e+00  0.000e+00 -3.000e+20
-WVFMTGRD96    1.0 -8.870e+19 -8.870e+19  1.840e+12 -3.530e+12  6.580e+11 -2.400e+20  2.7879  0.9800
+            H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
+  TRUE     1.0 -1.000e+20 -1.000e+20  0.000e+00  0.000e+00  0.000e+00 -3.000e+20
+WVFMTGRD96 1.0 -8.870e+19 -8.870e+19  1.840e+12 -3.530e+12  6.580e+11 -2.400e+20  2.7879  0.9800
 </pre>
+</font>
+</p><p>
 <br>
+<font size="1">
 <table border=1>
 <thead>
 <tr>
@@ -220,6 +218,7 @@ WVFMTGRD96    1.0 -8.870e+19 -8.870e+19  1.840e+12 -3.530e+12  6.580e+11 -2.400e
 </tr>
 <tr>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   2.35E+20   dyne-cm
  Magnitude (Mw)    2.85
@@ -272,8 +271,10 @@ WVFMTGRD96    1.0 -8.870e+19 -8.870e+19  1.840e+12 -3.530e+12  6.580e+11 -2.400e
  
  
 </pre>
+</font>
 </td>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.91E+20   dyne-cm
  Magnitude (Mw)    2.79
@@ -326,21 +327,24 @@ WVFMTGRD96    1.0 -8.870e+19 -8.870e+19  1.840e+12 -3.530e+12  6.580e+11 -2.400e
  
  
 </pre>
+</font>
 </td>
 </tr>
-<tr>
-	<td><img src="TEST02/MTGRD.REG/MTGRDcmp1.png"></td>
-</tr>
 </table>
-<hr>
-<hr>
+</font>
+</p>
 <h3>Run 03</h3>
+<p>
+<font size="1">
 <pre>
-               H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
-  TRUE        1.0  1.000e+20  1.000e+20  0.000e+00  0.000e+00  0.000e+00 -2.000e+20
-WVFMTGRD96    1.0  1.010e+20  1.010e+20 -3.620e+12 -9.240e+12 -7.940e+11 -1.970e+20  2.7570  1.0000
+            H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
+  TRUE     1.0  1.000e+20  1.000e+20  0.000e+00  0.000e+00  0.000e+00 -2.000e+20
+WVFMTGRD96 1.0  1.010e+20  1.010e+20 -3.620e+12 -9.240e+12 -7.940e+11 -1.970e+20  2.7570  1.0000
 </pre>
+</font>
+</p><p>
 <br>
+<font size="1">
 <table border=1>
 <thead>
 <tr>
@@ -354,6 +358,7 @@ WVFMTGRD96    1.0  1.010e+20  1.010e+20 -3.620e+12 -9.240e+12 -7.940e+11 -1.970e
 </tr>
 <tr>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.73E+20   dyne-cm
  Magnitude (Mw)    2.76
@@ -406,8 +411,10 @@ WVFMTGRD96    1.0  1.010e+20  1.010e+20 -3.620e+12 -9.240e+12 -7.940e+11 -1.970e
  
  
 </pre>
+</font>
 </td>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.72E+20   dyne-cm
  Magnitude (Mw)    2.76
@@ -460,21 +467,24 @@ WVFMTGRD96    1.0  1.010e+20  1.010e+20 -3.620e+12 -9.240e+12 -7.940e+11 -1.970e
  
  
 </pre>
+</font>
 </td>
 </tr>
-<tr>
-	<td><img src="TEST03/MTGRD.REG/MTGRDcmp1.png"></td>
-</tr>
 </table>
-<hr>
-<hr>
+</font>
+</p>
 <h3>Run 04</h3>
+<p>
+<font size="1">
 <pre>
-               H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
-  TRUE        1.0  1.000e+20 -1.000e+20  0.000e+00  0.000e+00  0.000e+00  0.000e+00
-WVFMTGRD96    1.0  1.010e+20 -9.910e+19  6.620e+03  2.980e+12 -9.600e+12  4.350e+18  2.6002  1.0000
+            H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
+  TRUE     1.0  1.000e+20 -1.000e+20  0.000e+00  0.000e+00  0.000e+00  0.000e+00
+WVFMTGRD96 1.0  1.010e+20 -9.910e+19  6.620e+03  2.980e+12 -9.600e+12  4.350e+18  2.6002  1.0000
 </pre>
+</font>
+</p><p>
 <br>
+<font size="1">
 <table border=1>
 <thead>
 <tr>
@@ -488,6 +498,7 @@ WVFMTGRD96    1.0  1.010e+20 -9.910e+19  6.620e+03  2.980e+12 -9.600e+12  4.350e
 </tr>
 <tr>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.00E+20   dyne-cm
  Magnitude (Mw)    2.60
@@ -540,8 +551,10 @@ WVFMTGRD96    1.0  1.010e+20 -9.910e+19  6.620e+03  2.980e+12 -9.600e+12  4.350e
  
  
 </pre>
+</font>
 </td>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.00E+20   dyne-cm
  Magnitude (Mw)    2.60
@@ -594,21 +607,24 @@ WVFMTGRD96    1.0  1.010e+20 -9.910e+19  6.620e+03  2.980e+12 -9.600e+12  4.350e
  
  
 </pre>
+</font>
 </td>
 </tr>
-<tr>
-	<td><img src="TEST04/MTGRD.REG/MTGRDcmp1.png"></td>
-</tr>
 </table>
-<hr>
-<hr>
+</font>
+</p>
 <h3>Run 05</h3>
+<p>
+<font size="1">
 <pre>
-               H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
-  TRUE        1.0  1.000e+20 -1.000e+20  3.000e+19  6.000e+22  0.000e+00 -5.000e+21
-WVFMTGRD96    1.0  1.960e+21  1.960e+21  2.620e+15  5.980e+22  2.620e+15  1.960e+21  4.4515  0.9983
+            H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
+  TRUE     1.0  1.000e+20 -1.000e+20  3.000e+19  6.000e+22  0.000e+00 -5.000e+21
+WVFMTGRD96 1.0  1.960e+21  1.960e+21  2.620e+15  5.980e+22  2.620e+15  1.960e+21  4.4515  0.9983
 </pre>
+</font>
+</p><p>
 <br>
+<font size="1">
 <table border=1>
 <thead>
 <tr>
@@ -622,6 +638,7 @@ WVFMTGRD96    1.0  1.960e+21  1.960e+21  2.620e+15  5.980e+22  2.620e+15  1.960e
 </tr>
 <tr>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   6.01E+22   dyne-cm
  Magnitude (Mw)    4.45
@@ -674,8 +691,10 @@ WVFMTGRD96    1.0  1.960e+21  1.960e+21  2.620e+15  5.980e+22  2.620e+15  1.960e
  
  
 </pre>
+</font>
 </td>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   5.98E+22   dyne-cm
  Magnitude (Mw)    4.45
@@ -728,21 +747,24 @@ WVFMTGRD96    1.0  1.960e+21  1.960e+21  2.620e+15  5.980e+22  2.620e+15  1.960e
  
  
 </pre>
+</font>
 </td>
 </tr>
-<tr>
-	<td><img src="TEST05/MTGRD.REG/MTGRDcmp1.png"></td>
-</tr>
 </table>
-<hr>
-<hr>
+</font>
+</p>
 <h3>Run 06</h3>
+<p>
+<font size="1">
 <pre>
-               H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
-  TRUE        1.0  1.000e+21  1.000e+21  3.000e+20  6.000e+20  0.000e+00  1.000e+21
-WVFMTGRD96    1.0  9.970e+20  9.970e+20  2.990e+20  6.420e+20  1.760e+13  9.970e+20  3.3666  0.9998
+            H      Mxx        Myy        Mxy       Mxz         Myz        Mzz       Mw     Fit 
+  TRUE     1.0  1.000e+21  1.000e+21  3.000e+20  6.000e+20  0.000e+00  1.000e+21
+WVFMTGRD96 1.0  9.970e+20  9.970e+20  2.990e+20  6.420e+20  1.760e+13  9.970e+20  3.3666  0.9998
 </pre>
+</font>
+</p><p>
 <br>
+<font size="1">
 <table border=1>
 <thead>
 <tr>
@@ -756,6 +778,7 @@ WVFMTGRD96    1.0  9.970e+20  9.970e+20  2.990e+20  6.420e+20  1.760e+13  9.970e
 </tr>
 <tr>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.40E+21   dyne-cm
  Magnitude (Mw)    3.36
@@ -808,8 +831,10 @@ WVFMTGRD96    1.0  9.970e+20  9.970e+20  2.990e+20  6.420e+20  1.760e+13  9.970e
  
  
 </pre>
+</font>
 </td>
 <td>
+<font size="1">
 <pre>
  Moment (dyne-cm)   1.41E+21   dyne-cm
  Magnitude (Mw)    3.37
@@ -862,12 +887,13 @@ WVFMTGRD96    1.0  9.970e+20  9.970e+20  2.990e+20  6.420e+20  1.760e+13  9.970e
  
  
 </pre>
+</font>
 </td>
 </tr>
-<tr>
-	<td><img src="TEST06/MTGRD.REG/MTGRDcmp1.png"></td>
-</tr>
 </table>
+</font>
+</p>
+<footer>Last changed November 21, 2024</footer>
 
 </body>
 </hmtl>

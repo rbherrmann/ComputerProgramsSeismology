@@ -1,26 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title>CPSstrain Codes</title>
-	<meta name="generator" content="LibreOffice 7.1.1.2 (MacOSX)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2021-06-07T09:59:53.957969000"/>
-	<style type="text/css">
-		pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;text-align: left; }
-	</style>
-<style>
-table, th, td,  tr {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 10px;
-  text-align: center;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body lang="en-US" bgcolor="#ffffff" dir="ltr">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Stress-strain codes</h2></header>
 <h1>Codes</h1>
 <p>
 The new programs are as follow:
@@ -41,7 +37,6 @@ Before illustrating the computation sequence of the new codes, the following sho
 <table>
 <tr>
 	<th><big>Wavenumber Integration</big></th>
-	<th><big>Modal Superposition</big></th>
 </tr>
 <tr>
 	<td>
@@ -60,7 +55,15 @@ hpulse96 -V -p -l 1 | f96tosac -G
 for transverse isotropic media.
 </p>
 	</td>
-	<td>
+</tr>
+</table>
+</p><p>
+<table>
+<tr>
+	<th><big>Modal Superposition</big></th>
+</tr>
+<tr>
+<td>
 <pre>
 sprep96 -d dfile -M CUS.mod -HS 10.0 -HR 3.0 -L -R -NMOD 100
 sdisp96
@@ -79,10 +82,10 @@ spulse96 -V -p -l 1 | f96tosac -G
 The corresponding scripts for modal superposition are <i>CPSstrain.validate/SW/DOITSW</i> for a moment tensor source and <i>CPSstrain.validate/SW/DOITSWF</i> for a point force source. 
 </p>
 <p>The following shows the sequence of operations:
+<font size="2">
 <table>
 <tr>
 	<th><big>Wavenumber Integration</big></th>
-	<th><big>Modal Superposition</big></th>
 </tr>
 <tr>
 	<td>
@@ -101,6 +104,13 @@ hpulse96strain -V -p -l 1          -MW ${MW}  -STK ${STK} -DIP ${DIP} \\
 </pre>
 for transverse isotropic models.
 	</td>
+</tr>
+</table>
+</font>
+<table>
+<tr>
+	<th><big>Modal Superposition</big></th>
+</tr>
 	<td>
 <pre>
 sprep96 -d dfile -M CUS.mod -HS 10.0 -HR 3.0 -L -R -NMOD 100
@@ -113,42 +123,58 @@ spulse96strain -V -p -l 1 -d dfile -MW ${MW}  -STK ${STK} -DIP ${DIP} \\
 	</td>
 </tr>
 </table>
+</font>
 </p>
 <p>In the scripts the shell variables STK, DIP, RAKE, AZ and MW specify the source parameters. The command line parameters of <b>hspec96strain</b> are the same as those if <b>hspec96</b>. The <b>hpulse96strain</b> combines the functions of <b>hpulse96</b>, <b>f96tosac</b>, <b>fmech96</b> and the <i>mt</i> command of <b>gsac</b> and likewise of <b>spulse96strain</b>.  </p>
 <p>When the -STRAIN is invoked with the <i>-FMT 1</i> flag,, the output will be Sac files with names such as 
+<font size="2">
 <pre>
 002000_0100_0050.Eff	002000_0100_0050.Erf	002000_0100_0050.Erz
 002000_0100_0050.Efz	002000_0100_0050.Err	002000_0100_0050.Ezz
 002000_0100_0050.Del
 </pre>
+</font>
+</p>
+<p>
 The units are strain, and not microstrain or nanostrain
 </p>
 <p>
 If the -STRESS is invoked, the output Sac files will be of the form
+<font size="2">
 <pre>
 002000_0100_0050.Sff	002000_0100_0050.Srf	002000_0100_0050.Srz
 002000_0100_0050.Sfz	002000_0100_0050.Srr	002000_0100_0050.Szz
 </pre>
+</font>
+</p><p>
 with units of <i>Pa</i>.
 </p>
 <p>
 If the -ROTATE is given, the output will be
+<font size="3">
 <pre>
 002000_0100_0050.Wfz	002000_0100_0050.Wrf	002000_0100_0050.Wrz
 </pre>
-with units of <i>m/m</i>.
+</font>
 </p>
 <p>
+with units of <i>m/m</i>.
+<p>
 Finally if the -D, -V or -A is given, the following result:
+<font size="3">
 <pre>
 002000_0100_0050.Ur	002000_0100_0050.Ut	002000_0100_0050.Uz
 </pre>
+</font>
+</p>
+<p>
 where these are 
 <i>m</i>,
 <i>m/s</i> or
 <i>m/s/s</i>, respectively. The only non-standard point is the Z is positive downward rather than positive upward. This is not a problem since I would use the <b>hpulse96</b> sequence and <b>gsac</b> to compute the 3-component motion.
  </p>
 <h2>Time function</h2>
+<p>
 The earlier code assumed that the source time function was step-like, which is appropriate for earthquakes. Now the ground velocity for a step source is the same as the ground displacement for an impulsive source. The latter is the Green's function by definition. The default source time function is step-like with a rise time controlled by the
 <i>-p -l </i> or <i>-t -l </i> flags. To force the output to be for an impulse source with a duration controlled by the same flags, the <i>-STEP</i> option is used.
 <h2>Units</h2>
@@ -158,6 +184,7 @@ The earlier code assumed that the source time function was step-like, which is a
 <h1>srotate96</h1>
 <p>Note that everything is in terms of a cylindrical coordinate system. In modeling data, it is natural to specify the epicenter and then compute the motions at the receiver with is at (r,&phi;) with respect to the source. The instruments may not be aligned in the <bold>e</bold><sub>r</sub>  and <bold>e</bold><sub>&phi;</sub> directions. The program
 <b>srotate96</b> can be used to rotate the motions at the receiver to a local Cartesian system, as in the next figure:
+</p><p>
 <table>
 <img src="xyrt.png">
 </table>
@@ -178,16 +205,19 @@ Note the use of the underscore instead of the period.
 
 <h1>Program syntax</h1>
 <h2>hspec96strain</h2>
+<p>
+<font size="2">
 <pre>
- USAGE: hspec96strain [-H] [-A arg] [-K] [-N][-SU] [-SD] [-SPUP] [-SSUP] [-SPDN] [-SSDN] [-RU] [-RD] [-RPUP] [-RSUP] [-RPDN] [-RSDN] [-?] [-h]
+ USAGE: hspec96strain [-H] [-A arg] [-K] [-N][-SU] [-SD] [-SPUP] [-SSUP] [-SPDN] [-SSDN] 
+          [-RU] [-RD] [-RPUP] [-RSUP] [-RPDN] [-RSDN] [-?] [-h]
  -H (default false)   Use Hankel function not Bessel
  -A arg (default arg=3.0) value of kr where Hn(kr) replaces
              Jn(kr) in integration - only used when -H is used
  -K      (default Futterman) use Kjartansson Causal Q
  -N      (default causal) use non-causal Q
  The following govern wavefield at source. The default is the entire wavefield
- -SU      (default whole wavefield) Compute only upgoing                wavefield from the source
- -SD      (default whole wavefield) Compute only downgoing                wavefield from the source
+ -SU      (default whole wavefield) Compute only upgoing wavefield from the source
+ -SD      (default whole wavefield) Compute only downgoing wavefield from the source
   -SPUP  Include upward P at source
   -SSUP  Include upward S at source
   -SPDN  Include downward P at source
@@ -202,16 +232,21 @@ Note the use of the underscore instead of the period.
  -?                   Display this usage message
  -h                   Display this usage message
 </pre>
+</font>
+</p>
 <h2>tspec96strain</h2>
+<p>
+<font size="2">
 <pre>
- USAGE: tspec96strain [-H] [-A arg] [-K] [-SU] [-SD] [-SPUP] [-SSUP] [-SPDN] [-SSDN] [-RU] [-RD] [-RPUP] [-RSUP] [-RPDN] [-RSDN] [-?] [-h]
+ USAGE: tspec96strain [-H] [-A arg] [-K] [-SU] [-SD] [-SPUP] [-SSUP] [-SPDN] [-SSDN] 
+               [-RU] [-RD] [-RPUP] [-RSUP] [-RPDN] [-RSDN] [-?] [-h]
  -H (default false)   Use Hankel function not Bessel
  -A arg (default arg=3.0) value of kr where Hn(kr) replaces
              Jn(kr) in integration - only used when -H is used
  -K      (default Futterman) use Kjartansson Causal Q
  The following govern wavefield at source. The default is the entire wavefield
- -SU      (default whole wavefield) Compute only upgoing                wavefield from the source
- -SD      (default whole wavefield) Compute only downgoing                wavefield from the source
+ -SU      (default whole wavefield) Compute only upgoing wavefield from the source
+ -SD      (default whole wavefield) Compute only downgoing wavefield from the source
   -SPUP  Include upward P at source
   -SSUP  Include upward S at source
   -SPDN  Include downward P at source
@@ -226,7 +261,11 @@ Note the use of the underscore instead of the period.
  -?                   Display this usage message
  -h                   Display this usage message
 </pre>
+</font>
+</p>
 <h2>hpulse96strain</h2>
+<p>
+<font size="2">
 <pre>
  hpulse96strain:Help
 USAGE: 
@@ -317,7 +356,11 @@ hpulse96strain -d Distance_File [ -t -o -p -i ] [-a alpha]
   -?           Write this help message
   -h           Write this help message
 </pre>
+</font>
+</p>
 <h2>spulse96strain</h2>
+<p>
+<font size="2">
 <pre>
  spulse96strain:Help
 USAGE: 
@@ -421,7 +464,11 @@ spulse96strain -d Distance_File [ -t -o -p -i ] [-a alpha]
   -?           Write this help message
   -h           Write this help message
 </pre>
+</font>
+</p>
 <h2>srotate96</h2>
+<p>
+<font size="2">
 <pre>
  
 Usage: srotate96 -AZ az [-U|-STRESS|-STRAIN] -FILE prototype
@@ -442,6 +489,8 @@ Usage: srotate96 -AZ az [-U|-STRESS|-STRAIN] -FILE prototype
        to create 005000_0100_0010_Wxy etc in the current directory
  -h           (default false) online help
 </pre>
-<p></p>
+</font>
+</p>
+<footer>Last changed November 21, 2024</footer>
 
 </body>

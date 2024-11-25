@@ -1,34 +1,32 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title>CPSstrain Examples</title>
-	<meta name="generator" content="LibreOffice 7.1.1.2 (MacOSX)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2021-06-07T09:59:53.957969000"/>
-	<style type="text/css">
-		pre { margin-left: 0.05in; margin-top: 0.09in; margin-bottom: 0.09in; background: #e6e6e6 ;text-align: left; }
-	</style>
-<style>
-table, th, td,  tr {
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 10px;
-  text-align: center;
-}
-</style>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body lang="en-US" bgcolor="#ffffff" dir="ltr">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Stress-strain examples</h2></header>
 <h1>Test</h1>
-The example code is in the file <a href="CPSstrainexample.tgz">CPSstrainexample.tgz</a>. Frist you must compile a program that is not in the Computer Programs in Seismology distribution: <b>psac</b>. This is a utility for plotting Sac files. First define a SHELL variable <b>CPS</b> that points to the location of the Computer Programs in Seismology package, such as
 <p>
+The example code is in the file <a href="CPSstrainexample.tgz">CPSstrainexample.tgz</a>. First you must compile a program that is not in the Computer Programs in Seismology distribution: <b>psac</b>. This is a utility for plotting Sac files. First define a SHELL variable <b>CPS</b> that points to the location of the Computer Programs in Seismology package, such as
+</p><p>
 <pre>
 export CPS='/Users/rbh/PROGRAMS.310t/PROGRAMS.330/'
 </pre>
-Then to execute this test case, do the following:
+</p>
 <p>
+Then to execute this test case, do the following:
 <pre>
 gunzip -f CPSstrainexample.tgz | tar xvf -
 cd CPSstrain.example
@@ -80,5 +78,6 @@ Plane wave theory show that the ratios are proportional to the phase velocity.
 In this presentation, the velocity with maximum of 1.8 x 10 <sup>-7</sup> m/s is in the left column and the strain with maximum value of 2.5 x 10<sup>-11</sup> is on the right column. The local coordinate system is rotated through angles of 0&deg; to 340&deg; with respect to the radial direction form the source. Since the signal is a mixture of Love and Rayleigh waves, the presentation shows the different radiation patterns of each.
 </p>
 
+<footer>Last changed November 21, 2024</footer>
 
 </body>
