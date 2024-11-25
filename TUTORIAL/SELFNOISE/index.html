@@ -1,10 +1,24 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Determination of Instrument Self Noise from Cross-correlation</title>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
 </head>
 <body>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Instrument self noise</h2></header>
 <h2>Introduction</h2>
+<p>
 This tutorial shows how to determine the self noise of an instrument
 though the comparison of the output of two instruments operating
 side-by-side.<br>
@@ -23,6 +37,7 @@ information to separate the ground motion and the two instrumental
 components.<br>
 <br>
 <h2>Software</h2>
+<p>
 All codes and sample data sets are contained in the tar-ball 
 <A HREF="selfnoise.tgz">selfnoise.tgz</A>
 <br>
@@ -36,6 +51,7 @@ which tells you how to compile
 and run the programs.<br>
 <br>
 <h2>Test Data Sets</h2>
+<p>
 Two data sets are provided which compare the 00 and 01 data stream for
 the LHZ component at ANMO&nbsp; and the LHZ, LHN and LHE components at
 KMI.&nbsp; The are contained in the directories ANMO.TEST and
@@ -50,6 +66,7 @@ LHZ, LHN and LHE for KMI<br>
 &nbsp;&nbsp;&nbsp; 3. plots the results:<br>
 <br>
 <h3>ANMO</h3>
+<p>
 <br>
 This compares two instruments. For each sensor, the figures give the
 gound noise esitmate (triangle), total noise estimate (light blue line,
@@ -71,23 +88,20 @@ USGS/IRIS as a check on our code. <br>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="1"
  src="ANMOTEST/PLOTLHZ20101.220.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="2"
  src="ANMOTEST/PLOTLHZ20102.220.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 658px; height: 498px;" alt="coher"
  src="ANMOTEST/CPLOTLHZ2010.220.PLT.png"><br>
       </td>
     </tr>
   </tbody>
 </table>
-<h3><img style="width: 550px; height: 440px;" alt="USGS PDF"
- src="ANMOTEST/pdf_E2010.220_S2010.220_cBHZ_l10_nIU_sANMO.png"><br>
-</h3>
+<p>
+<img src="ANMOTEST/pdf_E2010.220_S2010.220_cBHZ_l10_nIU_sANMO.png">
+</p>
 <h3><br>
 </h3>
 <h3>KMI</h3>
@@ -105,49 +119,40 @@ USGS/IRIS as a check on our code. <br>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="Z1"
  src="KMITEST/PLOTLHZ20101.027.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="Z1"
  src="KMITEST/PLOTLHZ20102.027.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 658px; height: 498px;" alt="zcoher"
  src="KMITEST/CPLOTLHZ2010.027.PLT.png"><br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="n1"
  src="KMITEST/PLOTLHN20101.027.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="N2"
  src="KMITEST/PLOTLHN20102.027.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 658px; height: 498px;" alt="zcoher"
  src="KMITEST/CPLOTLHN2010.027.PLT.png"><br>
       </td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="E1"
  src="KMITEST/PLOTLHE20101.027.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 490px; height: 498px;" alt="E2"
  src="KMITEST/PLOTLHE20102.027.PLT.png"><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><img
- style="width: 658px; height: 498px;" alt="zcoher"
  src="KMITEST/CPLOTLHE2010.027.PLT.png"><br>
       </td>
     </tr>
   </tbody>
 </table>
-<br>
-<br>
+</p>
+<footer>Last changed November 21, 2024</footer>
 </body>
 </html>
