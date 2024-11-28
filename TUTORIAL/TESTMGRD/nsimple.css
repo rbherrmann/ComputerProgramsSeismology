@@ -627,6 +627,7 @@ pre {
   padding: 1rem 1.4rem;
   max-width: 100%;
   overflow: visible;
+  font-weight: bold;
   color: var(--preformatted);
 }
 

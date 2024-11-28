@@ -626,7 +626,6 @@ kbd {
 pre {
   padding: 1rem 1.4rem;
   max-width: 100%;
-  font-weight: bold;
   overflow: visible;
   color: var(--preformatted);
 }
