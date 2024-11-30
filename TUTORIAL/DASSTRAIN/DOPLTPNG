@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+then
+	echo "Usage:  DOPLTPNG CPS_plot_files	"
+	echo "   as in "
+	echo "   DOPLTPNG PRS001.PLT"
+	exit 0
+fi
+
+for i 
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done

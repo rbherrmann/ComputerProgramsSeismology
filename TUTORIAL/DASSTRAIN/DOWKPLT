@@ -1,0 +1,13 @@
+#!/bin/sh
+
+gsac << EOF
+r WK*/*Ux
+bg plt 
+prs shd pos sa 0 Pick on
+r WK*/*Exx
+prs shd pos sa 0 Pick on
+q
+EOF
+mv PRS001.PLT WKPRS001.PLT
+mv PRS002.PLT WKPRS002.PLT
+DOPLTPNG WKPRS*PLT

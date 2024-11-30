@@ -1,0 +1,183 @@
+<html>
+<head>
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+</head>
+<body bgcolor="FFFFFF">
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Synthetics for horizontal DAS</h2></header>
+<h2>Introduction</h2>
+<p>
+The purpose of this tutorial is to model strain and displacement at DAS elements of an actual array.
+thus it differs from the tutorial <a href="../CPSStrain/index.html"> CPSstrain</a> in that example can be modified to model actual data sets.
+</p>
+<p>
+The file <a href="../CPSSTRAIN/strain.pdf"> ../CPSSTRAIN/strain.pdf</a> describes the theory of the CPS codes used to model the dispalcement, strain and stress fields.
+</p>
+<p>
+
+</p>
+<p>
+
+</p>
+<h2>Coordinate systems</h2>
+<p>
+The following figures illustrate the geometry of the problem and the angles involved. The epicenter generates the seismic wavefield which then propagates to the DAS element. At distances short enough that one can ignore the curvature of the earth, the back azimuth from the DAS element to the epicenter is just 180<sup>o</sup> plus azimuth from the source. When this is not true, then this simple relation does not hold.
+</p>
+<p>
+The 
+x<sub>r</sub>, x<sub>&phi;</sub>, x<sub>z</sub> and
+x<sub>1</sub>,  x<sub>2</sub>, x<sub>3</sub> are right-hand coordinate systems with the x<sub>z</sub> and x<sub>3</sub> axes positive downward.
+</p>
+<p>
+Figure 1 illustrates the coordinate that governs the radiation of the source. The great circle path from the source to the receiver leaves the source at an azimuth of &phi;.
+</p>
+<p>
+Figure 2 displays the coordinate system at the receiver. x<sub>r</sub> is the direction of the incident ray from the source. 
+The azimuth from the source, &phi;  and back azimuth, BAZ, are computed given the geographic coordinates of the source (ELAT,ELON) and receiver (STLA, STLO).
+</p>
+<p>
+Figure 3 describes the  orientation of the DAS element. In the presentation here, the DAS element is aligned with the x<sub>1</sub> axis, which trends in a direction defined by AZ<sub>DAS</sub>.
+</p>
+<p>
+Figure 4 shows the relationship between the incident wavefield and the DAS coordinate system. The angle &theta; = BAZ + 180 - AZ<sub>DAS</sub> is used to transform the displacements, stresses and strains in the (r,&phi;,z) coordinate system tot he desired (1,2,3) coordinate system.
+<p>
+</p>
+<p>
+	<table border="0" width="100%">
+	<tr>
+		<td width="50%">
+		&phi;  - azimuth with respect to North from the <br>source to the receiver.
+		The angle &phi; affects the radiation pattern from the source.
+		</td>
+		<td>
+		<figure><img src="FIG1.png"><figcaption>Figure 1</figcaption> </figure>
+		</td>
+	</tr>
+	<tr>	
+		<td width="50%">
+		BAZ - back-azimuth with respect to North from the receiver back 
+		to the source.
+		This angle is usually used to rotate observed horizontal motions to 
+		radial and transverse with respect to the incident ray. 
+		The radial direction away from the source is at an azimuth of &pi; + BAZ  .
+		</td>
+		<td>
+		<figure><img src="FIG2.png"><figcaption>Figure 2</figcaption></figure>
+		</tr>
+		</td>
+	<tr>
+		<td width="50%">
+AZ<sub>DAS</sub> - direction of a local x<sub>1</sub> axis 
+at the receiver. We will assume that this is the 
+local direction of the DAS line. 
+		</td>
+		<td>
+		<figure><img src="FIG3.png"><figcaption>Figure 3.</figcaption></figure> 
+		</td>
+	</tr>
+	<tr>
+		<td width="50%">
+		&theta; - angle from the positive x<sub>1</sub> axis to the radial direction from the source. 
+		</td>
+		<td>
+		<figure><img src="FIG4.png"><figcaption>Figure 4</figcaption></figure>
+		</td>
+	</tr>
+	</table>
+</p>
+<p>All angles are measured in a clockwise direction</p>
+</p>
+<p>
+In order to model the observed U<sub>x</sub> and e<sub>xx</sub> at the DAS element, the following steps are performed:
+<ul>
+<li>Compute the U<sub>r</sub>, U<sub>&phi;</sub>,U<sub>z</sub>, e<sub>rr</sub>, e<sub>r&phi;</sub>, ..., e<sub>zz</sub> at the DAS element.</li>
+<li><p>
+Rotate these into the coordinate system aligned with the DAS line to form the u<sub>1</sub> and e<sub>11</sub>.
+</p>
+</li>
+</ul>
+</p>
+</p>
+<h2>Detailed  example</h2>
+<p>Download the <a href="DASSTRAIN.tgz"> DOSTRAIN.tgz</a> and unpack it using the command
+<br>
+<pre>
+gunzip -c DASSTRAIN.tgz | tar xf - 
+</pre>
+</p><p>
+The will create the directory <i>DASSTRAIN</i> with  shell scripts <b>DOITWK</b> and <b>DOITSW</b>. The first computes complete synthetics using wavenumber integration, while the second uses surface-wave modal superposition.
+</p>
+<p></p>
+<p></p>
+<p></p>
+<h3>Wavenumber integration</h3>
+<p>
+<pre>
+cd DASSTRAIN
+DOITWK
+</pre>
+</p>
+<p>
+The script DOITWK  is based on a rewal data set. The script consists of the following
+sections:
+<ul>
+<li>Define the source hypocentral coordinates and mechanism</li>
+<li>Define the velocity model</li>
+<li>Starting with a tabulation of geographic coordinates of points on the DAS line, 
+create a table of triplets of locations where the three entries define a linear section of
+the DAS line. The first and third sets define the horizontal orientaion of the DAS line while the second set is used to define the 
+distance from the source, the azimuth from the source to the element and the back-azimuth from the element to the source.</li>
+<li>For each DAS element, compute the ground velocity and strains at the element in the x<sub>r</sub>, x<sub>&phi;</sub> and x<sub>z</sub> coordinate system and then rotate it to the DAS local coordinate system for each element. the result will be the desired
+E<sub>11</sub> strain  and u<sub>1</sub>.</li> displacment, or equivalently the
+E<sub>xx</sub> and u<sub>x</sub> which will be the output of <b>hpulse96strain</b> or <b>spulse96strain</b>. 
+<li>Finally make a map using GMT5+ showing the epicenter and DAS elements. </li>
+</ul>
+</p>
+<p>  
+<figure>
+<img src="WKmap.png"> 
+<figcaption>Profile of DAS elements. The epicenter is indicated by the star.
+</figcaption>
+</figure></p>
+<p> 
+<figure><img src="WKPRS001.png"> <figcaption>True amplitude lot of the u<sub>1</sub> ground velocity along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<p> 
+<figure><img src="WKPRS002.png"> <figcaption>True amplitude lot of the E<sub>11</sub> ground strain along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<p>
+</p>
+<h3>Modal superposition</h3>
+<p>
+<pre>
+cd DASSTRAIN
+DOITSW
+</pre>
+<p>This script invokes the surface wave codes. Since the surface wave synthetic will include only thos arrivals with pghase velocities less than or equal to the halfspace S-wave velocity and since the example has the source in the mediaum where V<sub>P</sub> is 6 km/s, the mdoel used for the wavenumber integration will not be able to model the wavefield due to the direct P wave. To address this a layer is placed at depth with V<sub>P</sub>=14 km/s and V<subn>S</sub>=7 km/s. The resulting synthetics are known as locked mode synthetics. </p>
+<p>
+The next two figures overlay the wavenumebr integration and locked mode synthetics using different colors for each.. the comparison is excellent.
+</p>
+<p> 
+<figure><img src="SWWKPRS001.png"> <figcaption>True amplitude lot of the u<sub>1</sub> ground velocity along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<p> 
+<figure><img src="SWWKPRS002.png"> <figcaption>True amplitude lot of the E<sub>11</sub> ground strain along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<h3>Discussion</h3>
+<p>One interesting aspect of thjis study is that the initiual P-wave amplitudes are very small for this source mechanism.
+Another interesting feature is that the E<sub>11</sub> is very simialr oin appearance to the u<sub>1</sub> groupnd velocity. f:wq
+</p>
+<h3>Support scripts</h3>
+<p>
+The scripts <b>EPSTOPNG</b> and <b>DOPLTPNG</b> are sued to convert EPS and the CPS PLT files to PNG bit graphics using the ImageMagick package <b>convert</b>. These were used to create the graphics of this tutorial.
+</p>
+<footer>Last changed December 1, 2024</footer>
+</body>
+</html>

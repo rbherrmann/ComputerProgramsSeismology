@@ -1,0 +1,9 @@
+#!/bin/sh
+
+rm -fr SWDIR* WKDIR* *.eps 
+rm -fr *staaz *stalist
+rm -fr PRS*CTL
+
+rm -f CALPLT.cmd
+rm -f gmt*
+rm -f out

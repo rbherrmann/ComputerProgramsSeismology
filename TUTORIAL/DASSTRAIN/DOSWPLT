@@ -1,0 +1,15 @@
+#!/bin/sh
+
+gsac << EOF
+r SW*/*Ux
+title l top s m text "Ux velocity - corrected for 1/r spreading"
+bg plt 
+prs shd pos sa 0 Pick on
+r SW*/*Exx
+title l top s m text "Exx strain - corrected for 1/r spreading"
+prs shd pos sa 0 Pick on
+q
+EOF
+mv PRS001.PLT SWPRS001.PLT
+mv PRS002.PLT SWPRS002.PLT
+DOPLTPNG SWPRS*PLT

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+gsac << EOF
+r */*Ux
+color list red blue
+bg plt 
+prs shd pos sa 0 Pick on
+r */*Exx
+prs shd pos sa 0 Pick on
+q
+EOF
+mv PRS001.PLT SWWKPRS001.PLT
+mv PRS002.PLT SWWKPRS002.PLT
+DOPLTPNG SWWKPRS*PLT

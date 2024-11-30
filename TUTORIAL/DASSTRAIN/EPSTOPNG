@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+EPS=$1
+BASE=`basename ${EPS} .eps`
+convert -trim -density 150x150 -resize 1000x1000 -verbose ${BASE}.eps ${BASE}.png

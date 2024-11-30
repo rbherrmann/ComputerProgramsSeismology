@@ -1,0 +1,123 @@
+#!/bin/sh
+
+PROTO=FIG4
+
+#####
+#    define colors for calplt
+#####
+cat > red << EOF
+NEWPEN
+2
+EOF
+cat > blue << EOF
+NEWPEN
+4
+EOF
+cat > black << EOF
+NEWPEN
+1
+EOF
+cat > green << EOF
+NEWPEN
+3
+EOF
+
+#####
+#    initialize
+#####
+rm -f grid.d
+for X in 0.0  1.0  2.0  3.0  4.0  5.0  6.0  7.0 8.0  9.0  10.0
+do
+	cat red >> grid.d
+	echo LINE >> grid.d
+	echo $X 0.0 $X 8.0 >> grid.d
+	cat green >> grid.d
+	for inc in 1 2 3
+	do
+		X=`echo $X | awk '{print $1 + 0.25}'`
+		echo LINE >> grid.d
+		echo $X 0.0 $X 8.0 >> grid.d
+	done
+done
+for Y in 0 1 2 3 4 5 6 7 
+do
+	cat red >> grid.d
+	echo LINE >> grid.d
+	echo 0.0 $Y  10.0 $Y >> grid.d
+	cat green >> grid.d
+	for inc in 1 2 3
+	do
+		Y=`echo $Y | awk '{print $1 + 0.25}'`
+		echo LINE >> grid.d
+		echo 0.0 $Y 10.0 $Y  >> grid.d
+	done
+done
+echo PEND >> grid.d
+calplt < grid.d 
+mv CALPLT.PLT GRID.PLT
+
+
+calplt << EOF
+PLOT
+3.0 3.0 -3
+NEWPEN
+1
+SFILL
+'CI' 0.15 0.0 0.0 
+ARROW
+0.0 0.0 0.0 2.0 .false.
+CENTER
+0.0 2.1 0.15 'N' 0.0
+
+NEWPEN
+1
+ARROW
+0.0 0.0 -1.76 1.00 .false.
+SUBSC
+-2.0 1.20 0.15 'x' 1 '1 ' 1
+ARROW
+0.0 0.0 1.0 1.74 .false.
+SUBSC
+1.00 1.90 0.15 'x' 1 '2' 1
+ARROW
+0.0 0.0 -1.0 1.74 .false.
+SUBSC
+-1.1 2.0 0.15 'x' 1 'r ' 1
+ARROW
+0.0 0.0 1.74 1.0 .false.
+SUBSC
+1.74 1.2 0.15 'x' 1 'f ' -1
+ARC
+0.0 0.0 1.0 -210 -240 .true.
+GFONT
+4
+CENTER
+-0.5 0.4 0.15 'q' 0.0
+GFONT 
+7
+NEWPEN
+1
+GFONT
+4
+LEFT
+-1.3 -0.5 0.15 'q = ' 0.0
+GFONT
+0
+LEFT
+999.0 -0.5 0.15 'BAZ + 180 - ' 0.0
+SUBSC
+999.0 -0.5 0.15 'AZ' 2 'DAS' 3
+GFONT 
+0
+PLOT
+-3.0 -3.0 -3
+PEND
+EOF
+
+cat GRID.PLT CALPLT.PLT > ${PROTO}.PLT
+plotnps -F7 -W10 -EPS -K < ${PROTO}.PLT > ${PROTO}.eps
+mv CALPLT.PLT ${PROTO}.PLT
+DOPLTPNG ${PROTO}.PLT
+
+rm -f red green black blue
+rm -f grid.d
