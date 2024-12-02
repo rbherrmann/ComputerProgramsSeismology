@@ -1,8 +1,0 @@
-#!/bin/sh
-
-#####
-#   test code for TI programs
-#####
-
-DOIT1
-DOIT3
