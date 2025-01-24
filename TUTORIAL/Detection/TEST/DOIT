@@ -1,0 +1,25 @@
+#!/bin/sh
+
+gsac << EOF
+r 0555980100.ZSS
+synchronize o
+lh kzdate kztime b e
+synchronize b
+lh kzdate kztime b e
+synchronize e
+lh kzdate kztime b e
+q
+EOF
+gsac << EOF
+cut cal 1970 01 01 00 10 00 000 cal 1970 01 01 00 14 00 000
+r 0555980100.ZSS
+w append .cut
+synchronize o
+lh kzdate kztime b e
+synchronize b
+lh kzdate kztime b e
+synchronize e
+lh kzdate kztime b e
+q
+EOF
+

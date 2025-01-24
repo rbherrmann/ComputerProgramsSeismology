@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+  </head>
+<body>
+<h2>Introduction</h2>
+<p>
+Synthetic seismograms were computed for the AK135 continental model using wavenumber integration and surface-wave model superposition techniques. The
+former yields complete seismograms which include the many body wave arrivals while the latter consist of just the fundamental mode arrival. The synthetics are the ZSS Green's function, vertical component and strike-slip source, for a source depth of 10km, a location in the crust. The Green's functions are those of ground velocity.
+</p>
+<p>
+To illustrate features, there are four sets of figures:
+</ul>
+<li> Broadband ground velocity</li>
+<li> Ground velocity filtered using the Sac/gsac command
+<br>
+<pre>
+transfer from none to none freqlimits 0.01 0.02 0.04 0.05
+</pre>
+<br>
+which  has a zero response outside the band limits</li>
+<li> Narrow band-pass filtered displacement obtained by integrating the previous time series</li>
+<li> Envelope of the filtered displacement</li>
+</p>
+<p> As will be obvious on comparing the figures, for this crustal event, the low frequency signal is dominated by the surface wave.</p>
+<p>
+</p>
+<h2>Complete synthetics</h2>
+<p>
+<table>
+
+<tr>
+	<th>Broadband velocity</th>
+	<th>Bandpassed velocity</th>
+</tr>
+<tr>
+	<td><img src="WK1.png"></td>
+	<td><img src="WK2.png"></td>
+</tr>
+<tr>
+	<th>Bandpassed displacement </th>
+	<th>Envelope of bandpassed displacement </th>
+</tr>
+<tr>
+	<td><img src="WK3.png"></td>
+	<td><img src="WK4.png"></td>
+</tr>
+</table>
+</p>
+<h2>Fundamental mode surface-wave  synthetics</h2>
+<p>
+<table>
+<tr>
+	<th>Broadband velocity</th>
+	<th>Bandpassed velocity</th>
+</tr>
+<tr>
+	<td><img src="SW1.png"></td>
+	<td><img src="SW2.png"></td>
+</tr>
+<tr>
+	<th>Bandpassed displacement </th>
+	<th>Envelope of bandpassed displacement </th>
+</tr>
+<tr>
+	<td><img src="SW3.png"></td>
+	<td><img src="SW4.png"></td>
+</tr>
+</table>
+</p>
+<h2>Discussion</h2>
+<p>
+Considering the complete wavenumber integration synthetics, it is seen that the bandpass filtering removes many of the body wave arrivals. In addition the dominant signal is identified as the fundamental mode surface wave by comparison to the surface wave synthetics in the second set of figures. The envelope of the filtered displacement follows the fundamental mode surface wave and becomes narrower at shorter distances.
+</p>
+<p>
+The wavenumber integration synthetics were previously pre-computed for use with body-wave moment tensor determination, and did not start until the epicentral distance was 30<sup>o</sup>. The surface waves start at an arc distance of 5<sup>o</sup>. At short distance the signal is compact and relatively undispersed. The important observation is that the envelope becomes pulse-like at short distances. Thus if an observed signal of correcter for dispersion back to zero distance, the envelope will be pulse-like with a duration related to the duration of the source time function and the bandpass filter used.
+<p>
+Part 3 of the tutorial focuses on the development and application of the compression algorithm.
+</p>
+</p>
+
+
+</body>
+</html>

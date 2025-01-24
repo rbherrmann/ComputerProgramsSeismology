@@ -1,0 +1,24 @@
+#!/bin/sh
+
+#####
+#   make a list or distances and azimuths for an epicenter to the
+#   stations
+#   only keep those for which the 30 <= DELDEG <=90
+#   and network is IU
+#####
+EVLA=0.0
+EVLO=0.0
+
+rm -f list1.txt
+
+while read KSTNM KNETWK STLA STLO
+do
+	GCARC=`udelaz -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO -GCARC`
+	DIST=`udelaz -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO -DIST`
+	AZ=`udelaz -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO -AZ`
+	BAZ=`udelaz -EVLA $EVLA -EVLO $EVLO -STLA $STLA -STLO $STLO -BAZ`
+	echo $KSTNM $KNETWK $STLA $STLO $GCARC $DIST $AZ $BAZ >> list1.txt
+done < neicingest.txt 
+sort -n -k5 list1.txt | uniq > list2.txt
+grep ' IU ' list2.txt > list3.txt
+cat list3.txt  | awk '{if($5 >=30.0 && $5 <=90.0)print $1,$2,$3,$4}' > list4.txt

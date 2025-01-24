@@ -1,0 +1,85 @@
+
+#!/bin/sh
+
+#####
+#    for a given file
+#    compress the signal for the predicted distance
+#####
+
+if [ $# -ne 14 ]
+then
+	echo Usage: DOCOMPRESS SacFile DIST Dispersion UMAX UMIN  NZYEAR NZJDAY NZMON NZDAY NZHOUR NZMIN NZSEC NZMSEC DOGEOM
+	echo $*
+	exit 0
+fi
+echo $*
+
+SACFILE=$1
+DIST=$2
+DISPERSION=$3
+UMIN=$4
+UMAX=$5
+NZYEAR=$6
+NZJDAY=$7
+NZMON=$8
+NZDAY=$9
+NZHOUR=${10}
+NZMIN=${11}
+NZSEC=${12}
+NZMSEC=${13}
+DOGEOM=${14}
+
+#####
+#	Sacfile	- recorded waveform for this test
+#		normally one would access the particular NNSSSSSCCLL for a station
+#		location from the data base
+#	DIST	distance in km from the trial epicenter to the station
+#	Dispersion - path dependent dispersionfor the particular NNSSSSSCCCLL, e.g.,
+#		if Z component then this would be the Rayleigh disperion
+#		if R component then this would be the Rayleigh disperion
+#		if T component then this would be the Love     dispersion 
+#	UMIN, UMAX - group velocity window for the signal that focuses on the
+#		surface wave. Note tis could be extraced from the disperion curves
+#		The purpose of this is to grab a segment of the continuous recording
+#		for this analysis
+#	NZYEAR NZJDAY NZHOUR NZMIN NZSEC NZMSEC trial origin time
+#####
+#	Output
+#	The result will be a phase-match filtered compressed signal, with the
+#	name ${SacFile}.compress
+#####
+
+#####
+#       the steps are as follow
+#       window the trace using taper. it is assumed that UMIN and UMAX are actually
+#       0.9 minimum group velocity and 1.1 maximum group velocity respectively
+#       So apply a taper
+##### 
+
+
+#####
+#       get the data segment
+#####
+TMIN=`echo $DIST $UMAX | awk '{print $1/$2}' `
+TMAX=`echo $DIST $UMIN | awk '{print $1/$2}' `
+START=`redodate $NZYEAR $NZMON $NZDAY $NZHOUR $NZMIN $NZSEC $NZMSEC ${TMIN} | awk '{print $1,$2,$3,$4,$5,$6,$7}' `
+END=`  redodate $NZYEAR $NZMON $NZDAY $NZHOUR $NZMIN $NZSEC $NZMSEC ${TMAX}   | awk '{print $1,$2,$3,$4,$5,$6,$7}' `
+echo cut cal $START cal $END
+gsac << EOF
+rh $SACFILE
+# this is a hack for the cut to work 
+# becuase of a bug in gsac until 01/18/2025
+synchronize B
+wh
+cut cal $START cal $END
+r $SACFILE
+w append .cut
+q
+EOF
+
+B=`basename ${SACFILE} `
+saccompress ${B}.cut ${DIST} ${DISPERSION} ${DOGEOM}
+
+
+
+

@@ -1,0 +1,60 @@
+#!/bin/sh
+
+#####
+#    make a listing of
+#####
+rm -f env.txt
+for i in END*stk
+do
+	saclhdr -NL -EVLA -EVLO -DEPMAX -TIMMAX $i >> env.txt
+done
+
+#####
+#    now find the maximum stack envelope
+#####
+# sort does not work with exponentials
+# awk can handle exponentials
+#MAXENV=`sort -n -k3 env.txt | tail -1 | awk '{print $3}' `
+MAXENV=`cat env.txt | awk 'BEGIN{mx=0}{if($3> max)max=$3}END{print max}'`
+echo MAXENV = $MAXENV
+#####
+#    now normalize to the maximum
+#####
+rm -f envnorm.txt
+while read ELAT ELON DEPMAX TIMMAX
+do
+        echo $ELAT $ELON $DEPMAX $TIMMAX 
+	echo $ELAT $ELON $DEPMAX $TIMMAX | awk '{printf "%8.4f %9.4f %10.4f %10.4f\n", $1, $2, $3/'"${MAXENV}"',$4}' >> envnorm.txt
+done < env.txt
+DLAT=`cat DLAT`
+DLON=`cat DLON`
+
+#####
+#  rather than learning GMT use some simple genplt commands
+#  note this is hard wired to the example
+#####
+
+
+cat > cal.cmd << EOF
+NEWPEN
+1
+BOX
+-5 -5 5 5 ' ' 1
+EOF
+
+while read ELAT ELON EMAX TIMMAX
+do
+PEN=`echo $EMAX | awk '{printf "%5d", $1*1000 + (1-$1)*1100}'`
+echo NEWPEN >> cal.cmd
+echo $PEN >> cal.cmd
+echo SFILL >> cal.cmd
+echo \'SQ\' 0.25 $ELAT $ELON  >> cal.cmd
+done < envnorm.txt
+
+echo PEND >> cal.cmd
+
+calplt < cal.cmd
+DOPLTPNG CALPLT.PLT
+mv CALPLT.png ../Figures
+
+

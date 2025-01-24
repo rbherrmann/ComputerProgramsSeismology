@@ -22,7 +22,7 @@ The purpose of this tutorial is to model strain and displacement at DAS elements
 thus it differs from the tutorial <a href="../CPSstrain/index.html"> CPSstrain</a> in that example can be modified to model actual data sets.
 </p>
 <p>
-The file <a href="../CPSstrain/strain.pdf"> ../CPSSTRAIN/strain.pdf</a> describes the theory of the CPS codes used to model the dispalcement, strain and stress fields.
+The file <a href="../CPSstrain/strain.pdf"> ../CPSSTRAIN/strain.pdf</a> describes the theory of the CPS codes used to model the displacement, strain and stress fields.
 </p>
 <p>
 
@@ -129,17 +129,17 @@ DOITWK
 </pre>
 </p>
 <p>
-The script DOITWK  is based on a rewal data set. The script consists of the following
+The script DOITWK  is based on a real data set. The script consists of the following
 sections:
 <ul>
 <li>Define the source hypocentral coordinates and mechanism</li>
 <li>Define the velocity model</li>
 <li>Starting with a tabulation of geographic coordinates of points on the DAS line, 
 create a table of triplets of locations where the three entries define a linear section of
-the DAS line. The first and third sets define the horizontal orientaion of the DAS line while the second set is used to define the 
+the DAS line. The first and third sets define the horizontal orientation of the DAS line while the second set is used to define the 
 distance from the source, the azimuth from the source to the element and the back-azimuth from the element to the source.</li>
 <li>For each DAS element, compute the ground velocity and strains at the element in the x<sub>r</sub>, x<sub>&phi;</sub> and x<sub>z</sub> coordinate system and then rotate it to the DAS local coordinate system for each element. the result will be the desired
-E<sub>11</sub> strain  and u<sub>1</sub>.</li> displacment, or equivalently the
+E<sub>11</sub> strain  and u<sub>1</sub>.</li> displacement, or equivalently the
 E<sub>xx</sub> and u<sub>x</sub> which will be the output of <b>hpulse96strain</b> or <b>spulse96strain</b>. 
 <li>Finally make a map using GMT5+ showing the epicenter and DAS elements. </li>
 </ul>
@@ -151,9 +151,9 @@ E<sub>xx</sub> and u<sub>x</sub> which will be the output of <b>hpulse96strain</
 </figcaption>
 </figure></p>
 <p> 
-<figure><img src="WKPRS001.png"> <figcaption>True amplitude lot of the u<sub>1</sub> ground velocity along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<figure><img src="WKPRS001.png"> <figcaption>True amplitude lot of the u<sub>1</sub> ground velocity along the profile. Positive amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
 <p> 
-<figure><img src="WKPRS002.png"> <figcaption>True amplitude lot of the E<sub>11</sub> ground strain along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<figure><img src="WKPRS002.png"> <figcaption>True amplitude lot of the E<sub>11</sub> ground strain along the profile. Positive amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
 <p>
 </p>
 <h3>Modal superposition</h3>
@@ -162,17 +162,17 @@ E<sub>xx</sub> and u<sub>x</sub> which will be the output of <b>hpulse96strain</
 cd DASSTRAIN
 DOITSW
 </pre>
-<p>This script invokes the surface wave codes. Since the surface wave synthetic will include only thos arrivals with pghase velocities less than or equal to the halfspace S-wave velocity and since the example has the source in the mediaum where V<sub>P</sub> is 6 km/s, the mdoel used for the wavenumber integration will not be able to model the wavefield due to the direct P wave. To address this a layer is placed at depth with V<sub>P</sub>=14 km/s and V<subn>S</sub>=7 km/s. The resulting synthetics are known as locked mode synthetics. </p>
+<p>This script invokes the surface wave codes. Since the surface wave synthetic will include only those arrivals with phase velocities less than or equal to the halfspace S-wave velocity and since the example has the source in the medium where V<sub>P</sub> is 6 km/s, the model used for the wavenumber integration will not be able to model the wavefield due to the direct P wave. To address this a layer is placed at depth with V<sub>P</sub>=14 km/s and V<subn>S</sub>=7 km/s. The resulting synthetics are known as locked mode synthetics. </p>
 <p>
 The next two figures overlay the wavenumebr integration and locked mode synthetics using different colors for each.. the comparison is excellent.
 </p>
 <p> 
-<figure><img src="SWWKPRS001.png"> <figcaption>True amplitude lot of the u<sub>1</sub> ground velocity along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<figure><img src="SWWKPRS001.png"> <figcaption>True amplitude lot of the u<sub>1</sub> ground velocity along the profile. Positive amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
 <p> 
-<figure><img src="SWWKPRS002.png"> <figcaption>True amplitude lot of the E<sub>11</sub> ground strain along the profile. Positve amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
+<figure><img src="SWWKPRS002.png"> <figcaption>True amplitude lot of the E<sub>11</sub> ground strain along the profile. Positive amplitudes are shaded. The red tics indicate the theoretical P and S first-arrival times. </figcaption></figure></p>
 <h3>Discussion</h3>
-<p>One interesting aspect of thjis study is that the initiual P-wave amplitudes are very small for this source mechanism.
-Another interesting feature is that the E<sub>11</sub> is very simialr oin appearance to the u<sub>1</sub> groupnd velocity. f:wq
+<p>One interesting aspect of this study is that the initial P-wave amplitudes are very small for this source mechanism.
+Another interesting feature is that the E<sub>11</sub> is very similar in appearance to the u<sub>1</sub> ground velocity. 
 </p>
 <h3>Support scripts</h3>
 <p>

@@ -1,0 +1,129 @@
+#!/bin/sh
+
+#####
+#     perform a grid search over possible source locations
+#     stack envelopes as a function of event location
+#     and plot the stack maximum
+#####
+
+#####
+#    compile saccompress.f
+#####
+gfortran saccompress.f -o saccompress
+
+
+rm -f *cut *cmp *stk*
+
+#####
+#    In operation one would posit an rogin time and then 
+#    compress expected signals and then plot to indicate the
+#    location.
+#    Then increment the orgin time and repeat. In this
+#    processing example one could create a new outer loop that
+#    increments origin time
+#
+#    TARGET ORIGIN TIME
+#####
+NZYEAR=2025
+NZJDAY=025
+NZHOUR=01
+NZMIN=02
+NZSEC=00
+NZMSEC=000
+
+NZMON=01
+NZDAY=25
+
+
+
+
+#####
+#    perform a grid search over possible source locations
+#    For this tutorial indicate the increment for later plotting
+#    in the files DLAT and DLON
+#####
+echo 1.0 > DLAT
+echo 1.0 > DLON
+for EVLA in 0
+do
+	for EVLO in 0
+	do
+	#    for each station compute the distance from this trial location and
+	#    compress the signal based on this distance
+	#     
+	#    Here I will cheat since I have a list of NNSSSSSCCLL.SAC files
+	#    Normally one would have list of stations and components, from which
+	#    one would get coordinates and waveforms, etc
+	#    The network observed waveforms for the time period
+	#    starting at 2025/01/25T01:02:30:456  are in the ../Forward directory
+	#    and have a length of 5000s.
+	#
+	#    Here process only the verticla component
+	#####
+		#####
+		#  search over all stations
+		#####
+		for NNSSSSSCCCLL in ` ls ../Forward/*HZ*.SAC  `
+		do
+		#  get the distance from the trial location to the station.
+		# Use the CPS command saclhdr to get header bvalues. Operationally this 
+		# would be obtained from a precomputed  data base.
+		#####
+		STLA=`saclhdr -STLA ${NNSSSSSCCCLL}`
+		STLO=`saclhdr -STLO ${NNSSSSSCCCLL}`
+		# now get the distance in km
+		DIST=`udelaz -DIST -STLA $STLA -STLO $STLO -EVLA $EVLA -EVLO $EVLO`
+	 	# Note the radial and transverse components were created for the known
+		# location.
+		# Operationally, for each trial location, one would rotate the observed
+		# horizontals to form radial and transverse with respect to the trial location.
+		# If only verticals are sued, this is not a concern. If the search area is
+		# small, this may not ba a concern.
+		# define the dispersion type, R for Rayleigh and L for Love
+		KCMPNM=`saclhdr -KCMPNM ${NNSSSSSCCCLL}`
+        	case ${KCMPNM} in
+                	BHZ|HHZ|LHZ|HNZ) TYPE="R" ;;
+                	BHR|HHR|LHR|HNR) TYPE="R" ;;
+                	BHT|HHT|LHT|HNT) TYPE="L" ;;
+        	esac
+#		echo ${NNSSSSSCCCLL} $DIST $TYPE $STLA $STLO $EVLA $EVLO
+		#####
+		#  dispersion limits. For this station,  output will be in the file  cu.txt 
+		#  which will have the entry
+		#  UMIN UMAX PERMIN PERMAX UDISP CDISP
+		# The cu.txt is used to return results DODISPERSION
+		#####
+
+		#####
+		#   get the dispersion for this path. The output for thiw wae type
+		#   will be in the files U.dsp (fro group velocity) and C.dsp (for phase velocity).
+		#   Depending on the source of the dispersion information for the path, there
+		#   will be period and group velocity limits which DODISPERSION puts into the
+		#   cu.txt file
+		#####
+		DODISPERSION  $DIST $TYPE $STLA $STLO $EVLA $EVLO
+		read UMIN UMAX PERMIN PERMAX UDISP CDISP < cu.txt
+		#####
+		#  use the phase velocity to compress the signal to the source
+		#  The first step is to apply a group velocity window, with the resultant
+		#  sac file having a .cut appended. Then the compression is applied  to the cut signal
+		#  with the result having .cmp appended.  Thus if the original file is
+		#  IUKONO_HHZ__.SAC, this script will create a IUKONO_HHZ__.SAC.cut and IUKONO_HHZ__.SAC.cut.cmp
+		#  If DOGEOM is true, the compressed signal is multiplied by dist
+		#####
+		DOGEOM="FALSE"
+		DOGEOM="TRUE"
+		DOCOMPRESS  ${NNSSSSSCCCLL} $DIST $CDISP $UMIN $UMAX $NZYEAR $NZJDAY $NZMON $NZDAY $NZHOUR $NZMIN $NZSEC $NZMSEC ${DOGEOM}
+		done
+
+
+	#####
+	# clean up some processing
+	#####
+
+	# ELON
+	done
+# end ELAT
+done
+ DOSHOW
+

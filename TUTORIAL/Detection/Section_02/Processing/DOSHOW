@@ -1,0 +1,32 @@
+#!/bin/sh
+
+rm -f PRS*PLT
+
+gsac << EOF
+bg plt
+r ../Forward/*HZ*SAC
+prs gcarc amp 0.2
+r *.cut
+prs
+r *.cmp
+prs
+env
+prs
+prs sa 0
+stack norm on
+p
+q
+EOF
+
+DOPLTPNG PRS*PLT P001.PLT
+
+#####
+#    clean up
+#####
+DOPLTPNG PRS*.PLT P001.PLT
+for i in PRS*png P001.png
+do
+	mv $i ../Figures/X_$i
+done
+rm -f PRS*.CTL PRS*PLT P001.PLT
+

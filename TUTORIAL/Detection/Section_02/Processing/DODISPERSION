@@ -1,0 +1,75 @@
+#!/bin/sh
+
+#####
+#    get the dispersion for the path
+#    and window information
+#####
+
+
+
+if [ $# -ne 6 ]
+then
+	echo Usage: DODISPERSION  DIST TYPE STLA STLO EVLA EVLO
+	echo $*
+	exit 0
+fi
+DIST=$1
+TYPE=$2
+STLA=$3
+STLO=$4
+EVLA=$5
+EVLO=$6
+
+#####
+#	DIST	distance in km from the trial epicenter to the station
+#	TYPE    L for Love, R for Rayleigh
+#	STLA,STLO - station coordinates
+#	EVLA,EVLO - epicenter coordinatges
+
+#####
+#	Output
+#       the file cu.txt will contain
+#	UMIN UMAX PERMIN PERMAX UDISP CDISP
+#	UMIN,UMAX - group velocities defining the expected surface wave window
+#	PERMIN, PERMAX - period defining range of dispersion to use
+#       UDISP - file containing group velocites for this wave type in surf96 format
+#       CDISP - file containing phase velocites for this wave type in surf96 format
+#####
+
+#####
+#       operationally one would go to a data base to determine the values for the path
+#       If the dispersion are given in a gridded form, one would have to compute the
+# 	effective dispersion  by integration over the path, e.g., vel = INT ds / INT (1/V(s)) ds
+#
+#	here we use the dispersion from the model that was used to make the synthetics
+#####
+
+PERMIN=20
+PERMAX=150
+#####
+#     this is where I get it from the precomputed velues for the tak135sph.mod
+#     But rather than getting it from the source directory, this tutorial already has them
+#     in this directory
+#####
+#DISPER=${GREENDIR}/AK135.TEL/SW
+DISPER="."
+case ${TYPE} in
+	L)
+		grep ' U ' $DISPER/SLEGN.dsp | \
+			awk '{if ($6 >= '"${PERMIN}"' && $6 <= '"${PERMAX}"')print $1,$2,$3,$4,$5,$6,$7,$8}' > U.dsp
+		grep ' C ' $DISPER/SLEGN.dsp | \
+			awk '{if ($6 >= '"${PERMIN}"' && $6 <= '"${PERMAX}"')print $1,$2,$3,$4,$5,$6,$7,$8}' > C.dsp
+		;;
+	R)
+		grep ' U ' $DISPER/SREGN.dsp | \
+			awk '{if ($6 >= '"${PERMIN}"' && $6 <= '"${PERMAX}"')print $1,$2,$3,$4,$5,$6,$7,$8}' > U.dsp
+		grep ' C ' $DISPER/SREGN.dsp | \
+			awk '{if ($6 >= '"${PERMIN}"' && $6 <= '"${PERMAX}"')print $1,$2,$3,$4,$5,$6,$7,$8}' > C.dsp
+		;;
+esac
+
+#####
+#   define the group and phase velociy limit but permit room for a 10% taper
+UMIN=`cat U.dsp | awk '{print $7}' | sort -n | head -1 | awk '{print 0.9*$1}' `
+UMAX=`cat U.dsp | awk '{print $7}' | sort -n | tail -1 | awk '{print 1.1*$1}' `
+echo $UMIN $UMAX $PERMIN $PERMAX U.dsp C.dsp > cu.txt

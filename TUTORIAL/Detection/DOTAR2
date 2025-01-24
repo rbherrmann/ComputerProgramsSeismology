@@ -1,0 +1,8 @@
+#!/bin/sh
+
+tar cf - Section_02/Forward \
+	Section_02/Processing/DO* \
+	Section_02/Processing/tDOSEARCH \
+	Section_02/Processing/saccompress.f \
+	Section_02/Processing/*.dsp \
+	| gzip -c > Section_02.tgz

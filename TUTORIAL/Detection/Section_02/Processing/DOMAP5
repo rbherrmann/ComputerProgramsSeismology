@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#####
+#    get the values from envnorm.txt
+#####
+cat envnorm.txt | awk '{ print $1,$2,$3, 0.20}' > env.xyz
+
+PROJ2="-R0/10.5/0/11/ -Jx3  -V"
+LATLON1="-179/-10/-10/85"
+
+LATLON="-5/5/-5/5"
+PROJ="L-5/5/-5/5/10c"
+TICS="a1.00g0/a1.00g0wsne"
+FNAME=ENVNORM5.eps
+
+gmt makecpt  -Cpolar -T0.00/1.00/0.05 > mypolar.cpt
+gmt set PS_MEDIA letter  PS_PAGE_ORIENTATION portrait
+
+gmt pscoast   -J${PROJ} -R${LATLON} -B${TICS}   -W -K -Na -Dh   -G240 -S255/255/255   >> ${FNAME}
+gmt psxy env.xyz -Sc -Cmypolar.cpt -:  -J$PROJ -R${LATLON} -W0.01p -O   >> ${FNAME}
+
+
