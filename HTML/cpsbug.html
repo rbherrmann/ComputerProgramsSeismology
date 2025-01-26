@@ -64,10 +64,31 @@ pre {
     <hr>
     <hr>
     <h2 class="western"><a name="2025"></a>2025</h2>
-<h3>January 17, 2024</h3>
+<h3>January 26, 2025</h3>
+      <ul>
+        <li>The current distribution is NP330.Jan-26-2025.tgz</li>
+      </ul>
+<h3>January 26, 2025</h3>
+<ul>
+<li>Created the program <b>hwhole96strain</b> which extends <b>whole96</b>.
+This new code  provides the analytic Fourier transforms of the Green's functions and their <i>d/dz</i> for a homogeneous, isotropic medium that are used to producing strain series when used with <b>hpusle96strain</b>.  As such these are faster to run <b>hspec96strain</b> for this simple medium. One use of these wholespace codes for a wholespace is to test the numerical wavenumber integration of  <b>hspec96</b> and <b>hspec96strain</b>, especially at lower frequencies.  </li>
+</ul>
+<h3>January 17, 2025</h3>
 <ul>
 <li>
-A serious bug was corrected in the implementation of the <i>cut cal 2024 01 10 12 34 56 0000</i> and <i>cut gmt 2024 10 12 34 56 000</i> commands. If the reference time was not set such that the header  value <i>B = 0 </i>, the cut would be offset by <i>B</i> seconds. This required a correction in the file <i>gsac_sac.h</i>.
+A serious bug was corrected in the implementation of the <i>cut cal 2024 01 10 12 34 56 0000</i> and <i>cut gmt 2024 10 12 34 56 000</i> commands. If the reference time was not set such that the header  value <i>B = 0 </i>, the cut would be offset by <i>B</i> seconds. This required a correction to the procedure <i>brswac()</i>  in the file <i>gsac_sac.h</i>.
+The correction in the procedure brsac() when CUT_CAL or CUT_GRN are true  was to change
+<br>
+<pre>
+                        tv = (float)(gsac_control.cutepoch[i]-tzref);
+</pre>
+<br>
+                to
+<br>
+<pre>
+                        tv = (float)(gsac_control.cutepoch[i]-tzref-newsachdr.rhdr[H_B]);
+</pre>
+<br>
 </li>
 </ul>
     <hr>
