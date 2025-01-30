@@ -1,0 +1,928 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple.css Test Page</title>
+	<!-- The following are some stylesheets for testing -->
+	<!-- Sanitize.css reset -->
+	<!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+	<!-- Latest release version of Simple.css -->
+	<!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+	<!-- Latest commit from GitHub -->
+	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+	<!-- Local version -->
+	<link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2>Program Description</h2></header>
+<h2>Software distribution as of 2025/01/27</h2>
+<p>
+This is a listing of the 157 programs currently distributed as 
+part of the Computer Programs in Seismology. 
+These have been developed over the years, and many are little   used
+in my current research. For example, the FILE96 file format 
+used  for waveforms and many programs were written to  
+filter and display waveforms. Currently I work with files in the SAC  
+binary format and use the CPS <b>gsac</b> for processing, although the FILE96 format is used to
+create  Sac files, e.g., <b>f96tosac</b>.   
+</P>
+<p>
+The &#10004; in the first column indicates the programs that I use most.  The second column proviede a simple description of the program. The final column provides a link to PDF docuemntation and/or to a specific tutorial.
+</p>
+<p>
+<table style="width: 100%">
+    <colgroup>
+       <col span="1" style="width:  5%;">
+       <col span="1" style="width: 50%;">
+       <col span="1" style="width: 45%;">
+    </colgroup>
+<thead>
+<tr>
+	<th text-align: center;>Most Used</th>
+	<th text-align: center;>Program</th>
+	<th text-align: center;>Document/Tutorial</th>
+</tr>
+</thead>
+<tbody>
+<TR>
+<TD style="color:white;"   colspan="3" bgcolor="#FF0000" > <b>INVERSION FOR VELOCITY MODEL</b> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD colspan="2" style="color:white;"   bgcolor="#000000" > Surface wave inversion </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>surf96</b> which calls the programs
+<b>srfdis96</b>,
+<b>srfdrl96</b>,
+<b>srfdrr96</b>,
+<b>srfgph</b>,
+<b>srfinv96</b>,
+<b>srfphr96</b>,
+<b>srfphv96</b>,
+<b>srfpre96</b>,
+<b>srfrph</b> and
+<b>srfvph</b>
+ </TD>
+<TD>  <a href="CPS/CPS330/cps330c.pdf"> Crustal structure - Chap. 3</a>
+<br> <A href="TUTORIAL/LessonA/index.html">Surface wave synthetics and group velocity</a> 
+<br><a href="TUTORIAL/STRUCT/index.html">Inversion for structure</a></TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD  colspan="2" bgcolor="#000000" style="color:white"> Receiver function inversion </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>rftn96</b> - Receiver function inversion program which calls
+<b>rftndr96,
+<b>rftnpr96</b>, <b>rftnpv96</b> and <b>rftnvp</b>
+ </TD>
+<TD> <a href="CPS/CPS330/cps330c.pdf"> Crustal structure - Chap. 4</a> 
+<br><a href="TUTORIAL/STRUCT/index.html">Inversion for structure</a> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD  colspan="2" bgcolor="#000000" style="color:white"> Joint inversion of surface wave dispersion and receiver function </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>joint96</b> which calls <b>jntpre96</b> and the support  programs of <b>surf96</b> and <b>rftn96</b></TD>
+<TD> <a href="CPS/CPS330/cps330c.pdf"> Crustal structure - Chap. 5</a> 
+<br><a href="TUTORIAL/STRUCT/index.html">Inversion for structure</a> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white"> Joint inversion of surface wave dispersion and first arrival times. This needs a tutorial </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>shallow96</b> - Joint inversion of dispersion and first arrival times. This calls 
+<b>shalpr96</b>,
+<b>srfdis96</b>,
+<b>srfdrl96</b>,
+<b>srfdrr96</b>,
+<b>ttinvdr96</b>,
+<b>srfinv96</b>,
+<b>srfvph</b>,
+<b>ttinvvp</b>,
+<b>srfgph</b> and
+<b>srfrph</b>
+ </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white"> Inversion of first arrival times </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>ttinv96</b> - A travel time inversion program which  calls
+<b>ttinvdr96</b>,
+<b>ttinvpr96</b>,
+<b>ttinvpv96</b>and
+<b>ttinvvp<b>
+</TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white"> Surface wave inversion kernels </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>srfker96</b> - This uses the output of <b>surf96</b> for simple data set </TD>
+<TD> <a href="TUTORIAL/SWKERNELS/index.html"> Surface-wave inversion kernels -I </a>  </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>srfpar96</b> - Partial derivatives for actual data set </TD>
+<TD> <a href="TUTORIAL/SWKERNELS1/index.html"</a> Surface-wave inversion kernels - II  </TD>
+</TR>
+<TR>
+<TD style="color:white;"   colspan="3" bgcolor="#FF0000" > <b>GENERALIZED RAY THEORY SYNTHETICS</b> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>gprep96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 2</a>  </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>genray96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 2</a>  </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>gpulse96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 2</a>  </TD>
+</TR>
+<TR>
+<TD style="color:white;"   colspan="3" bgcolor="#FF0000" > <b>CERVENY RAY TRACING SYNTHETICS</b> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>cprep96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>cseis96</b> </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 5</a>  </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>cpulse96</b> </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 5</a>  </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>cray96</b> </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 5</a>  </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>SURFACE WAVE DISPERSION AND SYNTHETICS</b> </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white"> Isotropic model: </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sprep96</b>  - prepare a data set for dispersion computation </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdisp96</b>  - get Love and Rayleigh pahse velocity  for isotropic media </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>scomb96</b>  - fix disperiosn curves if a mode is skipped </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>slegn96</b>  - compute Love wave eigenfunctions </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sregn96</b>  - compute Rayleigh wave eigenfunctions </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>spulse96</b> - make a synthetic by convolving with source pulse </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>spulse96strain</b> - make a stress, sgtreen synthetic by convolving with source pulse </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 10</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdpder96</b> - display depth dependent eigenfunctions </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdpdsp96</b> - plot observed data in same format as <b>sdoegn96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdpegn96</b> - display eigenvalues, phase roupd velocity, etc </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdprad96</b> - plot radiation patterns for a given double couple mechanism </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a><br><a href="CPS/CPS330/cps330s.pdf>Crustal structure = Chap 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdpspc96</b> - plot theoretical spectra </TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 4</A> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sdpsrf96</b> - plot theoretical phase velocities from <b>sdisp96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>rlegn96</b>  - Love wave eigenfunctionbs using generalized reflection matricea. This 
+will handle low velocity zones correctly </TD>
+<TD> <a href="TUTORIAL/RDOC/index.html">Eigenfunctions using GR matrices</a>  </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>rregn96</b>  - Rayleigh wave eigenfunctionbs using generalized reflection matrica. This 
+will handle low velocity zones correctly </TD>
+<TD> <a href="TUTORIAL/RDOC/index.html">Eigenfunctions using GR matrices</a>  </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD> <b>slat2d96</b> - apply conservation of energy to fundamental model to 
+estimate dispersion and synthetics for a laterally varying medium</TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD>   </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white"> Transverse isotropic model: </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tprep96</b>  - prepare a data set for disperison computation </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tdisp96</b>  - compute Love and Rayleigh wave phase velocities </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tlegn96</b>  - compute Love wave eigenfunctions </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tregn96</b>  - compute Rayleigh wave eigenfunctions </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tpulse96</b> - make a synthetic by convolving with source pulse </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tcomb96</b>  - fix dispersion curves if a mode is skipped </TD>
+<TD>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tdpder96</b> - display depth dependent eigenfunctions </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tdpegn96</b> - display eigenvalues, phase roupd velocity, etc </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>tdpsrf96</b> - plot theoretical phase velocities from <b>tdisp96</b> </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>WAVENUMBER INTEGRATION SYNTHETICS</b>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white;"> Isotropic media </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hprep96</b>  - prepare the <b>hspec96</b> run </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 3</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hspec96</b>  - make wavenumber integration synthetics </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 3</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hprep96p</b> - prepare the <b>hspec96p</b> run </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 3</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hspec96p</b> - make plane wave synthetics </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 3</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>hwhole96</b> </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 3</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hpulse96</b> - convolve with source time function and create a FILE96 file </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 3</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hrftn96</b>  - make a P-wave receiver function for an isotrpic model </TD>
+<TD>  <a href="CPS/CPS330/cps330c.pdf"> Crustal structure - Chap. 4</a>  </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hspec96strain</b> - wavenumber integration for use with <b>hpulse96strain</b>  </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 10</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hwhole96strain</b> - analytic wholespace for  use with <b>hpulse96strain</b> </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hpulse96strain</b> - output Green, strain, stress time series </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 10</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>rspec96</b>  - wavenumber integration using generalized reflection matrices 
+will handle solid-fluid-solid problem </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>rspec96p</b> - plane wave synthetics using generalized reflection matrices </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>ISOTROPIC STEEPEST DESCENT TELESEISMIC SYNTHETICS</b> </td>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>hudson96</b> - Make teleseismic synthetics for layered structure at source  
+and receiver and ray tracing through the mantle </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>ISOTROPIC STATIC DISPLACEMENT</b> </td>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>hsanal96</b> - computes analytic permanent deformation Greens functions
+for a wholespace and halfspace for an isotropic model </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>hstat96</b>  - compute static deformation Green's functions for a layerd isotropic model </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>TRANSVERSE ISOTROPIC (VTI) MEDIA</b> </td>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>tspec96</b>  - compute wavenumber integration synthetic for transverse isotropic media </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>tspec96p</b> - compute plane wav e synthetics for transverse isotropic medium </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>tspec96strain</b> - wavenumber integration for use with <b>hpulse96strain</b>  for TI media </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 10</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>trftn96</b>  - make a P-wave receiver function for a transverse isotropic model </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>UTILITY PROGRAMS</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>elocate</b> - location program. Requires <b>sac2eloc</b> to create arrival file <i>elocate.dat</i> from the information in the Sac file headers. </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 4</a>
+<br><a href=TUTORIAL/LOCATE/index.html">Epicenter determination</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>udelaz</b>   - compute great circle distance (km), arc distance (deg), azimuth and back azimuth</TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>udtdd</b>    - compute P-wave ray parameter for Jeffreys-Bullen model. 
+Use <b>time96</b> or <b>ttime96</b> instead </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>stereo</b>   - compute stereo nets using equal area or equal angle projection. </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>redodate</b> - a date calculator. I use this to define a time 60 sec before 
+origin time when I request data</TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>mtinfo</b>   - decomposes a general moment tensor into isotropic - deviatoric, 
+isotropic - major double couple - minor double couple, etc </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white""> <b>MODEL96 PROGRAMS</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>shwmod96</b>  - plot the isotropic model </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 8</a>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>tshwmod96</b> - plot the transverse isotropic model </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>time96</b>    - compute first arrival time, ray parameter, T* for an isotropic 
+MODEL96 model file for a given distance and depth </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 8</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>timmod96</b>  - compute and plot first arrival times for an isotropic model </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 8</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>ttime96</b>   - compute first arrival time, ray parameter, T* for a transverse 
+isotropic MODEL96 model file for a given distance and depth </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>ttimmod96</b>  - compute first arrival time, ray parameter, T* for a transverse 
+isotropic MODEL96 model file for a given distance and depth </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>mkmod96</b>   - interactively create an isotropic velocity model in MODEL96 format </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 8</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>tmkmod96</b>  - interactively create a transverse isotropic model in MODEL96 format </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>is2timod</b>  - convert isotropic model to transverse isotropic model format </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>ti2ismod</b>  - convert a transverse isotropic model to the best isotropic model (Dahlen)</TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>refmod96</b>  - make a nice plot or refraction and reflection arrivals. Each invocation 
+of 'prs' in gsac will create a prototype shell script to 
+present an overlay of travel times onto waveforms </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 8</a> 
+</TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>prfmod96</b>  - an attempt to display a sequence of 1-D isotropic velocity models as contours on a profile</TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 8</a> </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>GRAPHICS</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>calxvig</b>  - this is required by all interactive graphics programs </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>plotdbg</b>  - debug a PLT file </TD>
+<TD> CaA </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>plotnps</b>  - convert a PLT file to PS or EPS </TD>
+<TD> Oa1,CaA </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>plotxvig</b> - display a PLOT file on an X11 screen </TD>
+<TD> Oa1,CaA </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>reframe</b>  - manipulate indivdual PLOT files to change position and to clip </TD>
+<TD> Oa1,CaA </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>genplt</b>  - a command line driven plot routine for making nice annotated plots </TD>
+<TD> <a href="CPS/CPS330/cps330p.pdf">CALPLOT - Chap. 7 </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>calplt</b>  - simple program that permits implementation of Calcomp calls interactively </TD>
+<TD> <a href="CPS/CPS330/cps330p.pdf">CALPLOT - Chap. 7 </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>Sac FILE PROGRAMS</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>gsac</b>     - SLU alternative to sac </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC </a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>shwsac</b>   - display contents of Sac header and plot the trace. This will show
+the actual header. On the other hand, gsac will comptue some values, 
+e.g., distance and azimuth, of possible. This is useful for debuggin the header </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>saccvt</b>   - convert binary Sac file byte order between big-endian and little endian. 
+When getting Sac files, it is often necessary to correct for the byte order:
+<br>
+<b>saccvt</b> -I < sac_file > tmp ; mv tmp sac_file
+<br>
+before sac_file can be used on the local machine.
+</TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a> <br><a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>asctosac</b> - convert Sac ASCII to Sac binary </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sactoasc</b> - convert Sac binary to Sac ascii </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a>  </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>saclhdr</b>  - list contents of Sac header. This is used to get header information from the sac file header </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sacpol</b>   - make particle motion plots in 2D </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sac2eloc</b> - read station coordiantes and arrival time picks from Sac header 
+to create the <i>elocate.dat</i. file for use with the location program <b>elocate</b>.
+</TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sacpsd</b>   - computer power spectral density for noise </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sacspc96</b> - plot spectra of Sac file </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sactof96</b> - convert sacfile to FILE96 format </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a>  </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>pltsac</b>   - general utility for plotting sac trace. Use primarily to compare 
+observed and predicted traces from source inversion </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sacdecon</b> - frequency domain water level deconvolution - use saciterd instead </TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a> 
+<br><a href="TUTORIAL/DECON/index.html">Estimating source time function</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sacevalr</b> - filter a sacfile using frequency-pahse and frequency-amplitude files 
+<br>
+! use the <b>gsac</b> 'transfer' instead</TD>
+<TD> <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a><br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>sacfilt</b>  - filter a sacfile using pole-zero file.<br>
+! use the <b>gsac</b> 'transfer' instead  </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a> <br><a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>saciterd</b> - iterative time-domain deconvolution for receiver functions or source time function determination  </TD>
+<TD>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>saciterdc</b>- C version of <b>saciterd</b> </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>sacampl</b>  - compute 1-D site response using Boore-Brown quarter wavelength method </TD>
+<TD><A href="TUTORIAL/SACAMPL/sacampl.html">Quarter wavelength site response"</a>   </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>srotate96</b> - given appropriate Sac files, rotate Ur Uz Ut, strain, stress, rotation to a lcoal X Y Z system </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 10</a> </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>SURFACE WAVE ANALYSIS</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>do_mft</b>   - GUI front end to <b>sacmft96</b> and <b>sacmat96</b>. This GUI calls 
+<b>sacmat96</b> and
+<b>sacmft96</b> 
+</TD>
+<TD> <a href="CPS/CPS330/cps330c.pdf"> Crustal structure - Chap. 3</a> 
+<br>
+<a href="EMPIRICAL_GREEN/index.html">Phase velocity from empirical Green</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>do_pom</b>   - GUI font end to <b>sacpom96</b>. this GUI calls <b>sacpom96</b>  which does a p-&omega; stack to get phase velocities</TD>
+<TD> <a href="CPS/CPS330/ps330c.pdf"> Crustal structure - Chap. 3</a>
+<br> <a href="TUTORIAL/LessonB/index.html">Surface wave synthetics and phase velocity</a>
+<br><a href="TUTORIAL/POMEGA/index.html">Phase velocity from a network</a>  </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>MFTSRF</b></b>   - Shell script to convert output of <b>do_mft</b> or <b>do_pom</b> to SURF96 format for inversion </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>SOURCE INVERSION</b> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD  colspan="2" bgcolor="#000000" style="color:white"> Surface wave spectral amplitude inversion </td>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>srfgrd96</b> </TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 4</A> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD colspan="2" bgcolor="#000000" style="color:white"> Waveform inversion programs </td>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>wvfdly96</b> - reads the time delay in the wvfgrd96 and wvfmtgrd96 created
+sac files to examine time shift as a function of azimuth 
+to estimate location error 
+ </TD>
+<TD>  <a href="TUTORIAL/MTIVTEST/index.html">Test of moment tensor inversion</a>  </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>wvfgrd96</b> - grid search for best double couple </TD>
+<TD> <a href="TUTORIAL/MTIVTEST/index.html">Test of moment tensor inversion</a>   </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>wvfmch96</b> - creates a synthetic for a given double couple or moment tensor </TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 5</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>wvfmt96</b>  - linear inversion for full moment tensor - however the 
+time shift correction is not implemented well and the
+ program has been superceded by <b>wvfmtgrd96</b></TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 5</a> <br>
+<A href="TUTORIAL/MTIVTEST/index.html"> Test of moment tensor inversion</TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>wvfmtd96</b> - linear inversion for deviatoric moment tensor - however the 
+time shift correction is not implemented well and the 
+program has been superceded by wvfmtgrd96 
+</TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 6</a> <br>
+<A href="TUTORIAL/MTIVTEST/index.html"> Test of moment tensor inversion</TD>
+</TR>
+<TR>
+<TD> <a href="TUTORIAL/TESTMGRD/index.html"> Test of wvfmtgrd96</a>   </TD>
+<TD> <b>wvfmtgrd96</b> - Implemention of Zhu and Ben-Zion grid search for 
+best double couple, deviatoric moment tensor or full 
+moment tensor. The time shifting works well. The deviatoric search 
+takes longer than the double couple search, and the full moment tensor  
+search takes longer than the deviatoric source, since there 
+at searches over 5, 4 and 3 parameters for the full, deviatoric and 
+double couple solutions, respectively. </TD>
+<TD> 
+<A href="TUTORIAL/MTIVTEST/index.html"> Test of moment tensor inversion</TD>
+</td>
+</TR>
+<TR>
+</TR>
+<TR>
+<TD>    </TD>
+<TD  colspan="2" bgcolor="#000000" style="color:white"> Utilities displaying the inversion results </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>fmdfit</b>   - plot goodness of fit output of <b>wvfgrd96</b> or <b>wvfmtgrd96</b> as a function of depth </TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>fmmfit</b?   - plot output of <b>wvfgrd96</b> to show goodness of fit as function of strike, dip and rake </TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>fmlpr</b?    - create an ASCII focla mechanism plot for double couple </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>fmplot</b>   - plot focal mechanism, P SV or SH amplitudes, for double coupl ort 
+moment tensor mechanism </TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 6</a><br><a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap. 4</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fmtp</b>     - Given  strike, dip or rake, determine 
+ parameters of the other nodal plane, or given P and T trend and  
+plunge, compute the nodal plane parameters 
+</TD>
+<TD> <a href="CPS/CPS330/cps330s.pdf"> Source - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>REFORMATTING PROGRAMS USING THE file96 FORMAT</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>f96tosac</b> Converts file96 file to Sac </TD>
+<TD>  <a href="CPS/CPS330/cps330g.pdf"> GSAC - Chap.5</a>,<br><A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 7</a>  </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>OTHER FILE96 PROGRAMS</b>
+<br>Most functionality is in <b>gsac</b></B> </td>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>f96list</b>  - List f96 header </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fbutt96</b>  - apply a Butterworth filter<br>  ! Use 'hp, lp, bp, br' in gsac </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a>  </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fderiv96</b> - Take a derivative of the f96 traces <br> ! Use 'dif' in gsac </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>ffilt96</b>  - Apply a polezero filter to f96 traces <br>  ! Use 'transfer' in gsac   </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>finteg96</b> - Integrate a f96 trace <br>! Use 'int' is gsac  </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fmech96</b>  - Apply a mechanism to f96 Greens functions<br>! Use 'mt' in gsac  </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>tfmech96</b> - Apply a mechanism to a data files created for an isotropic or  transverse isotropic 
+model - may eventually will replace fmech96  </TD>
+<TD> <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 9</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fplot396</b> - Plot sets of 3 traces. This was for use with  
+the 3 component waveforms generated using  
+fmech96 
+<br>! Use 'plot perplot 3' in gsac 
+</TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fplot96</b>  - This plotted traces <br>! Use 'plot' in gsac </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fplotg96</b> - Plot all Greens functions </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fprof96</b>  - Plot a record section<br>! Use 'prs ' in gsac </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fsel96</b>   - select a Green function of distance </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>fspec96</b>  - Plot spectra<br>! Use 'psp' in gsac </TD>
+<TD>  <A href="CPS/CPS330/cps330o.pdf"> Overview - Chap. 6</a> </TD>
+</TR>
+<TR>
+<TD  colspan="3" bgcolor="#FF0000" style="color:white"> <b>IRIS PROGRAMS</b> </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>evalresp</b>  - make a table of amplitude and pahse response from a SEED RESP file</TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD> &#10004; </TD>
+<TD> <b>rdseed</b>   - binary provided - old but still needed </TD>
+<TD>    </TD>
+</TR>
+<TR>
+<TD>    </TD>
+<TD> <b>xmlresp</b>  - create RESP file from FDSN statiobn XML file </TD>
+<TD>    </TD>
+</TR>
+</tbody>
+</table>
+</p>
+<footer>Last changed January 23, 2025</footer>
+  </body>
+</html>
