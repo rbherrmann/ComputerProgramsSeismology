@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+  </head>
+<body>
+<h2>1. Introduction</h2>
+<p>
+Unpack the <a ahref="section_03.tgz">section_03.tgz</a> with the command
+<pre>
+gunzip -c section_03.tgz | tar xvf - 
+</pre>
+</p>
+<p>
+This will create the directory <i>Section_03</i> with subdirectories <i>Section_03/Forward</i> and <i>Section_03/Processing</i>.
+</p>
+<h2>2. Data set in absolute time</h2>
+<p>
+Rather that viewing the data set in term of what is seen in real time, consider it as
+for all time, or essentially, previous acquired history that must be processed. A segment of that data stream is show in the next figure. For simplicity, it is assumed that the trial epicenter is the true epicenter.
+</p>
+<table>
+<trf>
+	<td><img src="PRS_FWD.png"</td>
+</tr>
+<table>
+<p>
+</p>
+
+<h2>3. Processing time windows using a group velocity window</h2>
+<p>
+In this set an origin time is assumed and then a time window is computed based on the travel time of the minimum and maximum group velocities to the station. In first example, the assumes origin time is offset -5, 0 or +5 minutes  about the true origin time of the signal.
+The consideration of 3 windows is used to illustrate the procedure. 
+</p>
+<p>
+The next figure displays the sections of data used for the data compression.
+</p>
+<table>
+<tr>
+	<th> -5 minutes </th>
+	<th> 0 minutes </th>
+	<th> +5 minutes </th>
+</tr>
+<tr>
+	<td><img src="PRS_m05.png"></td>
+	<td><img src="PRS_000.png"></td>
+	<td><img src="PRS_p05.png"></td>
+</tr>
+</table>
+<p>
+It is obvious that if the window diverges significantly from the range of the actualy data, then the signal compression and stacking will not yield significant values.
+</P>
+<p>
+The next figure illustrates this for offsets of -10, -5, 0, 5 and 10 minutes about the true origin time. The figures are annotated with the assumed origin time and the maximum amplitude  of the envelope. The assumed origin time is indicated by the red vertical bar on each plot.
+</p>
+<table>
+<tr>
+	<th>Stacked compressed signals for different assumed origin times</th>
+<tr>
+<tr>
+	<td><img src="STK_1.png"></td>
+</tr>
+</table>
+<p>
+The first thing to notice that one almost always sees a peak at the assumed origin time. this is because other windows have signal that is compressed, although not perfectly. 
+</p>
+<h2>4. Processing time windows without a group velocity window</h2>
+<p>
+Here we do nto apply a group velocity window to the traces. Instead a moving window is slected, and the inverse dispersion oeprator is applied to the entire window. The windows for -1, 0 and +10 minutes about the true origin time are displayed in the next figure. 
+</p>
+<p>
+<table>
+<tr>
+	<th>-10 minutes</th>
+	<th>  0 minutes</th>
+	<th>+10 minutes</th>
+</tr>
+<tr>
+	<td><img src="PRS_2m10.png"></td>
+	<td><img src="PRS_2000.png"></td>
+	<td><img src="PRS_2p10.png"></td>
+</tr>
+</table>
+</p>
+<p>
+Note that these plots start at 00:51:59.566, 01:01:59.566 and 01:11:59.566, respectively.
+This is illustrated in the next figure which show the synthetics trace for IUANTO plotted in real time for different start times of the cut window, as indicated.
+</p>
+<p>
+<table>
+<tr>
+	<td><img src="ANTO_2.png"></td>
+</tr>
+</table>
+</p>
+
+<p>
+The result of the compression at -10, -5, 0, +5 and +10 minute offsets are shown in the next figure.
+</p>
+<p>
+<table>
+<tr>
+	<td><img src="STK_2.png"></td>
+</tr>
+</table>
+</p>
+<p>
+For the windows considered, the compression and stacking results are virtually the same.
+There is some soouce of signal at roughly 01:02. The compression projects gthe observed signal back in absolute time, and since the cut signals ahd the same information, we are not surprised with this plot. 
+</p>
+<p>
+Signals commensurate with the assumed dispersion are mapped back to the origin time. Other signals are spread out and offset. In this figure the initial wavefield, think P waves, propagate faster than the assumed phase velocities. thus they are mapped and spread out later in time.
+</p>
+<p>
+Final plot compares the two stacks. the red trace is the result of applying the group velocity window, which the blue trace uses the entire trace. Near the true origin time, the stack amplitudes are  about the same. The group velocity windowed processing does not yield as sharp a pulse. The use of a wider window and a different taper will be investigaated.
+</p>
+<p>
+<table>
+<tr>
+	<td><img src="CMP_12.png"></td>
+</tr>
+</table>
+</p>
+<footer>Last changed January 23, 2025</footer>
+</body>
+</html>
