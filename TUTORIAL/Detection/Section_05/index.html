@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+  </head>
+<body>
+<h2>1. Introduction</h2>
+<p>
+This is a simple test of the effect of changing the cut window. The reason for doing this is to see if 
+the envelope stack can be sharpened.
+</p>
+<h2>2. Test</h2>
+</p>
+khThe original code of the shell script DOCOMPRESS in Section_02 had the lines
+<br>
+<pre>
+TMIN=`echo $DIST $UMAX | awk '{print $1/$2}' `
+TMAX=`echo $DIST $UMIN | awk '{print $1/$2}' `
+</pre>
+<br>
+which cut the original signal at travel times of Distance/UMAX to Distance/UMIN.
+</p>
+<p>
+For this test, the cut window was increased by 100 sec on ewither side of the cut by using the lines
+<pr>
+TMIN=`echo $DIST $UMAX -100 | awk '{print $3 + $1/$2}' `
+TMAX=`echo $DIST $UMIN +100 | awk '{print $3 + $1/$2}' `
+</pre>
+<br>
+</p>
+<p>
+the simulation was run again for the source position at (0,0).
+The comparison is show in the next figure.
+</p>
+<p>
+<table>
+<tr><td><img src=Sec-5.png</tr></tr>
+</table>
+</p>
+<p>
+Here we see that the wider window does sharpen the stack, but also adds some large side lobes.
+To be fair, the Section_02 trace consisted of 512 seconds (512 points) while the Section_05 was 1024 sec long (1024 samples).
+</p>
+<footer>Last changed January 23, 2025</footer>
+</body>
+</html>

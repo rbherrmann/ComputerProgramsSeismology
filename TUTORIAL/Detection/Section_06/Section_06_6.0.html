@@ -1,0 +1,80 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+  </head>
+<body>
+<h2>1.0 Synthetics for Mw=6.0</h2>
+<p>
+The first set of figures display the velocity traces for the mechanism described in Section 2.
+Each trace is plotted with the same amplitude in the figure.  In the test of the detection procedure, only the vertical, Z, component traces are used. The second set of figures results from the application of a zero-phase bandpass filter implemented using the <b>gsac</b> command
+</p>
+<pre>
+transfer from none to none freqlimits 0.01 0.02 0.04 0.05
+</pre>
+</p>
+<p>
+The sample rate of the 1s, which means that the Nuquist frequency is 0.5HZ. 
+For this magnitude, the surfce wave is seen in the boradband ground velocity.
+</p>
+<p>
+<table>
+<tr>
+	<th>Z</th>
+	<th>R</th>
+	<th>T</th>
+</tr>
+<tr>
+	<td><img src="MW6.0/Figures/F_Z.png"></td>
+	<td><img src="MW6.0/Figures/F_R.png"></td>
+	<td><img src="MW6.0/Figures/F_R.png"></td>
+</tr>
+<tr>
+	<th>Filtered Z</th>
+	<th>Filtered R</th>
+	<th>Filtered T</th>
+</tr>
+<tr>
+	<td><img src="MW6.0/Figures/F_ZF.png"></td>
+	<td><img src="MW6.0/Figures/F_RF.png"></td>
+	<td><img src="MW6.0/Figures/F_RF.png"></td>
+</tr>
+</table>
+</p>
+<h2>2. Detection</h2>
+<p>
+The detection script was run just using the true source position (0,0), but at different possibl
+e origin times, e.g., 
+00<sup>h</sup>52<sup>m</sup>,
+00<sup>h</sup>57<sup>m</sup>,
+01<sup>h</sup>02<sup>m</sup> (which is nearest to the true origina time),
+01<sup>h</sup>07<sup>m</sup>  and
+01<sup>h</sup>12<sup>m</sup>. The next figure plots the stack in an absolute amplitude scale, th
+at shows that the envelope stack is a maximum near the tru origin time.
+</p>
+<p>
+<table>
+<tr>
+        <td> <img src="MW6.0/FINAL_6.0.png"></td>
+</tr>
+</table>
+<p>
+</p>
+<footer>Last changed January 23, 2025</footer>
+</body>
+</html>
