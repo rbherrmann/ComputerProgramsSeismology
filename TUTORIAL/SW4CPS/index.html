@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple.css Test Page</title>
+	<!-- The following are some stylesheets for testing -->
+	<!-- Sanitize.css reset -->
+	<!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+	<!-- Latest release version of Simple.css -->
+	<!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+	<!-- Latest commit from GitHub -->
+	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+	<!-- Local version -->
+	<link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2>Comparison of SW4 and CPS synthetics </h2></header>
+<h2>1. Introduction</h2>
+<p>
+The purpose of this exercise is to compare SW4 synthetics to the wavenumber integration synthetics using Computer Programs in Seismology codes. For efficiency, the velocity model is a uniform halfspace with infinite Q. The source is a a depth of 5.0km from the free surface and the epicentral distance is 5.0 km.  Synthetics are compared at a range of azimuths from 0<sup>o</sup> to 180<sup>o</sup> in increments of 22.5<sup>o</sup>.</p>
+<p>The conclusion is that the two codes are in agreement.</p>
+<h2>2. SW4</h2>
+<p>
+Version 3.0 was downloaded from
+<a href"https://github.com/geodynamics/sw4/">https://github.com/geodynamics/sw4/</a>  by clicking on the <b>Code</b> pull-down menu
+and then clicking on the <b>Download ZIP</b> to get the <b><i>sw4-master.zip</i></b>. The file <i>doc/SW4-Installation.pdf</i> gives instructions on compiling the code.</P>
+<p>I compiled on an older machine with four processing cores that was running <i>Linux Mint 22.1 (xia)</i>. Following Section 5.1.2 of the SW4-Installation.pdf, I did <i>cp make.linux make.inc</i> in the directory <i>configs</i> and the edited the <i>make.inc</i> so that it read:
+<br>
+
+<pre>
+<small>
+FC = gfortran
+CXX = mpicxx
+EXTRA_LINK_FLAGS =-L/usr/lib/x86_64-linux-gnu -llapack -lblas -lgfortran
+</small>
+</pre>
+<br>
+</p>
+<p>Prior to compiling, I followed the guidance to ensure that the proper libraries were available. I did this by using the <i>Software Manager</i> and the program <b>synaptic</b> on this version of Mint. I then returned to the main directory and entered <b>make</b>. Note that I did this quickly and did not write down the libraries obtained using <b>synaptic</b>. Since I was going to compile codes using the libraries, I believe that I also downloaded the development versions, e.g., <i>libblas-dev</i>. </p>
+<p>Since this is a Linux system, I can use the <b>ldd</b> command to list the shared libraries that <b>sw4</b> is using:
+<br>
+<pre>
+<small>
+<small>
+linux-vdso.so.1 (0x00007ffd9b9c0000)
+liblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x000072a3a8800000)
+libgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x000072a3a8400000)
+libmpi_cxx.so.40 => /lib/x86_64-linux-gnu/libmpi_cxx.so.40 (0x000072a3a958b000)
+libmpi.so.40 => /lib/x86_64-linux-gnu/libmpi.so.40 (0x000072a3a9459000)
+libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x000072a3a8000000)
+libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000072a3a8f17000)
+libmvec.so.1 => /lib/x86_64-linux-gnu/libmvec.so.1 (0x000072a3a8307000)
+libgomp.so.1 => /lib/x86_64-linux-gnu/libgomp.so.1 (0x000072a3a9401000)
+libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000072a3a8ee9000)
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000072a3a7c00000)
+libopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x000072a3a5800000)
+/lib64/ld-linux-x86-64.so.2 (0x000072a3a95c8000)
+libopen-pal.so.40 => /lib/x86_64-linux-gnu/libopen-pal.so.40 (0x000072a3a874c000)
+libopen-rte.so.40 => /lib/x86_64-linux-gnu/libopen-rte.so.40 (0x000072a3a7f44000)
+libhwloc.so.15 => /lib/x86_64-linux-gnu/libhwloc.so.15 (0x000072a3a8e88000)
+libevent_core-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_core-2.1.so.7 (0x000072a3a82d2000)
+libevent_pthreads-2.1.so.7 => /lib/x86_64-linux-gnu/libevent_pthreads-2.1.so.7 (0x000072a3a93fa000)
+libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x000072a3a93dc000)
+libudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x000072a3a829f000)
+libcap.so.2 => /lib/x86_64-linux-gnu/libcap.so.2 (0x000072a3a873f000)
+</small>
+</small>
+</pre>
+<br>
+</p>
+<p>
+The final step that I took was to get the <b>sw4</b> executable into the PATH variable. I did this in the <i>.profile</i> file in my login directory by entering the lines that point to the directory on my system:
+<br>
+<pre>
+<small>
+# add sw4
+PATH="$PATH:/d/rbh/PROGRAMS.310t/SW4/sw4-master/optimize_mp"
+</small>
+</pre>
+<br>
+</p>
+</p>
+<h2>3. Test runs </h2>
+<p>
+Download and unpack the <a href="sw4cps.tgz">sw4cps.tgz</a> and
+<br>
+<pre>
+gunzip -c sw4cps.tgz | tar xf -
+cd SW4CPS
+</pre>
+</p>
+<p>Within SW4CPS there are several scripts. The scripts have comments, so read them. To duplicate the figures shown in the discussion below, run the following commands. Note: if you do not have <i>:.:</i> in your PATH, then where I indicate <b>DOALL</b> you must enter <b>./DOALL</b>.
+</p>
+<p>
+<pre>
+<small>
+# run the CPS hprep96/hspec96/hpulse96 codes
+(cd WK ; DOWK )
+# run the SW4 scripts
+DOALL
+# make the plots that compare the synthetics 
+# for the six moment tensor elements
+DOPLTMT
+# make the plots that compare the synthetics for 
+# the point forces
+DOPLTF
+</small>
+</pre>
+</p>
+<h3>CPS run</h3>
+<p>The result will be the plots in the PNG format, e.g., <i>MXX_E.png</i> which will display the E component of motion for the Mxx dipole or <i>FD_Z.png</i> which will display the Z component for the downward vertical force.</p>
+<p>The WK directory will have the CPS Green's functions, e.g., of the form 000500050.ZVF. These are computed for a halfspace velocity model <i>HALF.mod</i> which uses <i>km</i>, <i>km/s</i> and <i>gm/cm<sup>3</sup></i> for units. The <b>DOWK</b> script uses the <b>gsac</b> <i>mt</i> command to apply a mechanism. The moments are given in <i>dyne-cm</i> and the forces in <i>dyne</i>. The output traces will be in units of <i>m</i>.  The <b>hpulse96</b> <i>-V</i> flag indicates the Green's functions will be in units of <i>cm/s</i> for a step-like source time function. The output of the <b>gsac</b> <i>mt</i> command will thus be <i>m/s</i>
+</p>
+<p>
+The Z, N and E synthetics thus created are for moment tensor elements of 1.0e+25 dyne-cm or forces if 1.0e+20 dyne. The equivalent strengths used in the SW4 simulations are a moment of 1.0e+18 nt-m and a force of 1.0e+15 nt.
+</p>
+<h3>SW run</h3>
+<p>To create the input files for SW4, I modified the LOH.1 scripts that are described in Section 10 of the SW4-UsersGuide.pdf.</p>
+<p>The <b>DOALL</b> script runs the  parameter files with a line such as
+</p>
+<p>
+<pre>
+mpirun -np 3 sw4 mzz.in
+</pre>
+</p>
+<p>The results are in the directory <i>mzz</i> in Sac files with names such as 
+<i>sta01.e</i>, <i>sta01.n</i> and <i>sta01.u</i>.  The Sac headers are properly set so that the traces could be rotated using <b>sac</b> or <b>gsac</b>  to form radial and transverse components. Note by default the event coordinates are in California, e.g., EVLA              37.08983        EVLO             -117.8874. Even though the computations are for an epicentral distance of 5000m, the values in the Sac file are slightly different.
+</p>
+<h3>Comparison</h3>
+<p>Each method has its own quirks. Since comparisons are made at low frequencies, I will not worry too much about details at high frequency.  In both sets of computations, I use a triangular pulse. The far-field velocities of the body waves should appear as the derivative of the triangular shape, which is boxish. The SW4 internally computes the best sampling interval which will not be the same as that using in the CPS codes. So both will be low-pass filtered.
+</p>
+<p>
+<ul>
+<li>The first figure below show the output of each code. The SW4 trace is noisy since I was cavalier about the spacial sampling interval. Note difference in the pulse durations and hence the peak amplitudes.</li>
+<li>The second  figure show the result of applying the <b>gsac</b> command <i>triangle w 1</i>, which convolves the traces with a triangle of duration 1.0s. this low-pass filters the traces. These are plots of velocity in <i>m/s</i> </li>
+<li>The third figure shows the result of applying the <b>sac</b> command  <i>int</i>, which gives the displacement in <i>m</i>.</li>
+</ul>
+</p>
+<p>
+The final comparisons are excellent.
+</p>
+<p>
+<table>
+<tr><th>Computational output</th></tr>
+<tr><td><img src="P001.png"</td></tr>
+<tr><th>triangle w 1 output</th></tr>
+<tr><td><img src="P002.png"</td></tr>
+<tr><th>int </th></tr>
+<tr><td><img src="P003.png"</td></tr>
+</table>
+</p>
+<h2>Comparisons</h2>
+<p>
+The figure linked here show the results of the comparison. The CPS convention is that positive motion one the N, E and Z components are to the north, east and up. The SW4 convention for the sac files using the <i>nsew=1</i> flag is that positive n, e and u correspond to motion in the north,east and up directions.
+</p>
+<h3>Moment tensor displacement</h3>
+<p>These result from the commands <i>triangle w 1</i> and <i>int</i>.
+</p>
+<table>
+<tr>
+<td><a href="MXX_N.png">N/x component Mxx moment</> </td>
+<td><a href="MXX_E.png">E/y component Mxx moment</> </td>
+<td><a href="MXX_Z.png">Z/u component Mxx moment</> </td>
+</tr>
+<tr>
+<td><a href="MXY_N.png">N/x component Mxy moment</> </td>
+<td><a href="MXY_E.png">E/y component Mxy moment</> </td>
+<td><a href="MXY_Z.png">Z/u component Mxy moment</> </td>
+</tr>
+<tr>
+<td><a href="MXZ_N.png">N/x component Mxz moment</> </td>
+<td><a href="MXZ_E.png">E/y component Mxz moment</> </td>
+<td><a href="MXZ_Z.png">Z/u component Mxz moment</> </td>
+</tr>
+<tr>
+<td><a href="MYY_N.png">N/x component Myy moment</> </td>
+<td><a href="MYY_E.png">E/y component Myy moment</> </td>
+<td><a href="MYY_Z.png">Z/u component Myy moment</> </td>
+</tr>
+<tr>
+<td><a href="MYZ_N.png">N/x component Myz moment</> </td>
+<td><a href="MYZ_E.png">E/y component Myz moment</> </td>
+<td><a href="MYZ_Z.png">Z/u component Myz moment</> </td>
+</tr>
+<tr>
+<td><a href="MZZ_N.png">N/x component Mzz moment</> </td>
+<td><a href="MZZ_E.png">E/y component Mzz moment</> </td>
+<td><a href="MZZ_Z.png">Z/u component Mzz moment</> </td>
+</tr>
+</table>
+<h3>Force  velocity</h3>
+<p>These result from  just the commands <i>triangle w 1</i>. Comparisons are made for the E, N and Z(up) components for forces in the E, N and down directions, e.g., FX, FY and FD.
+</p>
+<table>
+<tr>
+<td><a href="FX_N.png">N/x component Fx/Fn force </> </td>
+<td><a href="FX_E.png">E/y component Fx/Fn force </> </td>
+<td><a href="FX_Z.png">Z/u component Fx/Fn force </> </td>
+</tr>
+<tr>
+<td><a href="FY_N.png">N/x component Fy/Fe force </> </td>
+<td><a href="FY_E.png">E/y component Fy/Fe force </> </td>
+<td><a href="FY_Z.png">Z/u component Fy/Fe force </> </td>
+</tr>
+<tr>
+<td><a href="FD_N.png">N/x component Fz/Fd force </> </td>
+<td><a href="FD_E.png">E/y component Fz/Fd force </> </td>
+<td><a href="FD_Z.png">Z/u component Fz/Fd force </> </td>
+</tr>
+</table>
+<h2>CPS Green's functions</h2>
+<p>The <a href="186.pdf"> CPS documentation</a> shows how the CPS Green's functions are combined to make three-component time histories
+for point force and moment tensor sources.
+</p>
+<h2>Discussion</h2>
+<p>
+The comparison show excellent agreement between the synthetics made using SW4 and the CPS wavenumber integration codes. Although some of the trace comparisons look bad, read the amplitudes. These are actually at nodes of the radiation pattern, and the traces just reflect numerical noise.
+</p>
+
+
+
+
+</p>
+<footer>Last changed March 9, 2025</footer>
+  </body>
+</html>
