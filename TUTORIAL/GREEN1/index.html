@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple.css Test Page</title>
+	<!-- The following are some stylesheets for testing -->
+	<!-- Sanitize.css reset -->
+	<!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+	<!-- Latest release version of Simple.css -->
+	<!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+	<!-- Latest commit from GitHub -->
+	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+	<!-- Local version -->
+	<link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2>Green's functions - II</h2></header>
+<h2>1. Introduction</h2>
+<p>
+This tutorial provides the codes and processing scripts to compute the Green's functions for two regional velocity models and one teleseismic model that are used for moment tensor inversion.
+</p>
+<p>
+The Green's functions are computed using the <a href="https://rbherrmann.github.io/ComputerProgramsSeismology/">Computer Programs in Seismology</a> programs 
+<b>hprep96</b>,
+<b>hspec96</b>,
+<b>hpulse96</b>, 
+<b>f96tosac</b>, <b>saclhdr</b> and <b>time96</b>. The codes are part of a larger package but the versions are included here
+</p>
+<p>
+The Green's functions are identified by specific names as follow:
+</p>
+<p>
+<table>
+<tr>
+<th>Green's function</th>
+<th>Green's function</th>
+</tr>
+<tr> <td>ZDD - vertical component 45<sup>o</sup> dip-slip</td>
+     <td>ZEX - vertical component isotropic expansion</td>
+</tr>
+<tr> <td>RDD - radial component 45<sup>o</sup> dip-slip</td>
+     <td>REX - radial component isotropic expansion</td>
+</tr>
+<tr> <td>ZDS - vertical component 90<sup>o</sup> dip-slip</td>
+     <td>ZVF - vertical component downward point force</td>
+<etr>
+<tr> <td>RDS - radial component 90<sup>o</sup> dip-slip</td>
+     <td>RVF - radial component downward point force</td>
+</tr>
+<tr> <td>TDS - transverse component 90<sup>o</sup> dip-slip</td>
+     <td>ZHF - vertical component horizontal point force</td>
+</tr>
+<tr> <td>ZDS - vertical component vertical strike-slip</td>
+     <td>RHF - radial component horizontal point force</td>
+</tr>
+<tr> <td>RDS - radial component vertical strike-slip</td>
+     <td>THF - transverse component horizontal point force</td>
+</tr>
+<tr> <td>TDS - transverse component vertical strike-slip</td>
+     <td></td>
+</tr>
+</table>
+</p>
+<p>
+The first letter indicates the component: Z is positive up, R is positive away from the source, and T is positive in a direction to the right as the signal propagates. For signal propagating to the North, the Z, R and T are Up, North and East, respectively.
+</p>
+<p>To form the modeled ground motion the following equations are used:
+<table>
+<tr><td><img src="green.png"></td>
+</tr>
+</table>
+</p>
+<p>
+Here the u<sub>z</sub>, u<sub>r</sub> and u<sub>&phi;</sub> are the vertical (positive up), radial (positive) away and transverse motions, respectively. The M<sub>ij</sub>=M<sub>ji</sub>  moment tensor elements are:
+<table>
+<tr>
+<td>M<sub>11</sub> = M<sub>xx</sub> = M<sub>&theta;&theta;</sub></td>
+<td>M<sub>12</sub> = M<sub>xy</sub> = -M<sub>&theta;&phi;</sub></td>
+<td>M<sub>13</sub> = M<sub>xz</sub> = -M<sub>R&theta;</sub></td>
+</tr>
+<tr>
+<td>M<sub>22</sub> = M<sub>yy</sub> = M<sub>&phi;&phi;</sub></td>
+<td>M<sub>23</sub> = M<sub>yz</sub> = -M<sub>R&phi;</sub></td>
+<td>M<sub>33</sub> = M<sub>zz</sub> = M<sub>RR</sub></td>
+</tr>
+</table>
+where the Cartesian coordinate system x<sub>1</sub>, x<sub>2</sub> and x<sub>3</sub> usually points north, east and down respectively,
+the Cartesian coordinate system x, y and z usually points north, east and down respectively, and the spherical coordinate system R, &theta; and &phi; which increase positively in upward, south and east directions.
+</p>
+<h2>2. Computations</h2>
+<p>
+The programs used here solve the wave equation in a cylindrical coordinate system for a layered, isotropic halfspace. The integrals are given in Equation (1).
+<p>
+<img src="int.png">
+</p>
+<p>
+Numerically the integrals are approximated by the summations of Equation (2). The first summation is a discrete Fourier transform. The second is an approximation to the Fourier-Bessel transform. The discretization introduces periodicity in the time and space domains that must be understood so that the results yield synthetics without artifacts.
+</P>
+<p>
+The length of the times series is <i>N&Delta;t</i> seconds. The wavenumber sampling <i>&Delta;k</i> is related to the distance <i>r</i>. In essence the computational effort is on the order of <i>NJ<sub>max</sub></i>, but the <i>J<sub>max</sub></i> is taken proportional to the highest frequency.  
+</p>
+<p>
+An important implication is that if the total length of the time series is fixed and it is desired to change the sampling from <i>&Delta;t</i> to <i>&Delta;t/2</i>, the computational effort will increase by about a factor of <i>4</i>. 
+</p>
+<h3>Source code</h3>
+<p>
+Download  the <a href="source.tgz">source code</a> and unpack using the command
+<pre>
+gunzip -c source.tgz | tar xf - 
+</pre>
+</p>
+<p>
+This command will the <i>bin</i> for the excutables and the <i>Source</i> directory for the programs to be compiled.
+The directory <i>Source</i> will contain the following files:
+<br>
+<pre>
+<small>
+csstime.c         csstime.h    f96subf.f        f96tosac.f
+hprep96.f         hpulse96.f   hspec96.f        igetmod.f
+lgstr.f           Makefile.LNX Makefile.LNXllvm Makefile.OSXM
+Makefile.OSXMllvm mchdep.f     mgtarg.f         mnmarg.f
+saclhdr.c         sacsubc.c    sacsubc.h        sacsubf.f
+tgetmod.f         time96.f
+</small>
+</pre>
+</p>
+<p>The makefiles are named according to the platform. However in these specially constructed makefiles, <i>Makefile.LNX</i> and <i>Makefile.OSXM</i> are identical
+as are <i>Makefile.LNXllvm</i> and <i>Makefile.OSXMllvm</i>. The major difference lies in the compilers used. <i>Makefile.LNX</i> and <i>Makefile.OSXM</i> used the <b>gcc</b> and <b>gfortran</b> complers, while <i>Makefile.LNXllvm</i> and <i>Makefile.OSXMllvm</i> use the LLVM <b>clang</b> and <b>flang</b> compilers. As of the date that this tutorial
+was created, the version numbers of these compilers are 
+</p>
+<p>
+<pre> 
+gcc       Version 14.2.0_1 
+gfortran  Version 14.2.0_1
+clang     Version 18.1.3
+flang     Version 19.1.7
+</pre> 
+</p>
+<p>The <b>clang</b> and <b>flang</b> version numbers differ because these are the current versions on different platforms. The important point to make, is that the codes using in creating the Green's functions meet current standards.
+</p>
+<p>Assuming that the <b>gcc</b> and <b>gfortran</b> compilers are installed, the following will install the executables in the <i>bin</i> directory. 
+<pre>
+cd Source
+make -f Makefile.OSXM all
+</pre>
+</p>
+<p>
+and the following executables will be placed into the <i>bin</i> directory
+<pre>
+f96tosac  hprep96  hpulse96  hspec96  saclhdr  time96
+</pre>
+</p>
+<p>
+The <b>hprep96</b> creates the input for the wavenumber integration 
+program <b>hspec96</b>, the <b>hpulse96</b> applies the inverse Fourier transform and the simple source time function. The <b>f96tosac</b> converts the output of <b>hpulse96</b>  to a Sac file format. The <b>saclhdr</b> extracts specifice parameters from the Sac file header and <b>time96</b> is used to determine the first P-arrival time for a given velocity mode, source depth and epicentral distamce.
+</p>
+<p>
+The command line syntax of these executables can be obtained on-line by invoking them with the <i>-h</i> flag, e.g.,
+<pre>
+hprep96 -h
+</pre>
+</p>
+<p>
+An example of the information in the Sac file header is the following:
+<pre>
+<small>
+0555980100.ZSS (0):
+        NPTS                  4096           B                434.11
+           E               4529.11       DELTA                     1
+      DEPMAX          1.865648e-09      DEPMIN         -1.843304e-09
+      DEPMEN         -1.792233e-14      NZYEAR                  1970
+      NZJDAY                     1      NZHOUR                     0
+       NZMIN                     0       NZSEC                     0
+      NZMSEC                     0       KZDATE   Jan 01 (001), 1970
+       KZTIME         00:00:00.000           O                     0
+           A              534.1147          T0              964.6018
+       KSTNM              GRN21         KCMPNM              ZSS     
+        STEL                     0        DIST                5559.8
+          AZ                     0         BAZ                   180
+       GCARC               50.0004        EVDP                    10
+       CMPAZ                     0      CMPINC                     0
+      TIMMAX               1467.11      TIMMIN               1526.11
+       NVHDR                     6        NINF                     0
+        NHST                     0      IFTYPE              ITIME   
+      IZTYPE              IB            LPSPOL                  TRUE
+      LOVROK                  TRUE      LCALDA                 FALSE
+       LHDR5                 FALSE       KEVNM      SYNTHETIC       
+          KO              O                 KA              P       
+         KT0              SV
+</small>
+</pre>
+</p>
+<p>
+This is mentioned here since this information will be required of the Sac files are incorporated into another format, e.g., HDF5.
+</p>
+<h3>Shell scripts</h3>
+<p>
+This tutorial considers two regional velocity models, CUS and WUS, and the AK135 continental global model. These models are displayed in these figures.
+<table>
+<tr><th>CUS and WUS models</th><th>AK135 model</th></tr>
+<tr>
+<td><img src="REG.png"></td>
+<td><img src="AK135.png"></td>
+</tr>
+</table>
+</p>
+<p>
+The following links provide the processing scripts. Unpack them, for example, with the command:
+<br>
+<pre>
+<small>
+gunzip CUS.REG.tgz | tar xf - 
+cd CUS.REG
+ls -F
+DODCTL*		DOIT.WK*	MKW*		Model/	tDOIT.WK
+</small>
+</pre>
+</p>
+<p>
+There will be similarly named shells scripts for the other models. These scripts do the following:
+</p>
+<p>
+<ul>
+<li>
+<a href="CUS.REG.tgz"> CUS.REG.tgz</a>
+</li>
+<li>
+<a href="WUS.REG.tgz"> WUS.REG.tgz</a>
+</li>
+<li>
+<a href="AK135.TEL.tgz"> AK135.TEL.tgz</a>
+</li>
+</ul>
+<p>
+<h3>Test runs</h3>
+<p>In each directory there is a shell script named <b>tDOIT.WK</b> which generates the Green's functions for just one source depth of 10km.
+The next set of figures displays the record sections for the ZSS Green's function. The purpose is to show the distance samling and time series window
+as a function of distance. The selected time window is long enough to contain the entire signal, which is based on the expected time series length for the shallowest depth for which the short period surface waves appear late in the time window. 
+</p>
+<p>
+After such a test run, a new directory will appear with the name <i>0100</i> which indicates a source depth of <i>010.0</i> km. This naming will permit source depth directories for depths from 000.1 km to 999.9 km.
+</p>
+<p>
+Within the directory for a given depth, there will appear the Green's functions required for a general moment tensor. The <i>dfile</i>, <i>hspec96.dat</i> and <i>hspec96.grn</i> files are left over from the computtions cna can be ignored.
+The naming convention for the Green's functions is the result of the <b>f96tosac -G</b> command which names the files as <i>DDDDdHHHh.grn</i>, which represents an epicentral distance of <i>DDDD.d</i> km and a source deoth of <i>HHH.h</i> km. For example, <i>009400100.TDS</i> is the TDS Green's function for and epicentrla distance of <i>94.0</i>km and a source depth of <i>10.0km</i>.
+</p>
+<p>
+To assist in pointing to a given set of Green's functions as a function of source depth and epicentral distance, a unique file with the name <i>W.CTL</i> is created within each source directory. This was created by the shell script <b>MKW</b> and invokes the helper program <b>sacldhr</b> to create simple output shch as
+<pre>
+  ...
+90 0.25 512 6.25 0 0100 009000100
+92 0.25 512 6.5 0 0100 009200100
+94 0.25 512 6.75 0 0100 009400100
+96 0.25 512 7 0 0100 009600100
+98 0.25 512 7.25 0 0100 009800100
+  ...
+</pre>
+<p>
+The entries on each line are the epicentral distance, sample interval, numebr of data points, time of first sample with respect tot he origin time, the directory name, and the file prototype. Thus at 94km, the following Green's functions were created:
+</p>
+<p>
+<pre>
+<small>
+009400100.RDD  009400100.REX  009400100.TDS  009400100.ZDD  009400100.ZEX
+009400100.RDS  009400100.RSS  009400100.TSS  009400100.ZDS  009400100.ZSS
+</small>
+</pre>
+</p>
+<p>
+The source time function was convolved with the synthetics using the command
+<br>
+<b>hpulse96 -V -p -l 1</b>
+<br>
+For the CUS and WUS models, which are defined in units of km, km/s and gm/cm<sup>3</sup>, The Green's functions will be ground velocity in cm/s for a step-like moment source of 1.0x10<sup>20</sup> dyne-cm. The source time function has a duration of <i>4&Delta;t</i>, or 1.0s, in this case. For the AK135 model, the Green's fucntions are created with a duration of 4.0s.
+</p>
+<p>
+To give a relative sense of computation time, the tDOIT.WK in WUS.REG ran in about 25 minutes, while the tDOIT.WK in AK135.TEL took about 5 hours for one source depth.
+</p>
+<p>
+Record sections from the test runs are shown in the next set of figures.
+</p>
+<p>
+<table>
+<tr><th>CUS Regional Model</td></tr>
+<tr><td><img src="CUSprs.png"></td></tr>
+<tr><th>WUS Regional Model</td></tr>
+<tr><td><img src="WUSprs.png"></td></tr>
+<tr><th>AK135 Global Model</td></tr>
+<tr><td><img src="AK135prs.png"></td></tr>
+</table>
+</p>
+<p>
+As seen from the figures, the traces do not start at the origin time, but rather at some seconds before the first P-wave arrival. In addition the length of the regional waveforms is dependent on distance while the teleseismic waveforms are of fixed length. The reasons for these choises are computational speed and accurary.
+</p>
+<h3>Complete runs</h3>
+<p>
+After a successful test run, do the following:
+<pre>
+cd CUS.REG ; DOIT.WK ; cd ..
+cd WUS.REG ; DOIT.WK ; cd ..
+cd AK135.TEL ; DOIT.WK ; cd ..
+</pre>
+</p>
+
+
+<footer>Last changed March 17,  2025</footer>
+  </body>
+</html>
