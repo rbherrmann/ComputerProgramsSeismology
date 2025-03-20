@@ -1,0 +1,57 @@
+#!/bin/sh
+
+#####
+#    create rfile.sac
+#
+#    NOTE the file rfiel must exist
+#####
+gfortran rfile2sac.f
+a.out
+rm a.out
+
+#####
+#    compare different outputs
+#####
+cpulse96 -V -p -l 1 | f96tosac -G
+mv 008490050.ZEX ZEXpar.sac
+cpulse96 -V -F rfile | f96tosac -G
+mv 008490050.ZEX ZEXrfileV.sac
+cpulse96 -A -F rfile | f96tosac -G
+mv 008490050.ZEX ZEXrfileA.sac
+gsac << EOF
+r ZEXpar.sac
+convolve file rfile.sac
+w ZEXparconv.sac
+dif
+w ZEXparconvd.sac
+q
+EOF
+
+#####
+#    use gsac to make plots
+#    also low pass for a  comparison
+#####
+gsac << EOF
+fileid list fname
+r rfile.sac ZEXpar.sac ZEXparconv.sac ZEXrfileV.sac  ZEXparconvd.sac ZEXrfileA.sac 
+bg plt
+p relative
+lp c 1 n 2
+p
+q
+EOF
+
+#####
+# Use ImagMagick to make a PNG from the PLT file
+#####
+
+for i  in P001.PLT P002.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done
+mv P001.png DOCMP.png
+mv P002.png DOCMPLP.png
+

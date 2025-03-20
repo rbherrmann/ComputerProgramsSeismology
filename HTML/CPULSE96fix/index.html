@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>  
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2>cpulse96</h2></header>
+<h2>rfile and cpulse96</h2>
+<p>
+Tian Mengnam noted a problem when using <b>cpulse96</b>  with an external waveform file.
+The program did not work. The source file has since been corrected. This note provides an opportunity to demonstrate the use of the external file and to offer an alternative, perhaps better method to apply a user provided source pulse.
+</p>
+<p>
+The shell script <a href="DOIT">DOIT</a> runs the code and also creates the user provided <i>rfile</i>. In addition, a FORTRAN program <a href="rfile2sac">rfile2sac.f</a> was created to convert the text <i>rfile</i> to a Sac file named <i>rfile.sac</i>. To use this FORTRAN program, compile it by the command
+</opp>
+<p>
+<pre>
+gfortran rfilesac.f
+</pre>
+</p>
+<h2>DOCMP</h2>
+<p>
+Download this shell script <a href="DOCMP">DOCMP</a> and then execute everything:
+</p>
+<p>
+<pre>
+chmod +x DOIT
+chmod +x DOCMP
+DOIT
+DOCMP
+</pre> 
+</p>
+<p>
+<b>DOCMP</b> runs the CPS codes but also uses the ImageMagick package to convert EPS to PNG. If you do not have ImageMagick installed, you can view the comparison with the command:
+</p>
+<p>
+<pre>
+plotxvig < P001.PLT
+plotxvig < P002.PLT
+</pre>
+</p>
+<h2>Discussion</h2>
+<p>
+<b>DOCMP</b> creates some Sac files and then plots them for comparison. These files, int he order shown in the figures, are as follow:
+<ul>
+<li> <i>rfile.sac</i> - This is the sac file created in the script DOIT. Note that for everything to work properly the sample interval for the synthetics and the rfile must be the same., in addition the rfile cannot have more than 1024 points, a constraint built into <i>cpulse96.f</i> and <i>rfile2sac.f</i>. Note that the use did not create a pulse with unit area, which is a requirement if one is interested in absolute amplitudes.</li>
+<li><i>ZEXpar.sac</i> - This is the ZEX Green's function resulting from the command <b>cpulse96 -V -p -l 1</b>. Since the parabolic pulse is an approximation to an impulse, the trace would be the displacement for an impulsive source, or equivalently, the velocity for a step-like source.</li>
+<li><i>ZEXparconv.sac</i> - The result of convolving the <i>rfile.sac</i> with the <i>ZEXpar.sac</i> using the <b>gsac</b> convolve command.</li>
+<li><i>ZEXrfileV.sac</i> - This is the result of applying the <i>rfile</i> directly with the command <b>cpulse96 -V -F rfile</b></li>
+<li>ZEXparconvd.sac</i> - This is the time derivative of ZEXparconv.sac</i> obtained using the  <i>dif</i> command of <b>gsac</b></li>
+<li><i>ZEXrfileA.sac</i> - This is the result of applying the rfile directory using the command <b>cpulse96 -A -F rfile</b> </li>
+</ul>
+</p>
+<p>
+<table>
+<tr><theader>Output</theader></tr>
+<tr>
+<td>
+<img src="DOCMP.png">
+</td>
+</tr>
+</table>
+</p>
+<p>
+This has shown that the external user supplied pulse can be applied either directory using <b>cpulse96</b> or by convolving with <b>gsac</b>. I prefer the latter since the advantage of the <b>cpulse96 -V -p l 1</b> is that the signal spectrum is zero at the Nyquist frequency, thus yielding a signal without a Gibb's phenomena.
+</p>
+<p>
+The next figure shows the result of lpwpass filtering all signals at 1.0 Hz. Note the similarity of the second and third traces, and the fourth and fifth traces.
+</p>
+<p>
+<table>
+<tr><theader><theader>Low-pass filtered traces</header></tr>
+<tr>
+<td>
+<img src="DOCMPLP.png">
+</td>
+</tr>
+</table>
+</p>
+<h2>Summary</h2>
+<p>
+This example demonstrates the the <i>-F rfile</i> command works for this program.
+</p>
+<footer>Last changed March 20, 2025</footer>
+</body>
+</html>
