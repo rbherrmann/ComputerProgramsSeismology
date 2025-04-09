@@ -1,0 +1,56 @@
+#!/bin/sh
+
+
+rm -f SSYM.PLT
+fmplot -UP -X0 2 -Y0 19 -RAD 1.25 -FMFILL -XX -1 -YY -1 -ZZ 1 -P  -TT "P"
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 5 -Y0 19 -RAD 1.25 -FMFILL -XX -1 -YY -1 -ZZ 1 -SV -TT "SV"
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 8 -Y0 19 -RAD 1.25 -TT "SH" 
+cat FMPLOT.PLT >> SSYM.PLT
+
+fmplot -UP -X0 2 -Y0 16 -RAD 1.25 -FMFILL -XZ 1 -P  
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 5 -Y0 16 -RAD 1.25 -FMFILL -XZ 1 -SV 
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 8 -Y0 16 -RAD 1.25 -FMFILL -XZ 1 -SH -NONODAL
+cat FMPLOT.PLT >> SSYM.PLT
+
+fmplot -UP -X0 2 -Y0 13 -RAD 1.25 -FMFILL -XX 1 -YY -1 -P  
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 5 -Y0 13 -RAD 1.25 -FMFILL -XX 1 -YY -1 -SV  
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 8 -Y0 13 -RAD 1.25 -FMFILL -XX 1 -YY -1 -SH  
+cat FMPLOT.PLT >> SSYM.PLT
+
+fmplot -UP -X0 2 -Y0 10 -RAD 1.25 -FMFILL -XX 1 -YY 1 -ZZ 1 -P  
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 5 -Y0 10 -RAD 1.25 
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 8 -Y0 10 -RAD 1.25 
+cat FMPLOT.PLT >> SSYM.PLT
+
+fmplot -UP -X0 2 -Y0 7 -RAD 1.25 -FMFILL  -P   -F3 1
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 5 -Y0 7 -RAD 1.25 -FMFILL  -SV  -F3 1
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 8 -Y0 7 -RAD 1.25 
+cat FMPLOT.PLT >> SSYM.PLT
+
+fmplot -UP -X0 2 -Y0 4 -RAD 1.25 -FMFILL  -P   -F1 1
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 5 -Y0 4 -RAD 1.25 -FMFILL  -SV  -F1 1
+cat FMPLOT.PLT >> SSYM.PLT
+fmplot -UP -X0 8 -Y0 4 -RAD 1.25 -FMFILL  -SH  -F1 1
+cat FMPLOT.PLT >> SSYM.PLT
+
+
+plotnps -F7 -W10 -EPS -K < SSYM.PLT > ssym.eps
+#ed ssym.eps << EOF
+#g/8.640000 1 (P) ShowEqui/s/P/ /
+#g/8.640000 1 (T) ShowEqui/s/T/ /
+#w
+#q
+#EOF
+
+#rm -f FMPLOT.PLT CALPLT.PLT CALPLT.cmd

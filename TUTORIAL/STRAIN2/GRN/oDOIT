@@ -1,0 +1,153 @@
+#!/bin/sh
+
+rm -f tfmplot *.o
+make tfmplot
+
+rm -f ASYM.PLT
+tfmplot -X0 2 -Y0 10 -RAD 1 -FMPLMN -XY 1 -P  -NOSYMMETRIC -TT "P"
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 5 -Y0 10 -RAD 1 -FMPLMN -XY 1 -SV -NOSYMMETRIC -TT "SV"
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 8 -Y0 10 -RAD 1 -FMPLMN -XY 1 -SH -NOSYMMETRIC -TT "SH" -NONODAL 
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 11 -Y0 10 -RAD 1 -XY 1 -pol -NOSYMMETRIC -TT "POL" -TP -NOFMTP
+cat FMPLOT.PLT >> ASYM.PLT
+
+tfmplot -X0 2 -Y0 7 -RAD 1 -FMPLMN -YX 1 -P  -NOSYMMETRIC 
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 5 -Y0 7 -RAD 1 -FMPLMN -YX 1 -SV -NOSYMMETRIC 
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 8 -Y0 7 -RAD 1 -FMPLMN -YX 1 -SH -NOSYMMETRIC -NONODAL
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 11 -Y0 7 -RAD 1 -YX 1 -pol -NOSYMMETRIC  -NOFMTP -NONODAL
+cat FMPLOT.PLT >> ASYM.PLT
+
+rm -f SYM.PLT
+tfmplot -X0 2 -Y0 4 -RAD 1 -FMPLMN -XY 1 -P  
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 5 -Y0 4 -RAD 1 -FMPLMN -XY 1 -SV  
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 8 -Y0 4 -RAD 1 -FMPLMN -XY 1 -SH  
+cat FMPLOT.PLT >> ASYM.PLT
+tfmplot -X0 11 -Y0 4 -RAD 1 -XY 1 -pol  -tP  
+cat FMPLOT.PLT >> ASYM.PLT
+calplt << EOF
+NEWPEN
+1
+LEFT 
+10.0 4.8 0.2 'P' 0.0
+LEFT 
+11.8 4.8 0.2 'T' 0.0
+PEND
+EOF
+cat CALPLT.PLT >> ASYM.PLT
+
+calplt << EOF
+NEWPEN
+1
+
+COMMENT
+' --------------SINGLE COUPLE'
+SUBSC
+12.8 11.3 0.2 'M' 1 '12' 2
+PLOT
+13.0 9.25 3
+PLOTD
+13.0 10.75 21 0.10
+
+PLOT
+12.25 10.00 3
+PLOTD
+13.75 10.00 21 0.10
+PLOT
+13.0 3.25 3
+PLOTD
+13.0 4.75 21 0.10
+PLOT
+12.25 4.00 3
+PLOTD
+13.75 4.00 21 0.10
+CENTER
+13.03 10.85 0.15 '1' 0.0
+LEFT
+13.80 9.93 0.15 '2' 0.0
+
+ARROW
+13.2 10.0 13.2 10.7 .false.
+ARROW
+12.8 10.0 12.8 9.3 .false.
+GWIDTH
+0.0
+
+
+COMMENT
+' --------------SINGLE COUPLE'
+SUBSC
+12.8 8.3 0.2 'M' 1 '21' 2
+PLOT
+13.0 6.25 3
+PLOTD
+13.0 7.75 21 0.10
+PLOT
+12.25 7.00 3
+PLOTD
+13.75 7.00 21 0.10
+CENTER
+13.03 7.85 0.15 '1' 0.0
+LEFT
+13.80 6.93 0.15 '2' 0.0
+
+ARROW
+13.0 7.2 13.7 7.2 .false.
+ARROW
+13.0 6.8 12.3 6.8 .false.
+GWIDTH
+0.0
+
+COMMENT
+' --------------double couple '
+SUBSC
+12.3 5.3 0.2 'M' 1 '12' 2
+CENTER
+13.0 5.3 0.2 '+' 0.0
+SUBSC
+13.2 5.3 0.2 'M' 1 '21' 2
+
+PLOT
+13.0 3.25 3
+PLOTD
+13.0 4.75 21 0.10
+PLOT
+12.25 4.00 3
+PLOTD
+13.75 4.00 21 0.10
+CENTER
+13.03 4.85 0.15 '1' 0.0
+LEFT
+13.80 3.93 0.15 '2' 0.0
+
+ARROW
+13.2 4.0 13.2 4.7 .false.
+ARROW
+12.8 4.0 12.8 3.3 .false.
+
+ARROW
+13.0 4.2 13.7 4.2 .false.
+ARROW
+13.0 3.8 12.3 3.8 .false.
+
+GWIDTH
+0.0
+
+PEND
+EOF
+cat CALPLT.PLT >> ASYM.PLT
+plotnps -F7 -W10 -EPS -K < ASYM.PLT > asym.eps
+#ed asym.eps << EOF
+#g/8.640000 1 (P) ShowEqui/s/P/ /
+#g/8.640000 1 (T) ShowEqui/s/T/ /
+#w
+#q
+#EOF
+
+rm -f FMPLOT.PLT CALPLT.PLT CALPLT.cmd

@@ -1,0 +1,12 @@
+#!/bin/sh
+DOIT
+SDOIT
+
+cp SYM.PLT  ALL.PLT
+reframe -N1 -O -X0+16100 -XH12600 < SSYM.PLT >> ALL.PLT
+plotnps -F7 -W10 -EPS -K < ALL.PLT > all.eps
+DOPLTPNG ALL.PLT
+mv ALL.png ../radpat.png
+
+
+
