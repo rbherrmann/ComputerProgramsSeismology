@@ -1,0 +1,191 @@
+#!/bin/sh
+DEST=FINAL
+MYTOP=`pwd`
+export MODEL="${MYTOP}/WUS.mod"
+echo $MODEL
+#####
+#	high pass corner for stability
+#	The FHIGH is for stability of the trace
+#####
+FHIGH=0.003
+#####
+#	This script cehcks amplitudes, permitting only
+#	those with absolute values in the rant 1.0E-10 to 0.1 meter/sec
+#	This copies and vertical and then rotates to radial transverse
+#	
+#	As of 27 FEB 2007 it also sets the P and S times using MODEL
+#####
+MINAMP=1.0E-10
+MAXAMP=0.1
+
+if [ -d  ${DEST} ]
+then
+	echo ${DEST} exists
+else
+	mkdir ${DEST}
+fi
+
+cd GOOD
+
+if [ -d TEMP ]
+then
+	echo TEMP exists
+else
+	mkdir TEMP
+fi
+
+#####
+#	high pass filter to get rid of low frequency noise
+#####
+for TRACE in *.sac
+do
+GCARC=`saclhdr -GCARC $TRACE`
+EVDP=`saclhdr -EVDP $TRACE`
+DEPMAX=`saclhdr -DEPMAX $TRACE`
+DEPMIN=`saclhdr -DEPMIN $TRACE`
+A=`time96 -M ${MODEL} -P -GCARC ${GCARC} -EVDP ${EVDP}`
+T0=`time96 -M ${MODEL} -SH -GCARC ${GCARC} -EVDP ${EVDP}`
+#echo A $A T0 $T0
+
+#####
+#	test the DEPMAX for valid amplitudes
+#####
+ANS=`echo $DEPMAX $MINAMP $MAXAMP | awk '{ if( $1 < $2) print "NO";else if($1 > $3) print "NO";else print "YES"}' `
+
+if [ $ANS = "YES" ]
+then
+
+gsac > /dev/null 2>&1 << EOF
+r $TRACE
+synchronize o
+rtr
+hp c ${FHIGH} np 2
+ch A ${A} T0 ${T0} T1 ${T0}
+wh
+w TEMP/$TRACE
+quit
+EOF
+
+fi
+done
+#####
+#	end of for tRACE
+#####
+
+#####
+#	Process BH LH HH Channels
+#####
+
+cd TEMP
+for i in *Z.*.sac
+do
+if [ -f $i ] 
+then
+	echo $i
+
+	KSTNM=`saclhdr -KSTNM $i`
+	KCMPNM=`saclhdr -KCMPNM $i`
+	KNETWK=`saclhdr -KNETWK $i`
+	if [ -z "${KNETWK}" ]
+	then
+		NET=""
+	else
+		if [ "${KNETWK}" = "-12345" ]
+		then
+				NET=""
+		else
+				NET="${KNETWK}"
+		fi
+	fi
+	KHOLE=`saclhdr -KHOLE $i`
+	if [ -z "${KHOLE}" ]
+	then
+		LOC=""
+	else
+		if [ "${KHOLE}" = "-12345" ]
+		then
+				LOC=""
+		else
+				LOC="${KHOLE}"
+		fi
+	fi
+
+	case ${KCMPNM} in
+		BHZ) C="BH" ;;
+		HHZ) C="HH" ;;
+		HNZ) C="HN" ;;
+		ENZ) C="EN" ;;
+		LHZ) C="LH" ;;
+	esac
+#####
+#	safety if we do not have horizontals
+#####
+	cp $i ../../${DEST}/${KSTNM}${NET}${LOC}${KCMPNM} 
+#####
+#	now try to process the horizontals
+#####
+
+gsac > /dev/null 2>&1 << EOF
+r ${KSTNM}${C}?.${NET}.${LOC}.sac 
+rotate3 to gc
+w ${KSTNM}${NET}${LOC}${C}R ${KSTNM}${NET}${LOC}${C}T ${KSTNM}${NET}${LOC}${C}Z
+quit
+EOF
+		rm ${KSTNM}${C}?.${NET}.${LOC}.sac
+		mv ${KSTNM}${NET}${LOC}${C}* ../../${DEST}
+	else
+		echo $i does not exist
+	fi
+done
+cd ${MYTOP}
+
+#####
+#    make some initial plots
+#####
+gsac << EOF
+fileid list fname dist az concat on
+cut o o 50
+r FINAL/*Z
+rtr
+sort up dist
+hp c 0.1 n 3
+lp c 0.5 n 3
+title on l top size small text "Z component 0.1 - 0.5 Hz"
+bg plt
+p
+mv P001.PLT Z.PLT
+
+r FINAL/*R
+sort up dist
+rtr
+hp
+lp
+title on l top size small text "R component 0.1 - 0.5 Hz"
+p
+mv P002.PLT R.PLT
+
+r FINAL/*T
+sort up dist
+rtr
+hp
+lp
+title on l top size small text "R component 0.1 - 0.5 Hz"
+p
+mv P003.PLT T.PLT
+# make a station plot
+map5 kstnm on
+q
+EOF
+
+
+
+for i in ?.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K  < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+rm t.eps
+done
+
+sh map5.sh
+convert -trim map5.eps map5.png

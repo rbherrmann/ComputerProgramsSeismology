@@ -1,0 +1,59 @@
+#!/bin/sh
+
+#####
+#    remove the instrument response to ground velocity in m/s
+#    ev alresp is used since that always will returne the units in 
+#    terma of m/s
+#    The polezero fiels from Earthscope will give response in meters
+#    while those from the NEIC CWB give the resposne in nane meters
+#####
+
+set -x
+
+DEST=GOOD
+
+for i in *.SAC
+do
+KSTNM=`saclhdr -KSTNM $i`
+KCMPNM=`saclhdr -KCMPNM $i`
+DELTA=`saclhdr -DELTA $i`
+DOY=`saclhdr -NZJDAY $i`
+YEAR=`saclhdr -NZYEAR $i`
+FHH=`echo $DELTA | awk '{print 0.50/$1}' `
+FHL=`echo $DELTA | awk '{print 0.25/$1}' `
+#####
+#	we will not rewrite the KNETWK and KHOLE in the headers with new values
+#	we will just repeat the following steps in the script
+#####
+KNETWK=`saclhdr -KNETWK $i`
+if [ "${KNETWK}" = "-12345" ]
+then
+        NET=""
+else
+        NET="${KNETWK}"
+fi
+KHOLE=`saclhdr -KHOLE $i`
+if [ "${KHOLE}" = "-12345" ]
+then
+        LOC=""
+else
+        LOC="${KHOLE}"
+fi
+DOY=`saclhdr -NZJDAY $i`
+cp RESP.${NET}.${KSTNM}.${LOC}.${KCMPNM} resp
+evalresp ${KSTNM} ${KCMPNM} ${YEAR} ${DOY} 0.025 ${FHH} 4095 -t ${HR}:${MN} -u 'vel' -f resp -use-estimated-delay
+gsac << EOF
+r $i
+ch lovrok true
+ch lcalda true
+rtr
+transfer from eval subtype  AMP.${NET}.${KSTNM}.${LOC}.${KCMPNM} PHASE.${NET}.${KSTNM}.${LOC}.${KCMPNM} TO NONE FREQLIMITS 0.002 0.004 ${FHL} ${FHH}
+w ${DEST}/${KSTNM}${KCMPNM}.${NET}.${LOC}.sac
+quit
+EOF
+
+#####
+#       deconvolve the trace
+#####
+done
+#rm -f AMP* PHASE*

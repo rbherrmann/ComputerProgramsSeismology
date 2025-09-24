@@ -1,0 +1,40 @@
+#!/bin/sh
+set -x
+
+rm -fr SAC* RESP* *.SAC
+YEAR=2025
+MO=09
+DY=10
+HR=23
+MN=57
+SEC=47
+MSEC=000
+H=69.4
+LAT=40.480
+LON=-109.705
+DURATION=120
+DEG=1.0
+
+START=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC -60 | \
+        awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+END=`redodate $YEAR $MO $DY $HR $MN $SEC $MSEC ${DURATION} | \
+        awk '{printf "%4.4d-%2.2d-%2.2dT%2.2d:%2.2d:%2.2d",$1,$2,$3,$4,$5,$6}' `
+CCORD=`echo ${LAT} ${LON} ${DEG} | awk '{printf "%f:%f:%f",$1,$2,$3}' `
+
+#####
+#    save the processing scrip
+#####
+
+FetchData  -N '*' -S '*' -C 'BH*,HH*,HN*,EN*' -radius ${CCORD}  -s ${START}  -e ${END} -o BH.mseed -m BH.metadata -X BH.XML
+mseed2sac -f 3 BH.mseed -m BH.metadata
+java -jar ~/bin/stationxml-seed-converter-2.1.3.jar --input BH.XML --output BH.dataless
+rdseed -f BH.mseed -g BH.dataless -p -R -o -d 1
+
+
+gsac << EOF
+rh *SAC
+ch ocal $YEAR $MO $DY $HR $MN $SEC $MSEC evla $LAT evlo $LON evdp $H
+synchronize o
+wh
+q
+EOF

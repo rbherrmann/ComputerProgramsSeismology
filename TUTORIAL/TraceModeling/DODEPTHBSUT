@@ -1,0 +1,88 @@
+#/bin/sh
+
+#####
+#    Make depth section plots for the station component
+#    This requirtes moemnt tensor parameters
+#    and filtering the traces
+#####
+
+STA="BSUT"
+#####
+#    the individual component will has a Z R T appended to the end
+#####
+STAFILEPROTO="BSUTUU01HH"
+
+#####
+#    for this station and distance, define the distance prototype
+#    to access the Green's functions
+#####
+RPROTO="00900"
+#####
+#    define the filter passband
+#####
+FL=0.10
+FH=0.50
+
+
+
+#####
+#    define the moment tensor
+#    For this event the CPS output was
+#              Depth   STK   DIP   RAKE  MW   FIT
+#    WVFGRD96   64.0   110    65    40   4.08 0.5964
+#####
+STK=110
+DIP=65
+RAKE=50
+MW=4.08
+
+#####
+#    get the source to station azimuth from the
+#    deconvolved trace
+#####
+AZ=`saclhdr -AZ FINAL/${STAFILEPROTO}Z `
+
+#####
+#    loop over the source depths to make 
+#    In production code I would read the distance from the observed
+#    waveforms, and then search the W.CTL file in the Green's function
+#    directory for a given depth to define the DDDDdHHHh par fo the name
+#    Here this is hardwired to this observed trace.
+#####
+
+for HS in 0050 0100 0150 0200 0250 0300 0350 0400 0450 0500 0550 0600 0650 0700 0750 0800
+do
+PROTO="GREEN/nWUSHF.REG/${HS}/${RPROTO}${HS}"
+gsac << EOF
+mt to ZRT STK $STK DIP $DIP RAKE $RAKE AZ $AZ MW $MW FILE ${PROTO}
+w
+q
+EOF
+#####
+#    rename the T.Z T.R T.D to DDDd.Z etc
+#####
+mv T.Z ${HS}.Z
+mv T.R ${HS}.R
+mv T.T ${HS}.T
+done
+
+#####
+#    now use gsac to plot a depth record section for each component
+#####
+for C in Z R T
+do
+gsac << EOF
+cut o o 50
+r ????.${C}  FINAL/${STAFILEPROTO}${C}
+rtr
+hp c ${FL} n 3
+lp c ${FH} n 3
+bg plt
+title on location top size small text "${STA} ${C}: hp c ${FL} n 3; lp c ${FH} n 3"
+prs relative evdp amp 0.2
+q
+EOF
+mv PRS001.PLT ${STA}_${C}.PLT
+done
+
+
