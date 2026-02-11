@@ -18,7 +18,7 @@
 <header><h1>Computer Programs in Seismology Tutorial</h1>
 <h2>Wave propagation for ocean floor observations</h2></header>
     <h2> Complete Synthetics </h2>
-<p>Complete synthetics are computed along a horizontal profile for different water thicknesses. The source of 0.1km beneath the water - solid boundary and the receiver is 0.05km beneath this boundary. The shell script <b>DOIWK</b> computes the synthetics for the different models. After the synthetics are computed one can use <b>do_mft</b> to pick the dispersion. Because the synthetics are from a numerical model, it is possible to overlay the theoretical dispersion onto that determined by <b>do_mft</b>. To accomplish the overlay, the scripts <b>MFTDOOVERLAY</b> and <b>PHVDOOVERLAY</b> have been tailored to do this.  For my research, these two scripts are more complicated since I present the theoretical dispersion for several models as well as current results from surface wave tomography.
+<p>Complete synthetics are computed along a horizontal profile for different water thicknesses. The source of 0.1km beneath the water - solid boundary and the receiver is 0.05km beneath this boundary. The shell script <b>DOITWK</b> computes the synthetics for the different models. After the synthetics are computed one can use <b>do_mft</b> to pick the dispersion. Because the synthetics are from a numerical model, it is possible to overlay the theoretical dispersion onto that determined by <b>do_mft</b>. To accomplish the overlay, the scripts <b>MFTDOOVERLAY</b> and <b>PHVDOOVERLAY</b> have been tailored to do this.  For my research, these two scripts are more complicated since I present the theoretical dispersion for several models as well as current results from surface wave tomography.
 </p>
     <p> The <b>DOITWK</b>  shell script executes the wavenumber integration codes to create the
 synthetics for all Green's functions.
@@ -63,7 +63,7 @@ To start the process the epicentral distances and timing information is defined 
 <p>
 Next work directories are created for each model. Note the care in naming the model files and the directories.</p><p>
 The wavenumber integration codes are run and the resulting time series are converted to Sac files use the program <b>f96tosac</b>. This program has options for the naming of files. I have selected <b>-FMT 2</b> here since <b>f96tosac -h</b> indicates that the Green's functions will have names such as DDDDDddd_HHHhhh_ZZZzzz.grn, which means that the file name can express distances and depths to the nearest meter, or epicentral distance of DDDDD.ddd km, source depth as HHH.hhh km and receiver depth as ZZZ.zzz km.</p><p>
-Since the purpose of this tutorial is to compare the dispersion that derived from the seismogram to the theoretical values for the given velocity mode, the shell scripts <b>MFTDOOVERLAY</b> and >PHVDOOVERLAY</b> are copied into the subdirectory. In addition, the required eigenfunctions files are copied into the same directory. Note that <b>DOITWK</b> knows where these eigenfunction files are located.</p>
+Since the purpose of this tutorial is to compare the dispersion that derived from the seismogram to the theoretical values for the given velocity mode, the shell scripts <b>MFTDOOVERLAY</b> and >PHVDOOVERLAY</b> are copied into the sub-directory. In addition, the required eigenfunctions files are copied into the same directory. Note that <b>DOITWK</b> knows where these eigenfunction files are located.</p>
 </p>
 <p>the <b>DOIT.WK</b> script is
 <br>
@@ -162,7 +162,7 @@ sdpegn96 -X0 5.10 -Y0 1.50 -XLEN 4.00 -YLEN 4.00 -XMIN  2.00 -XMAX  100.  \
 For use with <b>do_mft</b> only the <b>sdpegn96</b> lines are important.
 </p>
 <p>
-To permit the dispersion overlays, <b>do_mft</b> executes the scripts <b>MFTDOOVELAY</b> and <b>PHVDOOVERLAY</b>. The first
+To permit the dispersion overlays, <b>do_mft</b> executes the scripts <b>MFTDOOVERLAY</b> and <b>PHVDOOVERLAY</b>. The first
 task is to extract the <b>sdpegn96</b> command form the <b>MFT96CMP</b> and the <b>PHV96CMP</b>. Then the command line is
 modified to specify a color of the dispersion overlay - white for group velocity and red for phase velocity, so that the 
 dispersion is actually visible. The modified shell script is <b>1.tmp</b> which is executed. Finally resultant PLT file is overlay onto the original <i>MFT96.PLT</i> or <i>PHV96.PLT</i>.  After the overlay script is run, <b>do_mft</b> replots its page.

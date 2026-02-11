@@ -24,7 +24,7 @@ to create teleseismic P-wave receiver functions from digital data.<br>
 <br>
 <h2>Required Programs:</h2>
 <p>
-To perform the analysis we wil require the following programs from the
+To perform the analysis we will require the following programs from the
 Computer Programs in Seismology: <span style="font-weight: bold;">gsac,
 saciterd, saclhdr, </span>and <span style="font-weight: bold;">udtdd.<br>
 <br>
@@ -60,7 +60,7 @@ create the directory</span> <span style="font-weight: bold;">20060510024256&nbsp
  href="20060510024256/DORFTN">DORFTN </a><span
  style="font-weight: bold;"></span><span style="font-weight: bold;"> </span>in
 that directory. I also place the SEED file <a
- href="20060510024256/20060510.seed">20060510.seed</a> in tht
+ href="20060510024256/20060510.seed">20060510.seed</a> in that
 directory. <br>
 <br>
 For testing everything is in the tarball&nbsp; <a href="rftn.tgz">rftn.tgz</a>
@@ -71,7 +71,7 @@ I now edit the <span style="font-weight: bold;">IDOEVT </span>script
 to place in the event location. The purpose of the <span
  style="font-weight: bold;">IDOEVT </span>script is to place the event
 source parameters into the SAC header and to deconvolve the instrument
-response to ground velocity in uits of <span style="font-weight: bold;"><span
+response to ground velocity in units of <span style="font-weight: bold;"><span
  style="font-style: italic;">m/sec.&nbsp; Deconvolution is optional for
 receiver function studies if the 3-components have the same instrument
 response. For more information on the IDOEVT script click on&nbsp; <a
@@ -123,7 +123,7 @@ These are placed in the newly created parallel directory called ../FINAL<br>
 Go to the ../FINAL directory. For this example you will see the
 following files: ULNBHR&nbsp; ULNBHT&nbsp; ULNBHZ.<br>
 <br>
-Because of the way tht <span style="font-weight: bold;">gsac </span>rotates
+Because of the way that <span style="font-weight: bold;">gsac </span>rotates
 traces, it is not necessary to <span style="font-style: italic;"><span
  style="font-weight: bold;">synchronize </span></span>and <span
  style="font-weight: bold;"><span style="font-style: italic;">cut </span></span>prior
@@ -152,7 +152,7 @@ So,<br>
  style="font-weight: bold;"><span style="font-weight: bold;">DORFTN</span><br></pre>
 </p><p>
 This script is highly commented.&nbsp; You only have to interactively
-pick the P arrival, uainsg the x-x sequence to position the window, P
+pick the P arrival, using the x-x sequence to position the window, P
 to pick and q to quit, you do not have to be very precise<br>
 <br>
 To see the receiver functions,&nbsp; you can use <span
@@ -213,7 +213,7 @@ following in the directory named KWJ:<br>
 </p><p>
 The PlotRecordSection (prs) command of gsac can plot these receiver
 functions in a way to assist their interpretation. Typically this is
-done in two ways - a plot versus ray parameter and a plot az a funciton
+done in two ways - a plot versus ray parameter and a plot as a function
 of back azimuth.&nbsp; The back azimuth plot is useful for identifying
 departure from a two dimensional model.&nbsp; For these plot to work,
 the receiver functions must be computed to have exactly the same number
@@ -254,7 +254,7 @@ that control the plotting.&nbsp; The <span style="font-style: italic;">relative
 correct time stamp. By definition the receiver function is a filter.
 However having the year and day helps identify the earthquake providing
 the data.&nbsp; The relative flag says to plot relative to the
-beginning of the trace.&nbsp; Since we can plot traces orgainized by
+beginning of the trace.&nbsp; Since we can plot traces organized by
 many of the SAC header values, e.g., EVDP, USER4, AZ, DIST, BAZ, etc.,
 the VL is used to denote the limits of the Variable used.&nbsp; In the
 first case, the VL refers to back azimuth (the use of <span
@@ -284,7 +284,7 @@ azimuth. </center>
     <tr align="center">
       <td style="vertical-align: top;"><img
  src="prs002.png"><br>
-      <center> KWJ receiver funcitons for ALP=1.0 as a function of ray
+      <center> KWJ receiver functions for ALP=1.0 as a function of ray
 parameter. Note that the PRS command does not yet have absolute trace
 scaling.</center>
       </td>

@@ -8,10 +8,10 @@
 <h3>Introduction</h3>
 In 2004, David Harkrider investigated the appropriateness of the
 Earth-flattening approximation by comparing the phase velocities from <span
- style="font-style: italic;">minos </span>to those from his
+ style="font-style: italic;">mineos </span>to those from his
 plane-layer dispersion codes.&nbsp; To make the comparison easier, he
 replaced the <span style="font-style: italic;">l</span> order
-parameter in <span style="font-style: italic;">minos&nbsp; </span>by
+parameter in <span style="font-style: italic;">mineos&nbsp; </span>by
 a float, so that he could get the effective free oscillation dispersion
 at periods such as 100 or 200 seconds.&nbsp; He restricted his
 comparison to the dispersion for infinite-Q models<br>
@@ -65,7 +65,7 @@ layer with <span style="font-style: italic;"><span
  style="font-weight: bold;">model96</span></span> parameters<br>
 <br>
 <pre>    47.8301     8.0191     0.0010     9.9543  0.578E+05   0.00       0.00       0.00       1.00       1.00<br><br></pre>
-and then modified the surface-wave disperesion and inversion codes to
+and then modified the surface-wave dispersion and inversion codes to
 use that false S-velocity for the dispersion relation, but not to use
 that low velocity in the root search. By adding this single layer, the
 higher modes are fit better at the longer periods. This model is called
@@ -81,7 +81,7 @@ Fri Dec 28 13:53:41 CST 2007: I modified <span
  style="font-weight: bold;">srfdis96,</span> <span
  style="font-weight: bold;">srfdrl96, srfdrr96, sdisp96, sregn96 </span>and<span
  style="font-weight: bold;"> slegn96 </span>to permit a fluid core by
-specifiying the shear-wave velocity in the core as 0.001 km/s. The
+specifying the shear-wave velocity in the core as 0.001 km/s. The
 logic for selecting the phase velocity search window assumes that this
 is a fluid and only uses the P-velocity as a guide. The test is made on
 whether the transformed velocity is &gt; 0.01 km/sec, e.g.,<br>
@@ -98,8 +98,8 @@ MINEOS/share/mineos1/nnDEMO6 (this appears when the MINEOS.tgz is
 unpacked), create the free oscillation synthetics&nbsp; <br>
 &nbsp;&nbsp;&nbsp; RUN_MINEOS.sh tak135-f<br>
 &nbsp;&nbsp;&nbsp; <br>
-then I run DOSEL to make the comparison, which polulates the
-MINEOS/sahre/mineos1/HTML.SW with graphics, and finally&nbsp; I run
+then I run DOSEL to make the comparison, which populates the
+MINEOS/share/mineos1/HTML.SW with graphics, and finally&nbsp; I run
 DOCLEAN to clean up the directory.<br>
 <br>
 Using the command&nbsp; <span style="font-weight: bold;">surf96 1 17</span>&nbsp;
@@ -121,7 +121,7 @@ c = c / tm<br>
 u = u * tm<br>
 where <br>
 &nbsp;&nbsp;&nbsp; tm = sqrt(1.+(3.*c/(2.*a*om))**2)&nbsp; [a is the
-radius of the Earth and om is the angulat frequency] for Love<br>
+radius of the Earth and om is the angular frequency] for Love<br>
 and<br>
 &nbsp;&nbsp;&nbsp; tm = sqrt(1.+(c/(2.*a*om))**2)&nbsp; for Rayleigh. <br>
 Note that the wavenumber integration synthetics do not have such a
@@ -133,7 +133,7 @@ We compute the dispersion for&nbsp; two models - the spherical model
 with flattening, e.g., with the keyword <span
  style="font-style: italic;">SPHERICAL EARTH</span>, and the same model
 treated as a flat-Earth model, e.g., replacing the <span
- style="font-style: italic;">SPHERICAL EARTH </span>keywork with <span
+ style="font-style: italic;">SPHERICAL EARTH </span>keyword with <span
  style="font-style: italic;">FLAT EARTH</span> in the file
 nntak135sph.mod. The observed (mineos) and <span
  style="font-weight: bold;">surf96 </span>predicted dispersion are in

@@ -39,14 +39,14 @@
     installed in PROGRAMS.330/VOLIV/src of the distribution provides the
     theory and the ability to get the information.
     <p> The detailed theory is given in <a href="surf.pdf"> surf.pdf</a>.
-      The discussion shows how the program <b>surf96</b> procides the
+      The discussion shows how the program <b>surf96</b> provides the
       required partial derivatives, especially those for the group
       velocity partials which are obtained numerically and are thus not
-      available from the eigenfunciton programs in
+      available from the eigenfunction programs in
       PROGRAMS.330/VOLIII/src, e.g., <b>sregn96</b> and <b>slegn96</b>.
     </p>
     <p> The complete set of scripts for running the programs are given
-      in <a href="DIST.tgz"> DIST.tgz</a>. After downloading, upack
+      in <a href="DIST.tgz"> DIST.tgz</a>. After downloading, unpack
       using the command: </p>
     <pre>gunzip -c DISP.tgz | tar xvf -
 </pre>
@@ -82,7 +82,7 @@ srfker96 &gt; srfker96.txt
 surf96 39
 </pre>
 </p><p>
-    The <b>surf96 39</b> cleans up temporaty files, <b>surf96 1</b>
+    The <b>surf96 39</b> cleans up temporary files, <b>surf96 1</b>
     computes the partials, and <b>srfker96</b> provides the desired
     kernels. The control file <i>sobs.d</i> is
 <br>
@@ -289,7 +289,7 @@ tdisp.d
     period.<br>
     <br>
     This run changes just the parameters in the second layer of the
-    model. Byediting top.mod, 0.mod and bot.mod computations can be made
+    model. By editing top.mod, 0.mod and bot.mod computations can be made
     for the other layers.<br>
     <br>
     The output of DOPAR can be compared directly to the output of <span
@@ -309,7 +309,7 @@ tdisp.d
     <h3>Example 3 - Kernels as a function of depth </h3>
     <p>The kernels given in the Computer Programs in Seismology 3.30
       (CPS330) by the programs <b>slegn96/sregn96/sdpder96</b> differ
-      from those given in papers by Saito anbd others in a significant
+      from those given in papers by Saito and others in a significant
       way. Those papers give the kernel at a given depth. The CPS330
       values are the kernels for a given layer, which are obtained from
       the depth kernels through integration: <br>

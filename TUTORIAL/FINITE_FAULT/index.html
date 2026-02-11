@@ -35,7 +35,7 @@
       <a href="../FINITE_STATIC/index.html"> Static Deformation Finite Fault</a><br>
     </p>
     <p>The finite fault model is that of the Costa Rica earthquake of
-      2012/09/05 14:42:00, which is the subjet of the first tutorial.<br>
+      2012/09/05 14:42:00, which is the subset of the first tutorial.<br>
     </p>
     <p>This tutorial provides a unified organization to organize and
       compute teleseismic P-waves, regional waveforms an regional
@@ -80,26 +80,26 @@ FINITE_FAULT/
       <li>A list of stations for which synthetics are to be made</li>
       <li>the finite fault model given by a link at the bottom of the
         USGS Finite Fault solution page</li>
-      <li>NOTE: The DOIT.TEL and DOIT.REG scripts use the <b>gsac</b> <i>map </i>comand to produce <b>map.sh</b> which can be used for a
+      <li>NOTE: The DOIT.TEL and DOIT.REG scripts use the <b>gsac</b> <i>map </i>command to produce <b>map.sh</b> which can be used for a
         GMT3/GMT4 installation. If you have GMT5 installed, then edit
         these scripts to change the lines</li>
     </ul>
 <font size="2">
 <pre>
-map ksntm on global on ray on<br>sh map.sh<br># if GMT5 is installed comment the previous line and 
+map kstnm on global on ray on<br>sh map.sh<br># if GMT5 is installed comment the previous line and 
 # then uncomment the next two
-#map5 ksntm on global on ray on
+#map5 kstnm on global on ray on
 #sh map5.sh
 </pre></font>
 </p><p>
 to read
 <font size="2">
 <pre>
-#map ksntm on global on ray on
+#map kstnm on global on ray on
 #sh map.sh
 # if GMT5 is installed comment the previous line and then 
 # uncomment the next two
-map5 ksntm on global on ray on
+map5 kstnm on global on ray on
 sh map5.sh</font></pre>
 </p>
     <h2>Simulations</h2>
@@ -140,7 +140,7 @@ cat &gt; dfile &lt;&lt; EOF
 ${DIST} 1.0 512 -20 8.5
 EOF<br></pre>
 </p><p>
-The 1.0 indicates a sample rate of 1.0 sec, the 512 indicates the number of points in the time series, and the first time sample is given by&nbsp; t = -20 + DIST/8.5.&nbsp; The computational time is such that if I had used 0.5 sec and 1024 points to include higher frequencies, then the time woudl increase by a factor of 4. I thought that my chose here was appropriate since the finite fault model was constructed using long period data.<br><br>The DOIT.REG creates the subdirectories WORK, STACK and FINAL in this directory. The stacked teleseismic synthetics are Sac files in the subdirectory FINAL.
+The 1.0 indicates a sample rate of 1.0 sec, the 512 indicates the number of points in the time series, and the first time sample is given by&nbsp; t = -20 + DIST/8.5.&nbsp; The computational time is such that if I had used 0.5 sec and 1024 points to include higher frequencies, then the time would increase by a factor of 4. I thought that my chose here was appropriate since the finite fault model was constructed using long period data.<br><br>The DOIT.REG creates the subdirectories WORK, STACK and FINAL in this directory. The stacked teleseismic synthetics are Sac files in the subdirectory FINAL.
 This example creates the following files:<br>
 <pre>BCIP.E	BCIP.N	BCIP.Z	JTS.E	JTS.N	JTS.Z
 </pre></p><p>
@@ -148,7 +148,7 @@ The DOIT.REG also creates the graphics files map.png and finite_tel.png which ar
 <table>
 <tbody><tr>
 <td><img src="FINITE.REG/map.png"><br><center>Location of epicenter and paths to stations </center></td>
-<td><img src="FINITE.REG/finite_reg.png" <br=""><center>Regional  simulations of ground velocity in m/sfrom the finite fault</center></td>
+<td><img src="FINITE.REG/finite_reg.png" <br=""><center>Regional  simulations of ground velocity in m/s from the finite fault</center></td>
 </tr>
 </tbody></table>
 </p><h3>Static deformation<br></h3><br>

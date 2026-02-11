@@ -31,7 +31,7 @@ AK135.TEL/  AK135.TELPBBD/  CUS.REG/    Models/  PROTO.REG/  WUS.REG/</PRE>
 </p><P>
 &nbsp;In these you will see scripts that I used for my Green's
 functions.&nbsp; These are examples.&nbsp; The prototypes for your
-Green's functions are in the directory PROTP.REG. The Models
+Green's functions are in the directory PROTO.REG. The Models
 directory contains the models that I use.</P>
 <H2>2. Set the environment</H2>
 <P>The moment tensor inversion scripts require knowledge of the
@@ -243,7 +243,7 @@ the DOIT.WK script you will see that there are two loops over source
 depth, within each is a loop&nbsp; over distance. The first loop is
 for short distance and the second is for larger, and will have a
 longer time series.&nbsp; The number of points and sampling interval
-are fine for my sudy of earthquakes from broadband stations 10 - 500
+are fine for my study of earthquakes from broadband stations 10 - 500
 km and in the frequency band of 0.02 - 0.10 Hz.<BR>In selecting the
 distances, use distances to the nearest km.&nbsp; Do not change the
 depth selection.<BR><BR>The DOIT.SW script accomplished two purposes.
@@ -255,7 +255,7 @@ ground noise.&nbsp; The&nbsp; surface wave is usually very easy to
 see.&nbsp; So DOIT.SW creates the Green's functions by adding
 together surface-wave modes, e.g., creating a seismogram for the
 signal following the first S arrival.&nbsp; These synthetics are very
-fast to compute and are actully quite good at 200 km. Compute these
+fast to compute and are actually quite good at 200 km. Compute these
 if you do not want to fit the initial P-wave form.<BR><BR>After the
 computations are complete the <I>GREEN/YUN.REG</I> directory contains
 the following:</P>
@@ -308,10 +308,10 @@ removed.&nbsp; The <I>W.CTL </I>file has entries as follow:
 460 0.25 1024 52.5 0 0100 046000100
 565 0.25 2048 65.625 0 0100 056500100</PRE>
 </p><p>
-The columns are the epicentral distacne, the sample rate, the number
+The columns are the epicentral distance, the sample rate, the number
 of points, the time of the first sample, the reduction velocity (a 0
 hear means that the time is actually that of the first sample), the
-directory for this dource depth, and the Green function prototype for
+directory for this source depth, and the Green function prototype for
 this source depth and the distance.&nbsp; Moment tensor inversion
 uses the epicentral distance of the actual observed waveform to find
 the Green function appropriate for that distance by searching the

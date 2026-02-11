@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="nsimple.css">
   </head>
   <body dir="ltr" bgcolor="#ffffff" lang="en-US">
-<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Simulate ambient noise processsing</h2></header>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Simulate ambient noise processing</h2></header>
     <h2 class="western">Introduction</h2>
     <p>The purpose of this tutorial is to generate surface-wave noise
       for a known 1-D structural model by applying randomly oriented
@@ -37,20 +37,20 @@
     <p>Many details of processing to determine the empirical Greens
       functions by cross-correlation have been simplified. For real data
       I have only applied a frequency domain whitening before
-      cross-correlation. Since tis simulation assumes noise sources
+      cross-correlation. Since this simulation assumes noise sources
       equally spaced in origin time, the records may be very spiky. I
       had no luck with these simulations. However, if I applied a AGC to
       the cross-correlation time series before stacking, then I got
       something that gave acceptable results for analysis using <b>do_mft.</b>&nbsp;&nbsp;
       The value of these scripts is that then be modified through the
       use of different velocity models or different distances between
-      the two receivers.&nbsp; As the seapration distance is made
+      the two receivers.&nbsp; As the separation distance is made
       smaller, I would expect that it will be difficult to get
       dispersion data at the longer periods. There may also be a problem
       with the many modes arriving, so that a dispersion mode may not be
       able to be identified.<br>
     </p>
-    <p>The other caution is that this script is set up to emulate a high frequency data acquisition where cartesian coordinates are appropriate. Anotehr script will have to be written to emulate data sets for stations widely separated, e.g., the TArray of USArray, where geocentric coodrinates have to be used.
+    <p>The other caution is that this script is set up to emulate a high frequency data acquisition where Cartesian coordinates are appropriate. Another script will have to be written to emulate data sets for stations widely separated, e.g., the TArray of USArray, where geocentric coordinates have to be used.
     </p>
     <h2 class="western">Download and distribution</h2>
     <p>This exercise is contained in the gzip’d tar file <a
@@ -103,7 +103,7 @@ HFAMBIENTNOISE.dist/Models/tak135sph.mod
       HFAMBIENTNOISE.dist/Models/soilm2.mod. The dispersion curves for
       this model are given Figure 1. The fundamental and higher modes
       are plotted. In this simulation the effects of Q are not
-      considered since the eigenfunction programs were executed tith the
+      considered since the eigenfunction programs were executed with the
       -NOQ flag, e.g., sregn96 -NOQ and slegn96 -NOQ.&nbsp; The group
       velocities indicate that there could be arrivals propagating as
       slow as 80 m/s. (0.08 km/sec).</p>
@@ -227,7 +227,7 @@ function getvmodextreme () {
 #   (EVAL,EVLO) - sourc coordinate in geocentrc coordinates
 #           - for simplicity the receivers are assumed to be
 #           - near (0,0) so that te conversion from km to degree
-#           - does is essentially cartesian
+#           - does is essentially Cartesian
 #####
 }
 <br>
@@ -290,7 +290,7 @@ The last part of the script performs
 ##### everything below here does the synthetic of the noise #####
 
 #####
-#    clean up previouse run
+#    clean up previous run
 #####
 rm -f ??????.stk
 rm -f *.Z
@@ -438,11 +438,11 @@ EOF
     <h2 class="western">DOSTKZNE</h2>
     <p>As set up, this script processes each of the 900 seconds of
       continuous 3-component noise at the two stations in 10 second
-      segments. Each segment is whitened int he frequency domain and
-      amplitude adjusted usg an AGC operator. Then the 10 second
+      segments. Each segment is whitened in the frequency domain and
+      amplitude adjusted using an AGC operator. Then the 10 second
       segments are cross-correlated. After all of the noise is
       processed, the cross-correlations and reversed cross-correlations
-      are saved, and stacked to form the interstation Green's
+      are saved, and stacked to form the inter-station Green's
       functions&nbsp; Z.correv, N.correv and E.correv.&nbsp;&nbsp;
       Because the stations were aligned in the EW direction, The
       Z.correv will have the Rayleigh wave, the E.correv will have the

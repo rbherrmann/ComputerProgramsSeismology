@@ -1,0 +1,540 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple.css Test Page</title>
+	<!-- The following are some stylesheets for testing -->
+	<!-- Sanitize.css reset -->
+	<!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+	<!-- Latest release version of Simple.css -->
+	<!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+	<!-- Latest commit from GitHub -->
+	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+	<!-- Local version -->
+	<link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2> Strain Synthetics - Tests - II  </h2></header>
+<h2>1. Introduction</h2>
+<p>
+This tutorial introduces the programs <b>sshspec96</b> and <b>sshspec96strain</b> which make  use of a property of real causal functions that states that
+<br>
+<img src="EQ_01.png">
+<br>
+where <i>U(t)</i> is the unit step function. This relation arises from the decomposition of a real function into even and odd parts, e.g., <i> h(t) = h<sub>e</sub>(t) + h<sub>o</sub>(t)</i> and for real
+<i>h(t)</i>, its Fourier transform is <i>H(&omega;) = R<sub>e</sub>(&omega;) + i I<sub>o</sub>(&omega;)</i>.
+If there is no discontinuity at <i>t=0</i>, then 
+<i>h<sub>o</sub>(t) = sgn(t) h<sub>e</sub>(t)</i>
+and
+<i>h<sub>e</sub>(t) = sgn(t) h<sub>o</sub>(t)</i>, which says that 
+<i>R<sub>e</sub>(&omega;)</i>
+and
+<i>I<sub>o</sub>(&omega;)</i> are Hilbert transforms of each other in the frequency domain.
+</p>
+<p>
+When solving wave equation problems in cylindrical coordinates, one has 
+<br>
+<img src="EQ_02.gif">
+<br>
+The advantage of this expression 
+is  that it is not necessary to integrate to infinity for non-attenuative media
+since  <i>Im H(k,&omega;) = 0</i> for <i>k &gt; k<sub>max</sub></i>, 
+where <i>k<sub>max</sub>=&omega;/V<sub>min</sub></i> and <i>V<sub>min</sub></i> is the lowest P- or S-wave velocity. 
+This is useful when the source and receiver are at the same depth, and the exponential decay in the  <i>H(k,&omega;)</i>.
+cannot be relied upon to truncate the integral.
+</p>
+<p>
+This approach follows the work of S&aacute;nchez-Sezma et al (2011) in their study of H/V ratios from ambient noise. The reference is
+</p>
+<p>
+<blockquote>
+<i>
+S&aacute;nchez-Sesma, F. J., Rodr&iacute;guez, M., Iturrar&aacute;n-Viveros, U., Luz&oacute;n, F., Campillo, M., Margerin,
+L., Garc&iacute;a-Jerez, A., Suarez, M., Santoyo, M. A., and Rodr&iacute;guez-Castellanos, A.
+(2011). A theory for microtremor H/V spectral ratio: application for a layered medium:.
+Geophys. J. Int., 186:221-225.
+</i>
+</blockquote>
+</p>
+<p>In order to implement this technique to compare to N-point synthetics
+created by <b>hspec96</b> and <b>hspec96strain</b>, a 2N point time series must be used with
+<b>sshspec96</b> and <b>sshspec96strain</b>, and then the first half of the time series saved. This truncation step is required since negative values map into the second half of the trace.
+</p>
+<p>
+The reason for developing <b>sshspec96</b> and <b>sshspec96strain</b> is to create synthetics efficiently for the special case that the source and receiver depths are identical.
+</p>
+<h3>Testing</h3>
+<p>
+The purpose of this tutorial is to compare <b>sshspec96strain</b> to  <b>hspec96strain</b> focusing on the special case when the source and receiver depths are the same.
+The testing considers  a set of epicentral distances for a fixed source depth and a set  of source depths for  fixed epicentral distance. As will be seen, the current code still has problems for some Green's functions at the vertical distance between the source and receiver is small.
+</p>
+<p>
+An overview of the wavenumber integration and considerations in its implementation are given in the document <a href="Theory.pdf">Theory.pdf</a>. The details about using the features of causality of real time functions, and hence the integration of <i>Im H(k,&omega;)</i> are 
+given in <a href="lat02.pdf"> lat02.pdf</a>.
+</p>
+<p>
+The test cases are given in <a href="STRAIN3.tgz">STRAIN3.tgz</a>. To run these yourself, do the following after downloading this archive:
+</p>
+<p>
+<pre>
+gunzip -c STRAIN3.tgz | tar xf -
+cd STRAIN3
+DOALL
+</pre>
+<br>The results will be in directories such as <i>ncVOLVInew/COMPAREZ</i>.
+</p>
+<h2>2. Code test</h2>
+<p>
+The wavenumber integration code within <b>hspec96</b>, <b>rspec96</b>, <b>tspec96</b> and <b>hspec96strain</b> often has numerical problems when the
+path of the direct arrival from the source to the receiver is nearly horizontal because the direct arrival is often has the largest amplitude
+and the small vertical offset means that the <i>H(k,&omega;)</i> does not decay rapidly as <i>k &rarr; &infin;</i>. When the vertical offset is not zero, the decay occurs at high frequencies. The underlying difficulty is that wavenumber integration requires the evaluation 
+of the integrals of the form  
+<i>&int;<sub>0</sub><sup>&infin;</sup> H ( k, &omega; ) J<sub>n</sub> (k r ) dk</i>, 
+but this is approximated as
+<i>&int;<sub>0</sub><sup>k<sub>max</sub></sup> H ( k, &omega; ) J<sub>n</sub> (k r ) dk</i> assuming that the contribution from <i>[k<sub>max</sub>, &infin;] </i>
+is negligible. This truncation problem is worse at lower frequencies.
+</p>
+<p>
+To test the current coding and to highlight problems, the Green's functions and partial derivatives with respect to the vertical and radial positions of the receiver are compared first with a fixed source depth of 10.0 km and different epicentral distances and then for a fixed radial distance of 10.0 km and different vertical distances between the source and the receiver.  The use of <b>hpulse96strain</b> with the <i>-TEST1</i> flag gives the Green's functions and the partial derivatives with respect to the receiver <i>(r,z)</i> coordinates. If these "look"
+ good, then the strains, stresses and rotations computed will be OK. It is assumed that the computation of strain using the Green's functions and their derivatives with respect to 'r' and 'z' is correct.
+</p>
+<h3>Wholespace Test</h3>
+<p>
+The wholespace velocity model, named <i>W.mod</i> is created with this shell script:
+</p
+<p>
+<pre>
+<small>
+cat > W.mod << EOF
+MODEL.01
+Simple wholespace model
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC) QP QS ETAP ETAS FREFP FREFS
+40.0  6.00       3.5     2.7        0  0  0    0     1     1
+EOF
+</small>
+</pre>
+</p>
+<p>
+The processing scripts used are called with the source depth and epicentral distance as command line arguments.
+<br>
+<table>
+<tr>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 256 0 0
+EOF
+hprep96 -M W.mod -d dfile -HS ${H} -HR 0 -TH -BH
+hspec96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2
+</pre>
+</small>
+</small>
+</td>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 512 0 0
+EOF
+hprep96 -M W.mod -d dfile -HS ${H} -HR 0 -TH -BH -XF 8
+sshspec96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2 -HALF
+</pre>
+</small>
+</small>
+</td>
+</tr>
+<tr>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 256 0 0
+EOF
+hprep96 -M W.mod -d dfile -HS ${H} -HR 0 -TH -BH
+hwhole96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2
+</pre>
+</small>
+</small>
+</td>
+<td>
+</td>
+</tr>
+</table>
+<br>
+Note that the original time series for <b>sshspec96strain</b> is twice as long as that for <b>hspec96strain</b> and that the <b>hprep96</b> has the flag <i>-XF 8</i> so that the integration hopefully 
+extends into the region where <i>Im[ H(k,&omega;)] </i> is effectively zero.
+</p>
+<p>The resulting time series consist of 256 points.
+The comparison are displayed in figures seen by clicking on the links of the next table.
+In these figures, the red curve is the true solution from <b>hspec96strain</b> and the blue curve is from <b>sshspec96strain</b> and the traces are overlain. For this wholespace test, the green traces are obtained from <b>hwhole96strain</b> which only requires an inverse Fourier transform and thus does not involve the wavenumber integration. Each comparison is annotated with the peak amplitude, the leading part of the file name which indicates distance, source and receiver depths, the radial distance, as R=0.0001km, and the source depth, as H=10. The receiver depth is 0.0.
+</p>
+<p>
+<table>
+<tr><th>Variation of epicentral distance for H=10km</th><th>Variation of source depth for R=10km</th></td>
+<tr>
+<td>
+<table>
+<tr><th>Green's function</th><th> <i>d /dz</i></th><th><i>d /dr</i></th></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/ZDD.png">ZDD</a></td> <td><a href="nwVOLVInew/COMPARER/ZDD_dz.png">d ZDD/dz</a></td> <td><a href="nwVOLVInew/COMPARER/ZDD_dr.png">d ZDD/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/RDD.png">RDD</a></td> <td><a href="nwVOLVInew/COMPARER/RDD_dz.png">d RDD/dz</a></td> <td><a href="nwVOLVInew/COMPARER/RDD_dr.png">d RDD/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/ZDS.png">ZDS</a></td> <td><a href="nwVOLVInew/COMPARER/ZDS_dz.png">d ZDS/dz</a></td> <td><a href="nwVOLVInew/COMPARER/ZDS_dr.png">d ZDS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/RDS.png">RDS</a></td> <td><a href="nwVOLVInew/COMPARER/RDS_dz.png">d RDS/dz</a></td> <td><a href="nwVOLVInew/COMPARER/RDS_dr.png">d RDS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/TDS.png">TDS</a></td> <td><a href="nwVOLVInew/COMPARER/TDS_dz.png">d TDS/dz</a></td> <td><a href="nwVOLVInew/COMPARER/TDS_dr.png">d TDS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/ZSS.png">ZSS</a></td> <td><a href="nwVOLVInew/COMPARER/ZSS_dz.png">d ZSS/dz</a></td> <td><a href="nwVOLVInew/COMPARER/ZSS_dr.png">d ZSS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/RSS.png">RSS</a></td> <td><a href="nwVOLVInew/COMPARER/RSS_dz.png">d RSS/dz</a></td> <td><a href="nwVOLVInew/COMPARER/RSS_dr.png">d RSS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/TSS.png">TSS</a></td> <td><a href="nwVOLVInew/COMPARER/TSS_dz.png">d TSS/dz</a></td> <td><a href="nwVOLVInew/COMPARER/TSS_dr.png">d TSS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/ZEX.png">ZEX</a></td> <td><a href="nwVOLVInew/COMPARER/ZEX_dz.png">d ZEX/dz</a></td> <td><a href="nwVOLVInew/COMPARER/ZEX_dr.png">d ZEX/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/REX.png">REX</a></td> <td><a href="nwVOLVInew/COMPARER/REX_dz.png">d REX/dz</a></td> <td><a href="nwVOLVInew/COMPARER/REX_dr.png">d REX/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/ZVF.png">ZVF</a></td> <td><a href="nwVOLVInew/COMPARER/ZVF_dz.png">d ZVF/dz</a></td> <td><a href="nwVOLVInew/COMPARER/ZVF_dr.png">d ZVF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/RVF.png">RVF</a></td> <td><a href="nwVOLVInew/COMPARER/RVF_dz.png">d RVF/dz</a></td> <td><a href="nwVOLVInew/COMPARER/RVF_dr.png">d RVF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/ZHF.png">ZHF</a></td> <td><a href="nwVOLVInew/COMPARER/ZHF_dz.png">d ZHF/dz</a></td> <td><a href="nwVOLVInew/COMPARER/ZHF_dr.png">d ZHF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/RHF.png">RHF</a></td> <td><a href="nwVOLVInew/COMPARER/RHF_dz.png">d RHF/dz</a></td> <td><a href="nwVOLVInew/COMPARER/RHF_dr.png">d RHF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPARER/THF.png">THF</a></td> <td><a href="nwVOLVInew/COMPARER/THF_dz.png">d THF/dz</a></td> <td><a href="nwVOLVInew/COMPARER/THF_dr.png">d THF/dr</a></td></tr>
+</table>
+</td>
+<td>
+<table>
+<tr><th>Green's function</th><th> <i>d /dz</i></th><th><i>d /dr</i></th></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/ZDD.png">ZDD</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZDD_dz.png">d ZDD/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZDD_dr.png">d ZDD/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/RDD.png">RDD</a></td> <td><a href="nwVOLVInew/COMPAREZ/RDD_dz.png">d RDD/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/RDD_dr.png">d RDD/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/ZDS.png">ZDS</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZDS_dz.png">d ZDS/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZDS_dr.png">d ZDS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/RDS.png">RDS</a></td> <td><a href="nwVOLVInew/COMPAREZ/RDS_dz.png">d RDS/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/RDS_dr.png">d RDS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/TDS.png">TDS</a></td> <td><a href="nwVOLVInew/COMPAREZ/TDS_dz.png">d TDS/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/TDS_dr.png">d TDS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/ZSS.png">ZSS</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZSS_dz.png">d ZSS/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZSS_dr.png">d ZSS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/RSS.png">RSS</a></td> <td><a href="nwVOLVInew/COMPAREZ/RSS_dz.png">d RSS/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/RSS_dr.png">d RSS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/TSS.png">TSS</a></td> <td><a href="nwVOLVInew/COMPAREZ/TSS_dz.png">d TSS/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/TSS_dr.png">d TSS/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/ZEX.png">ZEX</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZEX_dz.png">d ZEX/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZEX_dr.png">d ZEX/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/REX.png">REX</a></td> <td><a href="nwVOLVInew/COMPAREZ/REX_dz.png">d REX/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/REX_dr.png">d REX/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/ZVF.png">ZVF</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZVF_dz.png">d ZVF/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZVF_dr.png">d ZVF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/RVF.png">RVF</a></td> <td><a href="nwVOLVInew/COMPAREZ/RVF_dz.png">d RVF/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/RVF_dr.png">d RVF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/ZHF.png">ZHF</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZHF_dz.png">d ZHF/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/ZHF_dr.png">d ZHF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/RHF.png">RHF</a></td> <td><a href="nwVOLVInew/COMPAREZ/RHF_dz.png">d RHF/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/RHF_dr.png">d RHF/dr</a></td></tr>
+<tr> <td><a href="nwVOLVInew/COMPAREZ/THF.png">THF</a></td> <td><a href="nwVOLVInew/COMPAREZ/THF_dz.png">d THF/dz</a></td> <td><a href="nwVOLVInew/COMPAREZ/THF_dr.png">d THF/dr</a></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</p>
+<p>
+For the fixed source depth of H=10, the problems of <b>hspec96strain</b> at R=0 are seen in the d RVF/dr and d TSS/dr. 
+</p>
+<p>
+However larger differences are seen for fixed R=10 km as the source depth approaches the receiver depth.
+The <b>hspec96strain</b> (red curves) is supposed to be zero at H=0 for RDS, TDS, RVF, ZDD, ZEX, ZHF and 
+REX. In most cases the true amplitude may be zero, and the difference reflects numerical error.
+There are bigger differences in the d/dz of RDD, REX, RHF, RSS, THF, TSS, ZDS. The d/dr of
+RDS and ZEX
+show differences.
+</p>
+<p>
+The conclusion is that the <b>sshspec96strain</b> works well for a wholespace.
+</p>
+<h4>Uniform halfspace</h4>
+<p>
+The halfspace velocity model, named <i>HALF.mod</i> is created with this shell script:
+</p>
+<p>
+<pre>
+<small>
+cat > HALF.mod << EOF
+MODEL.01
+Simple wholespace model
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC) QP QS ETAP ETAS FREFP FREFS
+40.0  6.00       3.5     2.7        0  0  0    0     1     1
+EOF
+</small>
+</pre>
+</p>
+<p>
+The synthetics are made using the following script which is invoked with the source depth and epicentral distance on the command line. 
+This script differs from the one above in the model used but more importantly in the <b>hprep96</b> flag <i>-TF</i> which causes the model to be considered as a halfspace with a free surface. <font style="color: rgb(255,0,0);"> [Note that the default of <b>hprep96</b> is <i>-TF -BH</i>, e.g., free surface at the top and a halfspace at the bottom.]</font>
+In the comparison the 
+red curve is the true solution from <b>hspec96strain</b> and the blue curve is from <b>sshspec96strain</b> and the traces are overlain.
+<br>
+<p>
+<table>
+<tr>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 256 0 0
+EOF
+hprep96 -M HALF.mod -d dfile -HS ${H} -HR 0 -TF -BH
+hspec96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2
+</pre>
+</small>
+</small>
+</td>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 512 0 0
+EOF
+hprep96 -M HALF.mod -d dfile -HS ${H} -HR 0 -TF -BH -XF 8
+sshspec96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2 -HALF
+</pre>
+</small>
+</small>
+</td>
+</tr>
+</table>
+</small>
+</p>
+<p>
+<table>
+<tr><th>Variation of epicentral distance for H=10km</th><th>Variation of source depth for R=10km</th></td>
+<tr>
+<td>
+<table>
+<tr><th>Green's function</th><th> <i>d /dz</i></th><th><i>d /dr</i></th></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/ZDD.png">ZDD</a></td> <td><a href="nhVOLVInew/COMPARER/ZDD_dz.png">d ZDD/dz</a></td> <td><a href="nhVOLVInew/COMPARER/ZDD_dr.png">d ZDD/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/RDD.png">RDD</a></td> <td><a href="nhVOLVInew/COMPARER/RDD_dz.png">d RDD/dz</a></td> <td><a href="nhVOLVInew/COMPARER/RDD_dr.png">d RDD/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/ZDS.png">ZDS</a></td> <td><a href="nhVOLVInew/COMPARER/ZDS_dz.png">d ZDS/dz</a></td> <td><a href="nhVOLVInew/COMPARER/ZDS_dr.png">d ZDS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/RDS.png">RDS</a></td> <td><a href="nhVOLVInew/COMPARER/RDS_dz.png">d RDS/dz</a></td> <td><a href="nhVOLVInew/COMPARER/RDS_dr.png">d RDS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/TDS.png">TDS</a></td> <td><a href="nhVOLVInew/COMPARER/TDS_dz.png">d TDS/dz</a></td> <td><a href="nhVOLVInew/COMPARER/TDS_dr.png">d TDS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/ZSS.png">ZSS</a></td> <td><a href="nhVOLVInew/COMPARER/ZSS_dz.png">d ZSS/dz</a></td> <td><a href="nhVOLVInew/COMPARER/ZSS_dr.png">d ZSS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/RSS.png">RSS</a></td> <td><a href="nhVOLVInew/COMPARER/RSS_dz.png">d RSS/dz</a></td> <td><a href="nhVOLVInew/COMPARER/RSS_dr.png">d RSS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/TSS.png">TSS</a></td> <td><a href="nhVOLVInew/COMPARER/TSS_dz.png">d TSS/dz</a></td> <td><a href="nhVOLVInew/COMPARER/TSS_dr.png">d TSS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/ZEX.png">ZEX</a></td> <td><a href="nhVOLVInew/COMPARER/ZEX_dz.png">d ZEX/dz</a></td> <td><a href="nhVOLVInew/COMPARER/ZEX_dr.png">d ZEX/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/REX.png">REX</a></td> <td><a href="nhVOLVInew/COMPARER/REX_dz.png">d REX/dz</a></td> <td><a href="nhVOLVInew/COMPARER/REX_dr.png">d REX/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/ZVF.png">ZVF</a></td> <td><a href="nhVOLVInew/COMPARER/ZVF_dz.png">d ZVF/dz</a></td> <td><a href="nhVOLVInew/COMPARER/ZVF_dr.png">d ZVF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/RVF.png">RVF</a></td> <td><a href="nhVOLVInew/COMPARER/RVF_dz.png">d RVF/dz</a></td> <td><a href="nhVOLVInew/COMPARER/RVF_dr.png">d RVF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/ZHF.png">ZHF</a></td> <td><a href="nhVOLVInew/COMPARER/ZHF_dz.png">d ZHF/dz</a></td> <td><a href="nhVOLVInew/COMPARER/ZHF_dr.png">d ZHF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/RHF.png">RHF</a></td> <td><a href="nhVOLVInew/COMPARER/RHF_dz.png">d RHF/dz</a></td> <td><a href="nhVOLVInew/COMPARER/RHF_dr.png">d RHF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPARER/THF.png">THF</a></td> <td><a href="nhVOLVInew/COMPARER/THF_dz.png">d THF/dz</a></td> <td><a href="nhVOLVInew/COMPARER/THF_dr.png">d THF/dr</a></td></tr>
+</table>
+</td>
+<td>
+<table>
+<tr><th>Green's function</th><th> <i>d /dz</i></th><th><i>d /dr</i></th></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/ZDD.png">ZDD</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZDD_dz.png">d ZDD/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZDD_dr.png">d ZDD/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/RDD.png">RDD</a></td> <td><a href="nhVOLVInew/COMPAREZ/RDD_dz.png">d RDD/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/RDD_dr.png">d RDD/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/ZDS.png">ZDS</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZDS_dz.png">d ZDS/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZDS_dr.png">d ZDS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/RDS.png">RDS</a></td> <td><a href="nhVOLVInew/COMPAREZ/RDS_dz.png">d RDS/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/RDS_dr.png">d RDS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/TDS.png">TDS</a></td> <td><a href="nhVOLVInew/COMPAREZ/TDS_dz.png">d TDS/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/TDS_dr.png">d TDS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/ZSS.png">ZSS</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZSS_dz.png">d ZSS/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZSS_dr.png">d ZSS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/RSS.png">RSS</a></td> <td><a href="nhVOLVInew/COMPAREZ/RSS_dz.png">d RSS/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/RSS_dr.png">d RSS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/TSS.png">TSS</a></td> <td><a href="nhVOLVInew/COMPAREZ/TSS_dz.png">d TSS/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/TSS_dr.png">d TSS/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/ZEX.png">ZEX</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZEX_dz.png">d ZEX/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZEX_dr.png">d ZEX/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/REX.png">REX</a></td> <td><a href="nhVOLVInew/COMPAREZ/REX_dz.png">d REX/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/REX_dr.png">d REX/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/ZVF.png">ZVF</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZVF_dz.png">d ZVF/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZVF_dr.png">d ZVF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/RVF.png">RVF</a></td> <td><a href="nhVOLVInew/COMPAREZ/RVF_dz.png">d RVF/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/RVF_dr.png">d RVF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/ZHF.png">ZHF</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZHF_dz.png">d ZHF/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/ZHF_dr.png">d ZHF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/RHF.png">RHF</a></td> <td><a href="nhVOLVInew/COMPAREZ/RHF_dz.png">d RHF/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/RHF_dr.png">d RHF/dr</a></td></tr>
+<tr> <td><a href="nhVOLVInew/COMPAREZ/THF.png">THF</a></td> <td><a href="nhVOLVInew/COMPAREZ/THF_dz.png">d THF/dz</a></td> <td><a href="nhVOLVInew/COMPAREZ/THF_dr.png">d THF/dr</a></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</p>
+<h5>Discussion</h5>
+<p>
+Although the solutions require wavenumber integration, the comparisons are excellent for fixed source depth as the epicentral distance increases. </p>
+<p>
+For fixed R, <b>sshspec96strain</b> is much better than <b>hspec96strain</b> as H &#8594; 0.  The RDS and TDS at H=0 look noisy,  but note that the4 amplitudes are very small.
+The d/dz of ZHF has some noise at about H=1 and the ZDS at H=0 (but is small). 
+Both codes do well for the d/dr.
+</p>
+
+<h4>Layered Halfspace </h4>
+<p>
+The final comparison is for a more realistic  layered halfspace velocity model, named <i>CUS.mod</i> is created with this shell script:
+</p>
+<p>
+<pre>
+<small>
+<small>
+cat > CUS.mod << EOF
+MODEL.01
+CUS Model with Q from simple gamma values
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+  1.0000  5.0000  2.8900  2.5000 0.172E-02 0.387E-02 0.00  0.00  1.00  1.00 
+  9.0000  6.1000  3.5200  2.7300 0.160E-02 0.363E-02 0.00  0.00  1.00  1.00 
+ 10.0000  6.4000  3.7000  2.8200 0.149E-02 0.336E-02 0.00  0.00  1.00  1.00 
+ 20.0000  6.7000  3.8700  2.9020 0.000E-04 0.000E-04 0.00  0.00  1.00  1.00 
+  0.0000  8.1500  4.7000  3.3640 0.194E-02 0.431E-02 0.00  0.00  1.00  1.00 
+EOF
+</small>
+</small>
+</pre>
+</p>
+<p>
+The synthetics are made using the following script which is invoked with the source depth and epicentral distance on the command line. 
+<p>
+<br>
+<p>
+<table>
+<tr>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 256 0 0
+EOF
+hprep96 -M CUS.mod -d dfile -HS ${H} -HR 0 -TF -BH
+hspec96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2
+</pre>
+</small>
+</small>
+</td>
+<td>
+<small>
+<small>
+<pre>
+#!/bin/sh
+H=$1
+R=$2
+
+cat > dfile << EOF
+${R} 0.05 512 0 0
+EOF
+hprep96 -M CUS.mod -d dfile -HS ${H} -HR 0 -TF -BH -XF 8
+sshspec96strain
+hpulse96strain -TEST1 -V -p -l 2 -FMT 2 -HALF
+</pre>
+</small>
+</small>
+</td>
+</tr>
+</table>
+</p>
+<p>
+<table>
+<tr><th>Variation of epicentral distance for H=10km</th><th>Variation of source depth for R=10km</th></td>
+<tr>
+<td>
+<table>
+<tr><th>Green's function</th><th> <i>d /dz</i></th><th><i>d /dr</i></th></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/ZDD.png">ZDD</a></td> <td><a href="ncVOLVInew/COMPARER/ZDD_dz.png">d ZDD/dz</a></td> <td><a href="ncVOLVInew/COMPARER/ZDD_dr.png">d ZDD/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/RDD.png">RDD</a></td> <td><a href="ncVOLVInew/COMPARER/RDD_dz.png">d RDD/dz</a></td> <td><a href="ncVOLVInew/COMPARER/RDD_dr.png">d RDD/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/ZDS.png">ZDS</a></td> <td><a href="ncVOLVInew/COMPARER/ZDS_dz.png">d ZDS/dz</a></td> <td><a href="ncVOLVInew/COMPARER/ZDS_dr.png">d ZDS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/RDS.png">RDS</a></td> <td><a href="ncVOLVInew/COMPARER/RDS_dz.png">d RDS/dz</a></td> <td><a href="ncVOLVInew/COMPARER/RDS_dr.png">d RDS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/TDS.png">TDS</a></td> <td><a href="ncVOLVInew/COMPARER/TDS_dz.png">d TDS/dz</a></td> <td><a href="ncVOLVInew/COMPARER/TDS_dr.png">d TDS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/ZSS.png">ZSS</a></td> <td><a href="ncVOLVInew/COMPARER/ZSS_dz.png">d ZSS/dz</a></td> <td><a href="ncVOLVInew/COMPARER/ZSS_dr.png">d ZSS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/RSS.png">RSS</a></td> <td><a href="ncVOLVInew/COMPARER/RSS_dz.png">d RSS/dz</a></td> <td><a href="ncVOLVInew/COMPARER/RSS_dr.png">d RSS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/TSS.png">TSS</a></td> <td><a href="ncVOLVInew/COMPARER/TSS_dz.png">d TSS/dz</a></td> <td><a href="ncVOLVInew/COMPARER/TSS_dr.png">d TSS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/ZEX.png">ZEX</a></td> <td><a href="ncVOLVInew/COMPARER/ZEX_dz.png">d ZEX/dz</a></td> <td><a href="ncVOLVInew/COMPARER/ZEX_dr.png">d ZEX/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/REX.png">REX</a></td> <td><a href="ncVOLVInew/COMPARER/REX_dz.png">d REX/dz</a></td> <td><a href="ncVOLVInew/COMPARER/REX_dr.png">d REX/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/ZVF.png">ZVF</a></td> <td><a href="ncVOLVInew/COMPARER/ZVF_dz.png">d ZVF/dz</a></td> <td><a href="ncVOLVInew/COMPARER/ZVF_dr.png">d ZVF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/RVF.png">RVF</a></td> <td><a href="ncVOLVInew/COMPARER/RVF_dz.png">d RVF/dz</a></td> <td><a href="ncVOLVInew/COMPARER/RVF_dr.png">d RVF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/ZHF.png">ZHF</a></td> <td><a href="ncVOLVInew/COMPARER/ZHF_dz.png">d ZHF/dz</a></td> <td><a href="ncVOLVInew/COMPARER/ZHF_dr.png">d ZHF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/RHF.png">RHF</a></td> <td><a href="ncVOLVInew/COMPARER/RHF_dz.png">d RHF/dz</a></td> <td><a href="ncVOLVInew/COMPARER/RHF_dr.png">d RHF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPARER/THF.png">THF</a></td> <td><a href="ncVOLVInew/COMPARER/THF_dz.png">d THF/dz</a></td> <td><a href="ncVOLVInew/COMPARER/THF_dr.png">d THF/dr</a></td></tr>
+</table>
+</td>
+<td>
+<table>
+<tr><th>Green's function</th><th> <i>d /dz</i></th><th><i>d /dr</i></th></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/ZDD.png">ZDD</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZDD_dz.png">d ZDD/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZDD_dr.png">d ZDD/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/RDD.png">RDD</a></td> <td><a href="ncVOLVInew/COMPAREZ/RDD_dz.png">d RDD/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/RDD_dr.png">d RDD/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/ZDS.png">ZDS</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZDS_dz.png">d ZDS/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZDS_dr.png">d ZDS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/RDS.png">RDS</a></td> <td><a href="ncVOLVInew/COMPAREZ/RDS_dz.png">d RDS/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/RDS_dr.png">d RDS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/TDS.png">TDS</a></td> <td><a href="ncVOLVInew/COMPAREZ/TDS_dz.png">d TDS/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/TDS_dr.png">d TDS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/ZSS.png">ZSS</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZSS_dz.png">d ZSS/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZSS_dr.png">d ZSS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/RSS.png">RSS</a></td> <td><a href="ncVOLVInew/COMPAREZ/RSS_dz.png">d RSS/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/RSS_dr.png">d RSS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/TSS.png">TSS</a></td> <td><a href="ncVOLVInew/COMPAREZ/TSS_dz.png">d TSS/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/TSS_dr.png">d TSS/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/ZEX.png">ZEX</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZEX_dz.png">d ZEX/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZEX_dr.png">d ZEX/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/REX.png">REX</a></td> <td><a href="ncVOLVInew/COMPAREZ/REX_dz.png">d REX/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/REX_dr.png">d REX/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/ZVF.png">ZVF</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZVF_dz.png">d ZVF/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZVF_dr.png">d ZVF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/RVF.png">RVF</a></td> <td><a href="ncVOLVInew/COMPAREZ/RVF_dz.png">d RVF/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/RVF_dr.png">d RVF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/ZHF.png">ZHF</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZHF_dz.png">d ZHF/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/ZHF_dr.png">d ZHF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/RHF.png">RHF</a></td> <td><a href="ncVOLVInew/COMPAREZ/RHF_dz.png">d RHF/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/RHF_dr.png">d RHF/dr</a></td></tr>
+<tr> <td><a href="ncVOLVInew/COMPAREZ/THF.png">THF</a></td> <td><a href="ncVOLVInew/COMPAREZ/THF_dz.png">d THF/dz</a></td> <td><a href="ncVOLVInew/COMPAREZ/THF_dr.png">d THF/dr</a></td></tr>
+</table>
+</td>
+</tr>
+</table>
+</p>
+<h5>Discussion</h5>
+<p>
+Both <b>hspec96strain</b> and <b>sshspec96strain</b> give the same results for H=10 for different values of epicentral distances.
+</p>
+<p>
+For R=10 as the the source depth varies, <b>sshspec96strain</b> has some artifacts for RDS, TDS, d/dz of ZDS and the d_dr of RDS and TDS
+The <b>hspec96strain</b> exhibits some long period noise, e.g., RDS_dr and ZDS_dz,  while the <b>sshspec96strain</b> has some numerical noise for H=0.002 an H=0.01 for TDS_dr.
+</p>
+<h2>3. Summary</h2>
+<p>
+This tutorial shows how to evaluate imperfections in the computations. 
+The <b>sshspec96strain</b> works better as the source and receiver positions approach each other.
+</p>
+<p>
+The <b>sshspec96strain</b> successfully removed some of the low frequency trends for short source-receiver distances.
+</p>
+<p>
+It seems that the computation for the dip-slip Green's functions, ZDS, RDS and TDS, have more problems when the source and receiver depths become the same. this can be understood from the far-field radiation patterns, for which the P and SH amplitude should be zero for a ray leaving the source horizontally. In addition, there will be problems when the source is at the free surface for these Green's functions.
+</p>
+
+<footer>Last changed February 11, 2026</footer>
+  </body>
+</html>

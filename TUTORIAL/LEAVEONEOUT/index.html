@@ -158,7 +158,7 @@ for this data set. </p>
 ######
 cp elocate.dat elocate.dat.save
 <br>#####
-#     create a work subdirectory and populate it
+#     create a work sub-directory and populate it
 #     if it already exists start anew!
 #####
 rm -fr TEMP
@@ -246,7 +246,7 @@ esac
 #####
 M=`wc ${FILE} | awk '{print $1}' `
 #####
-#     create and awk scrip to compute the mean
+#     create an awk scrip to compute the mean
 #####
 cat &gt; awkscmn &lt;&lt; EOF
 BEGIN {SUM=0.0}
@@ -274,7 +274,7 @@ SDVAL[${IND}]="${SD}"
 <br>
 rm -f awkscmn awkscsd list.dep list.lat list.lon list.otcss
 <br>#####
-#     at this point compile a C program uner LINUX to convert
+#     at this point compile a C program under LINUX to convert
 #      epoch time to human time
 #####
 <br>#####

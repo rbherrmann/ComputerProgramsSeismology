@@ -42,7 +42,7 @@ Additional information on these scripts is provided on this <a href="https://sei
 In addition, you will require an ability to convert FDSN XML to SEED in order to get the instrument responses. The Java program for this purpose, stationxml-seed-converter-2.10.jar, is available at <a href="https://github.com/iris-edu/stationxml-seed-converter">https://github.com/iris-edu/stationxml-seed-converter</a> and the github site includes examples. I have had success with stationxml-seed-converter-2.0.7-SNAPSHOT.jar. The current release is
 <a href="https://github.com/iris-edu/stationxml-seed-converter/releases/download/stationxml-seed-converter-2.1.0/stationxml-seed-converter-2.1.0.jar"> stationxmk-seed-converter-2.10.0</a>.
 <p>
-Always make sure that you are using the current verson of the software.
+Always make sure that you are using the current version of the software.
 <p>
 <h2>CPS Moment Tensor</h2>
 <p>
@@ -103,7 +103,7 @@ mkdir Orig
 cd Orig
 #####
 #    get everything from IRIS
-#    This used the -F script that asks the vraious data centers
+#    This used the -F script that asks the various data centers
 #    for their holdings that are within DEG degrees of the target
 #    LAT and LON
 #####
@@ -236,7 +236,7 @@ cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
 #####
 IDOEVT
 #####
-#       rotate to Z R T and ensure that hte signal amplitudes are
+#       rotate to Z R T and ensure that the signal amplitudes are
 #       greater than 1.0e-10
 #####
 cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA/20200813023417/20200813023417
@@ -267,11 +267,11 @@ cd /Users/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.NA
 <p>
 You will see that the backslash-escaped character have avoided the interpretation by DOWS to create the correct DOFINISH.
 <p>
-The difference between the two DOFINISH scripes ariases from the fact that IRIS has a response server whihc provides the RESP files that I require.
+The difference between the two DOFINISH scripts arises from the fact that IRIS has a response server which provides the RESP files that I require.
 <h2>GMT</h2>
 <p>
 If you look at the recent SLM regional moment tensor solutions at
-<a href="www.eas.slu.edu/eqc/eqc_mt/MECH.NA">www.eas.slu.edu/eqc/eqc_mt/MECH.NA</a> you will see that GMT is used to several plots: station and epicenter map, focal mechanism and direction of maximum compressive stress axes. I have scripts to use GMT4 and GMT5. In addition, the CPS program <b>gsac</b> has the <i>map</i> and <i>map5</i> commands for use with GMT4 and 5 respectively. Those commands create an annotated shell script <i>map.sh</i> or <i>map5.sh</i> that, when executed, wil create the PostScript files <i>map.eps</i> or <i>map5.eps</i>. The shell scripts can be used a a prototype for fine adjustment of the GMT commands.
+<a href="www.eas.slu.edu/eqc/eqc_mt/MECH.NA">www.eas.slu.edu/eqc/eqc_mt/MECH.NA</a> you will see that GMT is used to several plots: station and epicenter map, focal mechanism and direction of maximum compressive stress axes. I have scripts to use GMT4 and GMT5. In addition, the CPS program <b>gsac</b> has the <i>map</i> and <i>map5</i> commands for use with GMT4 and 5 respectively. Those commands create an annotated shell script <i>map.sh</i> or <i>map5.sh</i> that, when executed, will create the PostScript files <i>map.eps</i> or <i>map5.eps</i>. The shell scripts can be used a a prototype for fine adjustment of the GMT commands.
 <h2>Scripts</h2>
 <p>
 To distinguish the scripts that use GMT5, I append a <i>5</i> to the script name.  Thus there are DOWS5, DOSOLUTION5 and DOSETUP5.  In addition the working scripts for the inversion have DOPLTSAC5 in place of DOPLTSAC, OHTML5 inplace of DOHTML.  The DOSETUP5 knows about these.
@@ -280,7 +280,7 @@ My current scripts are available in a compressed tar archive: <a href="MECH.NA.t
 <pre>
 mkdir MECH.NA
 cd MECH.NA
-gunzip -c ~/MECH.NA.tgz | tr xvf -
+gunzip -c ~/MECH.NA.tgz | tar xvf -
 </pre>
 
 

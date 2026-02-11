@@ -31,7 +31,7 @@
     <p><b>cseis96 </b>differs from the original <b>seis81 </b>in that
       the radiation patterns from point force and moment tensor sources
       was corrected and in&nbsp;&nbsp; revised&nbsp; output formats. The
-      significant difference in making synthetics is that the formtion
+      significant difference in making synthetics is that the creation
       of the time series is make by the program <b>cpulse96</b> after <b>cseis96</b>
       is run.&nbsp; The program <b>cprep96</b> is a front end that
       simplifies the preparation input for <b>seis81</b>. However&nbsp;
@@ -59,7 +59,7 @@
       approximate incident plane waves. In addition, changes were made
       to <b>cpulse96</b> to permit a new way to define the time of the
       first sample and to restrict the rays contributing to the
-      seismogram by specifying a range of acceptable ray parametes.<br>
+      seismogram by specifying a range of acceptable ray parameters.<br>
     </p>
     <p>The ray tracing code works by shooting a set of rays through the
       structure until a pair is found that bracket the horizontal
@@ -79,7 +79,7 @@
       negative if the&nbsp; initial motion is a dilation.&nbsp; As will
       be show below, if the source is to the right of the array, then
       the horizontal&nbsp; motion will be reversed.&nbsp; Although the
-      Green's fucntions have 'R' in their name, e.t., REX, the&nbsp;
+      Green's functions have 'R' in their name, e.t., REX, the&nbsp;
       motions should be interpreted as motions with respect to the
       direction of the horizontal x-axis rather as radial with respect
       to the source.&nbsp; This means that computation of receiver
@@ -228,12 +228,12 @@ gunzip -c Cerveny.tgz | tar xf -
 </p>
     <p>The documentation for this line is</p>
 <font size="2">
-    <pre>     12) One card, quantities that control the basic system of initial<br>c         angles in the two-point ray tracing,etc.<br>c         dt,amin1,astep1,amax1,amin2,astep2,amax2,ac    format(8f10.5)<br>c           dt...     time step in the integration of the ray-tracing<br>c                     system. dt should be greater than zero.<br>c                     If dt.lt.0.00001, then dt=1.<br>c           amin1,astep1,amax1... determine the system of initial<br>c                     angles for primary reflected waves (and possibly<br>c                     for other manually generated elementary waves,the<br>c                     first element of which strikes the interface situ-<br>c                     ated below the source)<br>c           amin2,astep2,amax2... determine the system of initial angles<br>c                     for the direct waves (and possibly for other manually<br>c                     generated elementary waves,the first element of<br>c                     which strikes the interface above the source).<br>c           ac...     required accuracy of integration of the ray tracing<br>c                     system. Recomended values: 0.0001 - 0.001.<br></pre>
+    <pre>     12) One card, quantities that control the basic system of initial<br>c         angles in the two-point ray tracing,etc.<br>c         dt,amin1,astep1,amax1,amin2,astep2,amax2,ac    format(8f10.5)<br>c           dt...     time step in the integration of the ray-tracing<br>c                     system. dt should be greater than zero.<br>c                     If dt.lt.0.00001, then dt=1.<br>c           amin1,astep1,amax1... determine the system of initial<br>c                     angles for primary reflected waves (and possibly<br>c                     for other manually generated elementary waves,the<br>c                     first element of which strikes the interface situ-<br>c                     ated below the source)<br>c           amin2,astep2,amax2... determine the system of initial angles<br>c                     for the direct waves (and possibly for other manually<br>c                     generated elementary waves,the first element of<br>c                     which strikes the interface above the source).<br>c           ac...     required accuracy of integration of the ray tracing<br>c                     system. Recommended values: 0.0001 - 0.001.<br></pre>
 </font>
 </p>
     <p>You may wonder why the limits in the example line are π to -π and
       -π to π. The code permits velocity gradients. Thus if velocity
-      increases with depth and one wanst a ray from the source to a
+      increases with depth and one wants a ray from the source to a
       receiver above the source, the ray will go upward&nbsp; at short
       distances&nbsp; and downward for large horizontal distances. The
       range given here covers all possibilities. However examining all
@@ -261,7 +261,7 @@ gunzip -c Cerveny.tgz | tar xf -
     . This is easily understood if one writes the ray type for each
     segment in binary, using 0 for P and 1 for S. Thus one would have 0
     or 1&nbsp; for the halfspace, and then 0 or 1 for each segment in
-    the layer. Thus this example may be written as 0 ro the halfspace
+    the layer. Thus this example may be written as 0 for the halfspace
     and 110 for the layer.&nbsp; If there are many layers, it will be
     possible to have 10's of thousands of rays/.<sub> </sub><br>
     <br>
@@ -292,8 +292,8 @@ gunzip -c Cerveny.tgz | tar xf -
       This requires the use of the <i>-R </i>flag with&nbsp; <b>cseis96</b>.
       As will be seen below, such a plot can be very complicated, and it
       is recommended that only one receiver position be considered. This
-      used the output contained in the file <i>cseis96.trc</i>, whh can
-      be very largeThe command line defines the boundaries for the plot.<br>
+      used the output contained in the file <i>cseis96.trc</i>, which can
+      be very large. The command line defines the boundaries for the plot.<br>
     </p>
     <pre> Usage: cray96 -XMIN xmin -XMAX xmax -ZMIN zmin -ZMAX zmax -v <br>  -XMIN [xmin]    (default 0)       : Minimum X for plot<br>  -XMAX [xmax]    (default=400.0)   : Maximum X for plot<br>  -ZMIN [zmin]    (default=0.0)     : Minimum Z for plot<br>  -ZMAX [zmax]    (default = 50.0)  : Maximum Z for plot<br>  -v      (default = false) : verbose output<br>  -?      (default = false) : This help screen<br>  -h      (default = false) : This help screen<br></pre>
 </p><p>
@@ -322,7 +322,7 @@ USAGE: cpulse96 [ -v  ] [ -t -o -p -i ] -a alpha -l L [ -D -V -A]
   -t          Triangular pulse of base 2 L dt
   -p          Parabolic Pulse of base  4 L dt
   -l L        (default 1 )duration control parameter
-  -D          Output is ground displacment
+  -D          Output is ground displacement
   -V          Output is ground velocity (default)
   -A          Output is ground acceleration
   -F rfile    User supplied pulse
@@ -487,19 +487,19 @@ The model used here is shown in the next figure <br>
     The P velocities in the layers are 6.0, 8.0, 6.0, 8.0 and 8.5 km/s
     from top to bottom. The layer boundaries on the right side of the
     model are at 0, 40, 200, 207 and 300 km. (The lower boundary at
-    about 600 km is inserted to that the source is oin a layer).
+    about 600 km is inserted to that the source is in a layer).
     <p></p>
     <p> The layer boundaries use a simple format that is described in
       the tutorial at <i>PROGRAMS.330/DOC/OVERVIEW.pdf/cps330o.pdf</i>.
       Thus the layering consists of linear segments. </p>
     <p> <b>NOTE:</b> This is not a restriction of <b>cseis96</b>. The
-      layering can be specified to be smoother by uaing cubic splines -
-      see the documantation at <i>PROGRAMS.330/VOLIX/DOC/seis81.txt</i>.
+      layering can be specified to be smoother by using cubic splines -
+      see the documentation at <i>PROGRAMS.330/VOLIX/DOC/seis81.txt</i>.
     </p>
     <p> To create synthetics to emulate teleseismic arrivals and for
       computational efficiency, the processing scripts will select a
       target x-coordinate, x<sub>rec</sub>, for the station. It will
-      then be neceasary to specifiy the source location, e.g., (x<sub>src</sub>,
+      then be necessary to specify the source location, e.g., (x<sub>src</sub>,
       z<sub>src</sub>) where the z<sub>src</sub> is much larger than the
       structure thickness. In this case a&nbsp; simple approximation is
       that the horizontal offset from the source will be <i>x<sub>offset</sub>
@@ -523,11 +523,11 @@ c-----
 c     This program considers at range of teleseismic
 c     ray parameters typically observed. It then 
 c     converts the ray parameters to angles in radians
-c     for use with the Cerveny code. In addiiton
+c     for use with the Cerveny code. In addition
 c     it gives the horizontal offset for a given source
 c     depth.
 c
-c     It is assumed tha tht source depth is much greater than 
+c     It is assumed that the source depth is much greater than 
 c     the thickness of the structure being modeled.
 c-----
 c     define the velocity of the P wave at
@@ -620,9 +620,9 @@ a.out
     <p><br>
       By default <b>cprep96</b> will compute all ray conversions, which
       will create a huge number of rays. The <i>-R reverb</i> option to
-      <b>cprep96</b> is used to restrict the number of boundings in the
+      <b>cprep96</b> is used to restrict the number of bounces in the
       layers of the model to 3,3,1 and 1, respectively. the <i>3</i>
-      means that ion a given leyer, PPP, PPS, PSP, PSS, SSS, SSP, SPP
+      means that ion a given layer, PPP, PPS, PSP, PSS, SSS, SSP, SPP
       and SPP are considered, which should be sufficient for this study.
     </p>
     <p><br>
@@ -633,7 +633,7 @@ a.out
       halfspace, which can be compared to the output of <b>hrftn96</b>
       to test the code. This is why <b>cseis96</b> computations were
       extended to double precision when computing the ray from the
-      soruce to the receiver. </p>
+      source to the receiver. </p>
     <h3>Forward profile</h3>
     <p>The synthetics for a forward profile are computed. In addition <b>saciterd</b>
       is created to make a p-wave receiver function profile as a
@@ -688,7 +688,7 @@ a.out
       position 600 km are given in Forward600.sac while Reverse600.sac
       is for the reversed profile. In performing this comparison the
       reverse profile receiver function were multiplied by (-1) for
-      comparison, thus converting modtion in the (-x) direction to
+      comparison, thus converting motion in the (-x) direction to
       radial with respect to the source. <br>
     </p>
     <table>

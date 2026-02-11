@@ -16,10 +16,10 @@
         <link rel="stylesheet" href="nsimple.css">
   </head>
   <body dir="ltr" vlink="#800000" lang="en-US" link="#000080">
-<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Cervbeny Green's functions</h2></header>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Cerveny Green's functions</h2></header>
     <h2 class="western">
       Introduction</h2>
-<p>The purpose of this tutorial is to compare the Green's functions created by <b>cpulse96</b> to thus created by wavenumber integrations. The comparison must include rays laving the source in both upward and downward directions. In addition the test must avoid the Rayleigh wave which is not sythetized by the Cerveny high-freuqnecy asymptitoc ray theory. A simple crustal model with thickness of 40 km is used. Thus the selected epicentral distance is <i>r=5</i> km and the source depth is <i>h=10</i> km.</p>
+<p>The purpose of this tutorial is to compare the Green's functions created by <b>cpulse96</b> to thus created by wavenumber integration. The comparison must include rays laving the source in both upward and downward directions. In addition the test must avoid the Rayleigh wave which is not synthesized by the Cerveny high-frequency asymptotic ray theory. A simple crustal model with thickness of 40 km is used. Thus the selected epicentral distance is <i>r=5</i> km and the source depth is <i>h=10</i> km.</p>
 <h2>Test scripts</h2>
 <p>First download <a href="CERVHSPEC.tgz">CERVHSPEC.tgz</a> and then
 <pre>
@@ -30,18 +30,18 @@ DOALL
 </p><p>
 This will create the two figures shown below.</p>
 <h2>Comparison</h2>
-<p>Because the reflections from the base of the crust will be of much lower amnplitude sue to a grater vertical propagation distance, e.g., 70 km vs 10 km, and also because the reflections will be sub-critical, the trace comparison si presented in two windows, 0 - 11 sec and 11-22 sec in the fillowing two figures.</p>
+<p>Because the reflections from the base of the crust will be of much lower amplitude sue to a grater vertical propagation distance, e.g., 70 km vs 10 km, and also because the reflections will be sub-critical, the trace comparison is presented in two windows, 0 - 11 sec and 11-22 sec in the following two figures.</p>
 <table>
-<tr><td><img src="cmp00-11.png"><br>Green's function comparison in the 0-11 sec time window. Red traces are computed using Cerveny's code; the blue traces are comptued using wavenumebr integration code.</td></tr>
+<tr><td><img src="cmp00-11.png"><br>Green's function comparison in the 0-11 sec time window. Red traces are computed using Cerveny's code; the blue traces are computed using wavenumebr integration code.</td></tr>
 </table>
 <p>
-The column give the component of motion while the row gives the result for a particular Green's function. This the first row compars the ZDD and RDD Green's functions. There is no TDD Green's function.
+The column give the component of motion while the row gives the result for a particular Green's function. This the first row compares the ZDD and RDD Green's functions. There is no TDD Green's function.
 </p>
 <table>
-<tr><td><img src="cmp11-22.png"><br>Green's function comparison in the 11-22 sec time window. Red traces are computed using Cerveny's code; the blue traces are comptued using wavenumebr integration code.</td></tr>
+<tr><td><img src="cmp11-22.png"><br>Green's function comparison in the 11-22 sec time window. Red traces are computed using Cerveny's code; the blue traces are computed using wavenumebr integration code.</td></tr>
 </table>
 <p>
-One obvious difference is apparent in the vertical Force (VF) and Horizontal force (HF) Grene's functions.  Int he 0-11 sec display, the wavnumber integration code contains the near field terms, which are not present in the ray theory code. The lower frequency signal in the ZSS comparison in the 11-22 sec window can be reduced by increasing the value used in the <i>-MF </i> option in <b>hprep96</b> in <b>HSPEC/DOIT</b>. The reason that there is a difference in waveforms at a travel time of about 15s is because, the invocation of <b>cprep96</b> in <b>CERV/DOERV</b> only incuded the direct rays from the source to the surface receiver and the downgoing rays, e.g., P, S, PmP, PmS, SmP and SmS. The ray description do not include the surface reflectiosn, e.g., pPmP etc.
+One obvious difference is apparent in the vertical Force (VF) and Horizontal force (HF) Green's functions.  Int he 0-11 sec display, the wavenumber integration code contains the near field terms, which are not present in the ray theory code. The lower frequency signal in the ZSS comparison in the 11-22 sec window can be reduced by increasing the value used in the <i>-MF </i> option in <b>hprep96</b> in <b>HSPEC/DOIT</b>. The reason that there is a difference in waveforms at a travel time of about 15s is because, the invocation of <b>cprep96</b> in <b>CERV/DOERV</b> only included the direct rays from the source to the surface receiver and the downgoing rays, e.g., P, S, PmP, PmS, SmP and SmS. The ray description do not include the surface reflections, e.g., pPmP etc.
 </p>
 <h2>Summary</h2>
 <p>

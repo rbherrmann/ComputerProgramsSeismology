@@ -27,7 +27,7 @@ actually occurs during a large earthquake in terms of which parts of
 the fault move, how much do they move, and how fast. Methodologies
 exist to perform a finite fault inversion, which entails using the
 information from seismographic recordings to image the rupture process
-on the fault plane.&nbsp; Such analysis requires computaion. Detail
+on the fault plane.&nbsp; Such analysis requires computation. Detail
 fault rupture analysis has implications for estimating the shaking
 effects near an earthquake by characterizing the rupture plane and the
 rupture direction.
@@ -82,11 +82,11 @@ The scripts are discussed in the following links:
 <p>
 Assume that we have already prepared teleseismic data by removing the
 instrument response, rotating traces, and QC'ing waveforms and that
-they are placed on the system in the order used for telemseismic source
+they are placed on the system in the order used for teleseismic source
 inversion or for using teleseismic for quality control. We will set up
 the processing using&nbsp; empirical and synthetic Green's functions.
 </p><p>
-Let directory for the deconvolved, rotated, QC'd wavforms for the large
+Let directory for the deconvolved, rotated, QC'd waveforms for the large
 earthquake be 
 <font size="3">
 <pre>/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL
@@ -174,7 +174,7 @@ mechanism for the region. Fortunately this earthquake was studied by
 Gavin Hayes of the USGS. Gavin derived a finite fault solution and an
 averaged source time function.<br>
 His finite fault solution and fault averaged (?) moment release is
-givne in the two figures:<br>
+given in the two figures:<br>
 <br>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2"
  cellspacing="2">
@@ -327,7 +327,7 @@ location of the seismograms for the main event and the typical
 mechanism for the region:<br>
 <br>
 <font size="2">
-<pre>DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL<br><br>#####<br>#       define the mechanism and depth for the synthetics<br>#       These values can be obtained from the regional<br>#       averages of mechanisms using the new code<br>#       STK = strike<br>#       DIP = dip<br>#       RAKE = rake<br>#       HS = sourrce depth in km<br>#       MW = this is the reference MW, in theory the zero frequency<br>#       level of the derived source time function is the moment ratio<br>#       of the two events, e.g., a ratio of 1000 corresponds to a<br>#       delta Mw of 2.0, so if thw reference Mw=5 then the big event has Mw=7!<br>#####<br>STK=171<br>DIP=55<br>RAKE=112<br>HS=30<br>MW=5.0<br><br></pre>
+<pre>DIRBIG=/home/rbh/PROGRAMS.310t/MOMENT_TENSOR/MECH.TEL/20070815234057/DAT.TEL<br><br>#####<br>#       define the mechanism and depth for the synthetics<br>#       These values can be obtained from the regional<br>#       averages of mechanisms using the new code<br>#       STK = strike<br>#       DIP = dip<br>#       RAKE = rake<br>#       HS = source depth in km<br>#       MW = this is the reference MW, in theory the zero frequency<br>#       level of the derived source time function is the moment ratio<br>#       of the two events, e.g., a ratio of 1000 corresponds to a<br>#       delta Mw of 2.0, so if the reference Mw=5 then the big event has Mw=7!<br>#####<br>STK=171<br>DIP=55<br>RAKE=112<br>HS=30<br>MW=5.0<br><br></pre>
 </font>
 </p><p>
 &nbsp;We get the average source parameters by running the new USGS code
@@ -360,7 +360,7 @@ the procedure of this script is to use <span style="font-weight: bold;">hudson96
 to make synthetics for an Mw=5 earthquake. We will look at the
 deconvolutions for ALP=0.5 and 1.0 again as above.<br>
 We will also examine the effect of the assumed source depth on the
-dseconvolutions:<br>
+deconvolutions:<br>
 <br>
 </p><p>
 <table>
@@ -397,7 +397,7 @@ dseconvolutions:<br>
 </table>
 <br>
 In this case we have more azimuths than for the empirical technique
-since we do not have to worry about the S/Nfor the small event. However
+since we do not have to worry about the S/N for the small event. However
 we may be affected by instrument response problems which divide out in
 the empirical technique. We may conclude rupture in the opposite
 direction from this presentation.<br>
@@ -409,10 +409,10 @@ The next test if to consider the sensitivity to the assumed source
 depth. We consider source depths of 10, 15, 20, 25, 30, 35, 40 and 45
 km in the AK135D model. <br>
 The figure shows that the double pulse feature is common to all, but
-that the amplitudes of the two main pulses is affected by sthe assumed
-source depth, and henc the corresponding moment ratio of the mainshock
+that the amplitudes of the two main pulses is affected by the assumed
+source depth, and hence the corresponding moment ratio of the mainshock
 to the Green's function, since the area under and trace is
-proporational to the moment ratio.<br>
+proportional to the moment ratio.<br>
 <br>
 <table
   <tbody>
@@ -424,13 +424,13 @@ proporational to the moment ratio.<br>
 </table>
 <br>
 </p><p>
-There is signiicant sensitivity in the deconvolved source pulse to the
+There is significant sensitivity in the deconvolved source pulse to the
 assumed source depth for the Green's function used to make the
 predicted motion.&nbsp; This would imply different moment ratios.<br>
 Some of the sensitivity may be due to the variation in material
 properties with depth, with the P velocity increasing from about 6 km/s
 near the surface to about 8 km/s beneath the Moho while the density
-might increase from 2700 to 3300 kg/m^3. Since the teeleseismic
+might increase from 2700 to 3300 kg/m^3. Since the teleseismic
 amplitude is proportional to Mo/(&rho;V<sub}p</sub><sup>3</sup>) for the P wave, the
 teleseismic amplitude for the small Green's event would be decreased by
 a actor of roughly 2.9, which is what we see in the figure.&nbsp; This

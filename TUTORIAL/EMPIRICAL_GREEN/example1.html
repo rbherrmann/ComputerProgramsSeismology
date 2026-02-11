@@ -48,7 +48,7 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
         a complete menu takes time
   -G              (default off) The default dispersion file name is of the form 
         StationComponent.dsp, e.g., SLMBHZ.dsp 
-        When working with ground-noise crosscorrelation for interstation Green functions, the
+        When working with ground-noise cross-correlation for inter-station Green functions, the
         naming is Station1Component1Station2Component2.dsp , e.g., SLMBHZFVMBHZ.dsp
   -T              (default off)  run script MFTDOOVERLAY
   -11MIN min11 
@@ -64,17 +64,17 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
 </pre>
     <p> Some of these options are useful when working with the
       cross-correlation of ground noise. If there are N stations, then
-      shere are N(N-1)/2 station pairs. When working with TA data, the
-      number of station pairs is huge for manual anlysis using <b>do_mft</b>.
+      there are N(N-1)/2 station pairs. When working with TA data, the
+      number of station pairs is huge for manual analysis using <b>do_mft</b>.
       The <i>-DMIN</i> and <i>-DMAX</i> flags permit the selection of
       a range of distances. The IHDR11 field is created by the <b>gsac</b>
-      <i>stack</i> command set this parameter with the number of trces
+      <i>stack</i> command set this parameter with the number of traces
       stacked. The chances of a useful cross-correlation should be
       better if the number of traces stacked is larger. </p>
     <p> The <i>-T</i> option permits the display of the <i>Tomo</i>
       buttons of <b>do_mft</b>. On pressing these buttons, the scripts
       MFTDOOVERLAY or PHVDOOVERLAY are executed. </p>
-    <p> The <i>-IG</i> option permits the interctive phase velocity
+    <p> The <i>-IG</i> option permits the interactive phase velocity
       analysis. </p>
     <h2>Example</h2>
     Before running this example, go to the example directory:<br>
@@ -95,7 +95,7 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
     </p>
     <p> <img src="FIGURES/Win02.png"><br>
     </p>
-    <p>Click on "Units" to seelct the physical units of the trace.&nbsp;
+    <p>Click on "Units" to select the physical units of the trace.&nbsp;
       For quantitative studies using spectral amplitudes, e.g., to
       determine earthquake source parameters, the proper physical unit
       must be used.&nbsp; For my source inversion processing, the traces
@@ -130,7 +130,7 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
       estimate a phase velocity, and because each phase velocity
       estimate has other possible values because of the N2&#960; phase
       ambiguity, the phase velocity display can be very cluttered and
-      difficult to use. To keep that clean, and assumoing that the
+      difficult to use. To keep that clean, and assuming that the
       larger spectral amplitudes (envelope peak values) will have better
       determined phase velocities, this menu restricts output to the
       largest or largest two envelope peaks.<br>
@@ -146,7 +146,7 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
     </p>
     <p>This path between two stations of the Saint Louis University
       component of the New Madrid Seismic Network (NM) goes through part
-      of the Illinois Basin which has deep sections of&nbsp; paleozoic
+      of the Illinois Basin which has deep sections of&nbsp; Paleozoic
       strata.<br>
       This is the reason that the observed dispersion at short periods
       lies beneath the model prediction. <br>
@@ -154,7 +154,7 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
     <p> <img src="FIGURES/Win05.png"><br>
     </p>
     <p>If we now click the "PhVel" button a new image appears.&nbsp; The
-      group velocity overlay picture is reproduced from the previoous
+      group velocity overlay picture is reproduced from the previous
       display. If we again click the "Tomo" button, the model predicted
       phase velocities are displayed together with the possible phase
       velocities. The "Tomo" button is now displayed.&nbsp; The purpose
@@ -191,13 +191,13 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
       see the selected points.&nbsp; You can now select a few more, here
       shown in red.<br>
     </p>
-    <p>When done seleting, click "Exit"&nbsp; you will asked whether to
+    <p>When done selecting, click "Exit"&nbsp; you will asked whether to
       save the picks. You do not have to save the picks if you do not
       believe them.&nbsp; In this case we will save them. The file
       created used the original file name and appends a .phv, e.g.,
-      SIUCBHZBLOBHZ.WSTK.phv to identify the pahgse velocity
+      SIUCBHZBLOBHZ.WSTK.phv to identify the phase velocity
       selection.&nbsp; The use of the file name occurs because the "-G"
-      flag ws used in invoking <b>do_mft.</b><br>
+      flag is used in invoking <b>do_mft.</b><br>
     </p>
     <p> <img src="FIGURES/Win10.png"><br>
     </p>
@@ -221,8 +221,8 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
     </p>
     <h2>Output formats</h2>
     <p>The two files SIUBHZBLOBHZ.WSTK.dsp and SIUCBHZBLOBHZ.WSTK.phv
-      are very similar. Both have many columns. The group velocity outpu
-      is identified by the initial MFT96 and the pahse velocity by the
+      are very similar. Both have many columns. The group velocity output
+      is identified by the initial MFT96 and the phase velocity by the
       initial PHV96.&nbsp; The SIUCBHZBLOBHZ.WSTK.phv file has three
       additional columns<br>
     </p>
@@ -270,7 +270,7 @@ Usage: do_mft [-Nnumberperpage] [-G] [-T] [-11MIN min11] [-11MAX max11] [-DMIN d
     control flag<br>
     17&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     Instantaneous period if this is preferred. This differs from the
-    ilter period because the signal spectram is not flat.<br>
+    filter period because the signal spectrum is not flat.<br>
     18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     Comment:&nbsp;&nbsp;&nbsp; keyword<br>
     19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

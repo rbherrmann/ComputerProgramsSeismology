@@ -18,7 +18,7 @@
 <header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Instrument QC UVW/XYZ</h2></header>
 <h2>Summary</h2>
 <p>
-While using waveforms from an earthquake, inconsistences in waveforms at some stations were noted.  The  problem is  traced to recording the internal UVW rather than ENZ components. A quick fix is proposed and an examination of field cabling is recommended.
+While using waveforms from an earthquake, inconsistencies in waveforms at some stations were noted.  The  problem is  traced to recording the internal UVW rather than ENZ components. A quick fix is proposed and an examination of field cabling is recommended.
 </p>
 <H2>Introduction</H2>
 <p>
@@ -37,14 +37,14 @@ I recently looked at the surface wave dispersion across North America from the 2
 <P>
 It was the study of this earthquake that lend to this detailed tutorial.
 <P>
-While performing group velocity analysis using <b>do_mft</b> I noted that the expected dispersion has a morror image.
+While performing group velocity analysis using <b>do_mft</b> I noted that the expected dispersion has a mirror image.
 <p>
 <img src="PAULI/MFT96.png">
 <br>
 This double dispersion feature could be due to
 <ul>
 <li>multipathing, which is unlikely here since nearby stations do not share this odd dispersion characteristic</b>
-<li>mis-orientation of the instreument in the ground, or
+<li>mis-orientation of the instrument in the ground, or
 <li>recording UVW rather than ENZ </li>
 </ul>
 </p>
@@ -67,7 +67,7 @@ transfer from polezero subtype PZFILE to vel freqlimits 0.003 0.005 FHL FHH
 </pre>
 </font>
 </p><p>
-where FHH is the Nyquist frequency and FHL is one-half the Nyqujist frequency.
+where FHH is the Nyquist frequency and FHL is one-half the Nyquist frequency.
 In the plots, the traces for stations BIRD, HODGE and PAULI are plotted in red.
 <p>
 The first plots focus on the teleseismic P-wave. The traces have been low-pass filtered at 0.2 Hz.
@@ -87,7 +87,7 @@ The first plots focus on the teleseismic P-wave. The traces have been low-pass f
 </tbody>
 </table>
 <p>
-The obvious features on the Z is that stations HODGE, PAULI and BIRD have different amplitudes, arrival times and polarities compared to the P-wave puale at the other stations.  The traces have been plotted at true amplitude to also look for gain problems. Only a distance dependence of amplitude is seen for the other stations.
+The obvious features on the Z is that stations HODGE, PAULI and BIRD have different amplitudes, arrival times and polarities compared to the P-wave signal  at the other stations.  The traces have been plotted at true amplitude to also look for gain problems. Only a distance dependence of amplitude is seen for the other stations.
 <p>
 Nothing odd stands out on the R components. HODGE, PAULI and BIRD stand out on the transverse component as being different, although other stations, Z53A, GOGA look odd.
 <p>
@@ -107,12 +107,12 @@ The next set of plots focus on the  surface wave.
 </tbody>
 </table>
 <p>
-The waveforms of HODGE, PAULI and BIRD differ in shape and arrival time on the Z and R components. The corresponding waveforms on the T component are extremently different.
+The waveforms of HODGE, PAULI and BIRD differ in shape and arrival time on the Z and R components. The corresponding waveforms on the T component are extremely different.
 
 	
 <H3>Discussion</H3>
 <p>As seen in these examples, the difference in displaying UVW instead of ZNE
-are subtle. We will ahve to demonstrate that UVW recording is occurring at HODGE, PAULI and BIRD.
+are subtle. We will have to demonstrate that UVW recording is occurring at HODGE, PAULI and BIRD.
 <p>
 The characteristics of the instrumentation at the CO network stations
 are given in the following table.
@@ -197,7 +197,7 @@ CMPINC and CMPAZ in the Sac files to the following values:
 </table>
 </p>
 <P>
-Note that such a hack implicitly assiumes that the instrument response of the Z, N and E channels are identical. This asusmption is usually true.
+Note that such a hack implicitly assumes that the instrument response of the Z, N and E channels are identical. This assumption is usually true.
 
 <h3>Proper solution</h3>
 <p>
@@ -229,7 +229,7 @@ as follow:
 </tbody>
 </table>
 <p>
-Although is it difficult to follow individual phase, we not that the waveforms have the proper shapes and amplitudes. The consistent short duration and earlier arrival times on the transverse component indicates that the Love wave has been isolated. I could nout use lower frequencies for the comparison because the earthquake was only an Mw=5.6.
+Although is it difficult to follow individual phase, we not that the waveforms have the proper shapes and amplitudes. The consistent short duration and earlier arrival times on the transverse component indicates that the Love wave has been isolated. I could not use lower frequencies for the comparison because the earthquake was only an Mw=5.6.
 <p>
 We see now that the waveforms of HODGE, PAULI and BIRD agree in shape, arrival time and amplitude with neighboring stations.
 
@@ -253,7 +253,7 @@ The results for the Offshore El Salvador earthquake are as follow:
 <p>
 We again see that the waveforms of HODGE, PAULI and BIRD agree in shape, arrival time and amplitude with neighboring stations.
 <p>
-This test involving earthquakes at different back azimuths to the stations incidates that the problem was properly identified and that the fix works properly.
+This test involving earthquakes at different back azimuths to the stations indicates that the problem was properly identified and that the fix works properly.
 
 <H2>Implications</H2>
 <p>

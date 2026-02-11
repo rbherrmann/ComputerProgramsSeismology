@@ -72,7 +72,7 @@ These synthetics have a sample rate of 2.0 sec, have a zero-phase&nbsp;
 triangular source pulse of length 8 seconds.&nbsp; This source pulse
 has a spectral zero at the Nyquist frequency and a corresponding
 spectral shaping for frequencies greater than 1/2 the Nyquist
-frequency.&nbsp; The synthetics are those of ground velocicy in units
+frequency.&nbsp; The synthetics are those of ground velocity in units
 of cm/sec.<br>
 <br>
 </div>
@@ -82,7 +82,7 @@ DOIT<br>
 </div>
 <div style="margin-left: 40px;"><br>
 &nbsp;&nbsp;&nbsp; This runs the script DOEGN which computes the free
-oscillation frequencies and eigenfunctions for the spehroidal and
+oscillation frequencies and eigenfunctions for the spheroidal and
 toroidal modes.&nbsp; The script is set to compute up to frequencies of
 0.2 Hz (e.g., 200 mHz).&nbsp; This computation will require several
 days.<br>
@@ -95,7 +95,7 @@ with names GRN_Syndat_DEP, where GRN is one of DS, SS, DD or EX and DEP
 is on of 010 (10 km), 100 (100 km) or 700 (700km).&nbsp; The contents
 of these directories with files with names such as "Syndat.1969365: 0:
 0:-4.170.LHZ.SAC". A zero phase source time function of a triangle with
-length 8 seconds is applied.&nbsp; The SAC files are gound acceleration
+length 8 seconds is applied.&nbsp; The SAC files are ground acceleration
 with units of <span style="font-style: italic;">nm/s/s.</span><br>
 <br>
 When the evaluation is complete, run the script DOCLEAN to return the
@@ -114,7 +114,7 @@ compare the two types of synthetics at the same depth and distance.<br>
 <br>
 &nbsp;&nbsp;&nbsp; DOPOPULATERBH<br>
 <br>
-This creates the dirrectories, within which there is a new directory
+This creates the directories, within which there is a new directory
 called NEW_-Z with the CPS Green's functions. For example the command<br>
 <br>
 </div>
@@ -196,7 +196,7 @@ with duration of 8.0 sec.&nbsp; <br>
 </div>
 <h2>Comparisons</h2>
 <h3>Timing</h3>
-The first test compares the synthetized ground velocities for a source
+The first test compares the synthesized ground velocities for a source
 depth of 10 km and a distance of 90 degrees.&nbsp; The focus here is on
 the amplitudes and the timing, especially that of the surface wave
 arrival.&nbsp; For the distance the waveforms are bandpass filtered
@@ -332,7 +332,7 @@ command. This also serves as an independent test of the moment tensor
 formulation using in Computer Programs in Seismology.&nbsp;<br>
 </p>
 <pre>	transfer from none to none freqlimits 0.002 0.003 0.025 0.030<br></pre>
-which accounts for the fact that the minos synthetics only include
+which accounts for the fact that the mineos synthetics only include
 frequencies as high as 0.10 HZ, whereas the wavenumber integration
 synthetics go up to 0.25 Hz. The use of the gsac transfer function is a
 simple way to accomplish a zero phase filter. This also eliminates much
@@ -371,7 +371,7 @@ model mantle waves.<br>
 <br>
 Conclusion:&nbsp; The comparison is good. The difference shows the
 effect of a slight time shift.&nbsp; If a partitioned inversion is
-used, e.g.,&nbsp; inverting for P, SV/SH and mantloe waves in separate
+used, e.g.,&nbsp; inverting for P, SV/SH and mantle waves in separate
 time windows with a permissible time shift, then THESE SYNTHETICS ARE
 THE ONES TO USE.<br>
 <br>

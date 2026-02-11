@@ -20,7 +20,7 @@
     <h2>Introduction</h2>
 <p>
     The purpose of this tutorial is to generate surface wave noise for
-    a known 1-D structural model. This is done by appling randomly
+    a known 1-D structural model. This is done by applying randomly
     oriented point forces at
     the surface of the structure and then propagating the 3-D ground
     motions to the receiver. The ground motions consists of multimode
@@ -53,7 +53,7 @@ gunzip -c HVNOISE.tgz | tar xf -
 </pre>
 </p>
 <p>
-    This procedure creates a directory strucutre and puts the processing
+    This procedure creates a directory structure and puts the processing
     files there:
 <pre>
 HVNOISE.dist/
@@ -102,7 +102,7 @@ HVNOISE.dist/Models/CUS.mod
 </p>
             <p>
               As set up, the script <b>DOITHVHF</b> ultimately creates
-              900 seconds fo 3-component noise as the sac files <i>E.stk</i>,
+              900 seconds of 3-component noise as the sac files <i>E.stk</i>,
               <i>N.stk</i> and <i>Z.stk</i>. The user can then process
               these time series to determine the H/V ratio using their
               own or other routines. The script <b>DOSPECRAT</b> uses
@@ -122,7 +122,7 @@ HVNOISE.dist/Models/CUS.mod
 #    applied at the surface
 #    
 #    To reflect real data we create individual segments
-#    define the power spectra and finally the ratio tp get H/V
+#    define the power spectra and finally the ratio to get H/V
 #
 #    This script is designed for high frequency
 #    motions for local site studies
@@ -196,10 +196,10 @@ function getsrc()
 #
 #   the following are returned globally:
 #   (XS,YS) - source coordinates in km
-#   (EVAL,EVLO) - source coordinate in geocentrc coordinates
+#   (EVAL,EVLO) - source coordinate in geocentric coordinates
 #           - for simplicity the receivers are assumed to be
-#           - near (0,0) so that te conversion from km to degree
-#           - does is essentially cartesian
+#           - near (0,0) so that the conversion from km to degree
+#           - does is essentially Cartesian
 #####
 }
 
@@ -225,7 +225,7 @@ function getforce()
 ##### everything below here does the synthetic of the noise #####
 
 #####
-#    clean up previouse run
+#    clean up previous run
 #####
 rm -f ??????.stk
 
@@ -273,14 +273,14 @@ cat S?EGN?.PLT &gt; DISP.PLT
 
 #####
 #    now make the synthetics
-#    for each subsource
+#    for each sub-source
 #        get source coordinates
 #        get force orientation
 #        make synthetic
 #        use gsac to apply the force
 #        open the synthetic using cut o 0 o TMAX
 #        save
-#    then stack the subsources
+#    then stack the sub-sources
 #####
 count=1
 while [ $count -lt ${NSRC} ]
@@ -356,7 +356,7 @@ EOF
 </p>
     <h2>DOSPECRAT</h2>
 <p>
-    To be consistent with standard practive, the H/V ratios should be
+    To be consistent with standard practice, the H/V ratios should be
     estimated following the standards given in the references listed
     above. However the script <b>DOSPECRAT</b> indicates how this could
     be done using <b>gsac</b>, <b>awk</b>, <b>genplt</b> and the <i>ImageMagick</i>
@@ -364,7 +364,7 @@ EOF
 </p>
 <p>The script assumes that the three-component noise data set is 900
 seconds long. It then processes succeeding 50 sec windows of the
-simulated nosie by removing a mean trend, applying a Hanning
+simulated noise by removing a mean trend, applying a Hanning
 window, computing the spectra, saving the amplitude spectrum,
 smoothing it using a 21 point mean smoother, and then saving the
 result as a CSV file (which can be read by Excel).
@@ -372,7 +372,7 @@ result as a CSV file (which can be read by Excel).
 <p>
 Then <b>awk</b> is used to form the ratio of the geometric mean
 of horizontal spectra to the vertical spectra for each window.
-When this is done an arithmetic average fo the ratios is formed.
+When this is done an arithmetic average of the ratios is formed.
 </p>
 <p>
 Finally <b>genplt</b> is used to make a plot of the individual
@@ -398,7 +398,7 @@ since it is assumed that the surface-generated surface waves will be
 the largest component of the recorded noise.
 </p>
     <p>
-      This is a forward simulation. This tutorial does not consider te
+      This is a forward simulation. This tutorial does not consider the
       inverse problem of how the H/V ratio can be use to define
       structure.
     </p>

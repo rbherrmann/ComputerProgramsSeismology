@@ -20,8 +20,8 @@
 <h2>Introduction</h2>
 <p>
 At the request of one user, this tutorial provides current scripts on
-the cross correlation of gound noise for the purpose of determining an
-interstation Green's function.<br>
+the cross correlation of ground noise for the purpose of determining an
+inter-station Green's function.<br>
 <br>
 The complete package is contained in the archive <a href="noise.tgz">noise.tgz</a>
 which is 46 megabytes in size.<br>
@@ -85,7 +85,7 @@ This will create the directory structure as follows:
 </font>
 </p><p>
 This data set consists of 24 days of the Transportable Array stations
-Q37A and R34A together with processin scripts.<br>
+Q37A and R34A together with processing scripts.<br>
 <br>
 After modifying the scripts (see the discussion in the next section),
 the scripts are run in the following order:<br>
@@ -102,7 +102,7 @@ After the run there will be two new directories created: CROSS and STACK. The di
 and the directory STACK will contain<br>
 <pre>Q37ABHRR34ABHR.WSTK  Q37ABHTR34ABHT.WSTK  Q37ABHZR34ABHZ.WSTK</pre>
 </p><p>
-A plot of the 24 day stack of the cross-corelation (.cor) and reversed
+A plot of the 24 day stack of the cross-correlation (.cor) and reversed
 cross-correlation (.rev) is performed using the <span
  style="font-weight: bold;">gsac</span> commands<br>
 <pre>GSAC&gt; r STACK/*<br>GSAC&gt; xlim o o 300<br>GSAC&gt; markt on<br>GSAC&gt; p<br></pre>
@@ -164,8 +164,8 @@ SCRIPT MUST BE EDITED BEFORE YOU APPLY THIS TO YOUR DATA SETS. </span></span>You
 must change the FREQLIMITS=, NPTSMIN and BASE entries for the following
 reason:&nbsp; to keep the size of this example small (and at 46
 megabytes it is not small), I resamples the BH data to 1
-sample/percond. This means that there is no signal at frequenices
-greater than 0.5 Hz, thus you must chang ehte FREQLIMTS parameter<br>
+sample/second. This means that there is no signal at frequencies
+greater than 0.5 Hz, thus you must change the FREQLIMTS parameter<br>
 <br>
 NPTSMIN is used to check that I have approximately one day of data. At
 1 sample per second, I there are 86400 seconds per day. Since I am
@@ -180,7 +180,7 @@ Note that the current code assumes that the files are BH (CMPZ, OCOMP
 and COMP parameters)<br>
 <br>
 <span style="font-weight: bold;">DOSTACK </span>- this script stacks
-the cross-correlations and places them in the subdirectory STACK<br>
+the cross-correlations and places them in the sub-directory STACK<br>
 </p>
 <h2>Caution</h2>
 <p>
@@ -188,7 +188,7 @@ Once you get the empirical Green's functions, you must then decide what
 the dispersion actually is. This requires practice since you must
 select a Gaussian filter parameter.&nbsp; I recommend starting with a
 reasonable estimate of the velocity model, making synthetics for&nbsp;
-the distances expected, and then selecting a Gaussial filter parmaeter
+the distances expected, and then selecting a Gaussian filter parameter
 (alpha) than best reproduces the known group velocities from the
 synthetic computations (modifiy the <a
  href="../LessonA/index.html">Surface-Wave

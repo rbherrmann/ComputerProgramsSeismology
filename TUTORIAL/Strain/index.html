@@ -49,7 +49,7 @@ pre {
         to yield time series n Sac format.</li>
     </ul>
     The programs <b>srotate96, </b><b>spulse96strain</b><b>, </b><b>hspec96strain</b>
-    and <b>hpulse96strain </b>will be part of thekj first Computer
+    and <b>hpulse96strain </b>will be part of the first Computer
     Programs in Seismology distribution of 2021. The source codes and
     instructions for incorporation into the previous distributions are
     given below.<br>
@@ -68,7 +68,7 @@ pre {
     </p>
     <pre>gunzip -c t.tgz | tar xf - <br></pre>
     <p> </p>
-    whiel will create the following directory and subdirectories:<br>
+    which will create the following directory and subdirectories:<br>
     <br>
     <pre><font color="#739FCF"><b>CPSstrain</b></font>
 &#9500;&#9472;&#9472; <font color="#739FCF"><b>LAYERF.IMG</b></font>
@@ -148,10 +148,10 @@ pre {
     <h1 <a="" href="Program">Programs</h1>
     <h2>srotate96</h2>
     <p> The program <b>spulse96strain</b> can output the three
-      component ground motions, the cylindical strains and stresses. <b>srotate96</b>
+      component ground motions, the cylindrical strains and stresses. <b>srotate96</b>
       implements the rotation discussed at the end of <a
         href="strain.pdf?"> strain.pdf</a> to rotate the cylindrical
-      strains and stresses to a local cartesian system show in the next
+      strains and stresses to a local Cartesian system show in the next
       figure. </p>
     <table>
       <tbody>
@@ -205,7 +205,7 @@ pre {
     <h2>hspec96strain and hpulse96strain</h2>
     <b>hspec96strain </b>is an extension of <b>hspec96</b> to also
     compute the vertical and radial deriveatives of the Green's
-    functions at the receiver position as well as the Green's funcitons
+    functions at the receiver position as well as the Green's functions
     themselves. The command line options are identical to both codes:
     <pre>$ hspec96strain -h<br>&nbsp;USAGE: hspec96 [-H] [-A arg] [-K] [-N][-SU] [-SD] [-SPUP] [-SSUP] [-SPDN] [-SSDN] [-RU] [-RD] [-RPUP] [-RSUP] [-RPDN] [-RSDN] [-?] [-h]<br>&nbsp;-H (default false)&nbsp;&nbsp; Use Hankel function not Bessel<br>&nbsp;-A arg (default arg=3.0) value of kr where Hn(kr) replaces<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Jn(kr) in integration - only used when -H is used<br>&nbsp;-K&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (default Futterman) use Kjartansson Causal Q<br>&nbsp;-N&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (default causal) use non-causal Q<br>&nbsp;The following govern wavefield at source. The default is the entire wavefield<br>&nbsp;-SU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (default whole wavefield) Compute only upgoing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wavefield from the source<br>&nbsp;-SD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (default whole wavefield) Compute only downgoing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wavefield from the source<br>&nbsp; -SPUP&nbsp; Include upward P at source<br>&nbsp; -SSUP&nbsp; Include upward S at source<br>&nbsp; -SPDN&nbsp; Include downward P at source<br>&nbsp; -SSDN&nbsp; Include downward S at source<br>&nbsp;The following govern wavefield at receiver. The default is the entire wavefield<br>&nbsp; -RD&nbsp;&nbsp;&nbsp; Only downgoing waves at receiver<br>&nbsp; -RU&nbsp;&nbsp;&nbsp; Only upgoing waves at receiver<br>&nbsp; -RPUP&nbsp; Include upward P at receiver<br>&nbsp; -RSUP&nbsp; Include upward S at receiver<br>&nbsp; -RPDN&nbsp; Include downward P at receiver<br>&nbsp; -RSDN&nbsp; Include downward S at receiver<br>&nbsp;-?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display this usage message<br>&nbsp;-h&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display this usage message</pre>
     The command line options for <b>hpulse96strain </b>are similar to
@@ -413,8 +413,8 @@ DOSTRAINCMPF
       important in this case. </p>
     <h2>Units </h2>
     <p> Synthetic seismogram code runs on the basis of numerical values
-      given for the model. The code has no sense of physical units. <b>spulse96strain</b>
-      is tailored to the use of KM, KM/S and GM/CM<sup>3</sup> for
+      given for the model. The code has no sense of physical units. These strain codes
+      are tailored to the use of KM, KM/S and GM/CM<sup>3</sup> for
       depth, velocity and density. The epicentral distances, and
       source/receiver depths are also assumed to be KM. Internally the
       code corrects everything to MKS units, e.g., M, KG/M<sup>3</sup>,
@@ -438,7 +438,7 @@ Srr ... Szz     -STRESS     stress       in Pa
     <p> </p>
     <pre>cd PROGRAMS.330/VOLIII/src
 
-[copy the strainspusle96.f to this directory]
+[copy the strainspulse96.f to this directory]
 [carefully edit the  Makefile to change the lines
 
 sacsubf.o:

@@ -91,7 +91,7 @@ Usage:
 java -jar stationxml-seed-converter &lt;FILE&gt; [OPTIONS]
 OPTIONS: 
    --help or -h         : print this message
-   --verbose            : change the verobsity level to info; info is printed to stderr
+   --verbose            : change the verbosity level to info; info is printed to stderr
    --input              : input as a file or directory
    --output             : output file path and name
    --label              : specify label for use in B10
@@ -118,7 +118,7 @@ OPTIONS:
 gunzip -c mseed2sac-2.3.tar.gz| tar xf -
 cd mseed2sac-2.3
 make &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#ff0000">#[Read the top of the Makefile */Makefile to
-              # set the enviroment for the compiler. This 
+              # set the environment for the compiler. This 
               # works for LINUX and MacOS]</font><br>
 <font color="#ff0000">Then install mseed2sac to a bin directory in the PATH</font></pre>
 </p>
@@ -178,7 +178,7 @@ mseed2sac -f 3 data.mseed -m channel.txt
     <p><br>
       Running these commands in with the following script <a
         href="KIPExample/DOIT">KIPExample/DOIT</a> give the following
-      image producted by <b>gsac</b>:
+      image produced by <b>gsac</b>:
 <br>
 <table>
 <tbody>
@@ -217,7 +217,7 @@ GSAC&gt;
       and then to use the old program <b>rdseed </b>to create the sac
       files, to place the channel information into the headers of the
       Sac files and also provide the responses as either Sac pole-zero
-      files or RESP files fo use with <b>evalresp</b>.&nbsp; <br>
+      files or RESP files of use with <b>evalresp</b>.&nbsp; <br>
     </p>
     <p><br>
       <b>Note if someone were to modify </b><b>stationxml-seed-converter-2.1.3.jar
@@ -228,7 +228,7 @@ GSAC&gt;
       </b></p>
     <h3><b>Example 1:</b></h3>
     <p>This example downloads all broadband channels waveforms and
-      responses from selected networks, converts the FESNstationxml to
+      responses from selected networks, converts the FDSNstationxml to
       dataless, and then uses <b>rdseed</b> to create the Sac files and
       responses with use with sac or gsac. This script resides in the
       Orig directory, and the results are placed in the parallel Sac
@@ -295,7 +295,7 @@ EOG
 #    for use with the GEOFON fdsnws_fetch
 #    One difference is that CWBquery will provide data
 #    in sac format and sac pole-zero format for stations 
-#    within a rabge of distances of a given latitude and longitude
+#    within a range of distances of a given latitude and longitude
 #    This will be done in software here
 #
 #    For everything to work, we need the Computer Programs in Seismology redodate
@@ -426,9 +426,9 @@ done &lt; plist
 </pre>
 </font>
     </p>
-    <p>As mentioned, getting the responses is tiem consuming. It is not
+    <p>As mentioned, getting the responses is time consuming. It is not
       possible to use the geographic search for the responses. Thus
-      created a response directory, and updating it peridocally may be
+      created a response directory, and updating it periodically may be
       more efficient.<br>
     </p>
     <p></p>

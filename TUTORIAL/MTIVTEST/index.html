@@ -137,7 +137,7 @@ MTIVTEST
 &#9474;&nbsp;&nbsp; &#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font>   
 &#9500;&#9472;&#9472; MTFULL <b><font color="#ff0000"># for testing the moment tensor inversion of a full moment tensor source</font></b><br>&#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font><br>&#9500;&#9472;&#9472; MTFULL.NOISE <b><font color="#ff0000"># testing  full moment tensor source with noise</font></b><br>&#9500;&#9472;&#9472; ... <font color="#ff0000"><b>(see above)</b></font>
 &#9500;&#9472;&#9472; DOALL5  <b><font color="#ff0000">(see below)</font></b><br>&#9500;&#9472;&#9472; DALL5<br>&#9500;&#9472;&#9472; DOALL<br>&#9500;&#9472;&#9472; DALL<br>&#9500;&#9472;&#9472; src <font color="#ff0000"><b># source code for executables to be placed in the ../bin directory</b></font>
-&#9492;&#9472;&#9472; TGREEN       <font color="#ff0000"><b># precomputed Green's functions at only those distances for the test.</b></font>
+&#9492;&#9472;&#9472; TGREEN       <font color="#ff0000"><b># pre-computed Green's functions at only those distances for the test.</b></font>
     &#9492;&#9472;&#9472; CUS.REG
         &#9500;&#9472;&#9472; 0010
         &#9500;&#9472;&#9472; 0020
@@ -151,7 +151,7 @@ MTIVTEST
     <p>It is assumed the Computer Programs in Seismology has been
       successfully compiled and that the <b>gcc</b> an <b>gfortran</b>
       compilers were used. In addition the <b>ImageMagick</b> package
-      must be installed since this is used to convert the EPS graphcis
+      must be installed since this is used to convert the EPS graphics
       to PNG for web display.<br>
     </p>
     <p>After downloading, set the environment to point to the CPS bin
@@ -198,7 +198,7 @@ cd ..</pre>
     <p>To duplicate the comparisons shown in the next section, one would
       execute the <b>DOALL </b>or <b>DOALL5 </b>scripts. The first
       is used if GMT4 graphics are installed and the second if GMT5 or
-      later versons of Generic Mapping Tools are installed. The scripts
+      later versions of Generic Mapping Tools are installed. The scripts
       compile the codes in the <i>src</i> directory and define the
       paths to the <i>bin </i>and Green's function
       directories.&nbsp;&nbsp; The <b>DOALL5</b> copies the <b>DALL5 </b>into
@@ -261,9 +261,9 @@ CASEE CO 203.703  118.211 34.993  -82.9317
 CPCT  ET  58.4465 144.044 35.45   -84.52
 GOGA  US 303.381  153.962 33.4112 -83.4666
 </pre>
-    <p>The next thing required is a precomputed set of Green's
+    <p>The next thing required is a pre-computed set of Green's
       functions. This is described in the tutorial <a
-        href="http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/GREEN/index.html">http://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/GREEN/index.html</a>.
+        href="../GREEN/index.html">../GREEN/index.html</a>.
       There is a directory that contains the Green's functions and an
       environment parameter GREENDIR that points tot he directory. If
       one does a <b>ls ${GREENDIR}</b>, one may see </p>
@@ -380,7 +380,7 @@ while read STA NET DIST AZ STLA STLO
 do
         echo $STA $NET $DIST $AZ
 #####
-#       search over source depth These depths are the subdirectory
+#       search over source depth These depths are the sub-directory
 #       names in the Green's Function Directory
 #####
 cat &gt; awkprog &lt;&lt; FOE
@@ -462,7 +462,7 @@ cp mt.msg ../MT.OTHER/true
     <h3>Synthetics with Noise<br>
     </h3>
     <p> This script DOSYN script in MTFULL.NOISE/DAT.SYN is given here.
-      This script makes use fo the program <b>sacnoise</b> which was
+      This script makes use of the program <b>sacnoise</b> which was
       part of the tutorial <a moz-do-not-send="true"
 href="https://www.eas.slu.edu/eqc/eqc_cps/TUTORIAL/MT_SENSITIVITY/index.html">Moment
 
@@ -515,7 +515,7 @@ while read STA NET DIST AZ STLA STLO
 do
 	echo $STA $NET $DIST $AZ
 #####
-#       search over source depth These depths are the subdirectory
+#       search over source depth These depths are the sub-directory
 #       names in the Green's Function Directory
 #####
 cat &gt; awkprog &lt;&lt; FOE

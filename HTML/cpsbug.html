@@ -55,13 +55,35 @@ pre {
         href="#2020">2020</a>, <a href="#2021">2021</a>, <a
         href="#2022">2022</a>, <a href="#2023">2023</a>, <a 
         href="#2024">2024</a>, <a href="#2025">2025</a>, <a
-        href="#2026"> <br>
+        href="#2026">2026</a> <br>
       For each year, the changes are (listed in order from newest to
       oldest) </p>
     <hr>
     <hr>
     <h2 class="western"><a name="2026"></a>2026</h2>
+<h3>February  8, 2026</h3>
+<ul>
+<li>
+The output of the <b>gsac</b> <i>outcsv</i> command was modified to use the <i>%g"</i> instead of the <i>%f</i> format.
+This resolve the problem that small values were saves as zeros.
+</li>
+<li>The <i>readline</i> includes were moved to the top of the code frpom alower position in the <b>gsac</b> <i>gsac_hist.c</i> source code.</li>
+<li>In the <b>gsac</b> <i>gsac_map5</i> code, the order of plotting symbols was changed. now the stations are plotted befor the epicenters. The reason was the the sation names often hid the epicenter symbol (star).</li>
+</ul>
+<h3>January  8, 2026</h3>
+<ul>
+<li>
+In the relationsip between Mw and Mo (dyne-cm), use  log_10 M_0 = 16.10 + 1.5 M_w. The source codes
+<i>sdprad96.f, sdpspc96.f, srfgrd96.f tfmech96.f lprmech96.f</i>
+had 16.05 instead of 16.10.   Further in <i>gsac_mt.c</i> Mw is converted to a moment factor using
+</li>
+</ul>
     <h2 class="western"><a name="2025"></a>2025</h2>
+<h3>December  1, 2025</h3>
+<ul>
+<li><b>hpulse96</b> and <b>hpulse96strain</b> were modified to permit the <i>-HALF</i> option, which
+is used with <b>sshspec96</b> and <b>sshspec96strain</b> to output just the first-half of the time series.</li>
+</ul>
 <h3>October  21, 2025</h3>
 <ul>
 <li> 

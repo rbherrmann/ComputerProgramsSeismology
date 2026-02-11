@@ -3,7 +3,7 @@
 <BODY BGCOLOR="#FFFFFF">
 <H2>Revisions</H2>
 <P>
-Changed March 19, 2009 because of corections to the source code. Specifically there were numericla problems with the receiver crust response to incident teleseismic S wave because of numerical instabilities in the formulation which were corrected through the use of a compound matrix. In addition, the <B>hudson96</B> code uses a modified routine to get the first arrival time, one that estimates the causality shift of the T* operator. For this reason the <B>hudson96</B> synthetics are slightly early compared to the complete <B>hspec96</B> synthetics.
+Changed March 19, 2009 because of corrections to the source code. Specifically there were numerical problems with the receiver crust response to incident teleseismic S wave because of numerical instabilities in the formulation which were corrected through the use of a compound matrix. In addition, the <B>hudson96</B> code uses a modified routine to get the first arrival time, one that estimates the causality shift of the T* operator. For this reason the <B>hudson96</B> synthetics are slightly early compared to the complete <B>hspec96</B> synthetics.
 <H2>Introduction</H2>
 <P>
 The purpose of this exercise is to evaluate the usefulness of the program <B>hudson96</B> for the prediction of the teleseismic S-wave.  One problem is that multiples, such as SS, are not considered, In addition the complexity of the P-SV conversions, means that the Z and R traces cannot be modeled as well as the T trace, which consists of only SH waves.
@@ -11,12 +11,12 @@ The purpose of this exercise is to evaluate the usefulness of the program <B>hud
 <P>
 <H2>Conclusions</H2>
 <P>
-The SH synthetics are adequate to 75 degrees. At larget distances the <B>hudson96</B> synthetics are incorrect since the first arrival time is really that of <I>SKS</I> and not <I>S</I>. Because of this the amplitudes are not correct since the geometrical spreading used for the telesiesmic S arrivals in that of <I>SKS</I> and not <I>S</I>.  Fixing this qould require a modification of the routine <I>fstarr</I> in the program.  However, even if the time is corrected in the synthesis, the synthetics may not be useful because of ignoring the <I>ScS</I> arrival.
+The SH synthetics are adequate to 75 degrees. At largest distances the <B>hudson96</B> synthetics are incorrect since the first arrival time is really that of <I>SKS</I> and not <I>S</I>. Because of this the amplitudes are not correct since the geometrical spreading used for the teleseismic S arrivals in that of <I>SKS</I> and not <I>S</I>.  Fixing this would require a modification of the routine <I>fstarr</I> in the program.  However, even if the time is corrected in the synthesis, the synthetics may not be useful because of ignoring the <I>ScS</I> arrival.
 <P>
-The transverse component, SH, synthetics comapre very well, since there are not extra arrivals due to the P-SV conversion.
+The transverse component, SH, synthetics compare very well, since there are not extra arrivals due to the P-SV conversion.
 <H2>Comparison</H2>
 <P>
-The comparisons here are for the SS component only, just to reduce the numebr of images. Two focal depths are considered, 10 and 100 km.
+The comparisons here are for the SS component only, just to reduce the number of images. Two focal depths are considered, 10 and 100 km.
 <H3>Comparison at 10 km depth</H3>
 <P>
 <TABLE>

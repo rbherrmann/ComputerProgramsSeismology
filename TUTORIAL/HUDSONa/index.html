@@ -29,12 +29,12 @@ synthetics for the AK135 model will be plotted on top of the P, pP, sP, PcP and 
 <a href="https://seiscode.iris.washington.edu/projects/taup">taup_time</a> for the ZSS, ZDS, and ZDD Green's functions to indicate epicentral distance ranges for which the Hudson synthetics are adequate.  Since the waveforms corresponding to a deviatoric moment tensor are a linear combination of these Green's functions, these comparisons will focus on the possible interference  of the PcP and PP amplitudes on the P, pP and sP arrivals which are used to constrain the source depth.
 </p>
 <p>
-This will be followed by  a comparison of the Hudson and complete synnthetics at selected epicentral distances and depths. This comparison differs from that given in <a href="/eqc/eqc_cps/TUTORIAL/HUDSON/TESTAK135/index.html">/eqc/eqc_cps/TUTORIAL/HUDSON/TESTAK135/index.html</a> in that the effect of source duration will be factored in. <b>At this stage of the documentation, quantitative measures of the differences will not be performed.</b>
+This will be followed by  a comparison of the Hudson and complete synthetics at selected epicentral distances and depths. This comparison differs from that given in <a href="/eqc/eqc_cps/TUTORIAL/HUDSON/TESTAK135/index.html">/eqc/eqc_cps/TUTORIAL/HUDSON/TESTAK135/index.html</a> in that the effect of source duration will be factored in. <b>At this stage of the documentation, quantitative measures of the differences will not be performed.</b>
 </p>
 <h2>Questions and Tests for  Implementation</h2>
 <ul>
 <li>In the implementation of the NEIC bbDEPTH and SynDepth, a source time function is convolved with the Hudson synthetics for a given moment tensor. <b>What is the time window used for a comparison between the observed and predicted traces, e.g., T<sub>sP</sub> - T<sub>P</sub> + source duration?  </b> This is important to avoid later arrivals not included in the Hudson synthetics. A side effect of a varying window is that the goodness of fit must be designed so as to not be sensitive to the different window lengths which will be a function of epicentral distance and source depth.  </li>
-<li>Using a typical distrubution of epicentral distances and azimuths, create a synthetic waveform using the complete Green's functions in HYDRA. Given this "network" create events have different moment tensors, depths and source time functions. then compare the SynDepth depth and source time function to the known input. This will point out limitations and thus lead to rules for the use of SynDepth results.
+<li>Using a typical distribution of epicentral distances and azimuths, create a synthetic waveform using the complete Green's functions in HYDRA. Given this "network" create events have different moment tensors, depths and source time functions. then compare the SynDepth depth and source time function to the known input. This will point out limitations and thus lead to rules for the use of SynDepth results.
 </ul>
 </p>
 <h2> Tests</h2>
@@ -51,7 +51,7 @@ This will be followed by  a comparison of the Hudson and complete synnthetics at
 <h3> Travel time comparisons</h3>
 <div id="TTIME"</div>
 <p>
-The figures shown here are arranged horizontally by Green's function and vertically by depth. The depths are 1, 10, 40, 100, ...,700 km.  In the figures, the legend that the bottom right of each figure giv ethe Green's function, a color code for the phase and an indication of the depth, e.g., 010_PcP is for a source depth of 10 km.
+The figures shown here are arranged horizontally by Green's function and vertically by depth. The depths are 1, 10, 40, 100, ...,700 km.  In the figures, the legend that the bottom right of each figure gives the Green's function, a color code for the phase and an indication of the depth, e.g., 010_PcP is for a source depth of 10 km.
 </p>
 <p>
 <table>
@@ -92,7 +92,7 @@ The following table attempts to summarize the information presented in these fig
 <tr> <td>300</td> <td>no concern, low amplitude</td> <td>Problem &Delta;&lt;50&deg;</td></tr>
 <tr> <td>400</td> <td>no concern, low amplitude</td> <td></td></tr>
 <tr> <td>500</td> <td>no concern, low amplitude</td> <td>Interesting. For ZSS strong interference with pP for &Delta; &lt;50&deg; and sP after 70&deg;</td></tr>
-<tr> <td>600</td> <td>no concern, low amplitude</td> <td>PP interferes with pP as short distances and sP at larger distances. Significant fot ZSS.</td></tr>
+<tr> <td>600</td> <td>no concern, low amplitude</td> <td>PP interferes with pP as short distances and sP at larger distances. Significant for ZSS.</td></tr>
 <tr> <td>700</td> <td>no concern, low amplitude</td> <td>PP interferes with pP for &Delta; &gt; 50&deg; especially for ZSS</td></tr>
 </tbody>
 </table>
@@ -100,15 +100,15 @@ The following table attempts to summarize the information presented in these fig
 </p>
 <p>
 <b>Summary:</b> At larger distances PP can interfere significantly with sP.
-At shorter distances PP may ba a problem if the tiem window used for processing to too large.
+At shorter distances PP may be a problem if the time window used for processing to too large.
 </p>
 <div id="WAVEF"</div>
 <h3> Trace  comparisons for different source durations</h3>
 <p>
-These plots focus on the time window that the Hudson synthetics adequately represent the teleseismic signal. The Hudson synthetics are compares to the full wavenumber integration synthetics for the ZDD, ZDS and ZSS Green's functions. These figures provide the basis for defining the distance range for which the Hudson sysnthetics are adequate, e.g., when the effect if PP does not distort the signal, as a function of source depth, epicentral distance and source duration.
+These plots focus on the time window that the Hudson synthetics adequately represent the teleseismic signal. The Hudson synthetics are compares to the full wavenumber integration synthetics for the ZDD, ZDS and ZSS Green's functions. These figures provide the basis for defining the distance range for which the Hudson synthetics are adequate, e.g., when the effect if PP does not distort the signal, as a function of source depth, epicentral distance and source duration.
 </p>
 <p>
-There are four displays. The first is of the "high frequency" Green functions. This is misnomer, since the wavenumber integration synthetics have a sample interval of 1.0s, and their source function has a duration of 4s. The others have had the synthetics convolved with a triangular pulse of dureation 5, 10 or 15s, to represent the signal expected for increasingly larger earthquakes, respectively.
+There are four displays. The first is of the "high frequency" Green functions. This is misnomer, since the wavenumber integration synthetics have a sample interval of 1.0s, and their source function has a duration of 4s. The others have had the synthetics convolved with a triangular pulse of duration 5, 10 or 15s, to represent the signal expected for increasingly larger earthquakes, respectively.
 </p>
 <p>
 <ul>
@@ -120,15 +120,15 @@ There are four displays. The first is of the "high frequency" Green functions. T
 </p>
 <h4>Discussion</h4>
 <p>
-These record sections provide a more detailed comparison of the WK and Hudson synthetic than was possible in the travel time plots above, whose primary purpose was to identify the PcP and PP phase on the synthetics. The expanded view in this section permits one to focus better on the appropriate distance range and on the signal interferences. The big problem for large depths is that the Hudson synthetics cannot model the PP hase which is strong on the ZDS and ZSS (verticla dip-slip nd vertical strike-slip sources, respectively). This interference might cause a "fuzziness" in the depth estimate.
+These record sections provide a more detailed comparison of the WK and Hudson synthetic than was possible in the travel time plots above, whose primary purpose was to identify the PcP and PP phase on the synthetics. The expanded view in this section permits one to focus better on the appropriate distance range and on the signal interferences. The big problem for large depths is that the Hudson synthetics cannot model the PP phase which is strong on the ZDS and ZSS (vertical dip-slip nd vertical strike-slip sources, respectively). This interference might cause a "fuzziness" in the depth estimate.
 </p>
 <div id="WAVETRUE"</div>
 <h3> True amplitude trace  comparisons for different source durations</h3>
 <p>
-These plots focus on the amplitudes of the two types of synthetics. The previous figures scaled each trace to the same maximum amplitude on the plot. To examine the amplitude, a true amplitude plot is not presented since amplitudes differ with distance due to geometrical spreading and radiaion pattern. Instead a correction for 1/distance(km) is made. This permits the amplitudes at a given epicentral distance to be compared.
+These plots focus on the amplitudes of the two types of synthetics. The previous figures scaled each trace to the same maximum amplitude on the plot. To examine the amplitude, a true amplitude plot is not presented since amplitudes differ with distance due to geometrical spreading and radiation pattern. Instead a correction for 1/distance(km) is made. This permits the amplitudes at a given epicentral distance to be compared.
 </p>
 <p>
-The concludion is that the initial amplitudes agree very well. Thus either set of synthetics could be used for quantitative source studies using the initial arrivals near P.
+The conclusion is that the initial amplitudes agree very well. Thus either set of synthetics could be used for quantitative source studies using the initial arrivals near P.
 </p>
 <p>
 <ul>
@@ -145,7 +145,7 @@ The comparison of the Hudson synthetics to the complete synthetics shows that
 the interference of the P, pP and sP sequence of arrivals with PP is a major limitation of the method. The following table is an attempt to codify the use of the Hudson synthetics for determining source depth.  
 </p>
 <p>
-The criteria is simple. if the PP arrival occurs before the sP + Soource_Duration time, then do not apply the technique. Implicit in the table is that data are not used at &Delta; &lt; 30&deg; to avoid the upper mantle triplication of P.
+The criteria is simple. if the PP arrival occurs before the sP + Source_Duration time, then do not apply the technique. Implicit in the table is that data are not used at &Delta; &lt; 30&deg; to avoid the upper mantle triplication of P.
 </p>
 The source duration is a function of M</sub>w</sub>. An approximate relation between the duration of the simple triangle function to moment magnitude is
 <br>
@@ -157,7 +157,7 @@ The source duration is a function of M</sub>w</sub>. An approximate relation bet
         8           50.0
 </pre>
 <br>
-The M</sub>w</sub>=8 should never be used, since the simple triangular puulse cannot represent the expected signal of an large extended source. Thus there must be some upper magnitude bound on the use of this technique. 
+The M</sub>w</sub>=8 should never be used, since the simple triangular pulse cannot represent the expected signal of an large extended source. Thus there must be some upper magnitude bound on the use of this technique. 
 <p>
 </p>
 <p>

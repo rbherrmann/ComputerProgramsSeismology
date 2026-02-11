@@ -24,18 +24,20 @@ This is a simple test of the effect of changing the cut window. The reason for d
 the envelope stack can be sharpened.
 </p>
 <h2>2. Test</h2>
-</p>
-khThe original code of the shell script DOCOMPRESS in Section_02 had the lines
+<p>
+While original code of the shell script DOCOMPRESS in Section_02 had the lines
 <br>
 <pre>
 TMIN=`echo $DIST $UMAX | awk '{print $1/$2}' `
 TMAX=`echo $DIST $UMIN | awk '{print $1/$2}' `
 </pre>
 <br>
+</p>
+<p>
 which cut the original signal at travel times of Distance/UMAX to Distance/UMIN.
 </p>
 <p>
-For this test, the cut window was increased by 100 sec on ewither side of the cut by using the lines
+For this test, the cut window was increased by 100 sec on either side of the cut by using the lines
 <pr>
 TMIN=`echo $DIST $UMAX -100 | awk '{print $3 + $1/$2}' `
 TMAX=`echo $DIST $UMIN +100 | awk '{print $3 + $1/$2}' `
@@ -48,7 +50,7 @@ The comparison is show in the next figure.
 </p>
 <p>
 <table>
-<tr><td><img src=Sec-5.png</tr></tr>
+<tr><td><img src="Sec_5.png"</tr></tr>
 </table>
 </p>
 <p>

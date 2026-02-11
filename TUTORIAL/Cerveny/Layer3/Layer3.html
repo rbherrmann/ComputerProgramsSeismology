@@ -17,7 +17,7 @@ pre {
     <h1>Layer3</h1>
     <p>
       the purpose of this is to show how ray parameter filtering is
-      applied using <b>cpusle96</b> and then to discuss the
+      applied using <b>cpulse96</b> and then to discuss the
       implication.
     </p>
     <p>
@@ -79,7 +79,7 @@ pre {
     km, but only a few of these are in the desired range.
     <p></p>
     <p>
-      This emphasizes the need to better approximate an indicent plane
+      This emphasizes the need to better approximate an incident plane
       wave.
     </p>
     <h1>Plane wave</h1>
@@ -96,7 +96,7 @@ cpulse96 -V -p -l 4 -EXF -DELAY 10 -PMIN 0.08 -PMAX 0.10  | f96tosac -B
 cray96 -XMIN -2100 -XMAX 250 -ZMIN 0 -ZMAX 2100
 </pre>
     <br>
-    The command line for <b>cprep96</b> has repositioned the source.
+    The command line for <b>cprep96</b> has re-positioned the source.
     The command line for
     <b>cpulse</b> applies the phase velocity filter. Finally the plot
     limits for<b>cray96</b> are changed because of the new source

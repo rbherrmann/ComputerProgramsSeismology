@@ -83,7 +83,7 @@ a plot of locations are as follow:</P>
 	</TBODY>
 </TABLE>
 <P ALIGN=CENTER><IMG SRC="map.png" NAME="graphics1" 0></P>
-<P>The interstation distances are ACLR-ASCB 54 km, ACLR-VELZ 68 km,
+<P>The inter-station distances are ACLR-ASCB 54 km, ACLR-VELZ 68 km,
 and ASCB-VELZ 60 km</P>
 <h2>Data Preparation</h2>
 <P>The data were in SEISAN binary format. Since the <I>sacsei</I> did
@@ -132,12 +132,12 @@ is annotated. Basically for each station, for each day, for each 30
 minute segment, convert to SAC, reset the SAC header values, insert
 the station coordinates, insert the station component orientation,
 resample to 0.05 sec (the high frequencies will not be needed at
-these interstation distances, and bu making the trace files smaller,
+these inter-station distances, and by making the trace files smaller,
 the size of the Fast Fourier Transforms used, is significantly
 reduced. Then save the trace day file in the directory organization
 required by the noise correlation script. Thus for station ACLR, Z
 component for November 1, 2005, the day trace ACLRBHZ is placed in
-the subdirectory 2005/305 
+the sub-directory 2005/305 
 </P>
 <P>This conversion to SAC took a lot of time. Mostly because I did
 this on my RAID, so that there was a lot of overhead. 
@@ -251,7 +251,7 @@ the processing
 <P>The following are the SAC binary files of the stacked waveforms.
 The SAC header value IHDR11 shows the number of traces that were
 stacked to create this result. Note that since we stack the day
-crosscorrealtion and the reversed day cross-correlation, the numebr
+cross-correlation and the reversed day cross-correlation, the number
 of days actually stacked in IHDR11/2 
 </P>
 <P>Since these are in INTEL, format, the safest thing to do before

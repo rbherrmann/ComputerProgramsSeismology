@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="nsimple.css">
   </head>
   <body bgcolor="#FFFFFF">
-<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Momen tensor sensitivity to noise</h2></header>
+<header><h1>Computer Programs in Seismology Tutorial</h1> <h2>Moment tensor sensitivity to noise</h2></header>
     <h2>Introduction</h2>
 <p>
     The determination of earthquake source parameters through moment
@@ -86,7 +86,7 @@
     defining the&nbsp;&nbsp; capabilities of a seismic network.<br>
     <h2>Modeling noise</h2>
     <p>The new tool developed for this study is the program <b>sacnoise</b>.
-      Using the USGS Albuquerque Seismc Lab New Low Noise Model (NLNM)
+      Using the USGS Albuquerque Seismological Lab New Low Noise Model (NLNM)
       and New High Noise Model (NHNM), an acceleration<br>
       history in units of&nbsp; meters/s/s (M/S**2) is created as a sac
       file.&nbsp; The source code and Makefile are given in this
@@ -94,7 +94,7 @@
       syntax is obtained by running the program using the <b>-h </b>flag:<br>
     </p>
 <font size="2">
-      <pre>rbh&gt; sacnoise -h<br>Usage: sacnoise -pval pval -seed seed -dt dt -npts npts <br>  Create time series of noise based on ASL NLNM and NHNM models. The output has units of <br>     m/s**2   (default)<br>  The noise level can be adjusted between the low and high noise models with pval<br>     pval=1   High noise model<br>     pval=0.5 mid-noise model<br>     pval=0   Low  noise model<br> -dt   dt     (default 1.0) sample interval <br> -npts npts   (default 32768) length of time series <br> -pval pval   (default 0.5) <br> -seed seed   (default 12345) Integer random number seed <br> -h           (default false) online helpjk<br><br></pre>
+      <pre>rbh&gt; sacnoise -h<br>Usage: sacnoise -pval pval -seed seed -dt dt -npts npts <br>  Create time series of noise based on ASL NLNM and NHNM models. The output has units of <br>     m/s**2   (default)<br>  The noise level can be adjusted between the low and high noise models with pval<br>     pval=1   High noise model<br>     pval=0.5 mid-noise model<br>     pval=0   Low  noise model<br> -dt   dt     (default 1.0) sample interval <br> -npts npts   (default 32768) length of time series <br> -pval pval   (default 0.5) <br> -seed seed   (default 12345) Integer random number seed <br> -h           (default false) online help<br><br></pre>
     </font>
 </p><p>
     To illustrate the usage and&nbsp; the use of the <i>pval</i>

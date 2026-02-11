@@ -20,7 +20,7 @@
 <body>
 <h2>1. Introduction</h2>
 <p>
-This section addresses the effect of station noise on the stack as a function of the event moment magnitude. To simplify the presentation, we will only consider one possible source, e.g., the true location. Further, there will be no source time funciton scaling as a funciton of moment magnitude because the signal stacked is long period and since we do not know the source time funciton of the slow events of interest. So in part this tutorial shows how to add realistic noise to the synthetic seismograms.
+This section addresses the effect of station noise on the stack as a function of the event moment magnitude. To simplify the presentation, we will only consider one possible source, e.g., the true location. Further, there will be no source time function scaling as a function of moment magnitude because the signal stacked is long period and since we do not know the source time function of the slow events of interest. So in part this tutorial shows how to add realistic noise to the synthetic seismograms.
 </p>
 <p>
 As seen in Section_02, a set of IU stations was used for the simulations. Fortunately EarthScope has a QA service that provides PSD's on the data streams. The desired information is easily obtained by running a command such as
@@ -59,7 +59,7 @@ wget -O IU.ADK.10.HH1.M-2024-11-01.text \
 </small>
 </p>
 <p>
-(Note the wrap around - the command are axtually long lines:.
+(Note the wrap around - the command are actually long lines:.
 </p>
 <p>
 The last part of the first script just ask for the PSD at a frequency of 0.05 Hz, or equivalently a period of 20.0s. Although this exercise gives several files for the noise level of a particular data channel, only the first is used.
@@ -76,7 +76,7 @@ RCBR IU    -5.8274   -35.9014 -159.56 -159.43 -160.06   0.39   0.40   0.38
 </pre>
 </small>
 </p><p>
-The entries at te station name, network, station latitude and longitude, 0.05Hz noise levels for the verticl and two horizontal components and a p-value for the vertical and two horizontal units. The p-value indicates a linear interpolation between the NLNM and NHNM nosie models at the 0.05Hz level. It is computed by the formula
+The entries are the station name, network, station latitude and longitude, 0.05Hz noise levels for the vertical and two horizontal components and a p-value for the vertical and two horizontal units. The p-value indicates a linear interpolation between the NLNM and NHNM noise models at the 0.05Hz level. It is computed by the formula
 <br>
 <pre>
 <small>
@@ -84,7 +84,7 @@ The entries at te station name, network, station latitude and longitude, 0.05Hz 
 </small>
 </pre>
 </p><p>
-with 0.0 equaling the low noise model and 1.0 the high nosiue model.
+with 0.0 equaling the low noise model and 1.0 the high noise model.
 </p>
 <p>
 To add noise to the synthetics, the CPS program <b>sacnoise</b> is used. Its command line options are given by
@@ -110,7 +110,7 @@ Usage: sacnoise -pval pval -seed seed -dt dt -npts npts
 </p>
 <h2>2. Detection as a function of Mw</h2>
 <p>
-Synthetics were made for Mw =5.5, 6.0 amd 7.0.  As mentioned the source time function is the same with a duration of 4 sec. This is not the behavior for earthquakes, but the purpose is to examine the effect of realistic noise on the detection.
+Synthetics were made for Mw =5.5, 6.0 and 7.0.  As mentioned the source time function is the same with a duration of 4 sec. This is not the behavior for earthquakes, but the purpose is to examine the effect of realistic noise on the detection.
 <ul>
 <li> <a href="Section_06_5.5.html">  Mw=5.5</a></li>
 <li> <a href="Section_06_6.0.html">  Mw=6.0</a></li>
@@ -119,7 +119,7 @@ Synthetics were made for Mw =5.5, 6.0 amd 7.0.  As mentioned the source time fun
 </p>
 <h2>3. Discussion </h2>
 <p>
-For the distance ranges considered, the detection works for Mw 6 and greater. Since there was no source time funciton scaling, the spectral change in a 20s spectral level from Mw=5.5 to 6.0 would be a factor of 10<sup>(1.5 * 0.5)</sup>, a factor of 5.6, and from Mw=6.0 to 7.0 woulde be a factor of 10<sup>(1.5 * 1.0 )</sup>, a factor of 31.6. The amplitudes of the largest amplitude stacks wew 3.8E-6, 1.7E-5 and 5.3e-4 for Mw= 5.5, 6.0 and 7.0. woulde be a factor of 10<sup>(1.5 * 1.0 )</sup>, a factor of 31.6. The amplitudes of the largest amplitude stacks wew 3.8E-6, 1.7E-5 and 5.3e-4 for Mw= 5.5, 6.0 and 7.0. As expected, the fdifference in amplitudes from Mw 6.0 to 70 is a factor of 31. From 5.5 to 6.0 the amplitudes vary by  a factor of 3 instead of the expected 5.6. 
+For the distance ranges considered, the detection works for Mw 6 and greater. Since there was no source time function scaling, the spectral change in a 20s spectral level from Mw=5.5 to 6.0 would be a factor of 10<sup>(1.5 * 0.5)</sup>, a factor of 5.6, and from Mw=6.0 to 7.0 would be a factor of 10<sup>(1.5 * 1.0 )</sup>, a factor of 31.6. The amplitudes of the largest amplitude stacks are 3.8E-6, 1.7E-5 and 5.3e-4 for Mw= 5.5, 6.0 and 7.0. would be a factor of 10<sup>(1.5 * 1.0 )</sup>, a factor of 31.6. The amplitudes of the largest amplitude stacks are 3.8E-6, 1.7E-5 and 5.3e-4 for Mw= 5.5, 6.0 and 7.0. As expected, the difference in amplitudes from Mw 6.0 to 70 is a factor of 31. From 5.5 to 6.0 the amplitudes vary by  a factor of 3 instead of the expected 5.6. 
 </p>
 <footer>Last changed January 23, 2025</footer>
 </body>

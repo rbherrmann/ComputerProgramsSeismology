@@ -33,8 +33,8 @@ This will create the directory <i>Section_02</i> with subdirectories <i>Section_
 directory <i>Processing</i> and run the scripts there.
 <h3>2.1 Forward</h3>
 <p>
-The shell script <b>DOIT</b> creates a synthetic data set for a given network and epicenter whose dource parameters are defined. To
-make the data set as reasliztic as possible, the waveforms are named in the NNSSSCCCLL.SAC style of the USGS CWBquery format, 
+The shell script <b>DOIT</b> creates a synthetic data set for a given network and epicenter whose source parameters are defined. To
+make the data set as realistic as possible, the waveforms are named in the NNSSSCCCLL.SAC style of the USGS CWBquery format, 
 have a realistic  time stamp, and appropriate component orientations. These represent the deconvolved, rotated time series with units of ground velocity in <i>m/s</i>.
 </p>
 <h4>DOIT</h4>
@@ -42,24 +42,24 @@ have a realistic  time stamp, and appropriate component orientations. These repr
 This script creates the synthetics for a specified source mechanism. 
 </p>
 <p>
-<b><font color="FF0000">NOTE:</font></b> The script requires the existence of the precomputed teleseismic Green's functions locate in the disk directory $dollar;{GREENDIR}/AK135.TEL, where the environment parameter GREENDIR is the path to the top level of the Green's function direcotries. If this does not exist, the CPS Tutorial <i>Teleseismic and Regional Green's Functions NOV 19, 2008</i> will show how to compute them.
+<b><font color="FF0000">NOTE:</font></b> The script requires the existence of the precomputed teleseismic Green's functions locate in the disk directory $dollar;{GREENDIR}/AK135.TEL, where the environment parameter GREENDIR is the path to the top level of the Green's function directories. If this does not exist, the CPS Tutorial <i>Teleseismic and Regional Green's Functions NOV 19, 2008</i> will show how to compute them.
 </p>
-<p>If you do not have the Green's functions, you can use the NNSSSCCCLL.SAC files in the directorty to test the detection algorithem with out running the <b>DOIT</b> script.
+<p>If you do not have the Green's functions, you can use the NNSSSCCCLL.SAC files in the directory to test the detection algorithm with out running the <b>DOIT</b> script.
 </p>
 <h4>What is in this directory</h4>
 <p>
 The <b>DOIT</b> script uses Green's functions generated for arc distances from 30&deg; to 95&deg;. The synthetics provided
-correpond to a source at latitude 0&deg; and longitude 0&deg; with a depth of 10km in the AK135 continental model, an prigin time of
-January 25, 2025 01:02:30.456 UTC, Mw=5.0 from a dislocation source with strike = 0&deg;, rake = 0&deg; and dipa = 80&deg;.
-The distribution of stations and the epicenter are whown in the next figure.
+correspond to a source at latitude 0&deg; and longitude 0&deg; with a depth of 10km in the AK135 continental model, an origin time of
+January 25, 2025 01:02:30.456 UTC, Mw=5.0 from a dislocation source with strike = 0&deg;, rake = 0&deg; and dip = 80&deg;.
+The distribution of stations and the epicenter are shown in the next figure.
 <br>
 <table>
 <tr>
- <td><img src="Figures/F_map5.png"><p>Msp showing ray paths from the epicenter to the stations</p></td>
+ <td><img src="Figures/F_map5.png"><p>Map showing ray paths from the epicenter to the stations</p></td>
 </tr>
 </table>
 <br>
-Record sectiobn of these default waveforms are shown in the next figure.
+Record section of these default waveforms are shown in the next figure.
 <br>
 <table>
 <tr>
@@ -75,7 +75,7 @@ Record sectiobn of these default waveforms are shown in the next figure.
 </table>
 </p>
 <p>
-<font color="FF0000">FINAL NOTE:</font>. Since the Green's functions were computed at increments of 1&deg;, there will be some time differences between the expected and synthetic phse arrival times to a given station.
+<font color="FF0000">FINAL NOTE:</font>. Since the Green's functions were computed at increments of 1&deg;, there will be some time differences between the expected and synthetic phase arrival times to a given station.
 </p>
 <h3>2.2 Processing</h3>
 <p>This directory initially  consists of the following scripts and FORTRAN source code for saccompress.f. 
@@ -84,14 +84,14 @@ Record sectiobn of these default waveforms are shown in the next figure.
 <ul>
 <li><b>DOSEARCH</b>
 <p>
-This is the top level command that assumes an origin time and searched through possible source locations. The observed waveforms at the stations are obtained, and cut within a specified group velocity window. The cut signals are then assumed to be findamental mode surface waves and are then compressed back to the source by usng the path dependent dispersion. When all stations are compressed, the envelope is formed and the envelopes are stacked. The stack is corrected for the number of stations/traces used.
-<p>The sac formated files of the final stacked envelopes will have names as <i>END_latitude_longitude.stk</i></p>
+This is the top level command that assumes an origin time and searched through possible source locations. The observed waveforms at the stations are obtained, and cut within a specified group velocity window. The cut signals are then assumed to be fundamental mode surface waves and are then compressed back to the source by using the path dependent dispersion. When all stations are compressed, the envelope is formed and the envelopes are stacked. The stack is corrected for the number of stations/traces used.
+<p>The sac formatted files of the final stacked envelopes will have names as <i>END_latitude_longitude.stk</i></p>
 </p>
 </li>
-<li><b>DODISPERSION</b>
+<li><b>DISPERSION</b>
 <p>This is called from within <b>DOSEARCH</b></p>
 <p>
-Given the postulated source location and the station coordinates, determine the effective group and pahse velocities for the path. This can be done by global wave tracing, or here by copying the disepersion for where is was obtained for this model.
+Given the postulated source location and the station coordinates, determine the effective group and phase velocities for the path. This can be done by global wave tracing, or here by copying the dispersion for where is was obtained for this model.
 </P></li>
 <li><b>DOCOMPRESS</b>
 <p>This is called from within <b>DOSEARCH</b></p>
