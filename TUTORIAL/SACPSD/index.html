@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple.css Test Page</title>
+        <!-- The following are some stylesheets for testing -->
+        <!-- Sanitize.css reset -->
+        <!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+        <!-- Latest release version of Simple.css -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+        <!-- Latest commit from GitHub -->
+        <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+        <!-- Local version -->
+        <link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2> PSD Noise Analysis </h2></header>
+<h2>Introduction</h2>
+<p>
+This in a significant update of earlier documentation on the use of <b>sacpsd</b> which can be found at
+<a href="../../HTML/SACPSD/index.html">../../HTML/SACPSD/index.html</a>. This documentation shows how to use <b>sacpsd</b> with time series obtained from the USGS CWB and FDSN data centers. The examples of data access will be of use for other studies.
+</p>
+<p>
+This extensive tutorial is given in <a href="nsacpsd.pdf">nsacpsd.pdf</a>.
+</p>
+<p>
+The shell scripts used to create the figures in the pdf are packed in <a href="SACPSD.tgz">SACPSD.tgz</a>.
+</p>
+<h2>Installing the examples</h2>
+<p>
+Do the following:
+<br>
+<small>
+<pre>
+gunzip -c SACPSD.tgz | tar xf -
+cd SACPSD
+ls
+FIGURE01/	FIGURE03/	FIGURE05/	FIGURE08/	FIGURE10/	FIGURE12/
+FIGURE02/	FIGURE04/	FIGURE06-07/	FIGURE09/	FIGURE11/	src/
+
+ls src
+CWBQuery.tar.gz    FetchData*	GUI.tar		jmdget.jar		
+mseed2sac-2.4.tar.gz
+</pre>
+</small>
+</p>
+<p>
+The <i>src</i> directory contains some useful code for obtaining time series from
+the CWB (unpack CWBQuery.tar.gz ), getting RESP files from the CWB (jmdget.jar, which is contained in GUI.tar).
+The FetchData is from EarthScope. Finally unpacking mseed2sac-2.4.tar.gz will permit one to compile the program mseed2sac, which is
+required to create Sac files from FDSN time series
+</p>
+</body>
+</html>
