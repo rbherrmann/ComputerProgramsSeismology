@@ -1,0 +1,33 @@
+#!/bin/sh
+
+
+TMIN=0
+TMAX=51.1
+cat > psac.d << EOF
+'TRACE'  1.0  6.0 5.0  1.5 1 '005000050.ZSS'
+'WIDTH'  0.05  -1  -1  -1  -1 ' '
+'TRACE'  1.0  5.0 5.0 -1.5 2 '005000050.ZSS'
+'WIDTH'  0.00 -1  -1  -1  -1 ' '
+'TRACE'  1.0  4.0 5.0  1.5 3 '005000050.RSS'
+'TRACE'  1.0  3.0 5.0  1.5 4 '005000050.TSS'
+'LEFT'   5.2  6.2 0.0 0.14 1 'ZSS'
+'CENTER' 6.6  5.2 0.0 0.14 1 'ZSS (rev)'
+'LEFT'   6.2  4.2 0.0 0.14 1 'RSS'
+'LEFT'   6.2  3.0 0.0 0.14 1 'TSS'
+'WIDTH'  0.01 -1  -1  -1  -1 ' '
+'XN'     -1   -1  -1  1.0 -1 ' '
+'XAXIS'  1.0  2.0 5.0 0.0  1 'Time (s)'
+${TMIN} ${TMAX}
+EOF
+psac < psac.d
+# rename PLT file
+mv PSAC.PLT 1.PLT
+#  use ImageMagick to make a PNG
+for i in 1.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K  < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+cp t.eps 1.eps
+rm t.eps
+done

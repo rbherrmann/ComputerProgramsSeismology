@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Computer Programs in Seismology Tutorials</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple.css Test Page</title>
+	<!-- The following are some stylesheets for testing -->
+	<!-- Sanitize.css reset -->
+	<!-- <link href="https://unpkg.com/sanitize.css" rel="stylesheet" /> -->
+	<!-- Latest release version of Simple.css -->
+	<!-- <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.css"> -->
+	<!-- Latest commit from GitHub -->
+	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
+	<!-- Local version -->
+	<link rel="stylesheet" href="nsimple.css">
+  </head>
+  <body>
+<header><h1>Computer Programs in Seismology </h1> <h2> PSAC  </h2></header>
+<h2>1. Introduction</h2>
+<p>
+<b>psac</b>  is a utility program for make plots of waveforms in SAC binary format. It can be used with <b>calplt</b> to annotate figures.
+</p>
+<p>
+The output is a CALPLOT file named <i>PSAC.PLT</i> which can be viewed in X11 using the command <b>plotxvig < PSAC.PLT</b> or converted to EPS using the command <b>plotnps -F7 -W10 -EPS -K < PSAC.PLT > epsfile</b>
+</p>
+<p>
+Although the <b>gsac</b> and <b>plotsac</b> programs of the Computer Programs in Seismology package can plot Sac files, it would be a major effort to 
+modify these codes to create different types of trace plots. Thus the simple <b>psac</b> was created. Some examples of figures that were
+created using ,b>psac</b> together with <b>calplt</b> are
+<ul>
+<li><a href="Eisner.html">Example of reciprocity comparing surface displacements  due to moment tensor sources at depth to strains at depth as a response to point forces at the surface</a></li>
+<li> <a href="sud.html">Example of wavefield separation for an acoustic medium comparing contributions of up-going and  down-going rays  from the source to total wavefield.</a> </li>
+<li><a href="FIG12.html">Illustration of the effect of low-pass filtering a trace that shows that low frequencies are dominated by the surface wave. </a></li>
+<li><a href="Fig9_11.html">Illustration of contributions to synthetic from the  integral along imaginary k-axis (i), poles (p) and real k-axis (r) at short (left) and large (right) epicentral distances.</a></li>
+</ul>
+<h2>2. Usage</h2>
+<p>
+<b>psac</b> does not have any command line flags, other than <i>-h</i> to remind the user of the usage. All commands are read in on the standard input. The standard input is read until an end of file. Except for the XAXIS command, each  line of input consists of the following items:
+<br>
+<i>cmd x0 y0 xlen ylen ipen fname</i>
+<p>
+where the meaning of the various terms depends on the command.
+<br>
+cmd is a single quote delimited string of length less than 10 characters. x0, y0, xlen, and ylen are floats. ipen is in integer and fname is a single quote delimited string of length 80 characters.
+</p>
+<p>
+The XAXIS option is followed by a single line with the minimum and maximum values of the time axis.
+</p>
+<p>
+The commands and the meaning of the options are as follow:
+</p>
+<p>
+<table>
+<tr> <td colspan="3">Syntax: 'command' x0 y0 xlen ylen ipen 'fname'</td></tr> 
+<tr><td>Command</td><td>Meaning</td><td>Details</td></tr>
+<tr><td>'TRACE'</td>
+<td>plot a trace </td>
+<td> The trace is plotted horizontally. It starts at (<i>x0,y0</i>) and extends <i>xlen</i> horizontally.
+<br>The maximum trace amplitude is <i>ylen</i> and the trace color is <i>ipen</i>
+<br><i>fname</i> is the name of the Sac file.  If <i>ylen</i> is negative, the trace is inverted.
+</td></tr>
+<tr>
+<td>'XAXIS'</td>
+<td>Plot a time axis</td>
+<td>The time axis is plotted horizontally. It starts at (<i>x0,y0</i>) and extends <i>xlen</i> horizontally.
+<br><i>ylen</i> and <i>ipen</i> are place holders that are not used.
+<br><i>fname</i> is the single quote delimited title for the axis.
+<br> 
+<br>This command is followed on the next line with <i>tmin</i> <i>tmax</i> which are the times at the beginning and end of the axis.
+</td>
+</tr>
+<tr><td>'CENTER'</td>
+<td>Center a character string</td>
+<td>Plot a string centered at (<i>x0,y0</i>) with height <i>ylen</i>  in color <i>ipen</i>.
+<br><i>fname</i> is the single quote delimited string to be plotted
+</td>
+</tr>
+<tr><td>'LEFT'</td>
+<td>Left justify  a character string</td>
+<td>Plot a string starting at   (<i>x0,y0</i>) with height <i>ylen</i>  in color <i>ipen</i>.
+<br><i>fname</i> is the single quote delimited string to be plotted
+</td>
+</tr>
+<tr><td>'XF'</td>
+<td>Increase font size of XAXIS string</td>
+<td><i>xlen</i>  is the factor to increase the string font size
+<tr><td>'WIDTH'</td>
+<td>Increase width of trace line</td>
+<td><i>x0</i>  width of line. The default is 0.001. However the
+default is overridden by the -Wwidth option of plotnps.
+</td>
+</tr>
+<tr><td>'YMAX'</td>
+<td>Plot absolute amplitudes</td>
+<td><i>ylen</i>  is the the maximum amplitude to use in scaling the traces.
+</td>
+</tr>
+</table>
+
+<h2>3. Examples</h2>
+<h3>Example 1</h3>
+<p>
+First, make some synthetics:
+<small>
+<small>
+<pre>
+#!/bin/sh
+
+#####
+#    create a halfspace model and make
+#    synthetics
+#    the Green's functions are named 003000100.RDD
+#####
+# clean up
+#####
+rm -f *.[ZRT]??
+
+HS=5		# source depth in km
+R=50		# epicentral distance in km
+DT=0.10		# sample interval in sec
+NPTS=512	# number of points
+
+#####
+#    create the model in model96 format
+#####
+cat > half.mod << EOF
+MODEL.01
+Simple halfspace model
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+ 40.0     6.0     3.55    2.7          0    0   0     0     1      1
+EOF
+# dfile: DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)  
+cat > dfile << EOF
+$R $DT $NPTS 0 0
+EOF
+
+hprep96 -M SCM.mod -d dfile -EQEX -HS ${HS} 
+hspec96
+hpulse96 -v -p -l 2 | f96tosac -G
+</small>
+</small>
+</pre>
+</p>
+<p>
+Simple trace plot
+</p>
+
+<p>
+<small>
+<small>
+<pre>
+#!/bin/sh
+
+TMIN=0
+TMAX=51.1
+cat > psac.d << EOF
+'TRACE'  1.0  6.0 5.0  1.5 1 '005000050.ZSS'
+'WIDTH'  0.05  -1  -1  -1  -1 ' '
+'TRACE'  1.0  5.0 5.0 -1.5 2 '005000050.ZSS'
+'WIDTH'  0.00 -1  -1  -1  -1 ' '
+'TRACE'  1.0  4.0 5.0  1.5 3 '005000050.RSS'
+'TRACE'  1.0  3.0 5.0  1.5 4 '005000050.TSS'
+'LEFT'   5.2  6.2 0.0 0.14 1 'ZSS'
+'CENTER' 6.6  5.2 0.0 0.14 1 'ZSS (rev)'
+'LEFT'   6.2  4.2 0.0 0.14 1 'RSS'
+'LEFT'   6.2  3.0 0.0 0.14 1 'TSS'
+'WIDTH'  0.01 -1  -1  -1  -1 ' '
+'XN'     -1   -1  -1  1.0 -1 ' '
+'XAXIS'  1.0  2.0 5.0 0.0  1 'Time (s)'
+${TMIN} ${TMAX}
+EOF
+psac < psac.d
+# rename PLT file
+mv PSAC.PLT 1.PLT
+#  use ImageMagick to make a PNG
+for i in 1.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K  < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+cp t.eps 1.eps
+rm t.eps
+done
+</pre>
+</small>
+</small>
+</p>
+<p>
+This produces the following figure:
+<table>
+<tr><td><img src="1.png"></td></tr>
+</table>
+</p>
+<h3>Example 2</h3>
+<p>
+This plots the traces using absolute amplitudes. In addition the plot is annotated with the peak amplitude by using
+<b>calplt</b>.  <b>calplt</b> interactively uses basic commands to make a plot. These are displayed using <b>calplt -h</b>.
+For more detail refer to the CALPLOT pdf.
+<p>
+<small>
+<small>
+<pre>
+#!/bin/sh
+#####
+#    get the maximum amplitude of the traces to be plot
+#####
+
+#####
+#    cut the traces
+####
+gsac << EOF
+cut a -5 a 20
+r 005000050.RSS 005000050.TSS 005000050.ZSS
+w R T Z
+q
+EOF
+AMAX=0.0
+TMIN=-5
+TMAX=20
+for TRACE in R T Z
+do
+	DEPMAX=`saclhdr -DEPMAX $TRACE`
+	DEPMIN=`saclhdr -DEPMIN $TRACE`
+	# use awk to get absolute value
+	DEPMAX=`echo $DEPMAX | awk '{if($1 > 0) print $1;else print -1*$1}'`
+	DEPMIN=`echo $DEPMIN | awk '{if($1 > 0) print $1;else print -1*$1}'`
+	# get the larger value
+	AMAX=`echo $AMAX $DEPMAX | awk '{if($1 > $2) print $1; else print $2}' `
+	AMAX=`echo $AMAX $DEPMIN | awk '{if($1 > $2) print $1; else print $2}' `
+done
+cat > psac.d << EOF
+'YMAX' -1 -1 -1 ${AMAX} -1 ' '
+'TRACE' 1.0 5.0 5.0 1.5  1 'R'
+'TRACE' 1.0 4.0 5.0 1.5  1 'T'
+'TRACE' 1.0 3.0 5.0 1.5  1 'Z'
+'LEFT ' 6.2 4.9 5.0 0.15 1 'R'
+'LEFT ' 6.2 3.9 5.0 0.15 1 'T'
+'LEFT ' 6.2 2.9 5.0 0.15 1 'Z'
+'XAXIS' 1.0 2.0 5.0 -1  -1 ' Time (s) relative to P '
+${TMIN} ${TMAX}
+EOF
+psac < psac.d
+# rename PLT file
+mv PSAC.PLT 2.PLT
+# use calplot to annotte with maximum amplitude
+calplt << EOF
+NEWPEN
+4
+LEFT
+1.0 2.5 0.15 'Amax=' 0.0
+NUMBER 
+999. 2.5 0.15 ${AMAX} 0.0 2003
+NEWPEN
+1
+PEND
+EOF
+cat CALPLT.PLT >> 2.PLT
+#  use ImageMagick to make a PNG
+for i in 2.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K  < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+cp t.eps 2.eps
+rm t.eps
+done
+</pre>
+</small>
+</small>
+</p>
+<p>
+this produces the following figure:
+<table>
+<tr><td><img src="2.png"></td></tr>
+</table>
+</p>
+<p>
+
+<footer>Last changed April 23, 2026</footer>
+  </body>
+</html>

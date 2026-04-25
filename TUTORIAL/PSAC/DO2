@@ -1,0 +1,64 @@
+#!/bin/sh
+#####
+#    get the maximum amplitude of the traces to be plot
+#####
+
+#####
+#    cut the traces
+####
+gsac << EOF
+cut a -5 a 20
+r 005000050.RSS 005000050.TSS 005000050.ZSS
+w R T Z
+q
+EOF
+AMAX=0.0
+TMIN=-5
+TMAX=20
+for TRACE in R T Z
+do
+	DEPMAX=`saclhdr -DEPMAX $TRACE`
+	DEPMIN=`saclhdr -DEPMIN $TRACE`
+	# use awk to get absolute value
+	DEPMAX=`echo $DEPMAX | awk '{if($1 > 0) print $1;else print -1*$1}'`
+	DEPMIN=`echo $DEPMIN | awk '{if($1 > 0) print $1;else print -1*$1}'`
+	# get the larger value
+	AMAX=`echo $AMAX $DEPMAX | awk '{if($1 > $2) print $1; else print $2}' `
+	AMAX=`echo $AMAX $DEPMIN | awk '{if($1 > $2) print $1; else print $2}' `
+done
+cat > psac.d << EOF
+'YMAX' -1 -1 -1 ${AMAX} -1 ' '
+'TRACE' 1.0 5.0 5.0 1.5  1 'R'
+'TRACE' 1.0 4.0 5.0 1.5  1 'T'
+'TRACE' 1.0 3.0 5.0 1.5  1 'Z'
+'LEFT ' 6.2 4.9 5.0 0.15 1 'R'
+'LEFT ' 6.2 3.9 5.0 0.15 1 'T'
+'LEFT ' 6.2 2.9 5.0 0.15 1 'Z'
+'XAXIS' 1.0 2.0 5.0 -1  -1 ' Time (s) relative to P '
+${TMIN} ${TMAX}
+EOF
+psac < psac.d
+# rename PLT file
+mv PSAC.PLT 2.PLT
+# use calplot to annotte with maximum amplitude
+calplt << EOF
+NEWPEN
+4
+LEFT
+1.0 2.5 0.15 'Amax=' 0.0
+NUMBER 
+999. 2.5 0.15 ${AMAX} 0.0 2003
+NEWPEN
+1
+PEND
+EOF
+cat CALPLT.PLT >> 2.PLT
+#  use ImageMagick to make a PNG
+for i in 2.PLT
+do
+B=`basename $i .PLT`
+plotnps -F7 -W10 -EPS -K  < $i > t.eps
+convert -trim t.eps -background white -alpha remove -alpha off ${B}.png
+cp t.eps 2.eps
+rm t.eps
+done

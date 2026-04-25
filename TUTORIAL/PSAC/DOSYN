@@ -1,0 +1,43 @@
+#!/bin/sh
+
+#####
+#    create a halfspace model and make
+#    synthetics
+#    the Green's functions are named 003000100.RDD
+#####
+# clean up
+#####
+rm -f *.[ZRT]??
+
+HS=5		# source depth in km
+R=50		# epicentral distance in km
+DT=0.10		# sample interval in sec
+NPTS=512	# number of points
+
+#####
+#    create the model in model96 format
+#####
+cat > half.mod << EOF
+MODEL.01
+Simple halfspace model
+ISOTROPIC
+KGS
+FLAT EARTH
+1-D
+CONSTANT VELOCITY
+LINE08
+LINE09
+LINE10
+LINE11
+  H(KM) VP(KM/S) VS(KM/S) RHO(GM/CC)   QP   QS  ETAP  ETAS  FREFP  FREFS
+ 40.0     6.0     3.55    2.7          0    0   0     0     1      1
+EOF
+# dfile: DIST(km) DT(sec) NPTS T0(sec) VRED(km/s)  
+cat > dfile << EOF
+$R $DT $NPTS 0 0
+EOF
+
+hprep96 -M SCM.mod -d dfile -EQEX -HS ${HS} 
+hspec96
+hpulse96 -v -p -l 2 | f96tosac -G
+
